@@ -1,0 +1,47 @@
+.bento-grid {
+  @apply grid grid-cols-1 gap-y-10 mt-6;
+
+  @media (min-width: 1024px) {
+    @apply lg:grid-cols-3 lg:gap-x-10;
+  }
+
+  &__item {
+    @apply h-full;
+
+    &--span-1 {
+      @apply lg:col-span-1;
+    }
+
+    &--span-2 {
+      @apply md:col-span-2;
+    }
+  }
+
+  &__link {
+    @apply block h-full;
+  }
+
+  &__figure {
+    @apply relative h-64 w-full;
+
+    @media (min-width: 768px) {
+      @apply md:h-[447px];
+    }
+  }
+
+  &__image {
+    @apply w-full h-full object-cover;
+  }
+
+  &__title {
+    @apply absolute bottom-4 text-center text-lg font-light mb-2 bg-white px-9 py-2 text-[#502B3A];
+
+    &--left {
+      @apply left-6;
+    }
+
+    &--right {
+      @apply left-6 md:left-auto md:right-6;
+    }
+  }
+}

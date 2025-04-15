@@ -1,16 +1,31 @@
-export function Logo({ className }: { className?: string }) {
+import React, { FC } from "react";
+
+interface LogoProps {
+  className?: string;
+  ariaLabel?: string;
+  width?: number;
+  height?: number;
+}
+
+export const Logo: FC<LogoProps> = ({
+  className,
+  ariaLabel = "Eno Basse Logo",
+  width = 185,
+  height = 40,
+}) => {
   return (
     <svg
-      aria-label="Eno Basse logo"
-      width="185"
-      height="40"
-      viewBox="0 0 185 40"
+      aria-label={ariaLabel}
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       className={className}
+      role="img"
     >
-      <rect width="185" height="40" fill="url(#pattern0_4397_487)" />
+      <rect width={width} height={height} fill="url(#pattern0_4397_487)" />
       <defs>
         <pattern
           id="pattern0_4397_487"
@@ -33,4 +48,4 @@ export function Logo({ className }: { className?: string }) {
       </defs>
     </svg>
   );
-}
+};

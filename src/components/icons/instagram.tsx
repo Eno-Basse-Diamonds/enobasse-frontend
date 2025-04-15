@@ -1,4 +1,7 @@
-export function InstagramIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const InstagramIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="20"

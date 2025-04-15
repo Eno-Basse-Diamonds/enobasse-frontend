@@ -1,4 +1,7 @@
-export function TiktokIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const TiktokIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="16"

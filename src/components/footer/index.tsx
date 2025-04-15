@@ -1,3 +1,6 @@
+"use client"
+
+import React from "react";
 import Link from "next/link";
 import { Logo } from "../logo";
 import {
@@ -6,12 +9,34 @@ import {
   XIcon,
   TiktokIcon,
   InstagramIcon,
-} from "../icons";
+} from "@/components/icons";
 import "./styles.scss";
 
-export function Footer() {
+interface NavItem {
+  label: string;
+  href: string;
+  ariaLabel: string;
+}
+
+interface NavSection {
+  title: string;
+  id: string;
+  navItems: NavItem[];
+}
+
+interface FooterProps {
+  companyName?: string;
+  copyrightYear?: number;
+  className?: string;
+}
+
+export const Footer: React.FC<FooterProps> = ({
+  companyName = "EnoBasse, LLC",
+  copyrightYear = new Date().getFullYear(),
+  className = "",
+}) => {
   return (
-    <footer className="footer" aria-label="Site footer">
+    <footer className={`footer ${className}`} aria-label="Site footer">
       <div>
         <nav aria-label="Footer navigation">
           <div className="footer__container">
@@ -24,17 +49,17 @@ export function Footer() {
         </nav>
         <div className="footer__logo-and-copyright" role="contentinfo">
           <div>
-            <Logo className="footer__logo" />
+            <Logo className="footer__logo" aria-hidden="true" />
           </div>
-          <Copyright />
+          <Copyright companyName={companyName} year={copyrightYear} />
         </div>
       </div>
     </footer>
   );
-}
+};
 
-function Navigation() {
-  const navigation = [
+const Navigation: React.FC = () => {
+  const navigation: NavSection[] = [
     {
       title: "Company",
       id: "company-heading",
@@ -120,7 +145,10 @@ function Navigation() {
           </h2>
           <ul className="footer__navigation-links">
             {section.navItems.map((item) => (
-              <li key={item.href} className="footer__navigation-link-item">
+              <li
+                key={`${section.id}-${item.href}`}
+                className="footer__navigation-link-item"
+              >
                 <Link
                   href={item.href}
                   className="footer__navigation-link"
@@ -135,9 +163,25 @@ function Navigation() {
       ))}
     </div>
   );
-}
+};
 
-function Newsletter() {
+const Newsletter: React.FC = () => {
+  const [email, setEmail] = React.useState<string>("");
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setEmail("");
+      setTimeout(() => setIsSuccess(false), 3000);
+    }, 1000);
+  };
+
   return (
     <section aria-labelledby="newsletter-heading">
       <h2 id="newsletter-heading" className="footer__newsletter-heading">
@@ -149,59 +193,93 @@ function Newsletter() {
       <form
         className="footer__newsletter-form"
         aria-label="Newsletter subscription"
+        onSubmit={handleSubmit}
+        noValidate
       >
-        <label htmlFor="email" className="sr-only">
-          Email address
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          className="footer__newsletter-form-input"
-          placeholder="Enter email address"
-          required
-          aria-required="true"
-        />
-        <button
-          type="submit"
-          className="footer__newsletter-form-button"
-          aria-label="Subscribe"
-        >
-          <ArrowRightIcon />
-        </button>
+        <div className="footer__newsletter-form-group">
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="footer__newsletter-form-input"
+            placeholder="Enter email address"
+            required
+            aria-required="true"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isSubmitting}
+          />
+          <button
+            type="submit"
+            className="footer__newsletter-form-button"
+            aria-label="Subscribe"
+            disabled={isSubmitting || !email}
+          >
+            <ArrowRightIcon />
+          </button>
+        </div>
+        {isSuccess && (
+          <p className="footer__newsletter-success" role="alert">
+            Thank you for subscribing!
+          </p>
+        )}
       </form>
     </section>
   );
+};
+
+interface SocialLink {
+  icon: React.ReactNode;
+  href: string;
+  ariaLabel: string;
 }
 
-function Socials() {
+const Socials: React.FC = () => {
+  const socialLinks: SocialLink[] = [
+    { icon: <FacebookIcon />, href: "#", ariaLabel: "Facebook" },
+    { icon: <InstagramIcon />, href: "#", ariaLabel: "Instagram" },
+    { icon: <XIcon />, href: "#", ariaLabel: "Twitter" },
+    { icon: <TiktokIcon />, href: "#", ariaLabel: "TikTok" },
+  ];
+
   return (
     <nav aria-label="Social media links">
       <div className="footer__socials">
-        <Link href="#" aria-label="Facebook">
-          <FacebookIcon />
-        </Link>
-        <Link href="#" aria-label="Instagram">
-          <InstagramIcon />
-        </Link>
-        <Link href="#" aria-label="Twitter">
-          <XIcon />
-        </Link>
-        <Link href="#" aria-label="TikTok">
-          <TiktokIcon />
-        </Link>
+        {socialLinks.map((link, index) => (
+          <Link
+            key={`social-${index}`}
+            href={link.href}
+            aria-label={link.ariaLabel}
+            passHref
+            legacyBehavior
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              {link.icon}
+            </a>
+          </Link>
+        ))}
       </div>
     </nav>
   );
+};
+
+interface CopyrightProps {
+  companyName: string;
+  year: number;
 }
 
-function Copyright() {
+const Copyright: React.FC<CopyrightProps> = ({ companyName, year }) => {
   return (
     <div>
       <span className="footer__copyright-text--desktop">
-        © 2025 EnoBasse, LLC. All rights reserved.
+        © {year} {companyName}. All rights reserved.
       </span>
-      <span className="footer__copyright-mobile">© 2025 EnoBasse, LLC.</span>
+      <span className="footer__copyright-text--mobile">
+        © {year} {companyName}.
+      </span>
     </div>
   );
-}
+};

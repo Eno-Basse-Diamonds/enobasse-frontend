@@ -1,4 +1,7 @@
-export function CloseIcon({ className = "" }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const CloseIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

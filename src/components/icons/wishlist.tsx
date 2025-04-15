@@ -1,4 +1,7 @@
-export function WishlistIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const WishlistIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="24"
