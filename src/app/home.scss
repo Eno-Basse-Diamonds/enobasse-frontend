@@ -1,0 +1,139 @@
+.blog-header {
+  @apply flex items-center justify-between gap-4;
+
+  &__title {
+    @apply font-primary font-semibold text-3xl md:text-4xl text-[#502B3A];
+  }
+
+  &__link {
+    @apply inline-flex items-center gap-x-2 bg-[#502B3A] rounded py-3 px-8 text-white text-center hover:bg-opacity-90;
+  }
+
+  &__link-icon {
+    @apply hidden md:block h-5 w-5;
+  }
+}
+
+.help-section {
+  @apply mt-10 md:mt-20 px-4 lg:px-8 flex flex-col lg:flex-row gap-y-12 lg:gap-x-20 items-center;
+
+  &__image-container {
+    @apply w-full lg:max-w-[780px];
+  }
+
+  &__image {
+    @apply w-full;
+  }
+
+  &__content {
+    @apply text-center lg:text-left mx-auto lg:mx-0 max-w-[454px];
+  }
+
+  &__title {
+    @apply font-primary font-semibold text-4xl text-[#502B3A] mb-6;
+  }
+
+  &__body {
+    @apply space-y-4 mb-10;
+  }
+
+  &__paragraph {
+    @apply font-light text-base text-[#1B1B1D] max-w-2xl;
+  }
+
+  &__button-wrapper {
+    @apply mx-auto;
+  }
+
+  &__button {
+    @apply inline-flex items-center gap-x-2 bg-[#502B3A] rounded py-3 px-8 text-white text-center hover:bg-opacity-90;
+  }
+
+  &__button-icon {
+    @apply h-5 w-5;
+  }
+}
+
+.about-section {
+  @apply mt-10 md:mt-20 px-4 lg:px-8 flex flex-col-reverse lg:flex-row gap-y-12 lg:gap-x-20 justify-end items-center;
+
+  &__content {
+    @apply text-center lg:text-left mx-auto lg:mx-0 max-w-[454px];
+  }
+
+  &__title {
+    @apply font-primary font-semibold text-3xl md:text-4xl text-[#502B3A] mb-6;
+  }
+
+  &__description {
+    @apply space-y-4 mb-10;
+  }
+
+  &__paragraph {
+    @apply font-light text-base text-[#1B1B1D] max-w-2xl;
+  }
+
+  &__button-wrapper {
+    @apply mx-auto;
+  }
+
+  &__button {
+    @apply inline-flex items-center gap-x-2 bg-[#502B3A] rounded py-3 px-8 text-white text-center hover:bg-opacity-90;
+  }
+
+  &__button-icon {
+    @apply h-5 w-5;
+  }
+
+  &__image-container {
+    @apply w-full lg:max-w-[750px];
+  }
+
+  &__image {
+    @apply w-full;
+  }
+}
+
+.services-section {
+  @apply mt-10 md:mt-20 px-4 lg:px-8 flex flex-col lg:flex-row gap-y-12 lg:gap-x-20 items-center;
+
+  &__video-container {
+    @apply w-full h-[300px] lg:w-[750px] lg:h-[600px] overflow-hidden;
+  }
+
+  &__video {
+    @apply w-full h-full object-cover;
+  }
+
+  &__content {
+    @apply text-center lg:text-left mx-auto lg:mx-0 max-w-[454px];
+  }
+
+  &__title {
+    @apply font-primary font-semibold text-3xl md:text-4xl text-[#502B3A] mb-6;
+  }
+
+  &__description {
+    @apply space-y-4 mb-10;
+  }
+
+  &__paragraph {
+    @apply font-light text-base text-[#1B1B1D] max-w-2xl;
+  }
+
+  &__button-wrapper {
+    @apply mx-auto;
+  }
+
+  &__button {
+    @apply inline-flex items-center gap-x-2 bg-[#502B3A] rounded py-3 px-8 text-white text-center hover:bg-opacity-90;
+  }
+
+  &__button-icon {
+    @apply h-5 w-5;
+  }
+}
+
+.section-container {
+  @apply px-4 lg:px-8 mt-10 md:mt-20;
+}
