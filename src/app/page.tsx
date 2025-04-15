@@ -320,7 +320,7 @@ interface AboutSectionProps {
   image: { src: string; alt: string };
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({
+const AboutSection: React.FC<AboutSectionProps> = ({
   title,
   description,
   button,
