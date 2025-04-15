@@ -1,4 +1,7 @@
-export function SearchIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const SearchIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="24"

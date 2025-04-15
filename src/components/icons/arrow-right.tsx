@@ -1,4 +1,7 @@
-export function ArrowRightIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const ArrowRightIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="24"
@@ -15,4 +18,4 @@ export function ArrowRightIcon({ className }: { className?: string }) {
       />
     </svg>
   );
-}
+};

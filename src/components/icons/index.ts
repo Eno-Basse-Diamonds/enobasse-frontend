@@ -9,6 +9,8 @@ import { XIcon } from "./x";
 import { ArrowRightIcon } from "./arrow-right";
 import { ArrowUpRightIcon } from "./arrow-up-right";
 import { ChevronDownIcon } from "./chevron-down";
+import { ChevronLeftIcon } from "./chevron-left";
+import { ChevronRightIcon } from "./chevron-right";
 import { CloseIcon } from "./close";
 import { MenuIcon } from "./menu";
 
@@ -23,6 +25,8 @@ export {
   XIcon,
   ArrowRightIcon,
   ArrowUpRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   ChevronDownIcon,
   CloseIcon,
   MenuIcon,

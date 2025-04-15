@@ -1,4 +1,7 @@
-export function FacebookIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const FacebookIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="20"

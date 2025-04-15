@@ -1,4 +1,7 @@
-export function CartIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const CartIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="24"
@@ -30,4 +33,4 @@ export function CartIcon({ className }: { className?: string }) {
       />
     </svg>
   );
-}
+};

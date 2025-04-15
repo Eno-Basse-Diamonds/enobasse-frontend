@@ -1,0 +1,31 @@
+.hero {
+  @apply relative h-[85vh] flex flex-col lg:flex-row items-center justify-center lg:justify-between p-4 lg:pl-8 lg:py-0 lg:pr-0 bg-gradient-to-r from-[#EEDEC3]/75 via-white/75 via-[60%] to-transparent;
+
+  &__content {
+    @apply w-full max-w-xl py-16 lg:py-0 text-center lg:text-left;
+  }
+
+  &__title {
+    @apply font-primary font-semibold text-4xl md:text-5xl text-[#502B3A];
+  }
+
+  &__description {
+    @apply font-light text-xl text-[#1B1B1D] mt-5;
+  }
+
+  &__nav {
+    @apply flex flex-col md:flex-row gap-x-8 gap-y-4 mt-16 w-full justify-center lg:justify-start;
+  }
+
+  &__button {
+    @apply rounded flex justify-center items-center gap-x-2 bg-[#502B3A] py-4 px-10 text-white hover:bg-opacity-90 transition-opacity;
+  }
+
+  &__image-container {
+    @apply hidden lg:block h-[85vh] w-auto relative;
+  }
+
+  &__image {
+    @apply h-full w-auto object-contain;
+  }
+}

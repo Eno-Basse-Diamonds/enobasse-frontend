@@ -1,4 +1,7 @@
-export function ChevronDownIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const ChevronDownIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="24"
@@ -11,4 +14,4 @@ export function ChevronDownIcon({ className }: { className?: string }) {
       <path d="M18 9L12 15L6 9" stroke="#502B3A" strokeLinejoin="round" />
     </svg>
   );
-}
+};

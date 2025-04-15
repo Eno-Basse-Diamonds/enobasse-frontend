@@ -1,4 +1,7 @@
-export function MenuIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const MenuIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

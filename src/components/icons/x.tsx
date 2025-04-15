@@ -1,4 +1,7 @@
-export function XIcon({ className }: { className?: string }) {
+import React from "react";
+import { IconProps } from "./types";
+
+export const XIcon: React.FC<IconProps> = ({ className }) => {
   return (
     <svg
       width="16"

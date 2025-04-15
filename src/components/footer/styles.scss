@@ -1,81 +1,87 @@
 .footer {
   @apply bg-[#D1A55933]/20 px-4 md:px-8;
 
-  & .footer__container {
+  &__container {
     @apply flex flex-row flex-wrap gap-8 justify-between py-12;
+  }
 
-    & .footer__navigation {
-      @apply w-full flex flex-row lg:w-auto flex-wrap gap-y-10 gap-x-20 justify-between;
+  &__navigation {
+    @apply w-full flex flex-row lg:w-auto flex-wrap gap-y-10 gap-x-20 justify-between;
 
-      & .footer__navigation-title {
-        @apply mb-4 text-base font-medium text-[#1B1B1D] uppercase;
-      }
-
-      & .footer__navigation-links {
-        @apply text-[#1B1B1D] font-light text-sm;
-
-        & .footer__navigation-link-item {
-          @apply mb-2;
-
-          & .footer__navigation-link {
-            @apply relative inline-block;
-
-            &::after {
-              content: "";
-              @apply absolute left-0 -bottom-[1px] h-[1px] w-full bg-[#1B1B1D] transition-transform duration-100 transform scale-x-0;
-              transform-origin: left;
-            }
-
-            &:hover::after {
-              @apply scale-x-100;
-            }
-          }
-        }
-      }
+    &-title {
+      @apply mb-4 text-base font-medium text-[#1B1B1D] uppercase;
     }
 
-    & .footer__socials-and-newsletter {
-      @apply space-y-8;
+    &-links {
+      @apply text-[#1B1B1D] font-light text-sm;
+    }
 
-      & .footer__socials {
-        @apply flex flex-row items-center gap-x-5;
+    &-link-item {
+      @apply mb-2;
+    }
+
+    &-link {
+      @apply relative inline-block;
+
+      &::after {
+        content: "";
+        @apply absolute left-0 -bottom-[1px] h-[1px] w-full bg-[#1B1B1D] transition-transform duration-100 transform scale-x-0;
+        transform-origin: left;
       }
 
-      & .footer__newsletter-heading {
-        @apply font-medium text-base text-[#1B1B1D] uppercase mb-1;
-      }
-
-      & .footer__newsletter-subheading {
-        @apply font-light text-sm text-[#1B1B1D];
-      }
-
-      & .footer__newsletter-form {
-        @apply relative w-full mt-5 z-10;
-
-        & .footer__newsletter-form-input {
-          @apply block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none;
-        }
-
-        & .footer__newsletter-form-button {
-          @apply absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80;
-        }
+      &:hover::after {
+        @apply scale-x-100;
       }
     }
   }
 
-  & .footer__logo-and-copyright {
+  &__socials-and-newsletter {
+    @apply space-y-8;
+  }
+
+  &__socials {
+    @apply flex flex-row items-center gap-x-5;
+  }
+
+  &__newsletter {
+    &-heading {
+      @apply font-medium text-base text-[#1B1B1D] uppercase mb-1;
+    }
+
+    &-subheading {
+      @apply font-light text-sm text-[#1B1B1D];
+    }
+
+    &-form {
+      @apply relative w-full mt-5 z-10;
+
+      &-input {
+        @apply block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none;
+      }
+
+      &-button {
+        @apply absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80;
+      }
+    }
+  }
+
+  &__logo-and-copyright {
     @apply py-8 flex items-center justify-between border-t-2 border-[#D1A55966]/30;
+  }
 
-    & .footer__logo {
-      @apply h-8 -ml-4;
-    }
+  &__logo {
+    @apply h-8 -ml-4;
+  }
 
-    & .footer__copyright-text--desktop {
-      @apply hidden md:block text-sm font-light text-[#1B1B1D];
-    }
+  &__copyright {
+    &-text {
+      &--desktop {
+        @apply hidden md:block text-sm font-light text-[#1B1B1D];
+      }
 
-    & .footer__copyright-mobile {
-      @apply block md:hidden text-sm font-light text-[#1B1B1D];
+      &--mobile {
+        @apply block md:hidden text-sm font-light text-[#1B1B1D];
+      }
     }
   }
 }
