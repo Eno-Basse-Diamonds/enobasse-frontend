@@ -39,7 +39,7 @@ export default function NotFound() {
 
       <figure className="not-found__image-wrapper">
         <Image
-          src="/404.png"
+          src="/images/404.png"
           alt="Not found image"
           width={500}
           height={500}

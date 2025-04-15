@@ -1,103 +1,423 @@
+import React, { ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRightIcon } from "@/components/icons";
+import {
+  BentoGrid,
+  BlogSection,
+  Carousel,
+  CTASection,
+  HeroSection,
+  SectionHeading,
+} from "@/components";
+import "./home.scss";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const carouselItems = [
+    {
+      image: "/images/categories/rings.png",
+      alt: "Gold diamond ring",
+      title: "Rings",
+      href: "/collections/rings",
+    },
+    {
+      image: "/images/categories/pendants.png",
+      alt: "Platinum diamond pendant",
+      title: "Pendants",
+      href: "/collections/pendants",
+    },
+    {
+      image: "/images/categories/engagement-rings.png",
+      alt: "Platinum diamond engagement ring",
+      title: "Engagement Rings",
+      href: "/collections/engagement-rings",
+    },
+    {
+      image: "/images/categories/necklaces.png",
+      alt: "Platinum diamond necklace",
+      title: "Necklace",
+      href: "/collections/necklace",
+    },
+    {
+      image: "/images/categories/bangles.png",
+      alt: "Platinum diamond bangle",
+      title: "Bangles",
+      href: "/collections/bangles",
+    },
+    {
+      image: "/images/categories/earrings.png",
+      alt: "Platinum diamond earring",
+      title: "Earrings",
+      href: "/collections/earrings",
+    },
+    {
+      image: "/images/categories/multi-gemstone-rings.png",
+      alt: "Platinum emerald ring",
+      title: "Multi-gemstone Rings",
+      href: "/collections/multi-gemstone-rings",
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const bentoItems = [
+    {
+      id: "best-sellers",
+      title: "Best Sellers",
+      href: "/collections/best-sellers",
+      image: {
+        src: "/images/collections/collection-01.png",
+        alt: "Eno Basse maroon colored ribbon with gold metal",
+      },
+    },
+    {
+      id: "valentine",
+      title: "Valentine's Day Gifts",
+      href: "/collection/valentine-gifts",
+      image: {
+        src: "/images/collections/collection-02.png",
+        alt: "Eno Basse maroon colored box with diamond necklace",
+      },
+    },
+    {
+      id: "new-arrivals",
+      title: "New Arrivals",
+      href: "/collections/new-arrivals",
+      image: {
+        src: "/images/collections/collection-03.png",
+        alt: "Eno Basse Gold pendant with red ribbon",
+      },
+    },
+    {
+      id: "trending-now",
+      title: "Trending Now",
+      href: "/collections/trending",
+      image: {
+        src: "/images/collections/collection-04.png",
+        alt: "Male with engagement band from Eno Basse",
+      },
+    },
+  ];
+
+  const blogPosts = [
+    {
+      id: "gemstone-education",
+      title: "Gemstone Education",
+      excerpt:
+        "Gemstones are highly prized for beauty, durability, and rarity.",
+      href: "/blog/gemstone-education",
+      image: {
+        src: "/images/blog/post-01.png",
+        alt: "Various gemstones displayed on velvet",
+      },
+      author: "Helen David",
+      date: "February 16th, 2025",
+      datetime: "2025-02-16",
+    },
+    {
+      id: "jewelry-care",
+      title: "Jewelry Care Guide",
+      excerpt:
+        "Learn how to properly maintain and care for your precious jewelry.",
+      href: "/blog/jewelry-care",
+      image: {
+        src: "/images/blog/post-02.png",
+        alt: "Person cleaning a ring with soft cloth",
+      },
+      author: "Michael Stone",
+      date: "March 5th, 2025",
+      datetime: "2025-03-05",
+    },
+    {
+      id: "engagement-rings",
+      title: "Choosing the Perfect Engagement Ring",
+      excerpt:
+        "Everything you need to know about selecting the ideal engagement ring.",
+      href: "/blog/engagement-rings",
+      image: {
+        src: "/images/blog/post-03.png",
+        alt: "Diamond engagement ring on velvet",
+      },
+      author: "Sarah Johnson",
+      date: "April 12th, 2025",
+      datetime: "2025-04-12",
+    },
+    {
+      id: "vintage-jewelry",
+      title: "The History of Vintage Jewelry",
+      excerpt:
+        "Exploring the timeless appeal of vintage jewelry designs through the decades.",
+      href: "/blog/vintage-jewelry",
+      image: {
+        src: "/images/blog/post-04.png",
+        alt: "Collection of vintage jewelry pieces",
+      },
+      author: "Emma Wilson",
+      date: "May 8th, 2025",
+      datetime: "2025-05-08",
+    },
+  ];
+
+  return (
+    <main>
+      <HeroSection
+        title="You Deserve The Most Unique Jewelry"
+        description="We create antique jewellery that can be passed down through
+            generations - timeless pieces designed to become family heirlooms."
+        image={{
+          src: "/images/hero.png",
+          alt: "Woman wearing a necklace, ring, and bracelet from Eno Basse",
+        }}
+        buttons={[
+          { text: "See Collections", href: "/collections" },
+          { text: "Shop Engagement", href: "/collections/engagement-rings" },
+        ]}
+      />
+
+      <SectionContainer id="categories">
+        <SectionHeading
+          id="categories-heading"
+          title="Explore Eno Basse"
+          description="Our craftsmen work with the finest materials with the sole aim of attaining perfection in every jewellery piece."
+        />
+        <div className="md:hidden">
+          <Carousel itemsPerPage={2} items={carouselItems} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className="hidden md:block">
+          <Carousel items={carouselItems} />
+        </div>
+      </SectionContainer>
+
+      <SectionContainer id="collections">
+        <SectionHeading
+          id="collections-heading"
+          title="Our Collection"
+          description="When perfectly cut and transformed into a piece of jewellery, diamonds undoubtedly add a touch of uniqueness and glamour to one's style."
+        />
+        <BentoGrid items={bentoItems} />
+      </SectionContainer>
+
+      <HelpSection
+        title="Need Help?"
+        body={[
+          "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Basse team is here to assist you every step of the way.",
+          "We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
+          "Every piece of jewellery tells a story… From glittering necklaces to radiant rings, we lead you to the perfect jewellery to tell your story, the best expression of you.",
+          "Our team consists of artisans with over 50 years of experience and a wide range of expertise who are eager to help you find and design the perfect piece.",
+        ]}
+        button={{ text: "Contact Us", href: "/contact" }}
+        image={{
+          src: "/images/need-help.png",
+          alt: "Customer consulting with Eno Basse jewellery expert online",
+        }}
+      />
+
+      <SectionContainer
+        id="blog"
+        className="bg-[#D1A559] bg-opacity-20 px-4 py-8 lg:px-8 lg:py-16 mt-10 md:mt-20"
+      >
+        <BlogHeader />
+        <BlogSection posts={blogPosts} />
+      </SectionContainer>
+
+      <AboutSection
+        title="Company Profile"
+        description={[
+          "Eno Basse was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery.",
+          "Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
+        ]}
+        button={{ text: "About Us", href: "/about" }}
+        image={{
+          src: "/images/founder.png",
+          alt: "Eno Basse master jeweler at work",
+        }}
+      />
+
+      <ServicesSection
+        title="Maintenance & Repairs"
+        description={[
+          "A lapidary workshop is a center for cutting, polishing of stones and maintenance of jewellery.",
+          "Our team offers advice on establishments of these workshops, the requirements and also respond to other enquiries our clients may have.",
+        ]}
+        button={{
+          text: "Contact Us",
+          href: "/contact",
+        }}
+        videoSrc="/videos/maintenance.mp4"
+      />
+
+      <CTASection
+        heading="Want to design your own? Calm, we can do it!"
+        image={{
+          src: "/images/call-to-action.png",
+          alt: "Ruby ring with gold metal in a box.",
+        }}
+        button={{ text: "Shop Now", href: "/collections" }}
+      />
+    </main>
   );
 }
+
+const BlogHeader: React.FC = () => {
+  return (
+    <header className="blog-header">
+      <h2 className="blog-header__title">Our Blog</h2>
+      <Link href="/blog" className="blog-header__link">
+        View All Posts <ArrowUpRightIcon className="blog-header__link-icon" />
+      </Link>
+    </header>
+  );
+};
+
+interface HelpSectionProps {
+  title: string;
+  body: string[];
+  button: { text: string; href: string };
+  image: { src: string; alt: string };
+}
+
+const HelpSection: React.FC<HelpSectionProps> = ({
+  title,
+  body,
+  button,
+  image,
+}) => {
+  return (
+    <section className="help-section">
+      <figure className="help-section__image-container">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          height={500}
+          width={500}
+          loading="lazy"
+          quality={100}
+          className="help-section__image"
+        />
+      </figure>
+      <article className="help-section__content">
+        <h2 className="help-section__title">{title}</h2>
+        <div className="help-section__body">
+          {body.map((paragraph, index) => (
+            <p key={index} className="help-section__paragraph">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        <div className="help-section__button-wrapper">
+          <Link href={button.href} className="help-section__button">
+            {button.text}{" "}
+            <ArrowUpRightIcon className="help-section__button-icon" />
+          </Link>
+        </div>
+      </article>
+    </section>
+  );
+};
+
+interface AboutSectionProps {
+  title: string;
+  description: string[];
+  button: { text: string; href: string };
+  image: { src: string; alt: string };
+}
+
+export const AboutSection: React.FC<AboutSectionProps> = ({
+  title,
+  description,
+  button,
+  image,
+}) => {
+  return (
+    <section className="about-section">
+      <article className="about-section__content">
+        <h2 className="about-section__title">{title}</h2>
+        <div className="about-section__description">
+          {description.map((paragraph, index) => (
+            <p key={index} className="about-section__paragraph">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        <div className="about-section__button-wrapper">
+          <Link href={button.href} className="about-section__button">
+            {button.text}{" "}
+            <ArrowUpRightIcon className="about-section__button-icon" />
+          </Link>
+        </div>
+      </article>
+      <figure className="about-section__image-container">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          height={500}
+          width={500}
+          loading="lazy"
+          quality={100}
+          className="about-section__image"
+        />
+      </figure>
+    </section>
+  );
+};
+
+interface ServicesSectionProps {
+  title: string;
+  description: string[];
+  button: { text: string; href: string };
+  videoSrc: string;
+}
+
+const ServicesSection: React.FC<ServicesSectionProps> = ({
+  title,
+  description,
+  button,
+  videoSrc,
+}) => {
+  return (
+    <section className="services-section">
+      <div className="services-section__video-container">
+        <video autoPlay={true} muted loop className="services-section__video">
+          <source src={videoSrc} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <article className="services-section__content">
+        <h2 className="services-section__title">{title}</h2>
+        <div className="services-section__description">
+          {description.map((paragraph, index) => (
+            <p key={index} className="services-section__paragraph">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        <div className="services-section__button-wrapper">
+          <Link href={button.href} className="services-section__button">
+            {button.text}{" "}
+            <ArrowUpRightIcon className="services-section__button-icon" />
+          </Link>
+        </div>
+      </article>
+    </section>
+  );
+};
+
+interface SectionContainerProps {
+  id: string;
+  children: ReactNode;
+  className?: string;
+}
+
+const SectionContainer: React.FC<SectionContainerProps> = ({
+  id,
+  children,
+  className = "",
+}) => {
+  return (
+    <section
+      id={id}
+      aria-labelledby={`${id}-heading`}
+      className={`section-container ${className}`}
+    >
+      {children}
+    </section>
+  );
+};
