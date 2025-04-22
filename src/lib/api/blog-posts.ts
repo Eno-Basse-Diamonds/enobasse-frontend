@@ -16,11 +16,6 @@ export interface Post {
     avatar: string;
   };
   image: { src: string; alt: string };
-  seo: {
-    metaTitle: string;
-    metaDescription: string;
-    keywords: string[],
-  }
 }
 
 export const getAllPosts = async (): Promise<Post[]> => {

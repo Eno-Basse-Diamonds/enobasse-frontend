@@ -1,0 +1,284 @@
+// blog-detail.scss
+
+.blog-detail {
+  @apply mt-12 mb-16 md:mb-20 lg:mb-28 text-[#502B3A];
+
+  &__header {
+    @apply px-4 sm:px-6 lg:px-8 text-left md:text-center;
+
+    &-container {
+      @apply flex flex-col items-start gap-y-8 md:flex-row md:items-center md:gap-x-2 justify-between mx-auto truncate;
+    }
+  }
+
+  &__hero--desktop {
+    @apply hidden sm:block relative w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] overflow-hidden;
+
+    &-image {
+      @apply w-full h-full object-cover;
+    }
+
+    &-meta {
+      @apply absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-[#502B3A]/60 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3;
+    }
+
+    & .blog-detail__hero-share {
+      @apply absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 bg-white text-[#502B3A]/60 p-2 sm:p-3 flex items-center gap-x-2 sm:gap-x-3 md:gap-x-4;
+
+      &-link {
+        @apply hover:text-[#D1A559] transition-colors;
+
+        &--facebook {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+
+        &--instagram {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+
+        &--x {
+          @apply w-3 h-3 sm:w-4 sm:h-4;
+        }
+
+        &--tiktok {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+      }
+    }
+  }
+
+  &__hero--mobile {
+    @apply sm:hidden;
+
+    &-container {
+      @apply relative w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] overflow-hidden;
+    }
+
+    &-image {
+      @apply w-full h-full object-cover;
+    }
+
+    &-meta {
+      @apply text-[#502B3A]/60 text-base font-light p-2 text-center mt-2;
+    }
+
+    & .blog-detail__hero-share {
+      @apply text-[#502B3A]/60 p-2 flex items-center justify-center gap-x-6;
+
+      &-link {
+        @apply hover:text-[#D1A559] transition-colors;
+
+        &--facebook {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+
+        &--instagram {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+
+        &--x {
+          @apply w-3 h-3 sm:w-4 sm:h-4;
+        }
+
+        &--tiktok {
+          @apply w-4 h-4 sm:w-5 sm:h-5;
+        }
+      }
+    }
+  }
+
+  &__content {
+    @apply mt-8 md:mt-12 lg:mt-16;
+
+    &-container {
+      @apply flex flex-col md:grid md:grid-cols-5 gap-16;
+    }
+
+    &-sidebar {
+      @apply order-1 md:order-2 md:col-span-2;
+    }
+
+    &-main {
+      @apply order-2 md:order-1 md:col-span-3;
+    }
+  }
+
+  &__toc {
+    @apply bg-[#D1A559]/20 p-8;
+
+    &-title {
+      @apply font-primary text-3xl mb-4;
+    }
+
+    &-list {
+      @apply space-y-1 list-disc list-inside;
+
+      &-item {
+        @apply ml-0;
+      }
+
+      &-link {
+        @apply text-lg text-[#502B3A] hover:hover:text-[#D1A559] hover:underline decoration-1 underline-offset-4;
+
+        &--child {
+          @apply text-lg text-[#502B3A]/80 hover:hover:text-[#D1A559] hover:underline decoration-1 underline-offset-4;
+        }
+      }
+
+      &-sublist {
+        @apply ml-4 mt-1 space-y-1 list-disc list-inside;
+      }
+    }
+  }
+
+  &__related {
+    @apply mt-16;
+
+    &-title {
+      @apply text-2xl font-primary text-[#502B3A] mb-6;
+    }
+
+    &-grid {
+      @apply grid gap-6 grid-cols-1;
+    }
+
+    &-item {
+      @apply flex flex-col sm:flex-row gap-4 transition-colors rounded-lg;
+
+      &-image {
+        @apply relative aspect-video sm:aspect-square sm:h-32 sm:w-56 flex-shrink-0 overflow-hidden;
+
+        img {
+          @apply w-full h-full object-cover transition-transform duration-300 group-hover:scale-105;
+        }
+      }
+
+      &-content {
+        @apply flex flex-col justify-between;
+      }
+
+      &-title {
+        @apply text-lg font-medium text-[#502B3A] group-hover:text-[#D1A559] transition-colors font-primary;
+      }
+
+      &-excerpt {
+        @apply mt-1 text-sm text-[#1B1B1D]/80 line-clamp-2;
+      }
+
+      &-meta {
+        @apply mt-3 flex items-center justify-between;
+      }
+
+      &-date {
+        @apply text-sm font-medium text-[#502B3A]/60;
+      }
+
+      &-time {
+        @apply text-xs font-medium text-[#D1A559];
+      }
+    }
+  }
+}
+
+.blog-post {
+  // Base typography
+  @apply text-[#1B1B1D] font-light leading-relaxed;
+
+  // Headings
+  & h1 {
+    @apply font-primary text-3xl md:text-5xl text-[#502B3A] mb-8;
+  }
+
+  & h2 {
+    @apply font-primary text-2xl md:text-3xl text-[#502B3A] mb-6 mt-10 pb-2;
+  }
+
+  & h3 {
+    @apply font-primary text-xl md:text-2xl text-[#502B3A] mb-4 mt-8;
+  }
+
+  & h4 {
+    @apply font-primary text-lg md:text-xl text-[#502B3A] mb-3 mt-6;
+  }
+
+  // Paragraphs and text elements
+  & p {
+    @apply text-base md:text-lg leading-7 mb-6;
+  }
+
+  & strong {
+    @apply font-medium text-[#462230];
+  }
+
+  & em {
+    @apply italic;
+  }
+
+  // Links
+  & a {
+    @apply text-[#D1A559] underline underline-offset-4 decoration-1 hover:text-[#B38C4A] transition-colors;
+  }
+
+  // Lists
+  & ul,
+  & ol {
+    @apply mb-6 pl-5;
+  }
+
+  & li {
+    @apply mb-2 pl-2;
+
+    & > p {
+      @apply mb-2;
+    }
+  }
+
+  & ul {
+    @apply list-disc;
+  }
+
+  & ol {
+    @apply list-decimal;
+  }
+
+  // Images
+  & img {
+    @apply my-8 shadow-md w-full h-auto;
+  }
+
+  // Blockquotes
+  & blockquote {
+    @apply border-l-4 border-[#D1A559] pl-6 py-2 my-6 italic text-[#462230]/90;
+
+    & p {
+      @apply mb-0;
+    }
+  }
+
+  // Code blocks
+  & pre {
+    @apply bg-[#F5F5F5] p-4 rounded-lg my-6 overflow-x-auto text-sm;
+  }
+
+  & code {
+    @apply font-mono bg-[#F5F5F5] px-2 py-1 rounded text-[#502B3A];
+  }
+
+  // Tables
+  & table {
+    @apply w-full my-8 border-collapse;
+  }
+
+  & th {
+    @apply bg-[#502B3A]/10 text-left px-4 py-3 border-b border-[#D1A559]/50 font-medium;
+  }
+
+  & td {
+    @apply px-4 py-3 border-b border-[#D1A559]/20;
+  }
+
+  // Horizontal rule
+  & hr {
+    @apply my-10 border-t border-[#D1A559]/30;
+  }
+}

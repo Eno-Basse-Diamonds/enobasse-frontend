@@ -1,36 +1,4 @@
 import React from "react";
-import { Metadata } from "next";
-import { getPostBySlug } from "../api/blog-posts";
-
-export const generateBlogMetadata = async (slug: string): Promise<Metadata> => {
-  const post = await getPostBySlug(slug);
-  if (!post) return {};
-
-  return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: {
-      canonical: `/blog/${slug}`
-    },
-    openGraph: {
-      title: `${post.title} | EnoBasse Jewellery`,
-      description: post.excerpt,
-      publishedTime: post.date,
-      images: [{
-        url: `https://enobasse.com${post.image.src}`,
-        width: 1200,
-        height: 630,
-        alt: post.image.alt,
-      }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${post.title} | EnoBasse Jewellery`,
-      description: post.excerpt,
-      images: [`https://enobasse.com${post.image.src}`],
-    },
-  };
-};
 
 export const cleanMarkdownContent = (content: string) => {
   return content.replace(/\n\s+/g, "\n").replace(/\n+/g, "\n").trim();
