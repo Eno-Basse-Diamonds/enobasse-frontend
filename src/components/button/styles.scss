@@ -1,0 +1,7 @@
+.back-button {
+  @apply text-[#502B3A] hover:text-[#D1A559] transition-colors;
+
+  &__icon {
+    @apply w-5 h-5 sm:w-6 sm:h-6;
+  }
+}
