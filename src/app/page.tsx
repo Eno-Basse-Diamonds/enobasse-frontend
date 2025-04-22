@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRightIcon } from "@/components/icons";
@@ -9,10 +9,12 @@ import {
   CTASection,
   HeroSection,
   SectionHeading,
+  SectionContainer,
 } from "@/components";
 import "./home.scss";
+import { getAllPosts } from "@/lib/api/blog-posts";
 
-export default function Home() {
+export default async function Home() {
   const carouselItems = [
     {
       image: "/images/categories/rings.png",
@@ -97,64 +99,7 @@ export default function Home() {
     },
   ];
 
-  const blogPosts = [
-    {
-      id: "gemstone-education",
-      title: "Gemstone Education",
-      excerpt:
-        "Gemstones are highly prized for beauty, durability, and rarity.",
-      href: "/blog/gemstone-education",
-      image: {
-        src: "/images/blog/post-01.png",
-        alt: "Various gemstones displayed on velvet",
-      },
-      author: "Helen David",
-      date: "February 16th, 2025",
-      datetime: "2025-02-16",
-    },
-    {
-      id: "jewelry-care",
-      title: "Jewelry Care Guide",
-      excerpt:
-        "Learn how to properly maintain and care for your precious jewelry.",
-      href: "/blog/jewelry-care",
-      image: {
-        src: "/images/blog/post-02.png",
-        alt: "Person cleaning a ring with soft cloth",
-      },
-      author: "Michael Stone",
-      date: "March 5th, 2025",
-      datetime: "2025-03-05",
-    },
-    {
-      id: "engagement-rings",
-      title: "Choosing the Perfect Engagement Ring",
-      excerpt:
-        "Everything you need to know about selecting the ideal engagement ring.",
-      href: "/blog/engagement-rings",
-      image: {
-        src: "/images/blog/post-03.png",
-        alt: "Diamond engagement ring on velvet",
-      },
-      author: "Sarah Johnson",
-      date: "April 12th, 2025",
-      datetime: "2025-04-12",
-    },
-    {
-      id: "vintage-jewelry",
-      title: "The History of Vintage Jewelry",
-      excerpt:
-        "Exploring the timeless appeal of vintage jewelry designs through the decades.",
-      href: "/blog/vintage-jewelry",
-      image: {
-        src: "/images/blog/post-04.png",
-        alt: "Collection of vintage jewelry pieces",
-      },
-      author: "Emma Wilson",
-      date: "May 8th, 2025",
-      datetime: "2025-05-08",
-    },
-  ];
+  const blogPosts = await getAllPosts();
 
   return (
     <main>
@@ -396,28 +341,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
           </Link>
         </div>
       </article>
-    </section>
-  );
-};
-
-interface SectionContainerProps {
-  id: string;
-  children: ReactNode;
-  className?: string;
-}
-
-const SectionContainer: React.FC<SectionContainerProps> = ({
-  id,
-  children,
-  className = "",
-}) => {
-  return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-heading`}
-      className={`section-container ${className}`}
-    >
-      {children}
     </section>
   );
 };
