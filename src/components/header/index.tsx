@@ -293,7 +293,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => (
   <div
     className={`header__mobile-menu ${isOpen ? "header__mobile-menu--open" : ""}`}
-    aria-hidden={!isOpen}
   >
     <div className="header__mobile-menu-container">
       <MobileMenuHeader onClose={onClose} />
