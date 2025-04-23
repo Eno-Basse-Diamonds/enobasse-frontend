@@ -114,9 +114,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${lora.variable} ${gantari.variable} antialiased`}>
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );

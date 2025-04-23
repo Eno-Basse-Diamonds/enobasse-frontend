@@ -11,6 +11,7 @@ import { BentoGrid } from "./bento-grid";
 import { Breadcrumb } from "./breadcrumb";
 import { Pagination } from "./pagination";
 import { BackButton } from "./button";
+import { Input, PasswordInput } from "./input";
 
 export {
   Header,
@@ -26,4 +27,6 @@ export {
   Breadcrumb,
   Pagination,
   BackButton,
+  Input,
+  PasswordInput
 };
