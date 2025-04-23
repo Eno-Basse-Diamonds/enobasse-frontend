@@ -2,7 +2,7 @@ import { AccountIcon } from "./account";
 import { CartIcon } from "./cart";
 import { SearchIcon } from "./search";
 import { WishlistIcon } from "./wishlist";
-import { FacebookIcon } from "./facebook";
+import { FacebookIcon, AuthFacebookIcon } from "./facebook";
 import { InstagramIcon } from "./instagram";
 import { TiktokIcon } from "./tiktok";
 import { XIcon } from "./x";
@@ -15,6 +15,9 @@ import { ChevronRightIcon } from "./chevron-right";
 import { CloseIcon } from "./close";
 import { MenuIcon } from "./menu";
 import { HomeIcon } from "./home";
+import { AuthGoogleIcon } from "./google";
+import { EyeCloseIcon } from "./eye-close";
+import { EyeOpenIcon } from "./eye-open";
 
 export {
   AccountIcon,
@@ -22,6 +25,7 @@ export {
   SearchIcon,
   WishlistIcon,
   FacebookIcon,
+  AuthFacebookIcon,
   InstagramIcon,
   TiktokIcon,
   XIcon,
@@ -34,4 +38,7 @@ export {
   CloseIcon,
   MenuIcon,
   HomeIcon,
+  AuthGoogleIcon,
+  EyeCloseIcon,
+  EyeOpenIcon,
 };

@@ -1,0 +1,38 @@
+.input {
+  &__container {
+    @apply block;
+  }
+
+  &__label {
+    @apply block font-primary font-medium text-sm sm:text-base text-[#502B3A];
+  }
+
+  &__field {
+    @apply mt-1 sm:mt-2 block w-full py-3 px-3 sm:px-4 bg-[#D1A55933]/20 focus:ring-1 focus:ring-[#D1A559] text-sm sm:text-base;
+
+    &--error {
+      @apply border border-red-500;
+    }
+  }
+
+  &__help-text {
+    @apply mt-2 text-sm text-[#787878];
+  }
+
+  &__error {
+    @apply mt-1 text-sm text-red-600;
+  }
+
+  // Password input specific styles
+  &__password-container {
+    @apply mt-1 sm:mt-2 relative;
+  }
+
+  &__toggle-button {
+    @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+  }
+
+  &__toggle-icon {
+    @apply h-4 w-4 sm:h-5 sm:w-5 text-gray-500 hover:text-gray-700;
+  }
+}

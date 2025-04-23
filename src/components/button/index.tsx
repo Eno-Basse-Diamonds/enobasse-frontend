@@ -14,7 +14,7 @@ export const BackButton: React.FC = () => {
   return (
     <button
       className="back-button"
-      aria-label="Go back to home page"
+      aria-label="Go back to previous page"
       onClick={handleBack}
     >
       <ArrowLeftIcon className="back-button__icon" />
