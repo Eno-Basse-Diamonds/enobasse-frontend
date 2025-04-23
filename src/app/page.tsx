@@ -1,7 +1,5 @@
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpRightIcon } from "@/components/icons";
+import { getAllPosts } from "@/lib/api/blog-posts";
 import {
   BentoGrid,
   BlogSection,
@@ -11,8 +9,11 @@ import {
   SectionHeading,
   SectionContainer,
 } from "@/components";
+import { AboutSection } from "./_components/about-section";
+import { BlogHeader } from "./_components/blog-header";
+import { HelpSection } from "./_components/help-section";
+import { ServicesSection } from "./_components/services-section";
 import "./home.scss";
-import { getAllPosts } from "@/lib/api/blog-posts";
 
 export default async function Home() {
   const carouselItems = [
@@ -200,147 +201,3 @@ export default async function Home() {
     </main>
   );
 }
-
-const BlogHeader: React.FC = () => {
-  return (
-    <header className="blog-header">
-      <h2 className="blog-header__title">Our Blog</h2>
-      <Link href="/blog" className="blog-header__link">
-        View All Posts <ArrowUpRightIcon className="blog-header__link-icon" />
-      </Link>
-    </header>
-  );
-};
-
-interface HelpSectionProps {
-  title: string;
-  body: string[];
-  button: { text: string; href: string };
-  image: { src: string; alt: string };
-}
-
-const HelpSection: React.FC<HelpSectionProps> = ({
-  title,
-  body,
-  button,
-  image,
-}) => {
-  return (
-    <section className="help-section">
-      <figure className="help-section__image-container">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          height={500}
-          width={500}
-          loading="lazy"
-          quality={100}
-          className="help-section__image"
-        />
-      </figure>
-      <article className="help-section__content">
-        <h2 className="help-section__title">{title}</h2>
-        <div className="help-section__body">
-          {body.map((paragraph, index) => (
-            <p key={index} className="help-section__paragraph">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-        <div className="help-section__button-wrapper">
-          <Link href={button.href} className="help-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="help-section__button-icon" />
-          </Link>
-        </div>
-      </article>
-    </section>
-  );
-};
-
-interface AboutSectionProps {
-  title: string;
-  description: string[];
-  button: { text: string; href: string };
-  image: { src: string; alt: string };
-}
-
-const AboutSection: React.FC<AboutSectionProps> = ({
-  title,
-  description,
-  button,
-  image,
-}) => {
-  return (
-    <section className="about-section">
-      <article className="about-section__content">
-        <h2 className="about-section__title">{title}</h2>
-        <div className="about-section__description">
-          {description.map((paragraph, index) => (
-            <p key={index} className="about-section__paragraph">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-        <div className="about-section__button-wrapper">
-          <Link href={button.href} className="about-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="about-section__button-icon" />
-          </Link>
-        </div>
-      </article>
-      <figure className="about-section__image-container">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          height={500}
-          width={500}
-          loading="lazy"
-          quality={100}
-          className="about-section__image"
-        />
-      </figure>
-    </section>
-  );
-};
-
-interface ServicesSectionProps {
-  title: string;
-  description: string[];
-  button: { text: string; href: string };
-  videoSrc: string;
-}
-
-const ServicesSection: React.FC<ServicesSectionProps> = ({
-  title,
-  description,
-  button,
-  videoSrc,
-}) => {
-  return (
-    <section className="services-section">
-      <div className="services-section__video-container">
-        <video autoPlay={true} muted loop className="services-section__video">
-          <source src={videoSrc} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <article className="services-section__content">
-        <h2 className="services-section__title">{title}</h2>
-        <div className="services-section__description">
-          {description.map((paragraph, index) => (
-            <p key={index} className="services-section__paragraph">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-        <div className="services-section__button-wrapper">
-          <Link href={button.href} className="services-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="services-section__button-icon" />
-          </Link>
-        </div>
-      </article>
-    </section>
-  );
-};
