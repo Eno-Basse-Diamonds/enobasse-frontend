@@ -6,6 +6,7 @@ import {
   BackButton,
   SectionContainer,
   Pagination,
+  PageHeading,
 } from "@/components";
 import "./styles.scss";
 
@@ -21,15 +22,7 @@ export default async function BlogPage() {
 
   return (
     <main className="blog-page">
-      <header className="blog-page__header">
-        <div className="blog-page__header-container">
-          <div className="blog-page__header-content">
-            <BackButton />
-            <h1 className="blog-page__title">Our Blog</h1>
-            <div aria-hidden className="blog-page__header-spacer"></div>
-          </div>
-        </div>
-      </header>
+      <PageHeading title="Our Blog" />
 
       <SectionContainer
         id="blog-posts"
@@ -42,10 +35,7 @@ export default async function BlogPage() {
         <BlogSection posts={posts} />
       </SectionContainer>
 
-      <div
-        aria-label="Blog pagination"
-        className="blog-page__pagination"
-      >
+      <div aria-label="Blog pagination" className="blog-page__pagination">
         <Pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}

@@ -12,6 +12,8 @@ import { Breadcrumb } from "./breadcrumb";
 import { Pagination } from "./pagination";
 import { BackButton } from "./button";
 import { Input, PasswordInput } from "./input";
+import { PageHeading } from "./page-heading";
+import { EmptyState } from "./empty-state";
 
 export {
   Header,
@@ -28,5 +30,7 @@ export {
   Pagination,
   BackButton,
   Input,
-  PasswordInput
+  PasswordInput,
+  PageHeading,
+  EmptyState,
 };

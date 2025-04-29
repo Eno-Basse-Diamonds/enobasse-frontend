@@ -1,0 +1,19 @@
+.page-heading {
+  @apply px-4 sm:px-6 lg:px-8 text-center;
+
+  &__container {
+    @apply text-center mb-6 sm:mb-8 md:mb-10;
+  }
+
+  &__header {
+    @apply flex items-center justify-between mx-auto;
+  }
+
+  &__title {
+    @apply text-2xl sm:text-3xl md:text-4xl font-primary font-semibold;
+  }
+
+  &__spacer {
+    @apply w-5 sm:w-6;
+  }
+}

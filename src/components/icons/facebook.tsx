@@ -18,7 +18,7 @@ export const FacebookIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};
 
 export const AuthFacebookIcon: React.FC<IconProps> = ({ className }) => {
   return (

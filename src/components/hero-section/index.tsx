@@ -30,11 +30,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {buttons.length > 0 && (
           <nav aria-label="Primary actions" className="hero__nav">
             {buttons.map((link, index) => (
-              <Link
-                key={index}
-                href={link.href}
-                className="hero__button"
-              >
+              <Link key={index} href={link.href} className="hero__button">
                 {link.text}
               </Link>
             ))}

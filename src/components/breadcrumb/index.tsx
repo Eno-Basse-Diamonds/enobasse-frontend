@@ -7,7 +7,7 @@ interface BreadcrumbItem {
   href: string;
 }
 
-interface BreadcrumbProps {
+export interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 

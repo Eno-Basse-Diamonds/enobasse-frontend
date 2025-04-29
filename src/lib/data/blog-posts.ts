@@ -1,4 +1,22 @@
-export const blogPosts = [
+export interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  tags: string[];
+  excerpt: string;
+  content: string;
+  date: string;
+  datetime: string;
+  readingTime: string;
+  author: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
+  image: { src: string; alt: string };
+}
+
+export const blogPosts: Post[] = [
   {
     id: "gemstone-education",
     title: "Gemstone Education: Understanding Quality & Value",
@@ -68,7 +86,6 @@ export const blogPosts = [
       - [Gemstone Glossary](/glossary) – Key terms explained.
       - [Rare Gemstones](/rare-gemstones) – Discover extraordinary varieties.
       `,
-    href: "/blog/gemstone-education",
     image: {
       src: "/images/blog/post-01.png",
       alt: "Various gemstones displayed on velvet",
@@ -180,8 +197,6 @@ export const blogPosts = [
     image: {
       src: "/images/blog/post-02.png",
       alt: "Person cleaning a ring with soft cloth",
-      width: 1200,
-      height: 800,
     },
     author: {
       name: "Michael Stone",
@@ -191,7 +206,6 @@ export const blogPosts = [
     date: "March 5th, 2025",
     datetime: "2025-03-05",
     readingTime: "8 min read",
-    category: "Maintenance",
     tags: ["cleaning", "storage", "repairs", "gold", "silver", "maintenance"],
   },
   {
@@ -338,12 +352,9 @@ export const blogPosts = [
 
       Ready to start shopping? [Book a consultation](/appointments) with our bridal specialists.
     `,
-    href: "/blog/engagement-rings",
     image: {
       src: "/images/blog/post-03.png",
       alt: "Diamond engagement ring on velvet",
-      width: 1200,
-      height: 800,
     },
     author: {
       name: "Sarah Johnson",
@@ -352,8 +363,7 @@ export const blogPosts = [
     },
     date: "April 12th, 2025",
     datetime: "2025-04-12",
-    readingTime: "12 min read", // Updated from 8 min
-    category: "Bridal",
+    readingTime: "12 min read",
     tags: [
       "engagement",
       "diamonds",
@@ -400,12 +410,9 @@ export const blogPosts = [
 
       [Explore our curated vintage collection](/collections/vintage) featuring authenticated pieces from each historical period, complete with certificates of authenticity and detailed provenance records.
     `,
-    href: "/blog/vintage-jewelry",
     image: {
       src: "/images/blog/post-01.png",
       alt: "Collection of vintage jewelry pieces through the decades",
-      width: 1200,
-      height: 800,
     },
     author: {
       name: "Emma Wilson",
@@ -414,8 +421,7 @@ export const blogPosts = [
     },
     date: "May 8th, 2025",
     datetime: "2025-05-08",
-    readingTime: "8 min read", // Updated from 5 min
-    category: "History",
+    readingTime: "8 min read",
     tags: [
       "vintage",
       "art deco",
@@ -486,12 +492,9 @@ export const blogPosts = [
 
       [View our curated Victorian collection](/collections/victorian), each piece professionally authenticated and accompanied by a detailed history report.
     `,
-    href: "/blog/victorian-jewelry",
     image: {
       src: "/images/blog/post-02.png",
       alt: "Collage of Victorian rings, brooches and necklaces spanning 1837-1901",
-      width: 1200,
-      height: 800,
     },
     author: {
       name: "Eleanor Blackwood",
@@ -501,7 +504,6 @@ export const blogPosts = [
     date: "June 15th, 2025",
     datetime: "2025-06-15",
     readingTime: "9 min read",
-    category: "History",
     tags: [
       "victorian",
       "antique",

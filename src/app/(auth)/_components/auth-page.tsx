@@ -93,7 +93,7 @@ export default function AuthPage({
                 helpText={field.helpText}
                 required={field.required}
               />
-            )
+            ),
           )}
 
           {showTermsCheckbox && (
@@ -107,14 +107,14 @@ export default function AuthPage({
                   required
                 />
               </div>
-              <label htmlFor="terms-and-conditions" className="auth-page__checkbox-label">
+              <label
+                htmlFor="terms-and-conditions"
+                className="auth-page__checkbox-label"
+              >
                 {termsText || (
                   <>
                     I agree to all{" "}
-                    <Link
-                      href="/terms"
-                      className="auth-page__terms-link"
-                    >
+                    <Link href="/terms" className="auth-page__terms-link">
                       Terms & Conditions
                     </Link>
                   </>
@@ -123,10 +123,7 @@ export default function AuthPage({
             </div>
           )}
 
-          <button
-            type="submit"
-            className="auth-page__submit-button"
-          >
+          <button type="submit" className="auth-page__submit-button">
             {actionButtonText}
           </button>
 
@@ -144,17 +141,11 @@ export default function AuthPage({
               </div>
 
               <div className="auth-page__social-buttons">
-                <button
-                  type="button"
-                  className="auth-page__social-button"
-                >
+                <button type="button" className="auth-page__social-button">
                   <AuthGoogleIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   Google
                 </button>
-                <button
-                  type="button"
-                  className="auth-page__social-button"
-                >
+                <button type="button" className="auth-page__social-button">
                   <AuthFacebookIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   Facebook
                 </button>

@@ -25,7 +25,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const pages = Array.from(
     { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
+    (_, i) => startPage + i,
   );
 
   return (

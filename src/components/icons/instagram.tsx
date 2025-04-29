@@ -34,4 +34,4 @@ export const InstagramIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};
