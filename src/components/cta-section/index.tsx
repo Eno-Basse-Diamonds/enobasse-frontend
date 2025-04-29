@@ -25,7 +25,8 @@ export const CTASection: React.FC<CTASectionProps> = ({
         </h2>
         <div className="cta-section__button-wrapper">
           <Link href={button.href} className="cta-section__button">
-            {button.text} <ArrowUpRightIcon className="cta-section__button-icon" />
+            {button.text}{" "}
+            <ArrowUpRightIcon className="cta-section__button-icon" />
           </Link>
         </div>
       </article>

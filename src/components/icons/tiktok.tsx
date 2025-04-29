@@ -18,4 +18,4 @@ export const TiktokIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};

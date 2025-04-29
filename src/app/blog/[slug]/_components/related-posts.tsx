@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Post } from "@/lib/api/blog-posts";
+import { Post } from "@/lib/data/blog-posts";
 
 interface RelatedPostsProps {
   posts: Post[];

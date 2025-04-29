@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import "./styles.scss";
-import { Post } from "@/lib/api/blog-posts";
+import { Post } from "@/lib/data/blog-posts";
 
 interface BlogSectionProps {
   posts: Post[];

@@ -2,14 +2,14 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { getPostBySlug, getRelatedPosts, Post } from "@/lib/api/blog-posts";
+import { getPostBySlug, getRelatedPosts } from "@/lib/api/blog-posts";
 import {
   cleanMarkdownContent,
   createHeadingRenderer,
   generateTableOfContents,
 } from "@/lib/utils/blog-post.utils";
 import { SectionContainer } from "@/components";
-import { BlogHeader } from "./_components/blog-header";
+import { PageHeading } from "@/components";
 import { BlogHeroImage } from "./_components/blog-hero-image";
 import { TableOfContents } from "./_components/table-of-content";
 import { RelatedPosts } from "./_components/related-posts";
@@ -19,8 +19,10 @@ type BlogDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const generateMetadata = async ({ params }: BlogDetailPageProps): Promise<Metadata> => {
-  const { slug } = await params
+export const generateMetadata = async ({
+  params,
+}: BlogDetailPageProps): Promise<Metadata> => {
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
 
@@ -28,18 +30,20 @@ export const generateMetadata = async ({ params }: BlogDetailPageProps): Promise
     title: post.title,
     description: post.excerpt,
     alternates: {
-      canonical: `/blog/${post.slug}`
+      canonical: `/blog/${post.slug}`,
     },
     openGraph: {
       title: `${post.title} | EnoBasse Jewellery`,
       description: post.excerpt,
       publishedTime: post.date,
-      images: [{
-        url: `https://enobasse.com${post.image.src}`,
-        width: 1200,
-        height: 630,
-        alt: post.image.alt,
-      }],
+      images: [
+        {
+          url: `https://enobasse.com${post.image.src}`,
+          width: 1200,
+          height: 630,
+          alt: post.image.alt,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -51,7 +55,7 @@ export const generateMetadata = async ({ params }: BlogDetailPageProps): Promise
 };
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const { slug } = await params
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
   const relatedPosts = await getRelatedPosts();
 
@@ -67,7 +71,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <main className="blog-detail">
-      <BlogHeader post={post} breadcrumbItems={breadcrumbItems} />
+      <PageHeading breadcrumb={{ items: breadcrumbItems }} />
 
       <SectionContainer id="blog-post" aria-labelledby="blog-post-heading">
         <BlogHeroImage

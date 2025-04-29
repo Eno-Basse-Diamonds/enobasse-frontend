@@ -15,7 +15,12 @@ interface BlogHeroImageProps {
   date: string;
 }
 
-export const BlogHeroImage = ({ src, alt, author, date }: BlogHeroImageProps) => (
+export const BlogHeroImage = ({
+  src,
+  alt,
+  author,
+  date,
+}: BlogHeroImageProps) => (
   <>
     <div className="blog-detail__hero--desktop">
       <Image
@@ -25,7 +30,8 @@ export const BlogHeroImage = ({ src, alt, author, date }: BlogHeroImageProps) =>
         height={1080}
         quality={100}
         className="blog-detail__hero--desktop-image"
-        priority />
+        priority
+      />
       <p className="blog-detail__hero--desktop-meta">
         By: {author} | {date}
       </p>
@@ -40,7 +46,8 @@ export const BlogHeroImage = ({ src, alt, author, date }: BlogHeroImageProps) =>
           height={1080}
           quality={100}
           className="blog-detail__hero--mobile-image"
-          priority />
+          priority
+        />
       </div>
       <p className="blog-detail__hero--mobile-meta">
         By: {author} | {date}

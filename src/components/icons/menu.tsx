@@ -44,4 +44,4 @@ export const MenuIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};

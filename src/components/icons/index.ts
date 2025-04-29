@@ -18,6 +18,10 @@ import { HomeIcon } from "./home";
 import { AuthGoogleIcon } from "./google";
 import { EyeCloseIcon } from "./eye-close";
 import { EyeOpenIcon } from "./eye-open";
+import { CheckIcon } from "./check";
+import { HeartIcon } from "./heart";
+import { MinusIcon } from "./minus";
+import { PlusIcon } from "./plus";
 
 export {
   AccountIcon,
@@ -41,4 +45,8 @@ export {
   AuthGoogleIcon,
   EyeCloseIcon,
   EyeOpenIcon,
+  CheckIcon,
+  HeartIcon,
+  MinusIcon,
+  PlusIcon,
 };

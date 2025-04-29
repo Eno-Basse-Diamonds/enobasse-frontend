@@ -40,7 +40,7 @@ export default function SignUpPage() {
       actionButtonText="Sign Up"
       footer={{
         text: "Already have an account?",
-        link: { text: "Sign In", href: "/sign-in" }
+        link: { text: "Sign In", href: "/sign-in" },
       }}
       showSocialAuth={true}
       showTermsCheckbox={true}

@@ -19,4 +19,4 @@ export const WishlistIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};

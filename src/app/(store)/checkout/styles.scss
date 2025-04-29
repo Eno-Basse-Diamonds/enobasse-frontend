@@ -1,0 +1,173 @@
+.checkout-page {
+  @apply bg-gray-50 py-12;
+
+  &__container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  &__columns {
+    @apply flex flex-col lg:flex-row gap-8;
+  }
+
+  &__left-column {
+    @apply lg:w-2/3;
+  }
+
+  &__right-column {
+    @apply lg:w-1/3;
+  }
+
+  & .form {
+    @apply space-y-4;
+
+    &__grid-2 {
+      @apply grid grid-cols-2 gap-4;
+    }
+
+    &__checkbox-container {
+      @apply flex items-center;
+    }
+
+    &__checkbox {
+      @apply h-4 w-4 text-[#D1A559] focus:ring-[#D1A559] border-gray-300 rounded;
+    }
+
+    &__checkbox-label {
+      @apply ml-2 block text-sm text-[#502B3A];
+    }
+
+    &__select-container {
+      @apply relative;
+    }
+
+    &__select {
+      @apply block w-full px-4 py-2 pr-8 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559] appearance-none bg-white;
+    }
+
+    &__select-icon {
+      @apply pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#502B3A];
+    }
+
+    &__radio-group {
+      @apply mt-4 flex flex-row items-center space-x-4;
+    }
+  }
+}
+
+.checkout-form-section {
+  @apply bg-white shadow p-8 mb-6;
+
+  &__title {
+    @apply text-xl font-semibold text-[#502B3A] mb-6;
+  }
+}
+
+.checkout-cart-item {
+  @apply py-4 flex items-start;
+
+  &__image-container {
+    @apply flex-shrink-0 h-16 w-16 overflow-hidden border border-gray-200;
+  }
+
+  &__content {
+    @apply ml-4 flex-1;
+  }
+
+  &__header {
+    @apply flex justify-between text-base;
+  }
+
+  &__name-link {
+    @apply font-medium text-sm text-[#502B3A] hover:underline transition-all;
+  }
+
+  &__price {
+    @apply ml-4 text-sm font-medium text-[#502B3A];
+  }
+
+  &__details-row {
+    @apply flex justify-between mt-1;
+  }
+
+  &__detail {
+    @apply text-xs text-[#502B3A]/70;
+  }
+
+  &__gemstone {
+    @apply text-xs text-[#502B3A]/70 mt-1;
+  }
+}
+
+.form-input {
+  &__label {
+    @apply block text-sm font-medium text-[#502B3A] mb-1;
+  }
+
+  &__field {
+    @apply w-full px-4 py-2 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559];
+  }
+}
+
+.order-summary {
+  @apply bg-white shadow p-6;
+
+  &__title {
+    @apply text-xl font-semibold text-[#502B3A] mb-6;
+  }
+
+  &__items-list {
+    @apply mb-6;
+  }
+
+  &__divider {
+    @apply space-y-4 border-t border-gray-200 pt-4;
+  }
+
+  &__row {
+    @apply flex justify-between;
+  }
+
+  &__label {
+    @apply text-sm text-[#502B3A];
+  }
+
+  &__value {
+    @apply text-sm font-medium text-[#502B3A];
+  }
+
+  &__total-row {
+    @apply flex justify-between border-t border-gray-200 pt-4;
+  }
+
+  &__total-label {
+    @apply text-base font-medium text-[#502B3A];
+  }
+
+  &__total-value {
+    @apply text-base font-bold text-[#502B3A];
+  }
+
+  &__checkout-btn {
+    @apply w-full bg-[#502B3A] hover:bg-[#C0954E] text-white py-3 px-4 font-medium transition-colors mt-6;
+  }
+
+  &__return-link {
+    @apply mt-4 text-center text-sm text-[#502B3A]/70;
+
+    a {
+      @apply font-medium text-[#502B3A] hover:text-[#D1A559];
+    }
+  }
+}
+
+.payment-method {
+  @apply flex items-center;
+
+  &__input {
+    @apply h-4 w-4 text-[#D1A559] focus:ring-[#D1A559] border-gray-300;
+  }
+
+  &__label {
+    @apply ml-3 block text-sm font-medium text-[#502B3A];
+  }
+}

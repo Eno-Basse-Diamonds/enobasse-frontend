@@ -36,13 +36,13 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   const nextSlide = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + 1
+      prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + 1,
     );
   }, [itemsPerPage, totalItems]);
 
   const prevSlide = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? totalItems - itemsPerPage : prevIndex - 1
+      prevIndex === 0 ? totalItems - itemsPerPage : prevIndex - 1,
     );
   }, [itemsPerPage, totalItems]);
 
@@ -50,7 +50,7 @@ export const Carousel: React.FC<CarouselProps> = ({
     (slideIndex: number) => {
       setCurrentIndex(slideIndex * itemsPerPage);
     },
-    [itemsPerPage]
+    [itemsPerPage],
   );
 
   const visibleStart = currentIndex + 1;

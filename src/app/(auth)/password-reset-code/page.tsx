@@ -26,7 +26,12 @@ export default function PasswordResetCodePage() {
           label: "Reset Code",
           type: "number",
           placeholder: "Enter 6 figure reset code",
-          helpText: <p className="mt-2 text-sm text-[#787878]">Didn’t receive the code? Resend code in: <span className="text-[#D1A559]">0:57s</span></p>,
+          helpText: (
+            <p className="mt-2 text-sm text-[#787878]">
+              Didn’t receive the code? Resend code in:{" "}
+              <span className="text-[#D1A559]">0:57s</span>
+            </p>
+          ),
           required: true,
         },
       ]}

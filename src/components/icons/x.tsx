@@ -18,4 +18,4 @@ export const XIcon: React.FC<IconProps> = ({ className }) => {
       />
     </svg>
   );
-}
+};

@@ -32,7 +32,7 @@ export default function SignInPage() {
       actionButtonText="Sign In"
       footer={{
         text: "New to EnoBasse?",
-        link: { text: "Create an account", href: "/sign-up" }
+        link: { text: "Create an account", href: "/sign-up" },
       }}
       showSocialAuth={true}
       showTermsCheckbox={false}
