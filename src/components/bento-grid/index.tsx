@@ -44,6 +44,7 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
               <Image
                 src={item.image.src}
                 alt={item.image.alt}
+                title={item.image.alt}
                 height={500}
                 width={500}
                 loading="lazy"

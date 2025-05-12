@@ -19,6 +19,7 @@ export const RelatedPosts = ({ posts, className = "" }: RelatedPostsProps) => (
               <Image
                 src={post.image.src}
                 alt={post.image.alt}
+                title={post.image.alt}
                 width={320}
                 height={240}
                 quality={80}

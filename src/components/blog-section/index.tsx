@@ -18,6 +18,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
               <Image
                 src={post.image.src}
                 alt={post.image.alt}
+                title={post.image.alt}
                 width={500}
                 height={500}
                 quality={100}

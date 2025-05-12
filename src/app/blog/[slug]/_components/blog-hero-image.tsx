@@ -26,6 +26,7 @@ export const BlogHeroImage = ({
       <Image
         src={src}
         alt={alt}
+        title={alt}
         width={1920}
         height={1080}
         quality={100}

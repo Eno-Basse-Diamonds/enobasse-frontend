@@ -96,6 +96,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                     <Image
                       src={item.image}
                       alt={item.alt}
+                      title={item.alt}
                       height={500}
                       width={500}
                       loading="lazy"
