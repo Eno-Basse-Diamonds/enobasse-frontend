@@ -22,6 +22,13 @@ import { CheckIcon } from "./check";
 import { HeartIcon } from "./heart";
 import { MinusIcon } from "./minus";
 import { PlusIcon } from "./plus";
+import { DiamondIcon } from "./diamond";
+import { ShareIcon } from "./share";
+import { LinkIcon } from "./link";
+import { StarIcon } from "./star";
+import { BoxIcon } from "./box";
+import { VehicleIcon } from "./vehicle";
+import { FilterIcon } from "./filter";
 
 export {
   AccountIcon,
@@ -49,4 +56,11 @@ export {
   HeartIcon,
   MinusIcon,
   PlusIcon,
+  DiamondIcon,
+  ShareIcon,
+  LinkIcon,
+  StarIcon,
+  BoxIcon,
+  VehicleIcon,
+  FilterIcon,
 };

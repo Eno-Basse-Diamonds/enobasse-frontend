@@ -6,11 +6,11 @@
   }
 
   &__item {
-    @apply flex items-center;
+    @apply flex items-center truncate overflow-hidden;
   }
 
   &__link {
-    @apply font-normal text-[#502B3A] hover:text-[#D1A559] transition-colors ml-1 md:ml-2;
+    @apply font-normal text-[#502B3A] hover:text-[#D1A559] transition-colors ml-1 md:ml-2 truncate;
 
     &--home {
       @apply inline-flex items-center;

@@ -17,10 +17,12 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
       <div className="page-heading__container">
         <div className="page-heading__header">
           <BackButton />
-          {title && <h1 className="page-heading__title">{title}</h1>}
+          <div className="flex flex-col items-center justify-center gap-3">
+            {title && <h1 className="page-heading__title">{title}</h1>}
+            {breadcrumb && <Breadcrumb {...breadcrumb} />}
+          </div>
           <div aria-hidden className="page-heading__spacer"></div>
         </div>
-        {breadcrumb && <Breadcrumb {...breadcrumb} />}
       </div>
     </div>
   );

@@ -249,17 +249,15 @@ const Socials: React.FC = () => {
     <nav aria-label="Social media links">
       <div className="footer__socials">
         {socialLinks.map((link, index) => (
-          <Link
+          <a
             key={`social-${index}`}
             href={link.href}
             aria-label={link.ariaLabel}
-            passHref
-            legacyBehavior
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <a target="_blank" rel="noopener noreferrer">
-              {link.icon}
-            </a>
-          </Link>
+            {link.icon}
+          </a>
         ))}
       </div>
     </nav>

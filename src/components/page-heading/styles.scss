@@ -6,7 +6,7 @@
   }
 
   &__header {
-    @apply flex items-center justify-between mx-auto;
+    @apply flex gap-x-4 items-start justify-between mx-auto;
   }
 
   &__title {
