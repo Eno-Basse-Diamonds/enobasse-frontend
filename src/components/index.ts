@@ -14,6 +14,16 @@ import { BackButton } from "./button";
 import { Input, PasswordInput } from "./input";
 import { PageHeading } from "./page-heading";
 import { EmptyState } from "./empty-state";
+import { ProductQuickView } from "./product/quickview";
+import { ProductList } from "./product/list";
+import { ShareDropdown } from "./dropdown";
+import { Accordion } from "./accordion/index.";
+import { Divider } from "./divider";
+import { Rating } from "./rating";
+import { RingSizeSelector } from "./select-menu";
+import { MetalTypeSelector } from "./checkbox";
+import { GemstoneSelector } from "./checkbox";
+import { FilterPanelDesktop, FilterPanelMobile } from "./product/filter-panel";
 
 export {
   Header,
@@ -33,4 +43,15 @@ export {
   PasswordInput,
   PageHeading,
   EmptyState,
+  ProductQuickView,
+  ProductList,
+  ShareDropdown,
+  Accordion,
+  Divider,
+  Rating,
+  RingSizeSelector,
+  MetalTypeSelector,
+  GemstoneSelector,
+  FilterPanelDesktop,
+  FilterPanelMobile,
 };
