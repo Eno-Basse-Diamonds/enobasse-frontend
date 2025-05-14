@@ -1,3 +1,5 @@
+import scrollbar from "tailwind-scrollbar";
+
 const config = {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx}",
@@ -8,10 +10,11 @@ const config = {
       fontFamily: {
         primary: ["var(--font-lora)"],
         secondary: ["var(--font-gantari)"],
+        "dancing-script": ["var(--font-dancing-script)"],
       },
     },
   },
-  plugins: [],
+  plugins: [scrollbar],
 };
 
 export default config;

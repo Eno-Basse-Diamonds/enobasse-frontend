@@ -10,31 +10,12 @@
   --color-foreground: var(--foreground);
   --font-primary: var(--font-gantari);
   --font-secondary: var(--font-lora);
+
+  --font-dancing-script: var(--font-dancing-script);
 }
 
 html {
-  scroll-behavior: smooth;
-
-  // For Firefox
-  scrollbar-width: thin;
-  scrollbar-color: #D1A559 #f5f5f5;
-
-  // For WebKit browsers (Chrome, Safari, Edge)
-  &::-webkit-scrollbar {
-    @apply w-2 h-2;
-  }
-
-  &::-webkit-scrollbar-track {
-    @apply bg-gray-50;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    @apply bg-[#D1A559] rounded-full;
-
-    &:hover {
-      @apply bg-[#b38d4d];
-    }
-  }
+  @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#D1A559];
 }
 
 body {

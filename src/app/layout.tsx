@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Lora, Gantari } from "next/font/google";
-import { Header, Footer } from "@/components";
+import { Lora, Gantari, Dancing_Script } from "next/font/google";
 import "./globals.scss";
 
 const lora = Lora({
@@ -10,6 +9,11 @@ const lora = Lora({
 
 const gantari = Gantari({
   variable: "--font-gantari",
+  subsets: ["latin"],
+});
+
+const dancingScript = Dancing_Script({
+  variable: "--font-dancing-script",
   subsets: ["latin"],
 });
 
@@ -113,7 +117,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lora.variable} ${gantari.variable} antialiased`}>
+      <body
+        className={`${lora.variable} ${gantari.variable} ${dancingScript.variable} antialiased`}
+      >
         {children}
       </body>
     </html>
