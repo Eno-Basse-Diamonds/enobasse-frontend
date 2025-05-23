@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import "./styles.scss";
+import * as motion from "motion/react-client";
 import { Post } from "@/lib/data/blog-posts";
+import "./styles.scss";
 
 interface BlogSectionProps {
   posts: Post[];
@@ -11,8 +12,20 @@ interface BlogSectionProps {
 export const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
   return (
     <ul className="blog-section" role="list">
-      {posts.map((post) => (
-        <li key={post.id} role="listitem" className="blog-section__item">
+      {posts.map((post, index) => (
+        <motion.li
+          key={post.id}
+          role="listitem"
+          className="blog-section__item"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.4,
+            delay: index * 0.1,
+            ease: "easeOut"
+          }}
+          whileHover={{ scale: 1.02 }}
+        >
           <Link href={`/blog/${post.slug}`} className="blog-section__link">
             <figure className="blog-section__figure">
               <Image
@@ -27,7 +40,9 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
               />
             </figure>
             <div className="blog-section__content">
-              <h3 className="blog-section__title">{post.title}</h3>
+              <h3 className="blog-section__title">
+                {post.title}
+              </h3>
               <p className="blog-section__excerpt">{post.excerpt}</p>
               <div className="blog-section__meta">
                 <p className="blog-section__author">{post.author.name}</p>
@@ -38,7 +53,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
               </div>
             </div>
           </Link>
-        </li>
+        </motion.li>
       ))}
     </ul>
   );

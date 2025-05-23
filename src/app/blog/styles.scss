@@ -1,5 +1,5 @@
 .blog-page {
-  @apply mt-12 md:mt-16 mb-16 md:mb-20 lg:mb-28 text-[#502B3A];
+  @apply mt-12 md:mt-16 mb-16 md:mb-20 lg:mb-28 text-primary-500;
 
   &__posts-container {
     @apply mt-8 md:mt-12 lg:mt-16;
@@ -7,19 +7,5 @@
 
   &__pagination {
     @apply mt-12 md:mt-16 lg:mt-20 px-4 sm:px-6;
-  }
-
-  &__post-link {
-    @apply relative pl-4;
-
-    &::before {
-      @apply content-[''] absolute left-0 top-1/2 transform -translate-y-1/2;
-      @apply w-1.5 h-1.5 rounded-full bg-[#D1A559];
-      @apply transition-colors duration-200;
-    }
-
-    &:hover::before {
-      @apply bg-[#502B3A];
-    }
   }
 }

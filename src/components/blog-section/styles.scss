@@ -10,7 +10,7 @@
   }
 
   &__item {
-    @apply hover:shadow-lg transition-shadow duration-300 border border-[#D1A559]/40;
+    @apply hover:shadow-md transition-shadow duration-300 border border-secondary-200;
   }
 
   &__link {
@@ -30,23 +30,23 @@
   }
 
   &__title {
-    @apply font-primary font-medium text-[#502B3A] text-base sm:text-lg md:text-xl mb-1;
+    @apply font-primary font-medium text-primary-500 text-base sm:text-lg md:text-xl mb-1;
   }
 
   &__excerpt {
-    @apply font-light text-sm sm:text-base md:text-[15px] mb-3 sm:mb-4 md:mb-5 flex-grow;
+    @apply font-light text-sm sm:text-base md:text-[15px] text-neutral-300 mb-3 sm:mb-4 md:mb-5 flex-grow;
   }
 
   &__meta {
-    @apply inline-flex gap-x-2 font-light text-sm sm:text-base text-[#462230]/60;
+    @apply inline-flex gap-x-2 font-light text-sm sm:text-base text-primary-300;
   }
 
   &__author,
   &__date {
-    @apply font-light text-sm sm:text-base text-[#462230]/60;
+    @apply font-light text-sm sm:text-base text-primary-300;
   }
 
   &__divider {
-    @apply text-[#462230]/60;
+    @apply text-primary-300;
   }
 }

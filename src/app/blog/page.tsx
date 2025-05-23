@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getAllPosts } from "@/lib/api/blog-posts";
 import {
   BlogSection,
-  BackButton,
   SectionContainer,
   Pagination,
   PageHeading,
