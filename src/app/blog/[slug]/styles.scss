@@ -1,7 +1,5 @@
-// blog-detail.scss
-
 .blog-detail {
-  @apply mt-12 mb-16 md:mb-20 lg:mb-28 text-[#502B3A];
+  @apply mt-12 mb-16 md:mb-20 lg:mb-28 text-primary-500;
 
   &__header {
     @apply px-4 sm:px-6 lg:px-8 text-left md:text-center;
@@ -19,14 +17,14 @@
     }
 
     &-meta {
-      @apply absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-[#502B3A]/60 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3;
+      @apply absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-primary-300 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3;
     }
 
     & .blog-detail__hero-share {
-      @apply absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 bg-white text-[#502B3A]/60 p-2 sm:p-3 flex items-center gap-x-2 sm:gap-x-3 md:gap-x-4;
+      @apply absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 bg-white text-primary-300 p-2 sm:p-3 flex items-center gap-x-2 sm:gap-x-3 md:gap-x-4;
 
       &-link {
-        @apply hover:text-[#D1A559] transition-colors;
+        @apply hover:text-secondary-500 transition-colors;
 
         &--facebook {
           @apply w-4 h-4 sm:w-5 sm:h-5;
@@ -59,14 +57,14 @@
     }
 
     &-meta {
-      @apply text-[#502B3A]/60 text-base font-light p-2 text-center mt-2;
+      @apply text-primary-300 text-base font-light p-2 text-center mt-2;
     }
 
     & .blog-detail__hero-share {
-      @apply text-[#502B3A]/60 p-2 flex items-center justify-center gap-x-6;
+      @apply text-primary-300 p-2 flex items-center justify-center gap-x-6;
 
       &-link {
-        @apply hover:text-[#D1A559] transition-colors;
+        @apply hover:text-secondary-500 transition-colors;
 
         &--facebook {
           @apply w-4 h-4 sm:w-5 sm:h-5;
@@ -104,10 +102,10 @@
   }
 
   &__toc {
-    @apply bg-[#D1A559]/20 p-8;
+    @apply bg-secondary-100/20 p-8;
 
     &-title {
-      @apply font-primary text-3xl mb-4;
+      @apply font-primary text-3xl text-primary-500 mb-4;
     }
 
     &-list {
@@ -118,10 +116,10 @@
       }
 
       &-link {
-        @apply text-lg text-[#502B3A] hover:hover:text-[#D1A559] hover:underline decoration-1 underline-offset-4;
+        @apply text-primary-500 hover:text-secondary-500 hover:underline decoration-1 underline-offset-4;
 
         &--child {
-          @apply text-lg text-[#502B3A]/80 hover:hover:text-[#D1A559] hover:underline decoration-1 underline-offset-4;
+          @apply text-primary-300 hover:text-secondary-500 hover:underline decoration-1 underline-offset-4;
         }
       }
 
@@ -135,7 +133,7 @@
     @apply mt-16;
 
     &-title {
-      @apply text-2xl font-primary text-[#502B3A] mb-6;
+      @apply text-2xl font-primary text-primary-500 mb-6;
     }
 
     &-grid {
@@ -158,11 +156,11 @@
       }
 
       &-title {
-        @apply text-lg font-medium text-[#502B3A] group-hover:text-[#D1A559] transition-colors font-primary;
+        @apply text-lg font-medium text-primary-500 group-hover:text-secondary-500 transition-colors font-primary;
       }
 
       &-excerpt {
-        @apply mt-1 text-sm text-[#1B1B1D]/80 line-clamp-2;
+        @apply mt-1 text-sm text-primary-400 line-clamp-2;
       }
 
       &-meta {
@@ -170,11 +168,11 @@
       }
 
       &-date {
-        @apply text-sm font-medium text-[#502B3A]/60;
+        @apply text-sm font-medium text-primary-200;
       }
 
       &-time {
-        @apply text-xs font-medium text-[#D1A559];
+        @apply text-xs font-medium text-secondary-500;
       }
     }
   }
@@ -182,32 +180,32 @@
 
 .blog-post {
   // Base typography
-  @apply text-[#1B1B1D] font-light leading-relaxed;
+  @apply text-neutral-300 font-light leading-relaxed;
 
   // Headings
   & h1 {
-    @apply font-primary text-3xl md:text-5xl text-[#502B3A] mb-8;
+    @apply font-primary text-3xl md:text-5xl text-primary-500 mb-8;
   }
 
   & h2 {
-    @apply font-primary text-2xl md:text-3xl text-[#502B3A] mb-6 mt-10 pb-2;
+    @apply font-primary text-2xl md:text-3xl text-primary-500 mb-6 mt-10 pb-2;
   }
 
   & h3 {
-    @apply font-primary text-xl md:text-2xl text-[#502B3A] mb-4 mt-8;
+    @apply font-primary text-xl md:text-2xl text-primary-500 mb-4 mt-8;
   }
 
   & h4 {
-    @apply font-primary text-lg md:text-xl text-[#502B3A] mb-3 mt-6;
+    @apply font-primary text-lg md:text-xl text-primary-500 mb-3 mt-6;
   }
 
   // Paragraphs and text elements
   & p {
-    @apply text-base md:text-lg leading-7 mb-6;
+    @apply leading-7 mb-6;
   }
 
   & strong {
-    @apply font-medium text-[#462230];
+    @apply font-medium text-primary-500;
   }
 
   & em {
@@ -216,7 +214,7 @@
 
   // Links
   & a {
-    @apply text-[#D1A559] underline underline-offset-4 decoration-1 hover:text-[#B38C4A] transition-colors;
+    @apply text-secondary-500 underline underline-offset-4 decoration-1 hover:text-secondary-400 transition-colors;
   }
 
   // Lists
@@ -248,7 +246,7 @@
 
   // Blockquotes
   & blockquote {
-    @apply border-l-4 border-[#D1A559] pl-6 py-2 my-6 italic text-[#462230]/90;
+    @apply border-l-4 border-secondary-500 pl-6 py-2 my-6 italic text-primary-400;
 
     & p {
       @apply mb-0;
@@ -257,11 +255,11 @@
 
   // Code blocks
   & pre {
-    @apply bg-[#F5F5F5] p-4 rounded-lg my-6 overflow-x-auto text-sm;
+    @apply bg-primary-100/10 p-4 rounded-lg my-6 overflow-x-auto text-sm;
   }
 
   & code {
-    @apply font-mono bg-[#F5F5F5] px-2 py-1 rounded text-[#502B3A];
+    @apply font-mono bg-primary-100/10 px-2 py-1 rounded text-primary-500;
   }
 
   // Tables
@@ -270,15 +268,15 @@
   }
 
   & th {
-    @apply bg-[#502B3A]/10 text-left px-4 py-3 border-b border-[#D1A559]/50 font-medium;
+    @apply bg-primary-100/10 text-left px-4 py-3 border-b border-secondary-500/50 font-medium;
   }
 
   & td {
-    @apply px-4 py-3 border-b border-[#D1A559]/20;
+    @apply px-4 py-3 border-b border-secondary-500/20;
   }
 
   // Horizontal rule
   & hr {
-    @apply my-10 border-t border-[#D1A559]/30;
+    @apply my-10 border-t border-secondary-500/30;
   }
 }

@@ -1,5 +1,4 @@
-import { Header } from "@/components";
-import { Footer } from "@/components";
+import { Header, Footer } from "@/components";
 
 export default function Layout({
   children,
