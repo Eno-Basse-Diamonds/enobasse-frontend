@@ -5,3 +5,77 @@
     @apply w-5 h-5 sm:w-6 sm:h-6;
   }
 }
+
+.button {
+  @apply inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+
+  // Variants
+  &--primary {
+    @apply bg-primary-100 text-white hover:bg-primary-200 focus:ring-primary-100;
+  }
+
+  &--secondary {
+    @apply bg-secondary-100 text-white hover:bg-secondary-200 focus:ring-secondary-100;
+  }
+
+  &--outline {
+    @apply border-2 border-primary-100 text-primary-100 hover:bg-primary-100 hover:text-white focus:ring-primary-100;
+  }
+
+  &--ghost {
+    @apply text-primary-100 hover:bg-primary-100/10 focus:ring-primary-100;
+  }
+
+  // Sizes
+  &--sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+
+  &--md {
+    @apply px-4 py-2 text-base;
+  }
+
+  &--lg {
+    @apply px-6 py-3 text-lg;
+  }
+
+  // Full width
+  &--full {
+    @apply w-full;
+  }
+
+  // Loading state
+  &--loading {
+    @apply cursor-wait;
+  }
+
+  // Icons
+  &__icon {
+    @apply inline-flex items-center;
+
+    &--left {
+      @apply mr-2;
+    }
+
+    &--right {
+      @apply ml-2;
+    }
+  }
+
+  // Loading animation
+  &__loader {
+    @apply inline-flex items-center gap-1;
+
+    &-dot {
+      @apply w-1.5 h-1.5 rounded-full bg-current animate-bounce;
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
