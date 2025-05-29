@@ -10,8 +10,7 @@ export interface Post {
   readingTime: string;
   author: {
     name: string;
-    role: string;
-    avatar: string;
+    avatar: { src: string; alt: string };
   };
   image: { src: string; alt: string };
 }

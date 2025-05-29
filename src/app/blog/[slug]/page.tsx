@@ -1,30 +1,30 @@
-import React from "react";
-import { notFound } from "next/navigation";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { getPostBySlug, getRelatedPosts } from "@/lib/api/blog-posts";
+import { getBlogPost, getRelatedBlogPosts } from "@/lib/api/blog-posts";
 import {
   cleanMarkdownContent,
   createHeadingRenderer,
   generateTableOfContents,
-} from "@/lib/utils/blog-post.utils";
+} from "@/lib/helpers/blog-post";
 import { SectionContainer } from "@/components";
 import { PageHeading } from "@/components";
 import { BlogHeroImage } from "./_components/blog-hero-image";
 import { TableOfContents } from "./_components/table-of-content";
 import { RelatedPosts } from "./_components/related-posts";
+import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
+import { BlogPostDetailLoader } from "@/components/loader";
 import "./styles.scss";
 
-type BlogDetailPageProps = {
+interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
-};
+}
 
 export const generateMetadata = async ({
   params,
-}: BlogDetailPageProps): Promise<Metadata> => {
+}: BlogPostPageProps): Promise<Metadata> => {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  if (!post) return {};
+  const post = await getBlogPost(slug);
 
   return {
     title: post.title,
@@ -35,7 +35,7 @@ export const generateMetadata = async ({
     openGraph: {
       title: `${post.title} | EnoBasse Jewellery`,
       description: post.excerpt,
-      publishedTime: post.date,
+      publishedTime: new Date(post.createdAt).toISOString(),
       images: [
         {
           url: `https://enobasse.com${post.image.src}`,
@@ -54,12 +54,13 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
+export default async function BlogPostPageProps({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  const relatedPosts = await getRelatedPosts();
 
-  if (!post) return notFound();
+  const [post, relatedPosts] = await Promise.all([
+    getBlogPost(slug),
+    getRelatedBlogPosts(slug)
+  ]);
 
   const breadcrumbItems = [
     { label: "Blog", href: "/blog" },
@@ -70,53 +71,60 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const toc = generateTableOfContents(content);
 
   return (
-    <main className="blog-detail">
-      <PageHeading breadcrumb={{ items: breadcrumbItems }} />
+    <Suspense fallback={<BlogPostDetailLoader />}>
+      <main className="blog-detail">
+        <PageHeading breadcrumb={{ items: breadcrumbItems }} />
 
-      <SectionContainer id="blog-post" aria-labelledby="blog-post-heading">
-        <BlogHeroImage
-          src={post.image.src}
-          alt={post.image.alt}
-          author={post.author.name}
-          date={post.date}
-        />
-      </SectionContainer>
+        <SectionContainer id="blog-post" aria-labelledby="blog-post-heading">
+          <BlogHeroImage
+            src={post.image.src}
+            alt={post.image.alt}
+            author={post.author.name}
+            date={dateToOrdinalDayMonthYear(post.createdAt)}
+            share={{url: `https://enobasse.com/blog/${slug}`, title: post.title}}
+          />
+        </SectionContainer>
 
-      <SectionContainer
-        id="blog-post-content"
-        aria-labelledby="blog-post-content-heading"
-        className="blog-detail__content"
-      >
-        <div className="blog-detail__content-container">
-          <div className="blog-detail__content-sidebar">
-            <TableOfContents toc={toc} />
-            <div className="hidden mt-16 lg:block">
-              <RelatedPosts posts={relatedPosts} />
+        <SectionContainer
+          id="blog-post-content"
+          aria-labelledby="blog-post-content-heading"
+          className="blog-detail__content"
+        >
+          <div className="blog-detail__content-container">
+            <div className="blog-detail__content-sidebar">
+              <TableOfContents toc={toc} />
+              {relatedPosts && (
+                <div className="hidden mt-16 lg:block">
+                  <RelatedPosts posts={relatedPosts} />
+                </div>
+              )}
             </div>
+
+            <article className="blog-detail__content-main blog-post">
+              <Markdown
+                components={{
+                  h1: createHeadingRenderer(1),
+                  h2: createHeadingRenderer(2),
+                  h3: createHeadingRenderer(3),
+                  h4: createHeadingRenderer(4),
+                }}
+              >
+                {content}
+              </Markdown>
+            </article>
           </div>
+        </SectionContainer>
 
-          <article className="blog-detail__content-main blog-post">
-            <Markdown
-              components={{
-                h1: createHeadingRenderer(1),
-                h2: createHeadingRenderer(2),
-                h3: createHeadingRenderer(3),
-                h4: createHeadingRenderer(4),
-              }}
-            >
-              {content}
-            </Markdown>
-          </article>
-        </div>
-      </SectionContainer>
-
-      <SectionContainer
-        id="related-blog-posts"
-        aria-labelledby="related-blog-posts-heading"
-        className="lg:hidden"
-      >
-        <RelatedPosts posts={relatedPosts} className="blog-detail__related" />
-      </SectionContainer>
-    </main>
+        {relatedPosts && (
+          <SectionContainer
+            id="related-blog-posts"
+            aria-labelledby="related-blog-posts-heading"
+            className="lg:hidden"
+          >
+            <RelatedPosts posts={relatedPosts} />
+          </SectionContainer>
+        )}
+      </main>
+    </Suspense>
   );
 }

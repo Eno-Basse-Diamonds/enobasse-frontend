@@ -61,3 +61,10 @@ export const createHeadingRenderer = (level: number) => {
   };
   return HeadingComponent;
 };
+
+export const calculateReadingTime = (content: string): number => {
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/).length;
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return minutes;
+}
