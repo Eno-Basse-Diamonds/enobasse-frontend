@@ -2,7 +2,7 @@
   @apply flex justify-center;
 
   &__list {
-    @apply inline-flex items-center space-x-1 md:space-x-2 text-[#502B3A] text-base sm:text-lg md:text-xl lg:text-2xl;
+    @apply inline-flex items-center space-x-1 md:space-x-2 text-[#502B3A] text-base sm:text-lg;
   }
 
   &__item {

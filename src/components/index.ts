@@ -10,7 +10,7 @@ import { HeroSection } from "./hero-section";
 import { BentoGrid } from "./bento-grid";
 import { Breadcrumb } from "./breadcrumb";
 import { Pagination } from "./pagination";
-import { BackButton } from "./button";
+import { BackButton, Button } from "./button";
 import { Input, PasswordInput } from "./input";
 import { PageHeading } from "./page-heading";
 import { EmptyState } from "./empty-state";
@@ -24,6 +24,7 @@ import { RingSizeSelector } from "./select-menu";
 import { MetalTypeSelector } from "./checkbox";
 import { GemstoneSelector } from "./checkbox";
 import { FilterPanelDesktop, FilterPanelMobile } from "./product/filter-panel";
+import { Alert } from "./alert";
 
 export {
   Header,
@@ -39,6 +40,7 @@ export {
   Breadcrumb,
   Pagination,
   BackButton,
+  Button,
   Input,
   PasswordInput,
   PageHeading,
@@ -54,4 +56,5 @@ export {
   GemstoneSelector,
   FilterPanelDesktop,
   FilterPanelMobile,
+  Alert,
 };

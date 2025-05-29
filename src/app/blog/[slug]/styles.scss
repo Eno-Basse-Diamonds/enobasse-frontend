@@ -17,11 +17,11 @@
     }
 
     &-meta {
-      @apply absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-primary-300 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3;
+      @apply absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-primary-300 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3 shadow;
     }
 
     & .blog-detail__hero-share {
-      @apply absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 bg-white text-primary-300 p-2 sm:p-3 flex items-center gap-x-2 sm:gap-x-3 md:gap-x-4;
+      @apply absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 bg-white text-primary-300 p-2 sm:p-3 flex items-center gap-x-2 sm:gap-x-3 md:gap-x-4 shadow;
 
       &-link {
         @apply hover:text-secondary-500 transition-colors;
@@ -141,7 +141,7 @@
     }
 
     &-item {
-      @apply flex flex-col sm:flex-row gap-4 transition-colors rounded-lg;
+      @apply flex flex-col sm:flex-row gap-4 transition-colors;
 
       &-image {
         @apply relative aspect-video sm:aspect-square sm:h-32 sm:w-56 flex-shrink-0 overflow-hidden;
@@ -152,7 +152,7 @@
       }
 
       &-content {
-        @apply flex flex-col justify-between;
+        @apply flex flex-col justify-between w-full;
       }
 
       &-title {
@@ -255,11 +255,11 @@
 
   // Code blocks
   & pre {
-    @apply bg-primary-100/10 p-4 rounded-lg my-6 overflow-x-auto text-sm;
+    @apply bg-primary-100/10 p-4 my-6 overflow-x-auto text-sm;
   }
 
   & code {
-    @apply font-mono bg-primary-100/10 px-2 py-1 rounded text-primary-500;
+    @apply font-mono bg-primary-100/10 px-2 py-1 text-primary-500;
   }
 
   // Tables
