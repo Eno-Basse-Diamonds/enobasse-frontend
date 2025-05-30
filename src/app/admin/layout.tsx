@@ -54,7 +54,7 @@ export default function AdminLayout({
     <>
       <div className="admin-layout">
         <SidebarNavigation sidebarItems={sidebarItems} />
-        <div className="admin-layout__content">{children}</div>
+        <div className="admin-layout__content bg-gray-100">{children}</div>
       </div>
 
       <div className="mobile-restricted-view">

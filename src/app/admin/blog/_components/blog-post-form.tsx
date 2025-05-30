@@ -1,31 +1,21 @@
 "use client";
 
-import { useState, useActionState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Eye, X, User, Calendar } from "lucide-react";
 import Markdown from "react-markdown";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button, Alert } from "@/components";
 import { BlogPost } from "@/lib/types/blog-post";
 import { BlogPostFormData } from "@/lib/validations/blog";
-import {
-  createBlogPost,
-  updateBlogPost,
-  FormErrors,
-  FormState,
-} from "@/lib/api/blog-posts";
+import { FormErrors, FormState } from "@/lib/api/blog-posts";
 import { createHeadingRenderer } from "@/lib/helpers/blog-post";
 import { textToSlug } from "@/lib/utils/string";
+import { useCreateBlogPost, useUpdateBlogPost } from "@/lib/hooks/use-blog";
 
 interface BlogPostFormProps {
-  blogPost: BlogPost;
+  blogPost: BlogPost | null;
   onClose: () => void;
 }
-
-const initialState: FormState = {
-  errors: {},
-  message: "",
-  success: false,
-};
 
 const ADMIN = {
   id: "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
@@ -89,6 +79,9 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     image: blogPost?.image || { src: "", alt: "" },
   });
 
+  const createPostMutation = useCreateBlogPost();
+  const updatePostMutation = useUpdateBlogPost();
+
   const handleInputChange = (field: keyof BlogPostFormData, value: any) => {
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
@@ -126,43 +119,53 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     }));
   };
 
-  const createPostAction = async (state: FormState): Promise<FormState> => {
-    const formPayload = prepareFormData(formData);
-    return await createBlogPost(formPayload, ADMIN.id);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formData);
+    if (blogPost) {
+      updatePostMutation.mutate({ slug: blogPost.slug, formData });
+    } else {
+      createPostMutation.mutate({ formData, authorId: ADMIN.id });
+    }
   };
-
-  const updatePostAction = async (state: FormState): Promise<FormState> => {
-    const formPayload = prepareFormData(formData);
-    return await updateBlogPost(blogPost.slug, formPayload);
-  };
-
-  const [state, formAction, isPending] = useActionState<FormState>(
-    blogPost ? updatePostAction : createPostAction,
-    initialState
-  );
 
   useEffect(() => {
-    if (state.message && state.success) {
-      const timer = setTimeout(onClose, 1500);
+    const mutation = blogPost ? updatePostMutation : createPostMutation;
+    if (mutation.isSuccess && mutation.data?.success) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [state.message, state.success, onClose]);
+  }, [blogPost, createPostMutation, updatePostMutation, onClose]);
 
   const formTitle = blogPost ? "Edit Blog Post" : "Create New Blog Post";
   const submitButtonText = blogPost ? "Update" : "Create";
   const isFormValid = Boolean(
-    !isPending &&
+    !createPostMutation.isPending &&
+      !updatePostMutation.isPending &&
       formData.title.trim() &&
       formData.content.trim() &&
-      formData.excerpt.trim()
+      formData.excerpt.trim() &&
+      formData.image.src
   );
+
+  const mutation = blogPost ? updatePostMutation : createPostMutation;
+  const state: FormState = {
+    errors: mutation.error?.message
+      ? { title: [mutation.error.message] }
+      : mutation.data?.errors || {},
+    message: mutation.data?.message || "",
+    success: mutation.isSuccess,
+    post: mutation.data?.post,
+  };
 
   return (
     <>
       <AlertMessage state={state} />
 
       <div className="modal-overlay">
-        <form action={formAction} className="modal-form">
+        <form onSubmit={handleSubmit} className="modal-form">
           <FormHeader
             title={formTitle}
             showPreview={showPreview}
@@ -188,7 +191,7 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
 
           <FormFooter
             onClose={onClose}
-            isPending={isPending}
+            isPending={mutation.isPending}
             isValid={isFormValid}
             submitButtonText={`${submitButtonText} Blog Post`}
           />
@@ -198,8 +201,10 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
   );
 }
 
-const AlertMessage = ({ state }: { state: FormState }) =>
-  state.message && (
+const AlertMessage = ({ state }: { state: FormState }) => {
+  if (!state.message) return null;
+
+  return (
     <div className="alert-message-container">
       <Alert
         type={state.success ? "success" : "error"}
@@ -210,6 +215,7 @@ const AlertMessage = ({ state }: { state: FormState }) =>
       </Alert>
     </div>
   );
+};
 
 interface FormHeaderProps {
   title: string;

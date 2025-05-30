@@ -2,7 +2,7 @@ import Image from "next/image";
 import { User, Calendar, Edit, Trash2, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components";
 import { BlogPost } from "@/lib/types/blog-post";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 interface BlogPostCardProps {
   post: BlogPost;
@@ -10,26 +10,24 @@ interface BlogPostCardProps {
   onDelete: (slug: string) => void;
 }
 
-export function BlogPostCard({ post, onEdit, onDelete }: BlogPostCardProps) {
+export const BlogPostCard = memo(function BlogPostCard({ post, onEdit, onDelete }: BlogPostCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
     <div className="blog-post-card">
       <div className="blog-post-card__image-container">
-        {imageError ? (
-          <div className="blog-post-card__image-fallback">
-            <ImageIcon />
-          </div>
-        ) : (
+        {post.image?.src && !imageError ? (
           <Image
             src={post.image.src}
-            alt={post.title}
-            className="w-full h-full object-cover"
-            height={100}
-            width={100}
-            quality={100}
+            alt={post.image.alt || post.title}
+            fill
+            className="blog-post-card__image"
             onError={() => setImageError(true)}
           />
+        ) : (
+          <div className="blog-post-card__image-fallback">
+            <ImageIcon className="w-8 h-8" />
+          </div>
         )}
         <div
           className={`blog-post-card__status ${
@@ -78,4 +76,4 @@ export function BlogPostCard({ post, onEdit, onDelete }: BlogPostCardProps) {
       </div>
     </div>
   );
-}
+});

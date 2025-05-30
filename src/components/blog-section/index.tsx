@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
@@ -13,23 +13,36 @@ interface BlogSectionProps {
   posts: BlogPost[];
 }
 
-export const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
+export const BlogSection: React.FC<BlogSectionProps> = React.memo(({ posts }) => {
+  const sortedPosts = useMemo(() => {
+    return [...posts].sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }, [posts]);
+
   return (
     <ul className="blog-section" role="list">
-      {posts.map((post, index) => (
+      {sortedPosts.map((post, index) => (
         <BlogCard key={post.id} post={post} index={index} />
       ))}
     </ul>
   );
-};
+});
+
+BlogSection.displayName = 'BlogSection';
 
 interface BlogCardProps {
   post: BlogPost;
   index: number;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
+const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
   const [imageError, setImageError] = useState(false);
+
+  const formattedDate = useMemo(() =>
+    dateToOrdinalDayMonthYear(post.createdAt),
+    [post.createdAt]
+  );
 
   return (
     <motion.li
@@ -73,11 +86,13 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
               dateTime={new Date(post.createdAt).toISOString()}
               className="blog-section__date"
             >
-              {dateToOrdinalDayMonthYear(post.createdAt)}
+              {formattedDate}
             </time>
           </div>
         </div>
       </Link>
     </motion.li>
   );
-};
+});
+
+BlogCard.displayName = 'BlogCard';

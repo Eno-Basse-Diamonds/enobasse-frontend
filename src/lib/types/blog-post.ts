@@ -16,3 +16,20 @@ export interface BlogPost {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface BlogPostFormData {
+  title: string;
+  slug: string;
+  tags: string[];
+  excerpt: string;
+  content: string;
+  isPublished: boolean;
+  image: { src: string; alt: string };
+}
+
+export interface FormState {
+  success: boolean;
+  message: string;
+  errors: Record<string, string[]>;
+  post?: BlogPost;
+}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { BlogPost } from '@/lib/types/blog-post';
 import { ImageIcon } from "lucide-react";
+import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 
 interface RelatedPostsProps {
   posts: BlogPost[];
@@ -61,7 +62,7 @@ const RelatedPostCard = ({ post }: { post: BlogPost }) => {
               dateTime={new Date(post.createdAt).toISOString()}
               className="blog-detail__related-item-date"
             >
-              {new Date(post.createdAt).toLocaleDateString()}
+              {dateToOrdinalDayMonthYear(post.createdAt)}
             </time>
             <span className="blog-detail__related-item-time">
               {post.readingTime} mins

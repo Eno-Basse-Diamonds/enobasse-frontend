@@ -1,5 +1,6 @@
 import { BlogPost } from "@/lib/types/blog-post";
 import { BlogPostCard } from "./blog-post-card";
+import { memo } from "react";
 
 interface BlogPostListProps {
   blogPosts: BlogPost[];
@@ -7,7 +8,7 @@ interface BlogPostListProps {
   onDelete: (slug: string) => void;
 }
 
-export function BlogPostList({ blogPosts, onEdit, onDelete }: BlogPostListProps) {
+export const BlogPostList = memo(function BlogPostList({ blogPosts, onEdit, onDelete }: BlogPostListProps) {
   return (
     <div className="blog-post-list">
       {blogPosts.map((post) => (
@@ -20,4 +21,4 @@ export function BlogPostList({ blogPosts, onEdit, onDelete }: BlogPostListProps)
       ))}
     </div>
   );
-}
+});

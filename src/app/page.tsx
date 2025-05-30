@@ -1,5 +1,4 @@
 import React from "react";
-import { getAllPosts } from "@/lib/api/blog-posts";
 import {
   BentoGrid,
   BlogSection,
@@ -102,7 +101,7 @@ export default async function Home() {
     },
   ];
 
-  const blogPosts = await getAllPosts();
+  // const blogPosts = await getAllPosts();
 
   return (
     <>
@@ -160,13 +159,13 @@ export default async function Home() {
           }}
         />
 
-        <SectionContainer
+        {/* <SectionContainer
           id="blog"
           className="bg-[#D1A559] bg-opacity-20 px-4 py-8 lg:px-8 lg:py-16 mt-10 md:mt-20"
         >
           <BlogHeader />
           <BlogSection posts={blogPosts} />
-        </SectionContainer>
+        </SectionContainer> */}
 
         <AboutSection
           title="Company Profile"
