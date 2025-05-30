@@ -51,12 +51,11 @@ const slideInFromRight = {
   show: { opacity: 1, x: 0, transition: { duration: 0.6 } },
 };
 
-const scaleUp = {
-  hidden: { opacity: 0, scale: 0.9 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
-};
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+}
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
+export default function ProductPage({ params }: ProductPageProps) {
   const product = getProduct();
   const relatedProducts = getProducts().slice(0, 4);
 
@@ -183,7 +182,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       <SectionContainer id="product-details">
         <div className="product-page__grid">
-          <motion.div variants={slideInFromLeft} className="product-page__gallery">
+          <motion.div
+            variants={slideInFromLeft}
+            className="product-page__gallery"
+          >
             <div className="flex w-full justify-end">
               <ShareDropdown url="https://example.com/products/1" />
             </div>
@@ -191,7 +193,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             <ProductDetails details={productDetails} />
           </motion.div>
 
-          <motion.div variants={slideInFromRight} className="product-page__info">
+          <motion.div
+            variants={slideInFromRight}
+            className="product-page__info"
+          >
             <div className="product-page__sticky-container">
               <div className="space-y-6 md:space-y-7">
                 <motion.h1
@@ -274,8 +279,8 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                 name: "Sarah Johnson",
                 image: {
                   src: "/images/avatars/user-1.jpg",
-                  alt: "Sarah Johnson's profile picture"
-                }
+                  alt: "Sarah Johnson's profile picture",
+                },
               },
               date: "2024-02-15",
             },
@@ -286,7 +291,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             { stars: 4, percentage: 25 },
             { stars: 3, percentage: 9 },
             { stars: 2, percentage: 2 },
-            { stars: 1, percentage: 1 }
+            { stars: 1, percentage: 1 },
           ]}
         />
       </SectionContainer>

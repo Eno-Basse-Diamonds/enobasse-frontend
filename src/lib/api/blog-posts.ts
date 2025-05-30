@@ -3,9 +3,9 @@
 import { BlogPostFormData, BlogPostSchema } from "@/lib/validations/blog";
 import type { BlogPost } from "../types/blog-post";
 import { calculateReadingTime } from "../helpers/blog-post";
-import { Http, ApiError } from "../utils/http";
+import { api, ApiError } from "../utils/api";
 
-type PaginatedBlogResponse = {
+export type PaginatedBlogResponse = {
   posts: BlogPost[];
   page: number;
   perPage: number;
@@ -27,29 +27,32 @@ export interface FormState {
   errors: FormErrors;
   message: string;
   success: boolean;
+  post?: BlogPost;
 }
 
-export async function getBlogPosts(
+export const getBlogPosts = async (
   page = 1,
   perPage = 9
-): Promise<PaginatedBlogResponse> {
-  return Http.get("/blog/posts", { params: { page, perPage } });
-}
+): Promise<PaginatedBlogResponse> => {
+  return api.get("/blog/posts", { params: { page, perPage } });
+};
 
-export async function getPublishedBlogPosts(
+export const getPublishedBlogPosts = async (
   page = 1,
   perPage = 9
-): Promise<PaginatedBlogResponse> {
-  return Http.get("/blog/posts/published", { params: { page, perPage } });
-}
+): Promise<PaginatedBlogResponse> => {
+  return api.get("/blog/posts/published", { params: { page, perPage } });
+};
 
-export async function getBlogPost(slug: string): Promise<BlogPost> {
-  return Http.get(`/blog/posts/${slug}`);
-}
+export const getBlogPost = async (slug: string): Promise<BlogPost> => {
+  return api.get(`/blog/posts/${slug}`);
+};
 
-export async function getRelatedBlogPosts(slug: string): Promise<BlogPost[]> {
-  return Http.get(`/blog/posts/${slug}/related`);
-}
+export const getRelatedBlogPosts = async (
+  slug: string
+): Promise<BlogPost[]> => {
+  return api.get(`/blog/posts/${slug}/related`);
+};
 
 export async function createBlogPost(
   formData: FormData | BlogPostFormData,
@@ -67,7 +70,7 @@ export async function createBlogPost(
   }
 
   try {
-    await Http.post("/blog/posts", {
+    const post = await api.post<BlogPost>("/blog/posts", {
       ...validatedData.data,
       authorId,
       readingTime: calculateReadingTime(validatedData.data.content),
@@ -77,6 +80,7 @@ export async function createBlogPost(
       success: true,
       message: "Blog post created successfully",
       errors: {},
+      post,
     };
   } catch (error) {
     return handleApiError(error);
@@ -106,24 +110,27 @@ export async function updateBlogPost(
   };
 
   try {
-    await Http.patch<BlogPost>(`/blog/posts/${slug}`, updatedData.data);
+    const post = await api.patch<BlogPost>(`/blog/posts/${slug}`, updatedData.data);
 
     return {
       success: true,
       message: "Blog post updated successfully",
       errors: {},
+      post,
     };
   } catch (error) {
+    console.log(error)
     return handleApiError(error);
   }
 }
 
-export async function deleteBlogPost(slug: string) {
+export async function deleteBlogPost(slug: string): Promise<FormState> {
   try {
-    await Http.delete(`/blog/posts/${slug}`);
+    await api.delete(`/blog/posts/${slug}`);
     return {
       success: true,
       message: "Blog post deleted successfully",
+      errors: {},
     };
   } catch (error) {
     return handleApiError(error);

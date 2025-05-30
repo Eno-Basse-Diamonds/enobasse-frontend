@@ -1,5 +1,5 @@
 .alert {
-  @apply border p-4;
+  @apply fixed top-4 right-4 max-w-md w-full z-[9999] border p-4;
 
   &-container {
     @apply flex;

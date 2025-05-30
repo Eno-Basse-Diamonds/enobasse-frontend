@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from "lucide-react";
 import "./styles.scss";
 
@@ -11,6 +11,7 @@ interface AlertProps {
   dismissible?: boolean;
   onDismiss?: () => void;
   className?: string;
+  duration?: number;
 }
 
 export const Alert: React.FC<AlertProps> = ({
@@ -20,13 +21,24 @@ export const Alert: React.FC<AlertProps> = ({
   dismissible = false,
   onDismiss,
   className = "",
+  duration,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     setIsVisible(false);
     if (onDismiss) onDismiss();
-  };
+  }, [onDismiss]);
+
+  useEffect(() => {
+    if (duration && isVisible) {
+      const timer = setTimeout(() => {
+        handleDismiss();
+      }, duration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [duration, isVisible, handleDismiss]);
 
   if (!isVisible) return null;
 
@@ -79,4 +91,5 @@ export const Alert: React.FC<AlertProps> = ({
       </div>
     </div>
   );
-};
+}
+;

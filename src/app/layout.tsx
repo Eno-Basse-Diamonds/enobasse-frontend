@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lora, Gantari, Dancing_Script } from "next/font/google";
+import { QueryProvider } from "../lib/providers/query-provider";
 import "./globals.scss";
 
 const lora = Lora({
@@ -120,7 +121,7 @@ export default function RootLayout({
       <body
         className={`${lora.variable} ${gantari.variable} ${dancingScript.variable} antialiased`}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
