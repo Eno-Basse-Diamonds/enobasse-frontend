@@ -6,6 +6,7 @@ import { FacebookIcon, AuthFacebookIcon } from "./facebook";
 import { InstagramIcon } from "./instagram";
 import { TiktokIcon } from "./tiktok";
 import { XIcon } from "./x";
+import { LinkedInIcon } from "./linkedin";
 import { ArrowLeftIcon } from "./arrow-left";
 import { ArrowRightIcon } from "./arrow-right";
 import { ArrowUpRightIcon } from "./arrow-up-right";
@@ -40,6 +41,7 @@ export {
   InstagramIcon,
   TiktokIcon,
   XIcon,
+  LinkedInIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowUpRightIcon,
