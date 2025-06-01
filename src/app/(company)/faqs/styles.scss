@@ -1,0 +1,35 @@
+.faqs-page {
+  @apply min-h-screen pt-12 pb-20 px-4 sm:px-6 lg:px-8;
+
+  &__container {
+    @apply max-w-7xl mx-auto;
+  }
+
+  &__header {
+    @apply text-center mb-16;
+  }
+
+  &__title {
+    @apply font-primary text-3xl md:text-4xl font-semibold text-primary-500 mb-6;
+  }
+
+  &__description {
+    @apply text-primary-400 max-w-3xl mx-auto leading-relaxed;
+  }
+
+  &__grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12;
+  }
+
+  &__item {
+    @apply space-y-4;
+  }
+
+  &__question {
+    @apply font-primary text-lg font-semibold text-primary-500 leading-tight;
+  }
+
+  &__answer {
+    @apply text-primary-400 leading-relaxed;
+  }
+}

@@ -21,8 +21,8 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: {
     default:
-      "Eno Basse Jewellery | Handcrafted Fine Jewelry & Diamond Collections",
-    template: "%s | Eno Basse Jewellery",
+      "Eno Basse Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
+    template: "Eno Basse Diamonds - %s",
   },
   description:
     "Discover exquisite handcrafted Eno Basse jewellery pieces at Eno Basse Jewellery. Shop our curated collection of diamond rings, gold necklaces, and custom engagement rings. Ethical sourcing, artisan craftsmanship.",
@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     "artisan Eno Basse jewellery",
   ],
   openGraph: {
-    title: "Eno Basse Jewellery | Handcrafted Fine Jewelry",
+    title: "Eno Basse Diamonds - Handcrafted Fine Jewelry",
     description:
       "Exquisite handcrafted Eno Basse jewellery pieces with ethical sourcing and artisan craftsmanship.",
     url: "https://enobasse.com",
-    siteName: "Eno Basse Jewellery",
+    siteName: "Eno Basse Diamonds",
     images: [
       {
         url: "https://enobasse.com/images/seo/og-image.png",
@@ -56,10 +56,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Eno Basse Jewellery | Handcrafted Fine Jewelry",
+    title: "Eno Basse Diamonds - Handcrafted Fine Jewelry",
     description:
       "Exquisite handcrafted Eno Basse jewellery pieces with ethical sourcing and artisan craftsmanship.",
     images: ["https://enobasse.com/images/seo/twitter-image.png"],
+    creator: "@EnoBasseDiamond",
   },
   robots: {
     index: true,
