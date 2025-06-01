@@ -84,6 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => {
@@ -96,10 +97,17 @@ export const Header: React.FC<HeaderProps> = ({
     setOpenDropdown((prev) => (prev === dropdownName ? null : dropdownName));
   }, []);
 
+  const toggleSearch = useCallback(() => {
+    setIsSearchVisible((prev) => !prev);
+  }, []);
+
   useEffect(() => {
-    document.body.classList.toggle("overflow-hidden", isMobileMenuOpen);
+    document.body.classList.toggle(
+      "overflow-hidden",
+      isMobileMenuOpen || isSearchVisible
+    );
     return () => document.body.classList.remove("overflow-hidden");
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isSearchVisible]);
 
   return (
     <header className="header" aria-label="Site header">
@@ -109,20 +117,18 @@ export const Header: React.FC<HeaderProps> = ({
         aria-label="Primary navigation"
       >
         <UtilityNav navItems={utilityNavItems} />
+        <LogoLink href="/" />
+        <UserActions onSearchClick={toggleSearch} />
         <MobileMenuButton
           toggleMobileMenu={toggleMobileMenu}
           isMobileMenuOpen={isMobileMenuOpen}
         />
-        <LogoLink href="/" />
-        <UserActions />
       </div>
 
       <MainNavigation navItems={mainNavItems} />
 
-      <MobileMenuBackdrop
-        isVisible={isMobileMenuOpen}
-        onClick={toggleMobileMenu}
-      />
+      <MobileSearchBar />
+      <SearchOverlay isVisible={isSearchVisible} onClose={toggleSearch} />
 
       <MobileMenu
         isOpen={isMobileMenuOpen}
@@ -188,9 +194,18 @@ const LogoLink: React.FC<LogoLinkProps> = ({ href }) => (
   </h1>
 );
 
-const UserActions: React.FC = () => {
+interface UserActionsProps {
+  onSearchClick: () => void;
+}
+
+const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
   const actions = [
-    { href: "/search", label: "Search", icon: <SearchIcon /> },
+    {
+      href: "#",
+      label: "Search",
+      icon: <SearchIcon />,
+      onClick: onSearchClick,
+    },
     { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon /> },
     { href: "/account", label: "Account", icon: <AccountIcon /> },
     { href: "/cart", label: "Cart", icon: <CartIcon /> },
@@ -208,6 +223,7 @@ const UserActions: React.FC = () => {
           href={action.href}
           aria-label={action.label}
           className="header__user-action"
+          onClick={action.onClick}
         >
           {action.icon}
         </Link>
@@ -247,7 +263,7 @@ const NavItem: React.FC<DropdownNavigation> = ({
     </Link>
     {dropdownItems && (
       <ul
-        className="absolute bg-white top-full left-0 pt-3 pb-5 px-4 font-light text-base text-[#502B3A] shadow-md space-y-3 min-w-[200px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+        className="absolute bg-white top-full -left-4 pt-3 pb-5 px-4 font-light text-base text-[#502B3A] shadow-md space-y-3 min-w-[230px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
         aria-label={`${title} submenu`}
       >
         {dropdownItems.map((item) => (
@@ -258,22 +274,6 @@ const NavItem: React.FC<DropdownNavigation> = ({
       </ul>
     )}
   </li>
-);
-
-interface MobileMenuBackdropProps {
-  isVisible: boolean;
-  onClick: () => void;
-}
-
-const MobileMenuBackdrop: React.FC<MobileMenuBackdropProps> = ({
-  isVisible,
-  onClick,
-}) => (
-  <div
-    className={`header__mobile-backdrop ${isVisible ? "header__mobile-backdrop--visible" : ""}`}
-    onClick={onClick}
-    aria-hidden="true"
-  />
 );
 
 interface MobileMenuProps {
@@ -295,8 +295,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     className={`header__mobile-menu ${isOpen ? "header__mobile-menu--open" : ""}`}
   >
     <div className="header__mobile-menu-container">
-      <MobileMenuHeader onClose={onClose} />
-
       <nav className="header__mobile-nav" aria-label="Mobile menu">
         <ul className="header__mobile-nav-list">
           {navItems.map((item) => (
@@ -310,31 +308,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           ))}
         </ul>
       </nav>
-
-      <MobileActions onAction={onClose} />
     </div>
   </div>
 );
-interface MobileMenuHeaderProps {
-  onClose: () => void;
-}
-
-const MobileMenuHeader: React.FC<MobileMenuHeaderProps> = ({ onClose }) => {
-  return (
-    <div className="header__mobile-menu-header">
-      <Link href="/" aria-label="Home">
-        <Logo />
-      </Link>
-      <button
-        className="header__mobile-menu-close"
-        aria-label="Close menu"
-        onClick={onClose}
-      >
-        <CloseIcon />
-      </button>
-    </div>
-  );
-};
 
 interface MobileNavItemProps {
   item: DropdownNavigation;
@@ -393,31 +369,121 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
   );
 };
 
-interface MobileActionsProps {
-  onAction: () => void;
-}
+const MobileSearchBar: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
-const MobileActions: React.FC<MobileActionsProps> = ({ onAction }) => {
-  const actions = [
-    { href: "/search", label: "Search", icon: <SearchIcon /> },
-    { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon /> },
-    { href: "/account", label: "Account", icon: <AccountIcon /> },
-    { href: "/cart", label: "Cart", icon: <CartIcon /> },
-  ];
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  const handleFocus = () => {
+    setIsSearchVisible(true);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", isSearchVisible);
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [isSearchVisible]);
 
   return (
-    <div className="header__mobile-actions">
-      {actions.map((action) => (
-        <Link
-          key={action.href}
-          href={action.href}
-          aria-label={action.label}
-          className="header__mobile-action"
-          onClick={onAction}
-        >
-          {action.icon}
-        </Link>
-      ))}
+    <>
+      <div className="header__mobile-search">
+        <form onSubmit={handleSubmit} className="header__mobile-search-form">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={handleFocus}
+            className="header__mobile-search-input"
+          />
+          <SearchIcon />
+        </form>
+      </div>
+      <SearchOverlay
+        isVisible={isSearchVisible}
+        onClose={() => setIsSearchVisible(false)}
+        initialQuery={searchQuery}
+      />
+    </>
+  );
+};
+
+interface SearchOverlayProps {
+  isVisible: boolean;
+  onClose: () => void;
+  initialQuery?: string;
+}
+
+const SearchOverlay: React.FC<SearchOverlayProps> = ({
+  isVisible,
+  onClose,
+  initialQuery = "",
+}) => {
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (initialQuery) {
+      setSearchQuery(initialQuery);
+    }
+  }, [initialQuery]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchResults([
+      "Diamond Ring",
+      "Gold Necklace",
+      "Pearl Earrings",
+      "Sapphire Bracelet",
+      "Ruby Pendant",
+    ]);
+  };
+
+  return (
+    <div
+      className={`header__search-overlay ${isVisible ? "header__search-overlay--visible" : ""}`}
+    >
+      <div className="header__search-overlay-container">
+        <div className="header__search-overlay-header">
+          <LogoLink href="/" />
+          <button
+            onClick={onClose}
+            className="header__search-overlay-close"
+            aria-label="Close search"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="header__search-overlay-form">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="header__search-overlay-input"
+            autoFocus
+          />
+          <SearchIcon />
+        </form>
+
+        {searchResults.length > 0 && (
+          <div className="header__search-overlay-results">
+            <h3 className="header__search-overlay-results-title">Results</h3>
+            <ul className="header__search-overlay-results-list">
+              {searchResults.map((result, index) => (
+                <li key={index} className="header__search-overlay-result-item">
+                  <Link href={`/search?q=${encodeURIComponent(result)}`}>
+                    {result}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
