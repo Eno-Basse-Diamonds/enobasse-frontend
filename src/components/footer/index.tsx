@@ -9,6 +9,7 @@ import {
   XIcon,
   TiktokIcon,
   InstagramIcon,
+  LinkedInIcon,
 } from "@/components/icons";
 import "./styles.scss";
 
@@ -86,16 +87,6 @@ const Navigation: React.FC = () => {
           ariaLabel: "Custom design",
         },
         {
-          label: "Jewellery Education",
-          href: "/jewellery-education",
-          ariaLabel: "Jewellery education",
-        },
-        {
-          label: "Gemstone Education",
-          href: "/gemstone-education",
-          ariaLabel: "Gemstone education",
-        },
-        {
           label: "Ring Resizing",
           href: "/ring-resizing",
           ariaLabel: "Ring resizing",
@@ -105,7 +96,6 @@ const Navigation: React.FC = () => {
           href: "/maintenance-repairs",
           ariaLabel: "Maintenance and repairs",
         },
-        { label: "Financing", href: "/financing", ariaLabel: "Financing" },
       ],
     },
     {
@@ -126,11 +116,6 @@ const Navigation: React.FC = () => {
           label: "Terms of Service",
           href: "/terms-of-service",
           ariaLabel: "Terms of service",
-        },
-        {
-          label: "Shipping & Warranty",
-          href: "/shipping-and-warranty",
-          ariaLabel: "Shipping and warranty",
         },
       ],
     },
@@ -239,10 +224,31 @@ interface SocialLink {
 
 const Socials: React.FC = () => {
   const socialLinks: SocialLink[] = [
-    { icon: <FacebookIcon />, href: "#", ariaLabel: "Facebook" },
-    { icon: <InstagramIcon />, href: "#", ariaLabel: "Instagram" },
-    { icon: <XIcon />, href: "#", ariaLabel: "Twitter" },
-    { icon: <TiktokIcon />, href: "#", ariaLabel: "TikTok" },
+    {
+      icon: <FacebookIcon />,
+      href: "https://www.facebook.com/eno.basse",
+      ariaLabel: "Link to Enobasse Facebook account",
+    },
+    {
+      icon: <InstagramIcon />,
+      href: "https://www.instagram.com/eno.basse",
+      ariaLabel: "Link to Enobasse Instagram account",
+    },
+    {
+      icon: <XIcon />,
+      href: "https://x.com/EnoBasseDiamond",
+      ariaLabel: "Link to Enobasse X account",
+    },
+    {
+      icon: <LinkedInIcon />,
+      href: "https://www.linkedin.com/in/eno-bass%C3%A9-diamonds-650b60299/",
+      ariaLabel: "Link to Enobasse LinkedIn account",
+    },
+    {
+      icon: <TiktokIcon />,
+      href: "https://www.tiktok.com/@eno.basse.diamonds",
+      ariaLabel: "Link to Enobasse TikTok account",
+    },
   ];
 
   return (
