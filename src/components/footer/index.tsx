@@ -104,7 +104,7 @@ const Navigation: React.FC = () => {
       navItems: [
         {
           label: "Shipping & Return Policy",
-          href: "/shipping-and-return",
+          href: "/shipping-and-return-policy",
           ariaLabel: "Shipping and return policy",
         },
         {
@@ -113,9 +113,9 @@ const Navigation: React.FC = () => {
           ariaLabel: "Privacy policy",
         },
         {
-          label: "Terms of Service",
-          href: "/terms-of-service",
-          ariaLabel: "Terms of service",
+          label: "Terms and Conditions",
+          href: "/terms-and-conditions",
+          ariaLabel: "Terms and Conditions",
         },
       ],
     },
