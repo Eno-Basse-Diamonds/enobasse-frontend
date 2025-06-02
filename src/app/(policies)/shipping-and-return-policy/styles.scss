@@ -1,0 +1,31 @@
+.shipping {
+  @apply max-w-4xl mx-auto px-6 py-16 text-primary-500;
+
+  &__title {
+    @apply font-primary text-3xl md:text-4xl font-semibold mb-12 text-center;
+  }
+
+  &__section {
+    @apply space-y-6;
+
+    &--spaced {
+      @apply mt-12;
+    }
+  }
+
+  &__heading {
+    @apply font-primary text-2xl font-semibold;
+
+    &--secondary {
+      @apply text-xl font-medium;
+    }
+  }
+
+  &__paragraph {
+    @apply text-gray-700;
+  }
+
+  &__highlight {
+    @apply text-purple-600 font-medium;
+  }
+}
