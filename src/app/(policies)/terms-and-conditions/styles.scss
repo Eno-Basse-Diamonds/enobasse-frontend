@@ -1,0 +1,61 @@
+.terms-conditions {
+  @apply max-w-4xl mx-auto px-6 py-12;
+
+  &__title {
+    @apply font-primary text-3xl md:text-4xl font-semibold text-center mb-4 text-primary-500;
+  }
+
+  &__last-modified {
+    @apply text-center text-primary-400 mb-12;
+  }
+
+  &__content {
+    @apply max-w-none;
+  }
+
+  &__section {
+    @apply mb-12;
+  }
+
+  &__heading {
+    @apply font-primary text-2xl font-semibold mb-4 text-primary-500;
+  }
+
+  &__subheading {
+    @apply font-primary text-xl font-semibold mt-8 mb-4 text-primary-500;
+  }
+
+  &__paragraph {
+    @apply text-primary-500 leading-relaxed mb-4;
+
+    &--no-margin {
+      @apply mb-0;
+    }
+  }
+
+  &__list {
+    @apply list-disc list-inside text-primary-500 mb-4 space-y-2;
+  }
+
+  &__list-item {
+    @apply text-primary-500;
+  }
+
+  &__data-group {
+    @apply space-y-4 mb-6;
+  }
+
+  &__data-item {
+    &-label {
+      @apply font-semibold text-primary-500;
+    }
+
+    &-value {
+      @apply text-primary-500;
+    }
+  }
+
+  &__link {
+    @apply text-secondary-500 underline;
+  }
+}
