@@ -5,6 +5,29 @@ import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Contact Us",
+  description:
+    "Reach our jewelry experts for purchases, custom designs, and client services. Visit our showroom, call, or message us directly.",
+  keywords: [
+    "Eno Basse contact",
+    "luxury jewelry inquiries",
+    "custom jewelry design",
+    "fine jewelry customer service",
+    "jewelry showroom appointment",
+  ],
+  openGraph: {
+    title: "Contact - Eno Basse Diamonds",
+    description:
+      "Connect with our master jewelers for custom commissions, purchases, or client services. Available by appointment at our showroom.",
+    url: "https://www.enobasse.com/contact",
+  },
+  twitter: {
+    title: "Contact - Eno Basse Diamonds",
+    description:
+      "Schedule an appointment or inquire about our luxury jewelry collections. Custom commissions available.",
+  },
+  alternates: {
+    canonical: "https://www.enobasse.com/contact",
+  },
 };
 
 export default async function ContactPage() {

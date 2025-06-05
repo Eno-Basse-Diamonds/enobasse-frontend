@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { CircleCheck } from "lucide-react";
-import { Button } from "@/components";
+import { Button, Alert } from "@/components";
+import { sendMessage } from "@/lib/api/contact";
+import { logger } from "@/lib/utils/logger";
 
 interface ContactFormState {
   firstName: string;
@@ -22,6 +24,7 @@ export const ContactForm: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,41 +36,27 @@ export const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
     try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: "info@enobasse.com",
-          subject: `New Contact Form Submission from ${formData.firstName} ${formData.lastName}`,
-          text: `
-            Name: ${formData.firstName} ${formData.lastName}
-            Email: ${formData.email}
-            Phone: ${formData.phoneNumber}
-            Message: ${formData.message}
-          `,
-        }),
+      await sendMessage({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        message: formData.message,
       });
 
-      if (response.ok) {
-        setShowSuccessModal(true);
-        // Reset form
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          message: "",
-        });
-      } else {
-        throw new Error("Failed to send message");
-      }
+      setShowSuccessModal(true);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        message: "",
+      });
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("There was an error sending your message. Please try again.");
+      logger.error("Error submitting contact form", error);
+      setError("There was an error sending your message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -75,6 +64,17 @@ export const ContactForm: React.FC = () => {
 
   return (
     <>
+      {error && (
+        <Alert
+          type="error"
+          className="mb-6"
+          dismissible
+          onDismiss={() => setError(null)}
+        >
+          {error}
+        </Alert>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div className="contact-form__wrapper">
           <div className="contact-form__group">
