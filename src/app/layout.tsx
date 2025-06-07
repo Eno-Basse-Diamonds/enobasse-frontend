@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: {
     default:
       "Eno Basse Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
-    template: "Eno Basse Diamonds - %s",
+    template: "%s - Eno Basse Diamonds",
   },
   description:
     "Discover exquisite handcrafted Eno Basse jewellery pieces at Eno Basse Jewellery. Shop our curated collection of diamond rings, gold necklaces, and custom engagement rings. Ethical sourcing, artisan craftsmanship.",
