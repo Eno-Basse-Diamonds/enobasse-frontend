@@ -74,11 +74,11 @@ const Navigation: React.FC = () => {
           href: "/testimonials",
           ariaLabel: "Testimonials",
         },
-        { label: "Sitemaps", href: "/sitemaps", ariaLabel: "Sitemaps" },
+        { label: "Sitemap", href: "/sitemap", ariaLabel: "Sitemap" },
       ],
     },
     {
-      title: "Services/Education",
+      title: "Services",
       id: "services-heading",
       navItems: [
         {
