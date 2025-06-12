@@ -22,7 +22,7 @@
   }
 
   &__button {
-    @apply inline-flex items-center gap-x-2 bg-white text-[#502B3A] rounded py-3 px-8 font-medium hover:bg-opacity-90 transition-colors;
+    @apply inline-flex items-center gap-x-2 bg-white text-[#502B3A] py-3 px-8 font-medium hover:bg-opacity-90 transition-colors;
   }
 
   &__button-icon {

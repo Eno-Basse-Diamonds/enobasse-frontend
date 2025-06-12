@@ -27,9 +27,7 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
   };
 
   const getTextPosition = (index: number) => {
-    return index % 2 !== 0
-      ? "bento-grid__title--right"
-      : "bento-grid__title--left";
+    return index % 2 !== 0 ? "bento-grid__title--right" : "bento-grid__title--left";
   };
 
   return (
@@ -45,8 +43,8 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
                 src={item.image.src}
                 alt={item.image.alt}
                 title={item.image.alt}
-                height={500}
-                width={500}
+                height={1000}
+                width={1000}
                 loading="lazy"
                 quality={100}
                 className="bento-grid__image"

@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRightIcon } from "../icons";
 import "./styles.scss";
 
 interface CTASectionProps {
@@ -25,8 +24,7 @@ export const CTASection: React.FC<CTASectionProps> = ({
         </h2>
         <div className="cta-section__button-wrapper">
           <Link href={button.href} className="cta-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="cta-section__button-icon" />
+            {button.text}
           </Link>
         </div>
       </article>

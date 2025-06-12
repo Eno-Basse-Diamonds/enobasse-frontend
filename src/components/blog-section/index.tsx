@@ -67,7 +67,7 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
             <Image
               src={post.image.src}
               alt={post.title}
-              className="blog-section__image"
+              className="blog-section__image object-cover"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               quality={100}

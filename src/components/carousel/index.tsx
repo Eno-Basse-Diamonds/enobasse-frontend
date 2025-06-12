@@ -36,13 +36,13 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   const nextSlide = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + 1,
+      prevIndex + itemsPerPage >= totalItems ? 0 : prevIndex + 1
     );
   }, [itemsPerPage, totalItems]);
 
   const prevSlide = React.useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? totalItems - itemsPerPage : prevIndex - 1,
+      prevIndex === 0 ? totalItems - itemsPerPage : prevIndex - 1
     );
   }, [itemsPerPage, totalItems]);
 
@@ -68,7 +68,6 @@ export const Carousel: React.FC<CarouselProps> = ({
         onClick={prevSlide}
         className="carousel__button carousel__button--prev"
         aria-label="Previous item"
-        disabled={currentIndex === 0}
       >
         <ChevronLeftIcon className="carousel__button-icon" />
       </button>
@@ -93,16 +92,18 @@ export const Carousel: React.FC<CarouselProps> = ({
               <Link href={item.href} passHref legacyBehavior>
                 <a className="carousel__link">
                   <div className="carousel__image-container">
-                    <Image
-                      src={item.image}
-                      alt={item.alt}
-                      title={item.alt}
-                      height={500}
-                      width={500}
-                      loading="lazy"
-                      quality={100}
-                      className="carousel__image"
-                    />
+                    <div className="carousel__image-wrapper">
+                      <Image
+                        src={item.image}
+                        alt={item.alt}
+                        title={item.alt}
+                        height={500}
+                        width={500}
+                        loading="lazy"
+                        quality={100}
+                        className="carousel__image"
+                      />
+                    </div>
                   </div>
                   <figcaption className="carousel__caption">
                     {item.title}
@@ -118,16 +119,14 @@ export const Carousel: React.FC<CarouselProps> = ({
         onClick={nextSlide}
         className="carousel__button carousel__button--next"
         aria-label="Next item"
-        disabled={currentIndex >= totalItems - itemsPerPage}
+
       >
         <ChevronRightIcon className="carousel__button-icon" />
       </button>
 
       <div className="carousel__indicators" role="tablist">
         {Array.from({ length: totalSlides }).map((_, index) => {
-          const isActive =
-            currentIndex >= index * itemsPerPage &&
-            currentIndex < (index + 1) * itemsPerPage;
+          const isActive = Math.floor(currentIndex / itemsPerPage) === index;
 
           return (
             <button

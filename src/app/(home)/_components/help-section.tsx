@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRightIcon } from "@/components/icons";
 
 interface HelpSectionProps {
   title: string;
@@ -22,8 +21,8 @@ export const HelpSection: React.FC<HelpSectionProps> = ({
         <Image
           src={image.src}
           alt={image.alt}
-          height={500}
-          width={500}
+          height={1000}
+          width={1000}
           loading="lazy"
           quality={100}
           className="help-section__image"
@@ -40,8 +39,7 @@ export const HelpSection: React.FC<HelpSectionProps> = ({
         </div>
         <div className="help-section__button-wrapper">
           <Link href={button.href} className="help-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="help-section__button-icon" />
+            {button.text}
           </Link>
         </div>
       </article>

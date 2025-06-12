@@ -22,11 +22,11 @@ export function useBlogPosts(page: number = 1) {
   });
 }
 
-export function usePublishedBlogPosts(page: number = 1) {
+export function usePublishedBlogPosts(page: number = 1, perPage: number = 9) {
   return useQuery({
     queryKey: ["publishedBlogPosts", page],
     queryFn: async () => {
-      const data = await getPublishedBlogPosts(page);
+      const data = await getPublishedBlogPosts(page, perPage);
       return data;
     },
   });
