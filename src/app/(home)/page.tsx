@@ -1,7 +1,11 @@
 import React from "react";
 import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import {
   BentoGrid,
-  BlogSection,
   Carousel,
   CTASection,
   HeroSection,
@@ -12,53 +16,64 @@ import {
 } from "@/components";
 import { AboutSection } from "./_components/about-section";
 import { BlogHeader } from "./_components/blog-header";
+import { BlogContent } from "./_components/blog-content";
 import { HelpSection } from "./_components/help-section";
 import { ServicesSection } from "./_components/services-section";
-import "./home.scss";
+import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
+import "./styles.scss";
 
-export default async function Home() {
+export default async function HomePage() {
+  const queryClient = new QueryClient();
+  const page = 1;
+  const perPage = 6;
+
+  await queryClient.prefetchQuery({
+    queryKey: ["publishedBlogPosts", page, perPage],
+    queryFn: () => getPublishedBlogPosts(page, perPage),
+  });
+
   const carouselItems = [
     {
-      image: "/images/categories/rings.png",
-      alt: "Gold diamond ring",
+      image: "/images/categories/rings.webp",
+      alt: "White gold diamond ring",
       title: "Rings",
       href: "/collections/rings",
     },
     {
-      image: "/images/categories/pendants.png",
-      alt: "Platinum diamond pendant",
-      title: "Pendants",
-      href: "/collections/pendants",
-    },
-    {
-      image: "/images/categories/engagement-rings.png",
-      alt: "Platinum diamond engagement ring",
+      image: "/images/categories/engagement-rings.webp",
+      alt: "White gold diamond engagement ring",
       title: "Engagement Rings",
       href: "/collections/engagement-rings",
     },
     {
-      image: "/images/categories/necklaces.png",
-      alt: "Platinum diamond necklace",
-      title: "Necklace",
-      href: "/collections/necklace",
-    },
-    {
-      image: "/images/categories/bangles.png",
-      alt: "Platinum diamond bangle",
-      title: "Bangles",
-      href: "/collections/bangles",
-    },
-    {
-      image: "/images/categories/earrings.png",
-      alt: "Platinum diamond earring",
+      image: "/images/categories/earrings.webp",
+      alt: "White gold diamond earrings",
       title: "Earrings",
       href: "/collections/earrings",
     },
     {
-      image: "/images/categories/multi-gemstone-rings.png",
-      alt: "Platinum emerald ring",
-      title: "Multi-gemstone Rings",
-      href: "/collections/multi-gemstone-rings",
+      image: "/images/categories/pendants.webp",
+      alt: "White gold diamond cross pendant",
+      title: "Pendants",
+      href: "/collections/pendants",
+    },
+    {
+      image: "/images/categories/necklaces.webp",
+      alt: "White gold diamond necklace",
+      title: "Necklace",
+      href: "/collections/necklace",
+    },
+    {
+      image: "/images/categories/bangles.webp",
+      alt: "White gold diamond bangle",
+      title: "Bangles",
+      href: "/collections/bangles",
+    },
+    {
+      image: "/images/categories/bracelets.webp",
+      alt: "White gold diamond bracelets",
+      title: "Bracelets",
+      href: "/collections/bracelets",
     },
   ];
 
@@ -68,8 +83,8 @@ export default async function Home() {
       title: "Best Sellers",
       href: "/collections/best-sellers",
       image: {
-        src: "/images/collections/collection-01.png",
-        alt: "Eno Basse maroon colored ribbon with gold metal",
+        src: "/images/collections/collection-01.webp",
+        alt: "Butterfly shaped white gold diamond ring in a box",
       },
     },
     {
@@ -77,8 +92,8 @@ export default async function Home() {
       title: "Valentine's Day Gifts",
       href: "/collection/valentine-gifts",
       image: {
-        src: "/images/collections/collection-02.png",
-        alt: "Eno Basse maroon colored box with diamond necklace",
+        src: "/images/collections/collection-02.webp",
+        alt: "Hands with a butterfly shaped white gold diamond ring on one finger",
       },
     },
     {
@@ -86,8 +101,8 @@ export default async function Home() {
       title: "New Arrivals",
       href: "/collections/new-arrivals",
       image: {
-        src: "/images/collections/collection-03.png",
-        alt: "Eno Basse Gold pendant with red ribbon",
+        src: "/images/collections/collection-03.webp",
+        alt: "Hand with leaf-styled white gold diamond ring holding an Eno Basse jewelry box",
       },
     },
     {
@@ -95,13 +110,11 @@ export default async function Home() {
       title: "Trending Now",
       href: "/collections/trending",
       image: {
-        src: "/images/collections/collection-04.png",
-        alt: "Male with engagement band from Eno Basse",
+        src: "/images/collections/collection-04.webp",
+        alt: "Diamond cross yellow gold pendant",
       },
     },
   ];
-
-  // const blogPosts = await getAllPosts();
 
   return (
     <>
@@ -112,7 +125,7 @@ export default async function Home() {
           description="We create antique jewellery that can be passed down through
             generations - timeless pieces designed to become family heirlooms."
           image={{
-            src: "/images/hero.png",
+            src: "/images/hero.webp",
             alt: "Woman wearing a necklace, ring, and bracelet from Eno Basse",
           }}
           buttons={[
@@ -144,51 +157,49 @@ export default async function Home() {
           <BentoGrid items={bentoItems} />
         </SectionContainer>
 
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <SectionContainer
+            id="blog"
+            className="bg-[#D1A559] bg-opacity-20 px-4 lg:px-8 py-8 lg:py-16 mt-10 md:mt-20"
+          >
+            <BlogHeader />
+            <BlogContent />
+          </SectionContainer>
+        </HydrationBoundary>
+
         <HelpSection
           title="Need Help?"
           body={[
-            "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Basse team is here to assist you every step of the way.",
-            "We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
-            "Every piece of jewellery tells a story… From glittering necklaces to radiant rings, we lead you to the perfect jewellery to tell your story, the best expression of you.",
-            "Our team consists of artisans with over 50 years of experience and a wide range of expertise who are eager to help you find and design the perfect piece.",
+            "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Basse team is here to assist you every step of the way. We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
+            "Every piece of jewellery tells a story… From glittering necklaces to radiant rings, we lead you to the perfect jewellery to tell your story, the best expression of you. Our team consists of artisans with over 50 years of experience and a wide range of expertise who are eager to help you find and design the perfect piece.",
           ]}
           button={{ text: "Contact Us", href: "/contact" }}
           image={{
-            src: "/images/need-help.png",
-            alt: "Customer consulting with Eno Basse jewellery expert online",
+            src: "/images/need-help.webp",
+            alt: "White gold diamond earrings",
           }}
         />
-
-        {/* <SectionContainer
-          id="blog"
-          className="bg-[#D1A559] bg-opacity-20 px-4 py-8 lg:px-8 lg:py-16 mt-10 md:mt-20"
-        >
-          <BlogHeader />
-          <BlogSection posts={blogPosts} />
-        </SectionContainer> */}
 
         <AboutSection
           title="Company Profile"
           description={[
-            "Eno Basse was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery.",
-            "Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
+            "Eno Basse was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery. Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
           ]}
           button={{ text: "About Us", href: "/about" }}
           image={{
-            src: "/images/founder.png",
-            alt: "Eno Basse master jeweler at work",
+            src: "/images/founder.webp",
+            alt: "Eno Basse founder",
           }}
         />
 
         <ServicesSection
           title="Maintenance & Repairs"
           description={[
-            "A lapidary workshop is a center for cutting, polishing of stones and maintenance of jewellery.",
-            "Our team offers advice on establishments of these workshops, the requirements and also respond to other enquiries our clients may have.",
+            "A lapidary workshop is a center for cutting, polishing of stones and maintenance of jewellery. Our team offers advice on establishments of these workshops, the requirements and also respond to other enquiries our clients may have.",
           ]}
           button={{
             text: "Contact Us",
-            href: "/contact",
+            href: "/maintenance-repairs",
           }}
           videoSrc="/videos/maintenance.mp4"
         />
@@ -196,7 +207,7 @@ export default async function Home() {
         <CTASection
           heading="Want to design your own? Calm, we can do it!"
           image={{
-            src: "/images/call-to-action.png",
+            src: "/images/call-to-action.webp",
             alt: "Ruby ring with gold metal in a box.",
           }}
           button={{ text: "Shop Now", href: "/collections" }}

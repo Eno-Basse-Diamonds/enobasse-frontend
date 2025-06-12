@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowUpRightIcon } from "@/components/icons";
 
 interface ServicesSectionProps {
   title: string;
@@ -34,8 +33,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         </div>
         <div className="services-section__button-wrapper">
           <Link href={button.href} className="services-section__button">
-            {button.text}{" "}
-            <ArrowUpRightIcon className="services-section__button-icon" />
+            {button.text}
           </Link>
         </div>
       </article>

@@ -21,6 +21,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   return (
     <section aria-labelledby="hero-heading" className="hero">
+      <figure className="hero__image-container hero__image-container--mobile">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          className="hero__image-container__image"
+          quality={100}
+          priority
+          sizes="100vw"
+        />
+      </figure>
+
       <article className="hero__content">
         <h1 id="hero-heading" className="hero__title">
           {title}
@@ -30,7 +42,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {buttons.length > 0 && (
           <nav aria-label="Primary actions" className="hero__nav">
             {buttons.map((link, index) => (
-              <Link key={index} href={link.href} className="hero__button">
+              <Link
+                key={index}
+                href={link.href}
+                className="hero__button"
+                passHref
+              >
                 {link.text}
               </Link>
             ))}
@@ -38,17 +55,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         )}
       </article>
 
-      <figure className="hero__image-container">
+      <figure className="hero__image-container hero__image-container--desktop">
         <Image
           src={image.src}
           alt={image.alt}
-          title={image.alt}
-          height={500}
-          width={500}
-          className="hero__image"
+          fill
+          className="hero__image-container__image"
           quality={100}
-          loading="eager"
           priority
+          sizes="50vw"
         />
       </figure>
     </section>

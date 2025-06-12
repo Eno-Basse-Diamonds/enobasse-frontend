@@ -109,7 +109,7 @@
       }
 
       &-input {
-        @apply flex-1 py-2 pl-4 pr-10 text-base border border-primary-100 focus:outline-none focus:border-primary-500;
+        @apply flex-1 py-2 pl-4 pr-10 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500;
       }
 
       svg {
@@ -211,7 +211,7 @@
     }
 
     &-container {
-      @apply max-w-7xl mx-auto px-8 py-6;
+      @apply max-w-7xl mx-auto px-4 md:px-8 py-6;
     }
 
     &-header {
@@ -237,7 +237,7 @@
     }
 
     &-input {
-      @apply flex-1 py-2 pl-4 pr-12 text-base border border-primary-100 focus:outline-none focus:border-primary-500;
+      @apply flex-1 py-2 pl-4 pr-12 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500;
     }
 
     &-form svg {

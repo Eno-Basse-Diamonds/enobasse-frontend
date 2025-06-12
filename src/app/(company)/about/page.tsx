@@ -34,8 +34,8 @@ export default function AboutUsPage() {
             <Image
               src="/images/about/package-box.webp"
               alt="Eno Basse packaging box"
-              height={1000}
-              width={500}
+              height={1500}
+              width={1500}
               className="about-page__hero-image"
               quality={100}
             />
@@ -77,8 +77,8 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about/founder.webp"
                 alt="Eno Basse founder profile picture"
-                height={1000}
-                width={500}
+                height={1500}
+                width={1500}
                 quality={100}
               />
             </div>
@@ -132,8 +132,8 @@ export default function AboutUsPage() {
                   <Image
                     src="/images/about/signature.webp"
                     alt="Eno Basse founder name signature"
-                    height={100}
-                    width={200}
+                    height={1500}
+                    width={1500}
                     quality={100}
                   />
                 </div>
@@ -167,8 +167,8 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about/sourcing-gemstone.webp"
                 alt="Eno Basse gemstones collection"
-                height={600}
-                width={800}
+                height={1500}
+                width={1500}
                 quality={100}
               />
             </div>
@@ -182,8 +182,8 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about/making-the-jewlery.webp"
                 alt="Eno Basse jewellery making process"
-                height={600}
-                width={800}
+                height={1500}
+                width={1500}
                 quality={100}
               />
             </div>
@@ -379,8 +379,8 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about/dirt-to-wealth.webp"
                 alt="Eno Basse Dirt to Wealth initiative"
-                height={600}
-                width={800}
+                height={1500}
+                width={1500}
                 quality={100}
               />
             </div>

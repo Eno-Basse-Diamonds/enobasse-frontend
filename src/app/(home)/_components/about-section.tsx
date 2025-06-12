@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRightIcon } from "@/components/icons";
 
 interface AboutSectionProps {
   title: string;
@@ -30,7 +29,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         <div className="about-section__button-wrapper">
           <Link href={button.href} className="about-section__button">
             {button.text}{" "}
-            <ArrowUpRightIcon className="about-section__button-icon" />
           </Link>
         </div>
       </article>
@@ -38,8 +36,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         <Image
           src={image.src}
           alt={image.alt}
-          height={500}
-          width={500}
+          height={1000}
+          width={1000}
           loading="lazy"
           quality={100}
           className="about-section__image"
