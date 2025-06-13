@@ -6,7 +6,7 @@
   }
 
   &__header {
-    @apply mb-16;
+    @apply mb-10 md:mb-16;
   }
 
   &__title {
@@ -18,7 +18,7 @@
   }
 
   &__hero {
-    @apply relative mb-16;
+    @apply relative -mx-4 md:mx-auto mb-10 md:mb-16;
 
     &-image {
       @apply w-full h-80 lg:h-96 object-cover;
@@ -30,7 +30,7 @@
   }
 
   &__section {
-    @apply py-12 lg:py-16;
+    @apply py-6 lg:py-16;
 
     &-container {
       @apply grid lg:grid-cols-2 gap-12 items-start;
@@ -41,7 +41,7 @@
     }
 
     &-image {
-      @apply flex justify-center lg:justify-start bg-gray-100;
+      @apply -mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100;
 
       img {
         @apply w-full h-auto;
@@ -63,33 +63,17 @@
     &-list {
       @apply list-disc list-inside space-y-2 text-primary-400;
     }
-
-    &-cards {
-      @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full;
-    }
-
-    &-card {
-      @apply bg-white p-6 shadow-md border border-secondary-200;
-
-      &-title {
-        @apply font-primary text-lg font-semibold text-primary-500 mb-4;
-      }
-
-      &-content {
-        @apply text-primary-400 leading-relaxed space-y-3;
-      }
-    }
   }
 
   &__founder {
-    @apply py-12 lg:py-16;
+    @apply py-6 lg:py-16;
 
     &-container {
       @apply grid lg:grid-cols-2 gap-12 items-start;
     }
 
     &-image {
-      @apply flex justify-center lg:justify-start bg-gray-100;
+      @apply -mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100;
 
       img {
         @apply w-full h-auto;
@@ -110,7 +94,7 @@
       }
 
       &-signature {
-        @apply mt-8 max-w-[200px];
+        @apply mx-auto md:mx-0 mt-8 max-w-[200px];
       }
     }
   }
