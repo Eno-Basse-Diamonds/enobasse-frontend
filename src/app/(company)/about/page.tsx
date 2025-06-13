@@ -145,7 +145,7 @@ export default function AboutUsPage() {
         {/* Sourcing Section */}
         <div className="about-page__section">
           <div className="about-page__section-container">
-            <div className="about-page__section-content">
+            <div className="about-page__section-content order-2">
               <h2 className="about-page__section-title">
                 Sourcing for Gemstones
               </h2>
@@ -163,7 +163,7 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
-            <div className="about-page__section-image">
+            <div className="about-page__section-image md:order-2">
               <Image
                 src="/images/about/sourcing-gemstone.webp"
                 alt="Eno Basse gemstones collection"
@@ -225,166 +225,10 @@ export default function AboutUsPage() {
           </div>
         </div>
 
-        {/* Consultation Section */}
-        <div className="about-page__section">
-          <div className="about-page__section-container">
-            <div className="about-page__section-content">
-              <h2 className="about-page__section-title text-center">
-                Consultation
-              </h2>
-              <div className="about-page__section-cards">
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Jewellery Design
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      Selecting the perfect stone and jewellery design is not
-                      the easiest task which is why the Eno Basse team is here
-                      to assist you every step of the way. We offer consultation
-                      services to assist clients in finding the right gemstones
-                      to suit their needs.
-                    </p>
-                    <p>
-                      Every piece of jewellery tells a story... From glittering
-                      necklaces to radiant rings, we lead you to the perfect
-                      jewellery to tell your story, the best expression of you.
-                    </p>
-                    <p>
-                      Our team consists of artisans with over 50 years of
-                      experience and a wide range of expertise who are eager to
-                      help you find and design the perfect piece.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Gemstones and Diamonds
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      Gemstones are highly prized for beauty, durability, and
-                      rarity. They are categorized into precious and
-                      semi-precious.
-                    </p>
-                    <p>
-                      Diamond is a solid form of pure carbon with its atoms
-                      arranged in a crystal, one of nature's most precious and
-                      beautiful creations.
-                    </p>
-                    <p>
-                      Eno Basse offers consultation services, providing detailed
-                      pricing and value information for evaluating gemstones and
-                      diamonds.
-                    </p>
-                    <p>
-                      All you need to know about these stones and how they can
-                      become profitable for you.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Precious Metals
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      Precious metals are rare, naturally occurring chemical
-                      element that have high economic value and are chemically
-                      resistant. The best known precious metals are Gold and
-                      Silver.
-                    </p>
-                    <p>
-                      At Eno Basse, our team provides all the information our
-                      clients may require about these precious metals and offer
-                      advice that they seek.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Allied Services
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      Eno Basse offers consultation services on all allied
-                      services associated with Gemstones such as identification,
-                      sourcing, cutting, marketing and exportation of gemstones,
-                      precious stones and metals.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Lapidary Workshops
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      A lapidary workshop is a center for cutting or polishing
-                      of stones and gems. Our team offers advice on
-                      establishments of these workshops, the requirements and
-                      also respond to other enquiries our clients may have.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Gold Refinery Factories
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>
-                      Before you melt down gold for jewellery making, you have
-                      to consider your gold refining options carefully.
-                    </p>
-                    <p>
-                      You want to ensure that your gold is being handled with
-                      absolute care and by the right people.
-                    </p>
-                    <p>
-                      Eno Basse offers consultation services on Gold refineries.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="about-page__section-card">
-                  <h3 className="about-page__section-card-title">
-                    Gold Purification
-                  </h3>
-                  <div className="about-page__section-card-content">
-                    <p>The value of gold depends on its purity.</p>
-                    <p>
-                      Gold purification is a tactical and complex process which
-                      requires expertise in order to be carried out excellently.
-                    </p>
-                    <p>
-                      Our highly experienced team offer sound advice on gold
-                      purification.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Dirt to Wealth Section */}
         <div className="about-page__section">
           <div className="about-page__section-container">
-            <div className="about-page__section-image">
-              <Image
-                src="/images/about/dirt-to-wealth.webp"
-                alt="Eno Basse Dirt to Wealth initiative"
-                height={1500}
-                width={1500}
-                quality={100}
-              />
-            </div>
-            <div className="about-page__section-content">
+            <div className="about-page__section-content order-2">
               <h2 className="about-page__section-title">Dirt to Wealth</h2>
               <div className="about-page__section-text">
                 <p>
@@ -415,6 +259,15 @@ export default function AboutUsPage() {
                   centers for the Dirt to Wealth Initiative.
                 </p>
               </div>
+            </div>
+            <div className="about-page__section-image  md:order-2">
+              <Image
+                src="/images/about/dirt-to-wealth.webp"
+                alt="Eno Basse Dirt to Wealth initiative"
+                height={1500}
+                width={1500}
+                quality={100}
+              />
             </div>
           </div>
         </div>
