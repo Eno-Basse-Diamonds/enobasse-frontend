@@ -38,9 +38,9 @@
   &__socials-and-newsletter {
     @apply flex flex-col flex-1 gap-y-8 items-center mb-4 lg:mb-0 lg:flex-none lg:items-start;
 
-     & nav {
+    & nav {
       @apply order-2 lg:order-1;
-     }
+    }
   }
 
   &__socials {
@@ -65,6 +65,18 @@
 
       &-button {
         @apply absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80;
+      }
+    }
+
+    &-message {
+      @apply mt-2 text-sm;
+
+      &--success {
+        @apply text-green-600;
+      }
+
+      &--error {
+        @apply text-red-600;
       }
     }
   }

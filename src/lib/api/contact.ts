@@ -84,6 +84,12 @@ export const sendRingResizingMessage = async (data: RingResizingMessage) => {
   return api.post("/contact/ring-resizing", data);
 };
 
-export const sendMaintenanceRepairsMessage = async (data: MaintenanceRepairsMessage) => {
+export const sendMaintenanceRepairsMessage = async (
+  data: MaintenanceRepairsMessage
+) => {
   return api.post("/contact/maintenance-repairs", data);
+};
+
+export const subscribeToNewsletter = async (email: string) => {
+  return api.post("/contact/newsletter", { email });
 };

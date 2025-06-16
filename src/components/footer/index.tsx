@@ -2,6 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
+import { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 import { Logo } from "../logo";
 import {
   ArrowRightIcon,
@@ -11,6 +13,7 @@ import {
   InstagramIcon,
   LinkedInIcon,
 } from "@/components/icons";
+import { subscribeToNewsletter } from "@/lib/api/contact";
 import "./styles.scss";
 
 interface NavItem {
@@ -154,17 +157,27 @@ const Newsletter: React.FC = () => {
   const [email, setEmail] = React.useState<string>("");
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
   const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setError("");
+
+    try {
+      await subscribeToNewsletter(email);
       setIsSuccess(true);
       setEmail("");
       setTimeout(() => setIsSuccess(false), 3000);
-    }, 1000);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 409) {
+        setError("You are already subscribed to our newsletter!");
+      } else {
+        setError("Failed to subscribe. Please try again later.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -203,15 +216,24 @@ const Newsletter: React.FC = () => {
             aria-label="Subscribe"
             disabled={isSubmitting || !email}
           >
-            <ArrowRightIcon />
+            {isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <ArrowRightIcon />
+            )}
           </button>
         </div>
-        {isSuccess && (
-          <p className="footer__newsletter-success" role="alert">
-            Thank you for subscribing!
-          </p>
-        )}
       </form>
+      {isSuccess && (
+        <p className="footer__newsletter-message footer__newsletter-message--success">
+          Thank you for subscribing!
+        </p>
+      )}
+      {error && (
+        <p className="footer__newsletter-message footer__newsletter-message--error">
+          {error}
+        </p>
+      )}
     </section>
   );
 };
