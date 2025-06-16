@@ -1,8 +1,8 @@
 .bento-grid {
-  @apply grid grid-cols-1 gap-y-6 mt-6;
+  @apply grid grid-cols-1 gap-y-6 lg:gap-y-8 mt-8;
 
   @media (min-width: 1024px) {
-    @apply lg:grid-cols-3 lg:gap-x-10;
+    @apply lg:grid-cols-3 lg:gap-x-8;
   }
 
   &__item {

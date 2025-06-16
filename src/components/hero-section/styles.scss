@@ -24,7 +24,7 @@
     }
 
     &__image {
-      @apply w-full h-full object-cover;
+      @apply w-full h-full object-cover lg:overflow-visible;
     }
   }
 
