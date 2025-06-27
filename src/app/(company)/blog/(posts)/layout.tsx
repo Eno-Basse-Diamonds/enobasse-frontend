@@ -7,7 +7,8 @@ import {
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
 import { PageHeading } from "@/components";
 import "./styles.scss";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import { BlogSectionSkeletonLoader } from "@/components/loaders";
 
 export const metadata: Metadata = {
   title: "Our Blog",
@@ -38,14 +39,12 @@ export const metadata: Metadata = {
 
 interface BlogPageLayoutProps {
   children: ReactNode;
-  searchParams: { page?: string };
 }
 
 export default async function BlogPageLayout({
   children,
-  searchParams = {},
 }: BlogPageLayoutProps) {
-  const page = Number(searchParams.page) || 1;
+  const page = 1;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -57,7 +56,7 @@ export default async function BlogPageLayout({
     <main className="blog-page">
       <PageHeading title="Our Blog" />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        {children}
+        <Suspense fallback={<BlogSectionSkeletonLoader />}>{children}</Suspense>
       </HydrationBoundary>
     </main>
   );

@@ -23,7 +23,7 @@ export default async function CartPage() {
               icon={<EmptyStateIcon />}
               title="Your cart is empty"
               description="Start adding items to your cart"
-              action={{ text: "Browse Products", href: "/products" }}
+              // action={{ text: "Browse Products", href: "/products" }}
             />
           ) : (
             <div className="cart-page__content">
