@@ -1,0 +1,143 @@
+.products-page {
+  @apply my-12;
+
+  &__container {
+    @apply flex flex-col lg:flex-row gap-8;
+  }
+
+  &__sidebar {
+    @apply lg:w-1/4 divide-y divide-gray-200 hidden lg:block;
+  }
+
+  &__filter-section {
+    @apply pb-8;
+
+    &--last {
+      @apply pt-8;
+    }
+  }
+
+  &__filter-title {
+    @apply text-base font-semibold mb-4;
+  }
+
+  &__filter-options {
+    @apply grid grid-cols-3 gap-3;
+  }
+
+  &__filter-option {
+    @apply flex flex-col items-center gap-2 p-3 transition text-center cursor-pointer hover:bg-gray-50;
+  }
+
+  &__filter-icon {
+    @apply w-12 h-12 flex items-center justify-center;
+  }
+
+  &__filter-label {
+    @apply text-xs font-medium;
+  }
+
+  &__products-container {
+    @apply lg:w-3/4;
+  }
+
+  &__products-header {
+    @apply flex justify-between items-center mb-6;
+  }
+
+  &__products-count {
+    @apply text-gray-600;
+  }
+
+  &__sort-select {
+    @apply appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50;
+  }
+
+  &__sort-icon {
+    @apply absolute right-3 top-3 h-4 w-4 text-gray-400;
+  }
+}
+
+.collection-detail {
+  @apply mt-12 mb-24;
+
+  &__header {
+    @apply mb-6 lg:mb-12;
+
+    &--mobile {
+      @apply lg:hidden;
+    }
+
+    &--desktop {
+      @apply hidden lg:block relative h-80 overflow-hidden;
+    }
+  }
+
+  &__image-container {
+    @apply h-48 w-full relative overflow-hidden;
+
+    &--desktop {
+      @apply w-full h-full;
+    }
+  }
+
+  &__image {
+    @apply object-cover;
+  }
+
+  &__info-panel {
+    @apply bg-[#502B3A] p-6 text-white mt-2;
+
+    &--desktop {
+      @apply absolute inset-0 px-8 bg-black/30 flex items-center justify-start;
+    }
+
+    &-content {
+      @apply text-white max-w-2xl bg-[#502B3A] p-8;
+    }
+  }
+
+  &__title {
+    @apply text-2xl font-primary font-medium mb-3;
+
+    &--desktop {
+      @apply text-3xl mb-4;
+    }
+  }
+
+  &__description {
+    @apply text-sm font-light;
+
+    &--desktop {
+      @apply text-base;
+    }
+  }
+
+  &__content {
+    @apply flex flex-col lg:flex-row gap-8;
+  }
+
+  &__sidebar {
+    @apply lg:w-1/4 divide-y divide-gray-200;
+  }
+
+  &__products-container {
+    @apply lg:w-3/4;
+  }
+
+  &__products-header {
+    @apply flex justify-between items-center mb-6;
+  }
+
+  &__products-count {
+    @apply text-gray-600;
+  }
+
+  &__sort-select {
+    @apply appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50;
+  }
+
+  &__sort-icon {
+    @apply absolute right-3 top-3 h-4 w-4 text-gray-400;
+  }
+}

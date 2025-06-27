@@ -1,0 +1,81 @@
+import { cache } from "react";
+import { Metadata } from "next";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getProduct } from "@/lib/api/products";
+import "./styles.scss";
+
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+  children: React.ReactNode;
+}
+
+const cachedGetProduct = cache(async (slug: string) => {
+  return getProduct(slug);
+});
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await cachedGetProduct(slug);
+
+  if (!product) {
+    return {
+      title: "Product not found",
+      description: "This product does not exist.",
+    };
+  }
+
+  const description =
+    product.variants && product.variants.length > 0
+      ? product.variants[0].description
+      : "No description available for this product.";
+
+  return {
+    title: `${product.name} - Eno Basse Diamonds`,
+    description: description,
+    alternates: {
+      canonical: `/products/${product.slug}`,
+    },
+    openGraph: {
+      title: `${product.name} - Eno Basse Diamonds`,
+      description: product.description,
+      images: [
+        {
+          url: `${product.images[0].url}`,
+          width: 1200,
+          height: 630,
+          alt: product.images[0].alt || product.name,
+        },
+      ],
+    },
+    twitter: {
+      title: `${product.name} - Eno Basse Diamonds"`,
+      description: description,
+      images: [`${product.images[0].url}`],
+    },
+  };
+}
+
+export default async function ProductPage({
+  params,
+  children,
+}: ProductPageProps) {
+  const { slug } = await params;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["product", slug],
+    queryFn: () => getProduct(slug),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      {children}
+    </HydrationBoundary>
+  );
+}

@@ -6,7 +6,7 @@ import Link from "next/link";
 import * as motion from "motion/react-client";
 import { HeartIcon, EyeOpenIcon } from "@/components/icons";
 import { ProductQuickView } from "../quickview";
-import { Product } from "@/lib/data/products";
+import { Product } from "@/lib/types/products";
 import "./styles.scss";
 
 interface ProductListProps {
@@ -63,19 +63,25 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
           >
             <div className="product-list__image-container">
               <Image
-                src={product.images[0].src}
+                src={product.images[0].url}
                 alt={product.images[0].alt}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="product-list__image product-list__image--primary"
+                className={`product-list__image bg-gray-100 ${
+                  product.images[1] ? 'product-list__image--primary' : ''
+                }`}
+                quality={100}
               />
-              <Image
-                src={product.images[1]?.src || product.images[0].src}
-                alt={product.images[0].alt}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="product-list__image product-list__image--secondary"
-              />
+              {product.images[1] && (
+                <Image
+                  src={product.images[1].url}
+                  alt={product.images[1].alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="product-list__image product-list__image--secondary bg-gray-100"
+                  quality={100}
+                />
+              )}
             </div>
 
             <motion.div className="product-list__details">

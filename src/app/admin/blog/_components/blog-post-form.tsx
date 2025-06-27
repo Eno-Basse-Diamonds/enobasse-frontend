@@ -121,7 +121,6 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     if (blogPost) {
       updatePostMutation.mutate({ slug: blogPost.slug, formData });
     } else {

@@ -128,7 +128,7 @@ export default async function HomePage() {
         }}
         buttons={[
           { text: "See Collections", href: "/collections" },
-          { text: "Shop Engagement", href: "/collections/engagement-rings" },
+          { text: "See Products", href: "/products" },
         ]}
       />
 

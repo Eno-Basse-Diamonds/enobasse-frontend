@@ -26,8 +26,12 @@ export const Engraving = () => {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
+      const header = document.querySelector('header');
+      if (header) header.style.zIndex = "0";
     } else {
-      const timer = setTimeout(() => setIsMounted(false), 200);
+      const header = document.querySelector('header');
+      if (header) header.style.zIndex = "20";
+      const timer = setTimeout(() =>  setIsMounted(false), 50);
       return () => clearTimeout(timer);
     }
 

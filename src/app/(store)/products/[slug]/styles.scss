@@ -1,4 +1,3 @@
-// Image Gallery
 .image-gallery {
   @apply space-y-4 w-full;
 
@@ -63,11 +62,24 @@
   }
 
   &__desktop {
-    @apply hidden md:grid grid-cols-2 gap-3;
+    @apply hidden md:grid gap-3;
+
+    &[data-single-image="true"] {
+      @apply hidden md:grid grid-cols-1 justify-items-center max-w-[460px] w-full mx-auto;
+    }
+
+    &[data-single-image="false"] {
+      @apply grid-cols-2;
+    }
   }
 
   &__desktop-item {
     @apply relative aspect-square border border-gray-200 overflow-hidden cursor-zoom-in;
+    width: 100%;
+
+    &.no-border {
+      border: none;
+    }
   }
 
   &__desktop-image {
@@ -91,7 +103,6 @@
   }
 }
 
-// Product Details
 .product-details {
   @apply mt-3;
 
@@ -112,7 +123,7 @@
   }
 
   &__value {
-    @apply mt-1 text-sm md:text-base font-medium text-[#502B3A];
+    @apply mt-1 font-medium text-[#502B3A];
 
     @screen sm {
       @apply mt-0;
@@ -120,7 +131,6 @@
   }
 }
 
-// Product Page Layout
 .product-page {
   @apply my-6 md:my-12;
 
@@ -133,7 +143,7 @@
   }
 
   &__info {
-    @apply lg:col-span-2 px-4 md:px-0;
+    @apply lg:col-span-2 mt-4 md:mt-0;
   }
 
   &__sticky-container {
@@ -141,7 +151,7 @@
   }
 
   &__title {
-    @apply font-primary text-2xl md:text-4xl text-[#502B3A] mb-3 md:mb-5;
+    @apply font-primary text-xl md:text-2xl lg:text-3xl text-[#502B3A] mb-3 md:mb-5;
   }
 
   &__rating-container {
@@ -157,7 +167,7 @@
   }
 
   &__actions {
-    @apply flex flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12;
+    @apply flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12;
   }
 
   &__add-to-cart {
@@ -169,9 +179,8 @@
   }
 }
 
-// Reviews
 .reviews {
-  @apply w-full max-w-[1550px] mx-auto px-4 md:px-0;
+  @apply w-full max-w-[1550px] mx-auto;
 
   &__grid {
     @apply grid grid-cols-1 gap-6 md:gap-8;
@@ -190,7 +199,7 @@
   }
 
   &__heading h2 {
-    @apply font-primary text-xl md:text-2xl lg:text-3xl font-semibold text-[#502B3A] mb-3;
+    @apply font-primary text-2xl md:text-3xl lg:text-4xl text-[#502B3A] mb-3;
   }
 
   &__rating-container {
@@ -246,7 +255,7 @@
   }
 
   &__cta-heading {
-    @apply text-base md:text-lg lg:text-xl font-semibold text-[#502B3A] mb-2;
+    @apply text-lg lg:text-xl font-semibold text-[#502B3A] mb-2;
   }
 
   &__cta-text {
@@ -254,7 +263,7 @@
   }
 
   &__cta-button {
-    @apply w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 border border-[#502B3A] text-[#502B3A] text-sm md:text-base font-medium hover:bg-[#502B3A]/5 transition-colors duration-200;
+    @apply w-full sm:w-auto text-[#502B3A] text-sm md:text-base;
   }
 
   &__review {
@@ -294,65 +303,6 @@
   }
 }
 
-// Review Modal
-.review-modal {
-  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out p-4 md:p-0;
-
-  &__content {
-    @apply bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto;
-  }
-
-  &__header {
-    @apply p-4 md:p-6 border-b border-gray-200;
-  }
-
-  &__title {
-    @apply text-lg md:text-xl font-semibold text-[#502B3A];
-  }
-
-  &__body {
-    @apply p-4 md:p-6;
-  }
-
-  &__form {
-    @apply space-y-4 md:space-y-6;
-  }
-
-  &__field {
-    @apply space-y-2;
-  }
-
-  &__label {
-    @apply block text-sm md:text-base font-medium text-[#502B3A];
-  }
-
-  &__input,
-  &__textarea {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50;
-  }
-
-  &__textarea {
-    @apply h-24 md:h-32;
-  }
-
-  &__footer {
-    @apply p-4 md:p-6 border-t border-gray-200 flex justify-end gap-x-3;
-  }
-
-  &__button {
-    @apply px-4 py-2 rounded-md text-sm md:text-base font-medium;
-
-    &--cancel {
-      @apply text-gray-700 hover:bg-gray-100;
-    }
-
-    &--submit {
-      @apply bg-[#502B3A] text-white hover:bg-[#502B3A]/90;
-    }
-  }
-}
-
-// Engraving
 .engraving-preview {
   @apply relative w-full mb-3;
 
@@ -431,7 +381,8 @@
   }
 
   &__modal-overlay {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+    @apply fixed inset-0 flex items-center justify-center p-4;
+    z-index: 99999;
   }
 
   &__modal-backdrop {

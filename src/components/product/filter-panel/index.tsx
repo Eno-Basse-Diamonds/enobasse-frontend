@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CloseIcon, FilterIcon } from "@/components/icons";
-import { PriceRange } from "./elements/price-range";
 import { MetalOptions } from "./elements/metal-options";
 import { Gemstones } from "./elements/gemstones";
 import "./styles.scss";
@@ -17,31 +16,43 @@ interface FilterOption {
 interface FilterPanelProps {
   metalOptions: FilterOption[];
   gemstones: FilterOption[];
+  selectedFilters?: FilterOption[];
+  onFilterChange?: (filters: FilterOption[]) => void;
 }
 
 export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
   metalOptions,
   gemstones,
+  selectedFilters = [],
+  onFilterChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
+  const [localFilters, setLocalFilters] =
+    useState<FilterOption[]>(selectedFilters);
 
   const toggleFilter = (filter: FilterOption) => {
-    setSelectedFilters((prev) => {
-      const exists = prev.find((f) => f.name === filter.name);
-      if (exists) {
-        return prev.filter((f) => f.name !== filter.name);
-      }
-      return [...prev, filter];
-    });
+    const newFilters = localFilters.find((f) => f.name === filter.name)
+      ? localFilters.filter((f) => f.name !== filter.name)
+      : [...localFilters, filter];
+
+    setLocalFilters(newFilters);
+    onFilterChange?.(newFilters);
   };
 
   const removeFilter = (filterName: string) => {
-    setSelectedFilters((prev) => prev.filter((f) => f.name !== filterName));
+    const newFilters = localFilters.filter((f) => f.name !== filterName);
+    setLocalFilters(newFilters);
+    onFilterChange?.(newFilters);
   };
 
   const resetFilters = () => {
-    setSelectedFilters([]);
+    setLocalFilters([]);
+    onFilterChange?.([]);
+  };
+
+  const applyFilters = () => {
+    onFilterChange?.(localFilters);
+    setIsOpen(false);
   };
 
   return (
@@ -54,9 +65,9 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
         Filters
       </button>
 
-      {selectedFilters.length > 0 && (
+      {localFilters.length > 0 && (
         <div className="product-filter-panel__tags">
-          {selectedFilters.map((filter) => (
+          {localFilters.map((filter) => (
             <div key={filter.name} className="product-filter-panel__tag">
               <span>{filter.name}</span>
               <button
@@ -86,15 +97,13 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
         <div className="product-filter-panel__mobile-content">
           <MetalOptions
             metalOptions={metalOptions}
-            selectedFilters={selectedFilters}
+            selectedFilters={localFilters}
             toggleFilter={toggleFilter}
           />
           <Gemstones
-            gemstones={gemstones}
-            selectedFilters={selectedFilters}
+            selectedFilters={localFilters}
             toggleFilter={toggleFilter}
           />
-          <PriceRange />
         </div>
 
         <div className="product-filter-panel__mobile-footer">
@@ -105,7 +114,7 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
             Reset Filters
           </button>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={applyFilters}
             className="product-filter-panel__apply-filters"
           >
             Apply Filters
@@ -119,20 +128,28 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
 export const FilterPanelDesktop: React.FC<FilterPanelProps> = ({
   metalOptions,
   gemstones,
+  selectedFilters = [],
+  onFilterChange,
 }) => {
+  const toggleFilter = (filter: FilterOption) => {
+    const newFilters = selectedFilters.find((f) => f.name === filter.name)
+      ? selectedFilters.filter((f) => f.name !== filter.name)
+      : [...selectedFilters, filter];
+
+    onFilterChange?.(newFilters);
+  };
+
   return (
     <>
       <MetalOptions
         metalOptions={metalOptions}
-        selectedFilters={[]}
-        toggleFilter={() => {}}
+        selectedFilters={selectedFilters}
+        toggleFilter={toggleFilter}
       />
       <Gemstones
-        gemstones={gemstones}
-        selectedFilters={[]}
-        toggleFilter={() => {}}
+        selectedFilters={selectedFilters}
+        toggleFilter={toggleFilter}
       />
-      <PriceRange />
     </>
   );
 };

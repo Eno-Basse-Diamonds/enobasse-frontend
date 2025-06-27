@@ -98,7 +98,7 @@ export const BlogHeroImage = ({
             width={1920}
             height={1080}
             quality={100}
-            className="blog-detail__hero--desktop-image"
+            className="blog-detail__hero--desktop-image bg-gray-100"
             priority
             onError={() => setDesktopImageError(true)}
           />

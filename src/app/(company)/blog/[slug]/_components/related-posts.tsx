@@ -43,7 +43,7 @@ const RelatedPostCard = ({ post }: { post: BlogPost }) => {
               width={320}
               height={240}
               quality={80}
-              className="blog-detail__related-item-image-content"
+              className="blog-detail__related-item-image-content bg-gray-100"
               onError={() => setImageError(true)}
             />
           )}

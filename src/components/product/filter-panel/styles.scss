@@ -34,7 +34,7 @@
   }
 
   &__button {
-    @apply bg-[#502B3A] w-full flex flex-row gap-x-4 items-center justify-center mx-auto max-w-[600px] text-white px-5 py-3 shadow-lg z-40 lg:hidden;
+    @apply border border-primary-300 w-full flex flex-row gap-x-4 items-center justify-center mx-auto text-primary-500 px-5 py-3 lg:hidden;
   }
 
   &__tags {
@@ -50,46 +50,6 @@
 
     &.active {
       @apply translate-y-0;
-    }
-  }
-
-  &__price-range {
-    @apply pt-4 lg:pt-8 mr-4;
-
-    &__title {
-      @apply font-semibold mb-4;
-    }
-
-    &__container {
-      @apply ml-6;
-    }
-
-    &__inputs {
-      @apply flex items-center space-x-4 mb-4 w-full;
-    }
-
-    &__input-group {
-      @apply flex flex-col w-1/2;
-    }
-
-    &__label {
-      @apply text-sm font-medium text-gray-600;
-    }
-
-    &__input-wrapper {
-      @apply relative mt-1;
-    }
-
-    &__currency {
-      @apply absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600;
-    }
-
-    &__input {
-      @apply text-sm w-full pl-7 pr-3 py-2 border focus:outline-none focus:ring-1 focus:ring-[#D1A559];
-    }
-
-    &__slider {
-      @apply w-full mb-2 accent-[#502B3A] cursor-pointer h-1 bg-[#502B3A] rounded-sm;
     }
   }
 

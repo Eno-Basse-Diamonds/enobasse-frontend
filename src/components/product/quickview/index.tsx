@@ -1,18 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
+import { Button } from "@/components/button";
 import {
   CloseIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   PlusIcon,
   MinusIcon,
-  ChevronDownIcon,
 } from "@/components/icons";
-import { Product } from "@/lib/data/products";
+import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
+import { Product, ProductVariant, Metal, Gemstone } from "@/lib/types/products";
+import { ringSizes } from "@/lib/utils/constants";
 import "./styles.scss";
 
 interface ProductQuickViewProps {
@@ -27,33 +29,46 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
+    product.variants[0]
+  );
+  const [selectedMetal, setSelectedMetal] = useState<Metal | undefined>(
+    product.metals?.[0]
+  );
+  const [selectedGemstone, setSelectedGemstone] = useState<
+    Gemstone | undefined
+  >(product.gemstones?.[0]);
+
+  const hasMultipleVariants = product.variants.length > 1;
+  const isRing = product.category === "rings";
+
+  const uniqueGemstones = Array.from(
+    new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
+  );
+
+  useEffect(() => {
+    const matchingVariant = product.variants.find(
+      (v) =>
+        v.metals.some((m) => m.type === selectedMetal?.type) &&
+        v.gemstones.some((g) => g.type === selectedGemstone?.type)
+    );
+    if (matchingVariant) {
+      setSelectedVariant(matchingVariant);
+      setCurrentImageIndex(0);
+    }
+  }, [selectedMetal?.type, selectedGemstone?.type, product.variants]);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === 0 ? product.images.length - 1 : prev - 1
+      prev === 0 ? selectedVariant.images.length - 1 : prev - 1
     );
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === product.images.length - 1 ? 0 : prev + 1
+      prev === selectedVariant.images.length - 1 ? 0 : prev + 1
     );
   };
-
-  const ringSizes = [
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-  ];
 
   // Animation variants
   const backdrop = {
@@ -124,29 +139,27 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               className="product-quick-view__image"
             >
               <Image
-                src={product.images[currentImageIndex].src}
-                alt={product.images[currentImageIndex].alt}
+                src={selectedVariant.images[currentImageIndex].url}
+                alt={selectedVariant.images[currentImageIndex].alt}
                 fill
-                className="object-cover"
-                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                className="object-contain"
+                priority={currentImageIndex === 0}
+                loading="eager"
               />
             </motion.div>
 
-            {product.images.length > 1 && (
+            {selectedVariant.images.length > 1 && (
               <>
                 <motion.button
                   onClick={handlePrevImage}
                   className="product-quick-view__nav-button product-quick-view__nav-button--prev"
-                  whileHover={buttonHover}
-                  whileTap={buttonTap}
                 >
                   <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
                 </motion.button>
                 <motion.button
                   onClick={handleNextImage}
                   className="product-quick-view__nav-button product-quick-view__nav-button--next"
-                  whileHover={buttonHover}
-                  whileTap={buttonTap}
                 >
                   <ChevronRightIcon className="h-5 w-5 text-gray-800" />
                 </motion.button>
@@ -159,7 +172,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              {product.images.map((image, index) => (
+              {selectedVariant.images.map((image, index) => (
                 <motion.button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
@@ -172,7 +185,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   whileTap={{ scale: 0.95 }}
                 >
                   <Image
-                    src={image.src}
+                    src={image.url}
                     alt={image.alt}
                     width={48}
                     height={48}
@@ -184,7 +197,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           </div>
 
           <motion.div
-            className="product-quick-view__content"
+            className="product-quick-view__content bg-slate-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -195,76 +208,90 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="product-quick-view__title">{product.name}</h2>
+              <h2 className="product-quick-view__title">
+                {selectedVariant.title}
+              </h2>
               <p className="product-quick-view__price">
-                {product.priceRange.min === product.priceRange.max
-                  ? `$${product.priceRange.min.toLocaleString(undefined)}`
-                  : `$${product.priceRange.min.toLocaleString(undefined)} - $${product.priceRange.max.toLocaleString(undefined)}`}
+                ${selectedVariant.price.toLocaleString(undefined)}
               </p>
             </motion.div>
 
-            <motion.div
-              className="product-quick-view__section"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-            >
-              <div className="flex justify-between items-center w-full mb-2">
-                <h3 className="product-quick-view__section-title">Size</h3>
-                <Link
-                  href="/ring-size-guide"
-                  className="product-quick-view__size-guide-link"
+            {hasMultipleVariants &&
+              product.metals &&
+              product.metals.length > 1 && (
+                <motion.div
+                  className="product-quick-view__section"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
                 >
-                  Size guide
-                </Link>
-              </div>
-              <div className="product-quick-view__size-options">
-                {ringSizes.map((size) => (
-                  <motion.button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`product-quick-view__size-button ${
-                      selectedSize === size
-                        ? "product-quick-view__size-button--selected"
-                        : "product-quick-view__size-button--unselected"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <MetalTypeSelector
+                    metalOptions={product.metals}
+                    selectedMetal={selectedMetal}
+                    onSelectMetal={setSelectedMetal}
+                  />
+                </motion.div>
+              )}
+
+            {hasMultipleVariants &&
+              product.gemstones &&
+              uniqueGemstones.length > 1 && (
+                <motion.div
+                  className="product-quick-view__section"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <GemstoneSelector
+                    gemstoneOptions={product.gemstones}
+                    selectedGemstone={selectedGemstone}
+                    onSelectGemstone={setSelectedGemstone}
+                  />
+                </motion.div>
+              )}
+
+            {isRing && (
+              <motion.div
+                className="product-quick-view__section"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+              >
+                <div className="flex justify-between items-center w-full mb-2">
+                  <h3 className="product-quick-view__section-title">Size</h3>
+                  <Link
+                    href="/ring-size-guide"
+                    className="product-quick-view__size-guide-link"
                   >
-                    {size}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
+                    Size guide
+                  </Link>
+                </div>
+                <div className="product-quick-view__size-options">
+                  {ringSizes.map((size) => (
+                    <motion.button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`product-quick-view__size-button ${
+                        selectedSize === size
+                          ? "product-quick-view__size-button--selected"
+                          : "product-quick-view__size-button--unselected"
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {size}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             <motion.div
               className="product-quick-view__section"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.4 }}
             >
-              <MetalSelection />
-            </motion.div>
-
-            <motion.div
-              className="product-quick-view__section flex flex-row items-start gap-12"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
-            >
-              <div>
-                <h3 className="product-quick-view__section-title">
-                  Total Carat Weight
-                </h3>
-                <div className="product-quick-view__select-wrapper">
-                  <select className="product-quick-view__select">
-                    <option>0.39 ct</option>
-                    <option>0.41 ct</option>
-                  </select>
-                  <ChevronDownIcon className="product-quick-view__select-icon" />
-                </div>
-              </div>
-
               <div>
                 <h3 className="product-quick-view__section-title">Quantity</h3>
                 <div className="product-quick-view__quantity-controls">
@@ -294,23 +321,15 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.45 }}
             >
-              <div className="product-quick-view__action-buttons">
-                <motion.button
-                  className="product-quick-view__action-button product-quick-view__action-button--primary"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Add to Cart
-                </motion.button>
-                <motion.button
-                  className="product-quick-view__action-button product-quick-view__action-button--secondary"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Wishlist
-                </motion.button>
+              <div className="product-quick-view__action-buttons hidden md:grid ">
+                <Button size="lg">Add to Cart</Button>
+                <Button variant="outline" size="lg">Wishlist</Button>
+              </div>
+              <div className="product-quick-view__action-buttons grid md:hidden">
+                <Button>Add to Cart</Button>
+                <Button variant="outline">Wishlist</Button>
               </div>
               <Link
                 className="product-quick-view__details-link"
@@ -323,56 +342,5 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
         </motion.div>
       </div>
     </motion.div>
-  );
-};
-
-const MetalSelection = () => {
-  const [selectedMetal, setSelectedMetal] = useState({
-    name: "White Gold",
-    purity: "14K",
-  });
-
-  const metalOptions = [
-    { name: "Rose Gold", purity: "14K", color: "border-[#E1A79F] bg-[#E1A79F]/30" },
-    { name: "White Gold", purity: "14K", color: "border-[#D8D8D8] bg-[#D8D8D8]/30" },
-    {
-      name: "Yellow Gold",
-      purity: "14K",
-      color: "border-[#EDC789] bg-[#EDC789]/30",
-    },
-    { name: "Rose Gold", purity: "18K", color: "border-[#E1A79F] bg-[#E1A79F]/30" },
-    { name: "White Gold", purity: "18K", color: "border-[#D8D8D8] bg-[#D8D8D8]/30" },
-    {
-      name: "Yellow Gold",
-      purity: "18K",
-      color: "border-[#EDC789] bg-[#EDC789]/30",
-    },
-    { name: "Platinum", purity: "Pt", color: "border-[#757575] bg-[#757575]/30" },
-  ];
-
-  return (
-    <div className="metal-selection">
-      <h3 className="metal-selection__title">
-        <span className="metal-selection__title-span">Metal Type: </span> {selectedMetal.purity} {selectedMetal.name}
-      </h3>
-      <div className="metal-selection__options">
-        {metalOptions.map((metal) => (
-          <motion.button
-            key={`${metal.name}-${metal.purity}`}
-            onClick={() => setSelectedMetal(metal)}
-            className={`metal-selection__button ${metal.color} ${
-              selectedMetal.name === metal.name &&
-              selectedMetal.purity === metal.purity
-                ? "metal-selection__button--selected"
-                : "hover:opacity-90"
-            }`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {metal.purity}
-          </motion.button>
-        ))}
-      </div>
-    </div>
   );
 };

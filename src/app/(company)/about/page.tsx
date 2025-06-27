@@ -1,4 +1,3 @@
-import React from "react";
 import { Metadata } from "next";
 import Image from "next/image";
 import "./styles.scss";
@@ -36,7 +35,7 @@ export default function AboutUsPage() {
               alt="Eno Basse packaging box"
               height={1500}
               width={1500}
-              className="about-page__hero-image"
+              className="about-page__hero-image bg-gray-100"
               quality={100}
             />
           </div>

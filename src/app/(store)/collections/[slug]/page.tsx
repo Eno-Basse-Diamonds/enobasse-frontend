@@ -1,99 +1,84 @@
+"use client";
+
+import React, { useCallback, useState, useMemo } from "react";
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import * as motion from "motion/react-client";
-import { getCollectionWithProducts } from "@/lib/api/collections";
+import { SearchSlashIcon } from "lucide-react";
 import {
   PageHeading,
   SectionContainer,
   ProductList,
   FilterPanelMobile,
   FilterPanelDesktop,
+  EmptyState,
 } from "@/components";
 import { ChevronDownIcon } from "@/components/icons";
+import { ProductsPageLoader } from "@/components/loaders";
+import { FilterOption } from "@/lib/types/products";
+import { useCollection } from "@/lib/hooks/use-collections";
+import { filterAndSortProducts } from "@/lib/utils/products";
+import { metalOptions, gemstones } from "@/lib/utils/constants";
 import "./styles.scss";
-
-type CollectionDetailPageProps = {
-  params: Promise<{ slug: string }>;
-};
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
 };
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 const imageHoverVariants = {
-  hover: {
-    scale: 1.05,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
+  hover: { scale: 1.05, transition: { duration: 0.3, ease: "easeOut" } },
 };
 
-export default async function CollectionDetailPage({
-  params,
-}: CollectionDetailPageProps) {
-  const { slug } = await params;
+export default function CollectionPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
+  const [sortBy, setSortBy] = useState("featured");
 
-  const collection = getCollectionWithProducts(slug);
-  if (!collection) return notFound();
-  const products = collection.products;
+  const { data, isLoading } = useCollection(slug);
+  const { collection, products } = data || {};
+
+  const filteredAndSortedProducts = useMemo(
+    () =>
+      filterAndSortProducts({
+        products: products || [],
+        selectedFilters,
+        sortBy,
+      }),
+    [products, selectedFilters, sortBy]
+  );
+
+  const handleSortChange = useCallback((value: string) => {
+    setSortBy(value);
+  }, []);
+
+  const handleFilterChange = useCallback((filters: FilterOption[]) => {
+    setSelectedFilters(filters);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <SectionContainer id="collection-products">
+        <ProductsPageLoader />
+      </SectionContainer>
+    );
+  }
+
+  if (!collection) {
+    return notFound();
+  }
 
   const breadcrumbItems = [
     { label: "Collections", href: "/collections" },
     { label: collection.name, href: "#" },
-  ];
-
-  const metalOptions = [
-    {
-      name: "Platinum",
-      type: "metal" as const,
-      image: { src: "/images/metal-options/platinum.webp", alt: "Platinum" },
-    },
-    {
-      name: "Rose Gold",
-      type: "metal" as const,
-      image: { src: "/images/metal-options/rose-gold.avif", alt: "Rose Gold" },
-    },
-    {
-      name: "White Gold",
-      type: "metal" as const,
-      image: {
-        src: "/images/metal-options/white-gold.avif",
-        alt: "White Gold",
-      },
-    },
-    {
-      name: "Yellow Gold",
-      type: "metal" as const,
-      image: {
-        src: "/images/metal-options/yellow-gold.avif",
-        alt: "Yellow Gold",
-      },
-    },
-  ];
-
-  const gemstones = [
-    { name: "Diamond", type: "gemstone" as const, color: "text-gray-400" },
-    { name: "Ruby", type: "gemstone" as const, color: "text-red-500" },
-    { name: "Sapphire", type: "gemstone" as const, color: "text-blue-600" },
-    { name: "Emerald", type: "gemstone" as const, color: "text-green-500" },
   ];
 
   return (
@@ -112,7 +97,7 @@ export default async function CollectionDetailPage({
           <div className="collection-detail__header--mobile">
             <div className="collection-detail__image-container">
               <Image
-                src={collection.image.src}
+                src={collection.image.url}
                 alt={collection.image.alt}
                 fill
                 sizes="100%"
@@ -140,7 +125,7 @@ export default async function CollectionDetailPage({
               className="collection-detail__image-container--desktop"
             >
               <Image
-                src={collection.image.src}
+                src={collection.image.url}
                 alt={collection.image.alt}
                 fill
                 sizes="100%"
@@ -175,46 +160,62 @@ export default async function CollectionDetailPage({
             className="collection-detail__sidebar hidden lg:block"
           >
             <FilterPanelDesktop
-              metalOptions={metalOptions}
-              gemstones={gemstones}
+              metalOptions={metalOptions as FilterOption[]}
+              gemstones={gemstones as FilterOption[]}
+              selectedFilters={selectedFilters}
+              onFilterChange={handleFilterChange}
             />
           </motion.aside>
 
-          {products && (
+          <motion.div
+            variants={itemVariants}
+            className="collection-detail__products-container"
+          >
+            <div className="lg:hidden">
+              <FilterPanelMobile
+                metalOptions={metalOptions as FilterOption[]}
+                gemstones={gemstones as FilterOption[]}
+                selectedFilters={selectedFilters}
+                onFilterChange={handleFilterChange}
+              />
+            </div>
             <motion.div
-              variants={itemVariants}
-              className="collection-detail__products-container"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="collection-detail__products-header"
             >
-              <div className="lg:hidden">
-                <FilterPanelMobile
-                  metalOptions={metalOptions}
-                  gemstones={gemstones}
-                />
+              <p className="collection-detail__products-count">
+                {filteredAndSortedProducts.length}{" "}
+                {filteredAndSortedProducts.length === 1
+                  ? "product"
+                  : "products"}
+              </p>
+              <div className="relative">
+                <select
+                  className="collection-detail__sort-select"
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                >
+                  <option value="featured">Sort by: Featured</option>
+                  <option value="price-low-high">Price: Low to High</option>
+                  <option value="price-high-low">Price: High to Low</option>
+                  <option value="newest">Newest Arrivals</option>
+                </select>
+                <ChevronDownIcon className="collection-detail__sort-icon" />
               </div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="collection-detail__products-header"
-              >
-                <p className="collection-detail__products-count">
-                  {products.length}{" "}
-                  {products.length === 1 ? "product" : "products"}
-                </p>
-                <div className="relative">
-                  <select className="collection-detail__sort-select">
-                    <option>Sort by: Featured</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Newest Arrivals</option>
-                  </select>
-                  <ChevronDownIcon className="collection-detail__sort-icon" />
-                </div>
-              </motion.div>
-
-              <ProductList products={products} />
             </motion.div>
-          )}
+
+            {filteredAndSortedProducts.length === 0 ? (
+              <EmptyState
+                title="No Results Found"
+                description="We couldn't find any products that match your filters."
+                icon={<SearchSlashIcon />}
+              />
+            ) : (
+              <ProductList products={filteredAndSortedProducts} />
+            )}
+          </motion.div>
         </motion.div>
       </SectionContainer>
     </motion.div>

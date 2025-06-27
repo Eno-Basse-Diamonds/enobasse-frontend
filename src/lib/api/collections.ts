@@ -1,14 +1,22 @@
-import {
-  collections,
-  collectionsWithProducts,
-  Collection,
-} from "../data/collections";
+import { Collection, CollectionWithProducts } from "../types/collections";
+import { api } from "../utils/api";
 
-export const getCollections = (): Collection[] => {
-  return collections;
+interface CollectionFilterOptions {
+  sortBy?: string;
+  sortOrder?: "ASC" | "DESC";
+  minPrice?: number;
+  maxPrice?: number;
+  metals?: string[];
+  gemstones?: string[];
+}
+
+export const getCollections = async (): Promise<Collection[]> => {
+  return api.get("/collections");
 };
 
-export const getCollectionWithProducts = (slug: string): Collection | null => {
-  const collection = collectionsWithProducts.find((c) => c.slug === slug);
-  return collection || null;
+export const getCollectionWithProducts = async (
+  slug: string,
+  options?: CollectionFilterOptions
+): Promise<CollectionWithProducts> => {
+  return api.get(`/collections/${slug}`, { params: options });
 };

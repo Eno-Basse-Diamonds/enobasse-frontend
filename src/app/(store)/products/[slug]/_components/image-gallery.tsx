@@ -5,12 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 interface ImageGalleryProps {
-  images: Array<{ src: string; alt: string }>;
+  images: Array<{ url: string; alt: string }>;
 }
 
 export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
+  const isSingleImage = images.length === 1;
 
   const handleImageClick = (index: number) => {
     setZoomedIndex(index);
@@ -25,7 +26,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   return (
     <>
       <section aria-label="Image gallery" className="image-gallery">
-        <div className="image-gallery__mobile">
+        <div className="image-gallery__mobile mt-4">
           <figure className="image-gallery__main-container">
             <div
               role="group"
@@ -40,7 +41,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   aria-hidden={selectedImageIndex !== index}
                 >
                   <Image
-                    src={img.src}
+                    src={img.url}
                     alt={img.alt}
                     fill
                     className="image-gallery__image"
@@ -53,56 +54,70 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
             </div>
           </figure>
 
-          <nav
-            aria-label="Image thumbnails"
-            className="image-gallery__thumbnails"
-          >
-            <ul className="image-gallery__thumbnails-list">
-              {images.map((img, i) => (
-                <li key={`mobile-${i}`} className="image-gallery__thumbnails-item">
-                  <button
-                    onClick={() => setSelectedImageIndex(i)}
-                    className={`image-gallery__thumbnail-button ${
-                      selectedImageIndex === i
-                        ? "image-gallery__thumbnail-button--selected"
-                        : ""
-                    }`}
-                    aria-label={`View image ${i + 1}: ${img.alt}`}
-                    aria-current={selectedImageIndex === i}
+          {!isSingleImage && (
+            <nav
+              aria-label="Image thumbnails"
+              className="image-gallery__thumbnails"
+            >
+              <ul className="image-gallery__thumbnails-list">
+                {images.map((img, i) => (
+                  <li
+                    key={`mobile-${i}`}
+                    className="image-gallery__thumbnails-item"
                   >
-                    <Image
-                      src={img.src}
-                      alt=""
-                      fill
-                      className="image-gallery__thumbnail-image"
-                      sizes="80px"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+                    <button
+                      onClick={() => setSelectedImageIndex(i)}
+                      className={`image-gallery__thumbnail-button ${
+                        selectedImageIndex === i
+                          ? "image-gallery__thumbnail-button--selected"
+                          : ""
+                      }`}
+                      aria-label={`View image ${i + 1}: ${img.alt}`}
+                      aria-current={selectedImageIndex === i}
+                    >
+                      <Image
+                        src={img.url}
+                        alt=""
+                        fill
+                        className="image-gallery__thumbnail-image"
+                        sizes="80px"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
 
-        <div className="image-gallery__desktop" role="grid" aria-label="Image grid">
+        <div
+          className="image-gallery__desktop"
+          role="grid"
+          aria-label="Image grid"
+          data-single-image={isSingleImage}
+        >
           {images.map((img, index) => (
             <figure
               key={`desktop-${index}`}
               onClick={() => handleImageClick(index)}
-              className="image-gallery__desktop-item cursor-zoom-in"
+              className={`image-gallery__desktop-item cursor-zoom-in ${
+                isSingleImage ? "no-border" : ""
+              }`}
               aria-label={`Image ${index + 1}: ${img.alt}`}
               role="gridcell"
             >
               <Image
-                src={img.src}
+                src={img.url}
                 alt={img.alt}
                 fill
                 className="image-gallery__desktop-image"
                 sizes="(max-width: 1024px) 50vw, 25vw"
                 quality={100}
               />
-              <figcaption className="image-gallery__caption">{img.alt}</figcaption>
+              <figcaption className="image-gallery__caption">
+                {img.alt}
+              </figcaption>
             </figure>
           ))}
         </div>
@@ -127,7 +142,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
             >
               <div className="relative w-full max-w-4xl aspect-square">
                 <Image
-                  src={images[zoomedIndex].src}
+                  src={images[zoomedIndex].url}
                   alt={images[zoomedIndex].alt}
                   fill
                   className="object-contain"
