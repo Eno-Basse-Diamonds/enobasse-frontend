@@ -19,7 +19,7 @@ export default async function WishlistPage() {
               icon={<HeartIcon className="empty-state-icon" />}
               title="Your wishlist is empty"
               description="Start adding items you love to your wishlist"
-              action={{ text: "Browse Products", href: "/products" }}
+              // action={{ text: "Browse Products", href: "/products" }}
             />
           ) : (
             <>

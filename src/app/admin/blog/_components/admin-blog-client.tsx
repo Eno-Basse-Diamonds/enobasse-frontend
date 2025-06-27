@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Alert, Button, Pagination } from "@/components";
-import { AdminBlogSkeletonLoader } from "@/components/loader";
+import { AdminBlogSkeletonLoader } from "@/components/loaders";
 import { Header } from "../../_components/header";
 import { BlogPostForm } from "./blog-post-form";
 import { BlogPostList } from "./blog-post-list";

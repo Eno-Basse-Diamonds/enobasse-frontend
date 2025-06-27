@@ -39,28 +39,19 @@ export const metadata: Metadata = {
 
 interface ProductListLayoutProps {
   children: React.ReactNode;
-  searchParams: {
-    page?: string;
-    sortBy?: string;
-    sortOrder?: "ASC" | "DESC";
-    metals?: string[];
-    gemstones?: string[];
-  };
 }
 
 export default async function ProductListLayout({
   children,
-  searchParams,
 }: ProductListLayoutProps) {
   const queryClient = new QueryClient();
-  const page = Number(searchParams?.page) || 1;
 
   const filterOptions: ProductsFilterOptions = {
-    page,
-    sortBy: searchParams?.sortBy || "featured",
-    sortOrder: searchParams?.sortOrder || "DESC",
-    metals: searchParams?.metals || [],
-    gemstones: searchParams?.gemstones || [],
+    page: 1,
+    sortBy: "featured",
+    sortOrder: "DESC",
+    metals: [],
+    gemstones: [],
   };
 
   await queryClient.prefetchQuery({
