@@ -1,5 +1,6 @@
 import * as motion from "motion/react-client";
 import { DiamondIcon } from "@/components/icons";
+import { FilterOption } from "@/lib/types/products";
 
 const hoverVariants = {
   hover: {
@@ -9,27 +10,22 @@ const hoverVariants = {
   },
 };
 
-interface FilterOption {
-  name: string;
-  type: "metal" | "gemstone";
-  image?: {
-    src: string;
-    alt: string;
-  };
-  color?: string;
-}
-
 interface GemstonesProps {
-  gemstones: FilterOption[];
   selectedFilters: FilterOption[];
   toggleFilter: (metal: FilterOption) => void;
 }
 
 export const Gemstones: React.FC<GemstonesProps> = ({
-  gemstones,
   selectedFilters,
   toggleFilter,
 }) => {
+  const gemstones: FilterOption[]  = [
+    { name: "Diamond", type: "gemstone", color: "text-gray-400" },
+    { name: "Ruby", type: "gemstone", color: "text-red-500" },
+    { name: "Sapphire", type: "gemstone", color: "text-blue-600" },
+    { name: "Emerald", type: "gemstone", color: "text-green-500" },
+  ];
+
   return (
     <div className="product-filter-panel__filter-section product-filter-panel__filter-section--last">
       <h3 className="product-filter-panel__title">Gemstones</h3>

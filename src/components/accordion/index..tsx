@@ -67,7 +67,7 @@ export const Accordion: React.FC<AccordionProps> = ({
               className="transition-all duration-300 ease-in-out overflow-hidden"
               aria-hidden={!isOpen}
             >
-              <div className="pt-0 pb-2 text-[#502B3A]/70">{item.content}</div>
+              <div className="pt-0 pb-2 text-primary-500 font-light">{item.content}</div>
             </div>
           </div>
         );

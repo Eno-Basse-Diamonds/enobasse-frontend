@@ -6,7 +6,7 @@
   }
 
   &__header {
-    @apply flex gap-x-4 items-start justify-between mx-auto;
+    @apply flex gap-x-4 items-start justify-between overflow-hidden;
   }
 
   &__title {
@@ -14,6 +14,6 @@
   }
 
   &__spacer {
-    @apply w-5 sm:w-6;
+    @apply hidden md:block sm:w-6;
   }
 }

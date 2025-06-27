@@ -1,9 +1,8 @@
 "use client";
 
 import { BlogSection } from "@/components";
-import { BlogSectionSkeletonLoader } from "@/components/loader";
+import { BlogSectionSkeletonLoader } from "@/components/loaders";
 import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
-import { div } from "motion/react-client";
 
 export function BlogContent() {
   const currentPage = 1;

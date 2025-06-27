@@ -1,32 +1,22 @@
-import { ReactNode } from "react";
-import Link from "next/link";
-import "./styles.scss";
-
 interface EmptyStateProps {
-  icon: ReactNode;
   title: string;
   description: string;
-  action?: { text: string; href: string };
+  icon: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  icon,
   title,
   description,
-  action,
+  icon,
+  children,
 }) => {
   return (
-    <div className="empty-state">
-      <div className="empty-state__icon-container">{icon}</div>
-      <h3 className="empty-state__title">{title}</h3>
-      <p className="empty-state__description">{description}</p>
-      {action && (
-        <div className="empty-state__action">
-          <Link href={action.href} className="empty-state__button">
-            {action.text}
-          </Link>
-        </div>
-      )}
+    <div className="empty-state flex flex-col items-center justify-center py-16 text-center text-gray-500">
+      <div className="mb-4">{icon}</div>
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <p className="mb-4">{description}</p>
+      {children}
     </div>
   );
 };

@@ -6,12 +6,14 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   hrefBuilder?: (page: number) => string;
+  onPageChange?: (page: number) => void;
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   hrefBuilder,
+  onPageChange,
 }) => {
   if (totalPages <= 1) return null;
 
@@ -25,25 +27,29 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   const pages = Array.from(
     { length: endPage - startPage + 1 },
-    (_, i) => startPage + i,
+    (_, i) => startPage + i
   );
 
   return (
     <nav className="pagination" aria-label="Pagination">
       {/* Previous Button */}
       <PaginationButton
-        href={hrefBuilder?.(currentPage - 1) ?? "#"}
+        page={currentPage - 1}
         disabled={currentPage <= 1}
         aria-label="Previous page"
         direction="prev"
+        href={hrefBuilder?.(currentPage - 1) ?? "#"}
+        onPageChange={onPageChange}
       />
 
       {/* First Page + Ellipsis */}
       {startPage > 1 && (
         <>
           <PaginationButton
-            href={hrefBuilder?.(1) ?? "#"}
+            page={1}
             active={1 === currentPage}
+            href={hrefBuilder?.(1) ?? "#"}
+            onPageChange={onPageChange}
           >
             1
           </PaginationButton>
@@ -55,8 +61,10 @@ export const Pagination: React.FC<PaginationProps> = ({
       {pages.map((page) => (
         <PaginationButton
           key={page}
-          href={hrefBuilder?.(page) ?? "#"}
+          page={page}
           active={page === currentPage}
+          href={hrefBuilder?.(page) ?? "#"}
+          onPageChange={onPageChange}
         >
           {page}
         </PaginationButton>
@@ -69,8 +77,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             <span className="pagination__ellipsis">...</span>
           )}
           <PaginationButton
-            href={hrefBuilder?.(totalPages) ?? "#"}
+            page={totalPages}
             active={totalPages === currentPage}
+            href={hrefBuilder?.(totalPages) ?? "#"}
+            onPageChange={onPageChange}
           >
             {totalPages}
           </PaginationButton>
@@ -79,59 +89,88 @@ export const Pagination: React.FC<PaginationProps> = ({
 
       {/* Next Button */}
       <PaginationButton
-        href={hrefBuilder?.(currentPage + 1) ?? "#"}
+        page={currentPage + 1}
         disabled={currentPage >= totalPages}
         aria-label="Next page"
         direction="next"
+        href={hrefBuilder?.(currentPage + 1) ?? "#"}
+        onPageChange={onPageChange}
       />
     </nav>
   );
 };
 
 interface PaginationButtonProps {
+  page: number;
   href: string;
   children?: React.ReactNode;
   active?: boolean;
   disabled?: boolean;
   "aria-label"?: string;
   direction?: "prev" | "next";
+  onPageChange?: (page: number) => void;
 }
 
 const PaginationButton: React.FC<PaginationButtonProps> = ({
+  page,
   href,
   children,
   active = false,
   disabled = false,
   "aria-label": ariaLabel,
   direction,
+  onPageChange,
 }) => {
   const baseClass = "pagination__button";
-  const modifierClasses = {
-    "--active": active,
-    "--disabled": disabled,
-    "--prev": direction === "prev",
-    "--next": direction === "next",
-  };
+  const modifierClasses = [
+    active && `${baseClass}--active`,
+    disabled && `${baseClass}--disabled`,
+    direction && `${baseClass}--${direction}`,
+  ].filter(Boolean);
 
-  const className = Object.entries(modifierClasses)
-    .filter(([_, condition]) => condition)
-    .map(([modifier]) => `${baseClass}${modifier}`)
-    .join(" ");
+  const className = [baseClass, ...modifierClasses].join(" ");
+
+  if (disabled) {
+    return (
+      <span className={className} aria-label={ariaLabel} aria-disabled="true">
+        {direction === "prev" && (
+          <ChevronLeftIcon className="pagination__icon" />
+        )}
+        {direction === "next" && (
+          <ChevronRightIcon className="pagination__icon" />
+        )}
+        {!direction && children}
+      </span>
+    );
+  }
+
+  if (onPageChange) {
+    return (
+      <button
+        type="button"
+        className={className}
+        aria-current={active ? "page" : undefined}
+        aria-label={ariaLabel}
+        onClick={() => onPageChange(page)}
+        disabled={disabled}
+      >
+        {direction === "prev" && <ChevronLeftIcon className="pagination__icon" />}
+        {direction === "next" && <ChevronRightIcon className="pagination__icon" />}
+        {!direction && children}
+      </button>
+    );
+  }
 
   return (
     <Link
-      href={disabled ? "#" : href}
+      href={href}
       passHref
-      className={`${baseClass} ${className}`}
+      className={className}
       aria-current={active ? "page" : undefined}
       aria-label={ariaLabel}
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : undefined}
     >
       {direction === "prev" && <ChevronLeftIcon className="pagination__icon" />}
-      {direction === "next" && (
-        <ChevronRightIcon className="pagination__icon" />
-      )}
+      {direction === "next" && <ChevronRightIcon className="pagination__icon" />}
       {!direction && children}
     </Link>
   );

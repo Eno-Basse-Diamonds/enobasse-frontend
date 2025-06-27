@@ -1,19 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { Metal, Gemstone } from "@/lib/data/products";
+import { Metal, Gemstone } from "@/lib/types/products";
 import * as motion from "motion/react-client";
 
 interface MetalOptionsProps {
   metalOptions: Metal[];
+  selectedMetal?: Metal;
+  onSelectMetal?: (metal: Metal) => void;
 }
 
 type MetalType = "White Gold" | "Yellow Gold" | "Rose Gold" | "Platinum";
 
 export const MetalTypeSelector: React.FC<MetalOptionsProps> = ({
   metalOptions,
+  selectedMetal,
+  onSelectMetal,
 }) => {
-  const [selectedMetal, setSelectedMetal] = useState(metalOptions[0]);
   const [hoveredMetal, setHoveredMetal] = useState<Metal | null>(null);
 
   const metalColors: Record<MetalType, { border: string; bg: string }> = {
@@ -37,22 +40,25 @@ export const MetalTypeSelector: React.FC<MetalOptionsProps> = ({
           Metal Type:{" "}
           <motion.span
             className="font-medium"
-            key={`${displayedMetal.purity}-${displayedMetal.name}`}
+            key={`${displayedMetal?.purity}-${displayedMetal?.type}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
-            {displayedMetal.purity} {displayedMetal.name}
+            {displayedMetal?.purity} {displayedMetal?.type}
           </motion.span>
         </motion.h3>
         <div className="flex flex-wrap gap-3">
           {metalOptions.map((metal) => {
-            const colors = metalColors[metal.name];
-            const isActive = selectedMetal === metal;
+            const colors = metalColors[metal.type as MetalType] || {
+              border: "border-gray-300",
+              bg: "bg-gray-100/30",
+            };
+            const isActive = selectedMetal?.type === metal.type;
 
             return (
               <motion.div
-                key={`${metal.purity} ${metal.name}`}
+                key={`${metal.purity} ${metal.type}`}
                 className={`relative rounded-full p-[2px] ${
                   isActive
                     ? `${colors.border} border-2`
@@ -69,10 +75,10 @@ export const MetalTypeSelector: React.FC<MetalOptionsProps> = ({
                       ? `${colors.bg}`
                       : `bg-white border-2 ${colors.border}`
                   }`}
-                  onClick={() => setSelectedMetal(metal)}
+                  onClick={() => onSelectMetal?.(metal)}
                   initial={false}
                   animate={{
-                    scale: isActive ? [1, 1.1, 1] : 1
+                    scale: isActive ? [1, 1.1, 1] : 1,
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -81,7 +87,15 @@ export const MetalTypeSelector: React.FC<MetalOptionsProps> = ({
                 {isActive && (
                   <motion.div
                     className="absolute inset-0 border-[0.5px] rounded-full"
-                    style={{ borderColor: colors.border.split('border-[')[1].replace(']', '') }}
+                    style={{
+                      borderColor: colors?.border
+                        ? colors.border.includes("border-[")
+                          ? colors.border
+                              .split("border-[")[1]
+                              ?.replace("]", "") || "#000"
+                          : colors.border
+                        : "#000",
+                    }}
                     layoutId="metalSelection"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
@@ -97,13 +111,21 @@ export const MetalTypeSelector: React.FC<MetalOptionsProps> = ({
 
 interface GemstoneOptionsProps {
   gemstoneOptions: Gemstone[];
+  selectedGemstone?: Gemstone;
+  onSelectGemstone?: (gemstone: Gemstone) => void;
 }
 
 export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
   gemstoneOptions,
+  selectedGemstone: externalSelectedGemstone,
+  onSelectGemstone,
 }) => {
-  const [selectedGemstone, setSelectedGemstone] = useState(gemstoneOptions[0]);
+  const [internalSelectedGemstone, setInternalSelectedGemstone] = useState(
+    gemstoneOptions[0]
+  );
   const [hoveredGemstone, setHoveredGemstone] = useState<Gemstone | null>(null);
+
+  const selectedGemstone = externalSelectedGemstone || internalSelectedGemstone;
 
   const gemstoneColors: Record<string, { border: string; bg: string }> = {
     Diamond: { border: "border-[#D1CFCD]", bg: "bg-[#D1CFCD]/30" },
@@ -126,22 +148,22 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
           Gemstone:{" "}
           <motion.span
             className="font-medium"
-            key={displayedGemstone.name}
+            key={displayedGemstone.type}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
-            {displayedGemstone.weight}ct {displayedGemstone.name}
+            {displayedGemstone.weight}ct {displayedGemstone.type}
           </motion.span>
         </motion.h3>
         <div className="flex flex-wrap gap-3">
           {gemstoneOptions.map((gemstone) => {
-            const colors = gemstoneColors[gemstone.name];
+            const colors = gemstoneColors[gemstone.type];
             const isActive = selectedGemstone === gemstone;
 
             return (
               <motion.div
-                key={`${gemstone.name} ${gemstone.weight}`}
+                key={`${gemstone.type} ${gemstone.weight}`}
                 className={`relative rounded-full p-[2px] ${
                   isActive
                     ? `${colors.border} border-2`
@@ -158,10 +180,14 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
                       ? `${colors.bg}`
                       : `bg-white border-2 ${colors.border}`
                   }`}
-                  onClick={() => setSelectedGemstone(gemstone)}
+                  onClick={() =>
+                    onSelectGemstone
+                      ? onSelectGemstone(gemstone)
+                      : setInternalSelectedGemstone(gemstone)
+                  }
                   initial={false}
                   animate={{
-                    scale: isActive ? [1, 1.1, 1] : 1
+                    scale: isActive ? [1, 1.1, 1] : 1,
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -170,7 +196,11 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
                 {isActive && (
                   <motion.div
                     className="absolute inset-0 border-[0.5px] rounded-full"
-                    style={{ borderColor: colors.border.split('border-[')[1].replace(']', '') }}
+                    style={{
+                      borderColor: colors.border
+                        .split("border-[")[1]
+                        .replace("]", ""),
+                    }}
                     layoutId="gemstoneSelection"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />

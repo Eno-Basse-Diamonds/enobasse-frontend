@@ -1,156 +1,90 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getProduct, getProducts } from "@/lib/api/product";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
+import { getCurrencySymbol } from "@/lib/utils/money";
+
 import {
-  SectionContainer,
-  PageHeading,
-  ShareDropdown,
   Accordion,
-  Divider,
-  Rating,
+  Button,
+  PageHeading,
   ProductList,
+  Rating,
+  SectionContainer,
+  ShareDropdown,
   RingSizeSelector,
   MetalTypeSelector,
   GemstoneSelector,
+  Divider,
 } from "@/components";
-import { WishlistIcon, VehicleIcon, BoxIcon } from "@/components/icons";
+import { WishlistIcon } from "@/components/icons";
+import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
+import { Engraving } from "./_components/engraving";
 import { ImageGallery } from "./_components/image-gallery";
 import { ProductDetails } from "./_components/product-details";
-import { Engraving } from "./_components/engraving";
 import { Reviews } from "./_components/reviews";
-import "./styles.scss";
-import * as motion from "motion/react-client";
+import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
+import { calculateAverageRating } from "@/lib/utils/reviews";
+import { data } from "motion/react-client";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+export default function ProductPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const { data: product } = useProduct(slug);
+  const { data: relatedProductsData } = useRelatedProducts(slug, 4);
+  const relatedProducts = relatedProductsData || [];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+  const [selectedMetal, setSelectedMetal] = useState<Metal | undefined>(
+    product?.metals?.[0] || product?.variants[0]?.metals[0]
+  );
+  const [selectedGemstone, setSelectedGemstone] = useState<
+    Gemstone | undefined
+  >(product?.gemstones?.[0] || product?.variants[0]?.gemstones[0]);
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.8 } },
-};
+  const initialVariant = product?.variants.find((v) => {
+    const metal = v.metals[0];
+    const gemstone = v.gemstones[0];
+    const hasMetal = metal.type === selectedMetal?.type;
+    const hasGemstone = gemstone.type === selectedGemstone?.type;
+    if (hasMetal && hasGemstone) return v;
+  });
 
-const slideInFromLeft = {
-  hidden: { opacity: 0, x: -50 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-};
+  const [selectedVariant, setSelectedVariant] = useState<
+    ProductVariant | undefined
+  >(initialVariant);
 
-const slideInFromRight = {
-  hidden: { opacity: 0, x: 50 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-};
+  useEffect(() => {
+    if (!product?.variants) return;
+    const matchingVariant = product.variants.find(
+      (v) =>
+        v.metals.some((m) => m.type === selectedMetal?.type) &&
+        v.gemstones.some((g) => g.type === selectedGemstone?.type)
+    );
+    if (matchingVariant) setSelectedVariant(matchingVariant);
+  }, [selectedMetal, selectedGemstone, product]);
 
-interface ProductPageProps {
-  params: Promise<{ slug: string }>;
-}
+  if (!product || !selectedVariant) {
+    return notFound();
+  }
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = getProduct();
-  const relatedProducts = getProducts().slice(0, 4);
+  const hasMultipleVariants = product.variants.length > 1;
+  const uniqueGemstones = Array.from(
+    new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
+  );
+  const isRing = product.category === "rings";
 
-  if (!product) return notFound();
-
-  const productVariant = product.variants[0];
-  const { metal, gemstone } = productVariant;
+  const { metals, gemstones } = selectedVariant;
 
   const productDetails = [
-    { label: "SKU", value: productVariant.sku },
-    { label: "Metal", value: `${metal.purity} ${metal.name}` },
-    { label: `${metal.name} Weight`, value: metal.weight },
-    { label: `${gemstone.name} Weight`, value: metal.weight },
+    { label: "SKU", value: selectedVariant.sku },
+    { label: "Metal", value: `${metals[0].purity} ${metals[0].type}` },
+    { label: `${metals[0].type} Weight`, value: metals[0].weight },
+    { label: `${gemstones[0].type} Weight`, value: gemstones[0].weight },
   ];
 
   const breadcrumbItems = [
     { label: "Products", href: "/products" },
     { label: product.name, href: "#" },
-  ];
-
-  const gemstones = [
-    { name: "Diamond", weight: "0.3" },
-    { name: "Diamond", weight: "0.8" },
-    { name: "Sapphire", weight: "0.3" },
-    { name: "Ruby", weight: "0.3" },
-    { name: "Emerald", weight: "0.3" },
-  ];
-
-  const shippingInfo = [
-    {
-      id: "shipping-item-1",
-      title: "Your Order Includes",
-      content: (
-        <>
-          <ul className="mt-2 space-y-5 mb-3">
-            <li className="flex flex-row items-start gap-x-4">
-              <div className="bg-[#D1A559]/20 p-3 rounded-full">
-                <VehicleIcon />
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-[#502B3A] text-sm">Free Delivery</h2>
-                <p className="text-[#502B3A] text-sm font-light">
-                  We&#39;re committed to making your entire experience a
-                  pleasant one, from shopping to delivery
-                </p>
-              </div>
-            </li>
-            <li className="flex flex-row items-center gap-x-4">
-              <div className="bg-[#D1A559]/20 p-3 rounded-full">
-                <BoxIcon />
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-[#502B3A] text-sm">Free Returns</h2>
-                <p className="text-[#502B3A] text-sm font-light">
-                  Our commitment to you doesn&#39;t end at delivery. We offer
-                  free returns to make your experience as easy as possible
-                </p>
-              </div>
-            </li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      id: "shipping-item-2",
-      title: "Product Details",
-      content: (
-        <>
-          Capture your lasting love with this stunning 14k white gold engagement
-          ring that showcases an elegant drape of pavé-set diamonds around your
-          center stone and along the twisting shank for a captivating look.
-        </>
-      ),
-    },
-    {
-      id: "shipping-item-3",
-      title: "Secure Shopping",
-      content: (
-        <>
-          We want to make sure your shopping experience exceeds your
-          expectations, so we have taken measures to guarantee your orders will
-          be safe and secure, from our door to yours.
-        </>
-      ),
-    },
-    {
-      id: "shipping-item-4",
-      title: "Lifetime Product Warranty",
-      content: (
-        <>
-          We stand behind our products and warrant that all items will be free
-          from manufacturing defects for the life of the products.
-        </>
-      ),
-    },
   ];
 
   const deliveryOfferings = [
@@ -173,154 +107,122 @@ export default function ProductPage({ params }: ProductPageProps) {
   ];
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="show"
-      variants={containerVariants}
-      className="product-page"
-    >
-      <PageHeading breadcrumb={{ items: breadcrumbItems }} />
+    <div className="product-page">
+      <div className="-mb-6 md:mb-auto">
+        <PageHeading breadcrumb={{ items: breadcrumbItems }} />
+      </div>
       <SectionContainer id="product-details">
         <div className="product-page__grid">
-          <motion.div
-            variants={slideInFromLeft}
-            className="product-page__gallery"
-          >
+          <div className="product-page__gallery">
             <div className="flex w-full justify-end">
-              <ShareDropdown url="https://example.com/products/1" />
+              <ShareDropdown
+                url={typeof window !== "undefined" ? window.location.href : ""}
+              />
             </div>
-            <ImageGallery images={productVariant.images} />
-            <ProductDetails details={productDetails} />
-          </motion.div>
+            <ImageGallery images={selectedVariant.images} />
+            <div className="hidden md:block">
+              <div className="mt-8 mb-4">
+                <h2 className="text-xl text-primary-300 mb-3">Description</h2>
+                <p className="text-primary-500 font-light leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+              <ProductDetails details={productDetails} />
+            </div>
+          </div>
 
-          <motion.div
-            variants={slideInFromRight}
-            className="product-page__info"
-          >
+          <div className="product-page__info">
             <div className="product-page__sticky-container">
               <div className="space-y-6 md:space-y-7">
-                <motion.h1
-                  variants={itemVariants}
-                  className="product-page__title"
-                >
-                  {productVariant.name}
-                </motion.h1>
-                <motion.div
-                  variants={itemVariants}
-                  className="product-page__rating-container"
-                >
-                  <Rating rating={4.5} count={321} />
+                <h1 className="product-page__title">{selectedVariant.title}</h1>
+                <div className="product-page__rating-container">
+                  <Rating
+                    rating={calculateAverageRating(
+                      product.ratingDistribution ?? []
+                    )}
+                    count={product.reviews?.length || 0}
+                    showCount={true}
+                  />
                   <button>
                     <WishlistIcon />
                   </button>
-                </motion.div>
-                {product.metals && (
-                  <motion.div variants={itemVariants}>
-                    <MetalTypeSelector metalOptions={product.metals} />
-                  </motion.div>
-                )}
-                <motion.div variants={itemVariants}>
-                  <GemstoneSelector gemstoneOptions={gemstones} />
-                </motion.div>
-                <motion.div
-                  variants={itemVariants}
-                  className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]"
-                >
+                </div>
+
+                {hasMultipleVariants &&
+                  product.metals &&
+                  product.metals.length > 1 && (
+                    <div>
+                      <MetalTypeSelector
+                        metalOptions={product.metals}
+                        selectedMetal={selectedMetal}
+                        onSelectMetal={setSelectedMetal}
+                      />
+                    </div>
+                  )}
+
+                {hasMultipleVariants &&
+                  product.gemstones &&
+                  uniqueGemstones.length > 1 && (
+                    <div>
+                      <GemstoneSelector
+                        gemstoneOptions={gemstones}
+                        selectedGemstone={selectedGemstone}
+                        onSelectGemstone={setSelectedGemstone}
+                      />
+                    </div>
+                  )}
+
+                <div className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]">
                   <Engraving />
-                  <RingSizeSelector />
-                </motion.div>
-                <motion.p
-                  variants={itemVariants}
-                  className="product-page__price"
-                >
+                  {isRing && <RingSizeSelector />}
+                </div>
+                <p className="product-page__price">
                   Price:{" "}
                   <span>
-                    {product.currency}{" "}
-                    {productVariant.price.toLocaleString(undefined)}
+                    {getCurrencySymbol(product.priceRange.currency)}
+                    {selectedVariant.price.toLocaleString(undefined)}
                   </span>
-                </motion.p>
-                <motion.div
-                  variants={containerVariants}
-                  className="product-page__actions"
-                >
-                  <motion.button
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="product-page__add-to-cart"
-                  >
-                    Add to Cart
-                  </motion.button>
-                  <motion.button
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="product-page__buy-now"
-                  >
+                </p>
+                <div className="product-page__actions hidden md:flex">
+                  <Button size="xl">Add to Cart</Button>
+                  <Button variant="outline" size="xl">
                     Buy Now
-                  </motion.button>
-                </motion.div>
+                  </Button>
+                </div>
+                <div className="product-page__actions flex md:hidden">
+                  <Button>Add to Cart</Button>
+                  <Button variant="outline">Buy Now</Button>
+                </div>
               </div>
             </div>
-          </motion.div>
-        </div>
-      </SectionContainer>
+          </div>
 
-      <SectionContainer id="product-reviews">
-        <Reviews
-          reviews={[
-            {
-              id: 1,
-              rating: 5,
-              title: "Beautiful Ring",
-              content:
-                "The ring is absolutely stunning. The quality is exceptional and it looks even better in person.",
-              customer: {
-                name: "Sarah Johnson",
-                image: {
-                  src: "/images/avatars/user-1.jpg",
-                  alt: "Sarah Johnson's profile picture",
-                },
-              },
-              date: "2024-02-15",
-            },
-            // ... other reviews
-          ]}
-          ratingDistribution={[
-            { stars: 5, percentage: 62 },
-            { stars: 4, percentage: 25 },
-            { stars: 3, percentage: 9 },
-            { stars: 2, percentage: 2 },
-            { stars: 1, percentage: 1 },
-          ]}
-        />
+          <div className="md:hidden">
+            <div className="my-4">
+              <h2 className="text-xl text-primary-300 mb-3">Description</h2>
+              <p className="text-primary-500 font-light leading-relaxed">
+                {product.description}
+              </p>
+            </div>
+            <ProductDetails details={productDetails} />
+          </div>
+        </div>
       </SectionContainer>
 
       {product.reviews && product.ratingDistribution && (
         <SectionContainer id="product-reviews">
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeIn}
-          >
+          <div>
             <Reviews
               reviews={product.reviews}
               ratingDistribution={product.ratingDistribution}
             />
-          </motion.div>
+          </div>
         </SectionContainer>
       )}
 
       <SectionContainer id="offerings">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={containerVariants}
-          className="py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start overflow-y-hidden"
-        >
-          <motion.div variants={slideInFromLeft} className="flex justify-start">
+        <div className="md:py-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start overflow-y-hidden">
+          <div className="flex justify-start">
             <div className="w-full">
               <Image
                 src="/images/packaged-ring.png"
@@ -331,58 +233,41 @@ export default function ProductPage({ params }: ProductPageProps) {
                 quality={100}
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div variants={slideInFromRight} className="space-y-6">
+          <div className="space-y-6">
             <div className="space-y-4">
-              <motion.h2
-                variants={itemVariants}
-                className="text-2xl md:text-4xl font-normal text-[#502B3A] leading-tight font-primary"
-              >
+              <h2 className="text-2xl md:text-4xl font-normal text-[#502B3A] leading-tight font-primary">
                 We&#39;re committed to making your entire experience a pleasant
                 one, from shopping to delivery
-              </motion.h2>
-              <motion.p
-                variants={itemVariants}
-                className="text-[#502B3A] text-sm md:text-base font-light leading-relaxed"
-              >
+              </h2>
+              <p className="text-[#502B3A] text-base font-light leading-relaxed">
                 Every item we send comes in our signature EnoBasse packaging.
                 Engagement rings arrive in a deluxe ring box within an elegant
                 presentation box ready for your proposal. The presentation box
                 also secures your appraisal certificate and diamond grading
                 report. Loose diamonds are presented in a velvet-lined diamond
                 case that securely holds the stone.
-              </motion.p>
+              </p>
             </div>
-            <motion.div variants={fadeIn} className="mt-8">
+            <div className="mt-8">
               <Accordion items={deliveryOfferings} />
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </SectionContainer>
 
       <SectionContainer id="related-products">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeIn}
-          className="mb-8 max-w-7xl mx-auto"
-        >
+        <div className="mb-8 max-w-7xl mx-auto">
           <Divider
             label="Might as well interest you"
             className="px-4 bg-white md:text-xl text-[#502B3A] font-primary"
           />
-        </motion.div>
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={containerVariants}
-        >
+        </div>
+        <div>
           <ProductList products={relatedProducts} />
-        </motion.div>
+        </div>
       </SectionContainer>
-    </motion.div>
+    </div>
   );
 }

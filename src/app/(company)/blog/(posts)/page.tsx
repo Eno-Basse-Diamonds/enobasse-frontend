@@ -1,18 +1,15 @@
 "use client";
 
-import { Suspense } from "react";
-import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
+import { useSearchParams } from "next/navigation";
 import { BlogSection, SectionContainer, Pagination } from "@/components";
-import { BlogSectionSkeletonLoader } from "@/components/loader";
+import { BlogSectionSkeletonLoader } from "@/components/loaders";
+import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
 
-interface BlogContentProps {
-  page: number;
-}
-
-export function BlogContent({ page }: BlogContentProps) {
-  const currentPage = page || 1;
-  const { data, isLoading } = usePublishedBlogPosts(currentPage);
-  const { posts, totalPages } = data || { posts: [], totalPages: 1 };
+export default function BlogPage() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const { data, isLoading } = usePublishedBlogPosts(page);
+  const { posts = [], totalPages = 1 } = data || {};
 
   if (isLoading) {
     return <BlogSectionSkeletonLoader />;
@@ -32,7 +29,7 @@ export function BlogContent({ page }: BlogContentProps) {
       </SectionContainer>
       <div aria-label="Blog pagination" className="blog-page__pagination">
         <Pagination
-          currentPage={currentPage}
+          currentPage={page}
           totalPages={totalPages}
           hrefBuilder={(page) => `/blog?page=${page}`}
         />

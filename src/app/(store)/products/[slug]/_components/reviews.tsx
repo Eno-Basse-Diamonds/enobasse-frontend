@@ -3,19 +3,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import * as motion from "motion/react-client";
-import { Rating } from "@/components";
+import { Rating, Button, EmptyState } from "@/components";
 import { StarIcon, CloseIcon } from "@/components/icons";
-import { Review } from "@/lib/data/products";
+import { Review } from "@/lib/types/reviews";
+import { calculateAverageRating } from "@/lib/utils/reviews";
+import { RatingDistribution } from "@/lib/types/reviews";
+import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
+import { User } from "lucide-react";
 
 interface ReviewsProps {
   reviews: Review[];
-  ratingDistribution: [
-    { stars: 5; percentage: number },
-    { stars: 4; percentage: number },
-    { stars: 3; percentage: number },
-    { stars: 2; percentage: number },
-    { stars: 1; percentage: number },
-  ];
+  ratingDistribution: RatingDistribution[];
 }
 
 export const Reviews: React.FC<ReviewsProps> = ({
@@ -46,16 +44,6 @@ export const Reviews: React.FC<ReviewsProps> = ({
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  const hoverScale = {
-    scale: 1.03,
-    transition: { duration: 0.2 },
-  };
-
-  const tapScale = {
-    scale: 0.98,
-    transition: { duration: 0.1 },
-  };
-
   return (
     <motion.section
       className="reviews"
@@ -70,15 +58,19 @@ export const Reviews: React.FC<ReviewsProps> = ({
             <h2 id="reviews-heading">Customer Reviews</h2>
             <div className="reviews__rating-container">
               <div className="flex items-center">
-                <Rating rating={4.7} aria-label="Average rating 4.7 stars" />
+                <Rating
+                  rating={calculateAverageRating(ratingDistribution)}
+                  showRatingNumber={true}
+                  aria-label={`Average rating: ${calculateAverageRating(ratingDistribution)} out of 5 stars`}
+                  count={reviews?.length || 0}
+                  showCount={false}
+                />
               </div>
-              <span className="reviews__rating-text">
-                Based on 1,624 reviews
-              </span>
             </div>
           </div>
 
           <div
+            id="reviews-section"
             className="reviews__distribution"
             aria-label="Rating distribution"
           >
@@ -126,15 +118,14 @@ export const Reviews: React.FC<ReviewsProps> = ({
               If you&#39;ve used this product, share your thoughts with other
               customers
             </p>
-            <motion.button
-              className="reviews__cta-button"
+            <Button
+              variant="outline"
               aria-label="Write a review"
               onClick={() => setIsModalOpen(true)}
-              whileHover={hoverScale}
-              whileTap={tapScale}
+              className="reviews__cta-button"
             >
               Write a review
-            </motion.button>
+            </Button>
           </motion.div>
         </motion.aside>
 
@@ -144,82 +135,76 @@ export const Reviews: React.FC<ReviewsProps> = ({
           aria-labelledby="reviews-heading"
           variants={container}
         >
-          {reviews.map((review, index) => (
-            <motion.article
-              key={review.id}
-              className="reviews__review"
-              aria-posinset={index + 1}
-              aria-setsize={reviews.length}
-              itemScope
-              itemType="https://schema.org/Review"
-              variants={item}
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="flex flex-col sm:flex-row gap-6">
-                <div className="reviews__user-info">
-                  <div className="reviews__user-container">
-                    <motion.div
-                      className="reviews__avatar"
-                      whileHover={{ rotate: 5, scale: 1.05 }}
-                      transition={{ type: "spring" }}
-                    >
-                      <Image
-                        src={review.customer.image.src}
-                        alt={`Profile picture of ${review.customer.name}`}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-full"
-                        itemProp="image"
-                      />
-                    </motion.div>
-                    <div>
-                      <h4
-                        className="reviews__user-name"
-                        itemProp="author"
-                        itemScope
-                        itemType="https://schema.org/Person"
+          {reviews.length === 0 ? (
+            <div>
+              <EmptyState
+                icon={<StarIcon className="w-12 h-12 text-gray-300" />}
+                title="No Reviews Yet"
+                description="Be the first to write a review for this product."
+              />
+            </div>
+          ) : (
+            reviews.map((review, index) => (
+              <motion.article
+                key={review.id}
+                className="reviews__review"
+                aria-posinset={index + 1}
+                aria-setsize={reviews.length}
+                itemScope
+                itemType="https://schema.org/Review"
+                variants={item}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="flex flex-col sm:flex-row gap-6">
+                  <div className="reviews__user-info">
+                    <div className="reviews__user-container">
+                      <motion.div
+                        className="reviews__avatar"
+                        transition={{ type: "spring" }}
                       >
-                        <span itemProp="name">{review.customer.name}</span>
-                      </h4>
-                      <div className="flex items-center mt-1">
-                        <Rating
-                          rating={review.rating}
-                          showRatingNumber={false}
-                          aria-label={`Rating: ${review.rating} out of 5 stars`}
-                        />
-                        <meta
-                          itemProp="ratingValue"
-                          content={review.rating.toString()}
-                        />
-                        <meta itemProp="bestRating" content="5" />
+                        <ReviewAuthorImage review={review} />
+                      </motion.div>
+                      <div>
+                        <h4
+                          className="reviews__user-name"
+                          itemProp="author"
+                          itemScope
+                          itemType="https://schema.org/Person"
+                        >
+                          <span itemProp="name">{review.authorName}</span>
+                        </h4>
+                        <div className="flex items-center mt-1">
+                          <Rating
+                            rating={review.rating}
+                            showCount={false}
+                            aria-label={`Rating: ${review.rating} out of 5 stars`}
+                          />
+                          <meta
+                            itemProp="ratingValue"
+                            content={review.rating.toString()}
+                          />
+                          <meta itemProp="bestRating" content="5" />
+                        </div>
                       </div>
                     </div>
+                    <time
+                      className="reviews__date"
+                      dateTime={review.createdAt}
+                      itemProp="datePublished"
+                    >
+                      {dateToOrdinalDayMonthYear(review.createdAt)}
+                    </time>
                   </div>
-                  <time
-                    className="reviews__date"
-                    dateTime={new Date(review.date).toISOString()}
-                    itemProp="datePublished"
-                  >
-                    {new Date(review.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                </div>
 
-                <div className="reviews__review-content">
-                  <h5 className="reviews__review-title" itemProp="name">
-                    {review.title}
-                  </h5>
-                  <p className="reviews__review-text" itemProp="reviewBody">
-                    {review.content}
-                  </p>
+                  <div className="reviews__review-content">
+                    <p className="reviews__review-text" itemProp="reviewBody">
+                      {review.content}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </motion.article>
-          ))}
+              </motion.article>
+            ))
+          )}
         </motion.div>
       </div>
 
@@ -231,6 +216,35 @@ export const Reviews: React.FC<ReviewsProps> = ({
     </motion.section>
   );
 };
+
+interface ReviewAuthorImageProps {
+  review: Review;
+}
+
+function ReviewAuthorImage({ review }: ReviewAuthorImageProps) {
+  const [imageError, setImageError] = useState(false);
+
+  if (imageError || !review.authorImage?.url) {
+    return (
+      <div className="relative flex items-center justify-center w-full h-full bg-gray-200 rounded-full">
+        <User className="w-1/2 h-1/2 text-gray-500" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full">
+      <Image
+        src={review.authorImage.url}
+        alt={`Profile picture of ${review.authorName}`}
+        layout="fill"
+        className="rounded-full object-cover"
+        itemProp="image"
+        onError={() => setImageError(true)}
+      />
+    </div>
+  );
+}
 
 interface ReviewFormModalProps {
   isOpen: boolean;
@@ -293,11 +307,13 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEscapeKey);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscapeKey);
+      document.body.style.overflow = "auto";
     };
   }, [isOpen, onClose]);
 
@@ -331,7 +347,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
 
   return (
     <motion.div
-      className="review-modal"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out p-4 md:p-0"
       initial="hidden"
       animate="visible"
       exit="hidden"
@@ -339,151 +355,165 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
     >
       <motion.div
         ref={modalRef}
-        className="review-modal__content"
+        className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl relative"
         variants={modal}
       >
         <motion.button
-          className="review-modal__close-button"
+          className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full"
           onClick={onClose}
           aria-label="Close review form"
           whileHover={{ rotate: 90, scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <CloseIcon className="review-modal__close-icon" />
+          <CloseIcon className="w-5 h-5" />
         </motion.button>
 
-        <h3 className="review-modal__title">Write a Review</h3>
+        <div className="p-4 md:p-6 border-b border-gray-200">
+          <h3 className="text-lg md:text-xl font-semibold text-[#502B3A] pr-12">
+            Write a Review
+          </h3>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="review-modal__form-grid">
-            <motion.div whileHover={{ x: 5 }}>
-              <label htmlFor="name" className="review-modal__label">
-                Name *
+        <div className="p-4 md:p-6">
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <motion.div className="space-y-2" whileHover={{ x: 2 }}>
+                <label
+                  htmlFor="name"
+                  className="block text-sm md:text-base font-medium text-[#502B3A]"
+                >
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
+                  required
+                  aria-required="true"
+                />
+              </motion.div>
+              <motion.div className="space-y-2" whileHover={{ x: 2 }}>
+                <label
+                  htmlFor="email"
+                  className="block text-sm md:text-base font-medium text-[#502B3A]"
+                >
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
+                  required
+                  aria-required="true"
+                />
+              </motion.div>
+            </div>
+
+            <div className="space-y-2">
+              <label
+                htmlFor="rating"
+                className="block text-sm md:text-base font-medium text-[#502B3A]"
+              >
+                Rating
+              </label>
+              <div className="flex items-center gap-4">
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <motion.button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className="p-1hover:bg-gray-100 transition-colors duration-200"
+                      aria-label={`Rate ${star} star${star !== 1 ? "s" : ""}`}
+                      whileHover={starHover}
+                      whileTap={starTap}
+                      animate={{
+                        scale: star <= rating ? 1.1 : 1,
+                      }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                    >
+                      <StarIcon
+                        className={`w-6 h-6 transition-colors duration-200 ${
+                          star <= rating
+                            ? "text-secondary-500 fill-secondary-500"
+                            : "text-gray-300 hover:text-gray-400"
+                        }`}
+                      />
+                    </motion.button>
+                  ))}
+                </div>
+                {rating > 0 && (
+                  <motion.span
+                    className="text-sm font-medium text-[#502B3A]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    {ratingLabels[rating]}
+                  </motion.span>
+                )}
+              </div>
+            </div>
+
+            <motion.div className="space-y-2" whileHover={{ x: 2 }}>
+              <label
+                htmlFor="title"
+                className="block text-sm md:text-base font-medium text-[#502B3A]"
+              >
+                Title *
               </label>
               <input
                 type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="review-modal__input"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
                 required
                 aria-required="true"
               />
             </motion.div>
-            <motion.div whileHover={{ x: 5 }}>
-              <label htmlFor="email" className="review-modal__label">
-                Email *
+
+            <motion.div className="space-y-2" whileHover={{ x: 2 }}>
+              <label
+                htmlFor="content"
+                className="block text-sm md:text-base font-medium text-[#502B3A]"
+              >
+                Review *
               </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="review-modal__input"
+              <textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200 h-24 md:h-32 resize-none"
+                rows={5}
                 required
                 aria-required="true"
               />
             </motion.div>
-          </div>
 
-          <div className="review-modal__rating-container">
-            <label htmlFor="rating" className="review-modal__label">
-              Rating
-            </label>
-            <div className="review-modal__rating-controls">
-              <div className="review-modal__stars">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <motion.button
-                    key={star}
-                    type="button"
-                    onClick={() => setRating(star)}
-                    className="review-modal__star-button"
-                    aria-label={`Rate ${star} star${star !== 1 ? "s" : ""}`}
-                    whileHover={starHover}
-                    whileTap={starTap}
-                    animate={{
-                      scale: star <= rating ? 1.1 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 500 }}
-                  >
-                    <StarIcon
-                      className={`review-modal__star-icon ${
-                        star <= rating ? "review-modal__star-icon--active" : ""
-                      }`}
-                    />
-                  </motion.button>
-                ))}
-              </div>
-              {rating > 0 && (
-                <motion.span
-                  className="review-modal__rating-label"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  {ratingLabels[rating]}
-                </motion.span>
-              )}
+            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+              <Button variant="ghost" type="button" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={rating === 0}
+                aria-disabled={rating === 0}
+              >
+                Submit Review
+              </Button>
             </div>
-          </div>
-
-          <motion.div className="review-modal__field" whileHover={{ x: 5 }}>
-            <label htmlFor="title" className="review-modal__label">
-              Title *
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="review-modal__input"
-              required
-              aria-required="true"
-            />
-          </motion.div>
-
-          <motion.div className="review-modal__field" whileHover={{ x: 5 }}>
-            <label htmlFor="content" className="review-modal__label">
-              Review *
-            </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="review-modal__textarea"
-              rows={5}
-              required
-              aria-required="true"
-            />
-          </motion.div>
-
-          <div className="review-modal__actions">
-            <motion.button
-              type="button"
-              onClick={onClose}
-              className="review-modal__cancel-button"
-              whileHover={{ x: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Cancel
-            </motion.button>
-            <motion.button
-              type="submit"
-              className="review-modal__submit-button"
-              disabled={rating === 0}
-              aria-disabled={rating === 0}
-              whileHover={{ x: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Submit Review
-            </motion.button>
-          </div>
-        </form>
+          </form>
+        </div>
       </motion.div>
     </motion.div>
   );
 };
 
-function progressAnimation({ width }: { width: number; }) {
+function progressAnimation({ width }: { width: number }) {
   return {
     hidden: { width: 0 },
     show: {

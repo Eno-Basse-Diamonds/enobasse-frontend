@@ -1,40 +1,72 @@
 .product-quick-view {
-  @apply fixed inset-0 z-50 overflow-y-auto;
+  @apply fixed inset-0 z-50 flex items-center justify-center;
 
   &__backdrop {
-    @apply fixed inset-0 bg-gray-500/90 transition-opacity;
+    @apply fixed inset-0 bg-gray-600/90 transition-opacity duration-300;
   }
 
   &__container {
-    @apply flex items-center justify-center min-h-screen p-4;
+    @apply relative w-full h-full;
+
+    @media (min-width: 768px) {
+      @apply h-[80vh] px-4;
+    }
+
+    @media (min-width: 1024px) {
+      @apply h-[85vh];
+    }
   }
 
   &__modal {
-    @apply relative bg-white w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row;
+    @apply relative w-full h-full bg-white flex flex-col overflow-hidden;
+
+    @media (min-width: 768px) {
+      @apply flex-row mx-auto w-[90%];
+    }
+
+    @media (min-width: 1024px) {
+      @apply w-[80%] max-w-[80rem];
+    }
   }
 
   &__close-button {
-    @apply absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white transition-colors;
+    @apply absolute top-4 right-4 z-10 p-2 rounded-full transition-colors duration-200;
+
+    &:hover {
+      @apply bg-white;
+    }
   }
 
   &__image-container {
-    @apply relative w-full md:w-1/2 h-96 md:h-auto bg-gray-100;
+    @apply relative flex-shrink-0 w-full h-[45vh];
+
+    @media (min-width: 768px) {
+      @apply w-1/2 h-full;
+    }
   }
 
   &__image {
-    @apply absolute inset-0 object-cover;
+    @apply relative w-full h-full;
+
+    img {
+      @apply object-contain;
+    }
   }
 
   &__nav-button {
-    @apply absolute top-1/2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors;
-  }
+    @apply absolute top-1/2 -translate-y-1/2 p-2 bg-gray-100 transition-colors duration-200 rounded-full;
 
-  &__nav-button--prev {
-    @apply left-4;
-  }
+    &:hover {
+      @apply bg-gray-50;
+    }
 
-  &__nav-button--next {
-    @apply right-4;
+    &--prev {
+      @apply left-4;
+    }
+
+    &--next {
+      @apply right-4;
+    }
   }
 
   &__thumbnail-container {
@@ -42,19 +74,23 @@
   }
 
   &__thumbnail-button {
-    @apply w-12 h-12 border;
+    @apply relative w-12 h-12 overflow-hidden;
 
     &--active {
-      @apply border-[#502B3A];
+      @apply border-2 border-primary-500;
     }
 
     &--inactive {
-      @apply border-transparent;
+      @apply opacity-70;
     }
   }
 
   &__content {
-    @apply w-full md:w-1/2 p-6 md:p-8 overflow-y-auto;
+    @apply w-full p-6 overflow-y-auto;
+
+    @media (min-width: 768px) {
+      @apply w-1/2 p-8;
+    }
   }
 
   &__header {
@@ -62,11 +98,11 @@
   }
 
   &__title {
-    @apply text-2xl font-bold text-gray-900;
+    @apply text-lg md:text-2xl font-primary text-primary-500;
   }
 
   &__price {
-    @apply text-xl text-[#502B3A] font-medium mt-2;
+    @apply md:text-xl font-medium text-primary-500 mt-2;
   }
 
   &__section {
@@ -74,108 +110,94 @@
   }
 
   &__section-title {
-    @apply text-sm font-medium text-gray-900 mb-2;
+    @apply text-sm font-medium text-gray-800 mb-2;
+  }
+
+  &__option-buttons {
+    @apply grid grid-cols-2 gap-2;
+  }
+
+  &__option-button {
+    @apply px-4 py-2 text-sm font-medium border border-gray-200 transition-all duration-200;
+
+    &:not(&--selected):hover {
+      @apply border-gray-300 bg-gray-50;
+    }
+
+    &--selected {
+      @apply border-primary-500 bg-primary-500/10 text-primary-500;
+    }
   }
 
   &__size-guide-link {
-    @apply text-sm text-[#C0954E] hover:underline;
+    @apply text-sm text-secondary-500 no-underline;
+
+    &:hover {
+      @apply underline;
+    }
   }
 
   &__size-options {
-    @apply flex flex-wrap gap-2;
+    @apply grid grid-cols-6 gap-2;
   }
 
   &__size-button {
-    @apply px-4 py-2 border text-sm;
+    @apply w-full px-2 py-2 text-sm font-medium border border-gray-200 transition-all duration-200;
+
+    &:not(&--selected):hover {
+      @apply border-gray-300 bg-gray-50;
+    }
 
     &--selected {
-      @apply bg-[#C0954E] border-[#C0954E] text-white;
+      @apply border-primary-500 bg-primary-500/10 text-primary-500;
     }
-
-    &--unselected {
-      @apply border-gray-300 hover:border-gray-400;
-    }
-  }
-
-  &__metal-selection {
-    @apply space-y-2;
-  }
-
-  &__metal-options {
-    @apply flex flex-wrap gap-4;
-  }
-
-  &__metal-button {
-    @apply w-8 h-8 rounded-full border-2 text-xs;
-  }
-
-  &__select-wrapper {
-    @apply relative;
-  }
-
-  &__select {
-    @apply appearance-none border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 w-full bg-transparent;
-  }
-
-  &__select-icon {
-    @apply absolute right-3 top-3 h-4 w-4 text-gray-400;
   }
 
   &__quantity-controls {
-    @apply flex items-center w-fit;
+    @apply flex items-center gap-2 p-1 border border-primary-500/20 w-fit;
   }
 
   &__quantity-button {
-    @apply px-2 py-2 border border-[#502B3A]/20 text-[#502B3A] hover:bg-[#502B3A]/10;
+    @apply p-2 text-primary-500 transition-colors duration-200;
+
+    &:hover {
+      @apply bg-primary-500/10;
+    }
   }
 
   &__quantity-value {
-    @apply px-4 py-2;
+    @apply px-4 font-medium;
   }
 
   &__action-buttons {
-    @apply flex flex-col sm:flex-row gap-3 mb-6;
+    @apply grid-cols-2 gap-4 mb-4;
   }
 
   &__action-button {
-    @apply flex-1 py-3 px-6 font-medium transition-colors flex items-center justify-center gap-2;
+    @apply px-6 py-3 text-sm font-medium transition-all duration-200 text-center;
 
     &--primary {
-      @apply bg-[#502B3A] hover:bg-[#C0954E] text-white;
+      @apply bg-primary-500 text-white;
+
+      &:hover {
+        @apply bg-secondary-500;
+      }
     }
 
     &--secondary {
-      @apply border border-[#502B3A] text-[#502B3A] hover:bg-[#C0954E] hover:text-white hover:border-[#C0954E];
+      @apply border border-primary-500 text-primary-500;
+
+      &:hover {
+        @apply bg-secondary-500 border-secondary-500 text-white;
+      }
     }
   }
 
   &__details-link {
-    @apply inline-block text-center w-full font-medium text-[#502B3A] hover:text-[#C0954E];
-  }
+    @apply inline-block w-full text-center font-medium text-primary-500 no-underline;
 
-  &__share-button {
-    @apply flex items-center gap-2 text-gray-600 hover:text-gray-800 mt-4 mb-6;
-  }
-}
-
-.metal-selection {
-  &__title {
-    @apply text-sm font-medium text-[#502B3A]/50 mb-3;
-  }
-
-  &__title-span {
-    @apply text-[#502B3A];
-  }
-
-  &__options {
-    @apply flex flex-wrap gap-4;
-  }
-
-  &__button {
-    @apply w-8 h-8 rounded-full border-2 text-xs;
-
-    &--selected {
-      @apply ring-2 ring-offset-1 ring-[#502B3A]/50;
+    &:hover {
+      @apply underline h-[1px] underline-offset-2;
     }
   }
 }

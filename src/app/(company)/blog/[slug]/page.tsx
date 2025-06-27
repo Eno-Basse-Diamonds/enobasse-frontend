@@ -1,78 +1,101 @@
-import React, { cache } from 'react';
-import { Metadata } from "next";
+"use client";
+
+import { useParams } from "next/navigation";
+import Markdown from "react-markdown";
+import { SectionContainer, PageHeading } from "@/components";
+import { BlogPostDetailLoader } from "@/components/loaders";
+import { BlogHeroImage } from "./_components/blog-hero-image";
+import { TableOfContents } from "./_components/table-of-content";
+import { RelatedPosts } from "./_components/related-posts";
+import { useBlogPost, useRelatedBlogPosts } from "@/lib/hooks/use-blog";
 import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { BlogPostContent } from "./_components/blog-post-content";
-import { getBlogPost, getRelatedBlogPosts } from "@/lib/api/blog-posts";
-import "./styles.scss";
+  cleanMarkdownContent,
+  createHeadingRenderer,
+  generateTableOfContents,
+} from "@/lib/helpers/blog-post";
+import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 
-const cachedGetBlogPost = cache(async (slug: string) => {
-  return getBlogPost(slug);
-});
+export default function BlogPostContent() {
+  const params = useParams();
+  const slug = params.slug as string || "";
+  const { data: post, isLoading: isPostLoading } = useBlogPost(slug);
+  const { data: relatedPosts, isLoading: isRelatedLoading } =
+    useRelatedBlogPosts(slug);
 
-interface BlogPostPageProps {
-  params: Promise<{ slug: string }>;
-}
+  if (isPostLoading) {
+    return <BlogPostDetailLoader />;
+  }
 
-export const generateMetadata = async ({
-  params,
-}: BlogPostPageProps): Promise<Metadata> => {
-  const { slug } = await params;
-  const post = await cachedGetBlogPost(slug);
+  if (!post) {
+    return null;
+  }
 
-  return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: {
-      canonical: `/blog/${post.slug}`,
-    },
-    openGraph: {
-      title: `${post.title} | EnoBasse Jewellery`,
-      description: post.excerpt,
-      publishedTime: new Date(post.createdAt).toISOString(),
-      images: [
-        {
-          url: `https://enobasse.com${post.image.src}`,
-          width: 1200,
-          height: 630,
-          alt: post.image.alt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${post.title} | EnoBasse Jewellery`,
-      description: post.excerpt,
-      images: [`https://enobasse.com${post.image.src}`],
-    },
-  };
-};
-
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
-  const queryClient = new QueryClient();
-
-  const post = await cachedGetBlogPost(slug);
-
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ["blogPost", slug],
-      queryFn: () => post,
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ["relatedBlogPosts", slug],
-      queryFn: () => getRelatedBlogPosts(slug),
-    }),
-  ]);
+  const content = cleanMarkdownContent(post.content);
+  const toc = generateTableOfContents(content);
 
   return (
-    <main className="blog-detail">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <BlogPostContent slug={slug} />
-      </HydrationBoundary>
-    </main>
+    <>
+      <PageHeading
+        breadcrumb={{
+          items: [
+            { label: "Blog", href: "/blog" },
+            { label: post.title, href: "#" },
+          ],
+        }}
+      />
+
+      <SectionContainer id="blog-post" aria-labelledby="blog-post-heading">
+        <BlogHeroImage
+          src={post.image.src}
+          alt={post.image.alt}
+          author={post.author.name}
+          date={dateToOrdinalDayMonthYear(post.createdAt)}
+          share={{
+            url: `https://enobasse.com/blog/${slug}`,
+            title: post.title,
+          }}
+        />
+      </SectionContainer>
+
+      <SectionContainer
+        id="blog-post-content"
+        aria-labelledby="blog-post-content-heading"
+        className="blog-detail__content"
+      >
+        <div className="blog-detail__content-container">
+          <div className="blog-detail__content-sidebar">
+            <TableOfContents toc={toc} />
+            {relatedPosts && relatedPosts.length > 0 && !isRelatedLoading && (
+              <div className="hidden mt-16 lg:block">
+                <RelatedPosts posts={relatedPosts} />
+              </div>
+            )}
+          </div>
+
+          <article className="blog-detail__content-main blog-post">
+            <Markdown
+              components={{
+                h1: createHeadingRenderer(1),
+                h2: createHeadingRenderer(2),
+                h3: createHeadingRenderer(3),
+                h4: createHeadingRenderer(4),
+              }}
+            >
+              {content}
+            </Markdown>
+          </article>
+        </div>
+      </SectionContainer>
+
+      {relatedPosts && relatedPosts.length > 0 && !isRelatedLoading && (
+        <SectionContainer
+          id="related-blog-posts"
+          aria-labelledby="related-blog-posts-heading"
+          className="lg:hidden"
+        >
+          <RelatedPosts posts={relatedPosts} />
+        </SectionContainer>
+      )}
+    </>
   );
 }

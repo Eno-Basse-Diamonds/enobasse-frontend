@@ -7,6 +7,7 @@ interface RatingProps {
   count?: number;
   maxRating?: number;
   showRatingNumber?: boolean;
+  showCount?: boolean;
 }
 
 export const Rating: React.FC<RatingProps> = ({
@@ -14,11 +15,12 @@ export const Rating: React.FC<RatingProps> = ({
   rating,
   maxRating = 5,
   showRatingNumber = true,
+  showCount = true,
 }) => {
   return (
     <div className="flex items-center">
       {showRatingNumber && (
-        <span className="text-[#502B3A] mr-2">{rating}</span>
+        <span className="text-[#502B3A] mr-2">{rating.toFixed(1)}</span>
       )}
       <div className="flex relative">
         {[...Array(maxRating)].map((_, index) => {
@@ -36,9 +38,9 @@ export const Rating: React.FC<RatingProps> = ({
           );
         })}
       </div>
-      {count && (
+      {count != 0 && showCount && (
         <Link
-          href=""
+          href="#reviews-section"
           className="ml-10 text-[#502B3A] font-medium hover:text-[#502B3A]/90"
         >
           See all {count} reviews
