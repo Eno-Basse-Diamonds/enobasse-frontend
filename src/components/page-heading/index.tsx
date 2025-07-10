@@ -17,7 +17,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
       <div className="page-heading__container">
         <div className="page-heading__header">
           <BackButton />
-          <div className="flex flex-col items-start justify-center gap-3 overflow-hidden w-auto">
+          <div className="flex flex-col items-start justify-center gap-3 overflow-x-hidden w-auto">
             {title && (
               <h1 className="page-heading__title truncate w-full text-ellipsis whitespace-nowrap">
                 {title}

@@ -1,43 +1,56 @@
 import { Metadata } from "next";
-import AuthPage from "../_components/auth-page";
+import AuthSection from "../_components/auth-section";
 
 export const metadata: Metadata = {
-  title: "Password Reset Code",
+  title: "Password Reset",
+  description:
+    "Enter your verification code to securely reset your Eno Basse account password. This code expires in 15 minutes for your protection.",
+  keywords: [
+    "Eno Basse password reset",
+    "jewelry account security",
+    "verification code",
+    "luxury client portal",
+    "secure account recovery",
+  ],
+  openGraph: {
+    title: "Password Reset - Eno Basse Diamonds",
+    description:
+      "Protecting your jewelry collection access. Please enter the 6-digit code sent to your registered email.",
+    url: "https://www.enobasse.com/password-reset-code",
+  },
+  twitter: {
+    title: "Password Reset - Eno Basse Diamonds",
+    description:
+      "For your security, we've sent a temporary access code. Never share this code.",
+  },
+  alternates: {
+    canonical: "https://www.enobasse.com/password-reset-code",
+  },
 };
 
 export default function PasswordResetCodePage() {
   return (
-    <AuthPage
-      title="Forgot Password"
-      heroImage="/images/auth/reset-code.png"
-      logoImage="/images/auth/logo-alt.svg"
+    <AuthSection
+      type="password-reset-code"
+      title="Password Rest Code"
+      heroImage="/images/auth/reset-code.webp"
+      logoImage="/images/auth/logo-alt.png"
       formFields={[
         {
-          id: "email",
-          name: "email",
-          label: "Email",
-          type: "email",
-          placeholder: "Enter your email",
-          required: true,
-        },
-        {
           id: "reset-code",
-          name: "reset-code",
+          name: "resetCode",
           label: "Reset Code",
           type: "number",
           placeholder: "Enter 6 figure reset code",
-          helpText: (
-            <p className="mt-2 text-sm text-[#787878]">
-              Didn’t receive the code? Resend code in:{" "}
-              <span className="text-[#D1A559]">0:57s</span>
-            </p>
-          ),
           required: true,
         },
       ]}
       actionButtonText="Continue"
+      messages={{
+        success: "Reset code has been succesfully verified.",
+      }}
       footer={{
-        text: "For your security, this code expires in 10 minutes",
+        text: "For your security, this code expires in 15 minutes",
       }}
       showSocialAuth={false}
       showTermsCheckbox={false}

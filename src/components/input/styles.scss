@@ -29,7 +29,7 @@
   }
 
   &__toggle-button {
-    @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+    @apply flex items-center;
   }
 
   &__toggle-icon {

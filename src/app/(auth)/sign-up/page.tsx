@@ -1,23 +1,19 @@
-import { Metadata } from "next";
-import AuthPage from "../_components/auth-page";
-
-export const metadata: Metadata = {
-  title: "Sign Up",
-};
+import AuthSection from "../_components/auth-section";
 
 export default function SignUpPage() {
   return (
-    <AuthPage
+    <AuthSection
+      type="sign-up"
       title="Join the World of Timeless Luxury"
-      heroImage="/images/auth/sign-up.png"
-      logoImage="/images/auth/logo-alt.svg"
+      heroImage="/images/auth/sign-up.webp"
+      logoImage="/images/auth/logo-alt.png"
       formFields={[
         {
           id: "name",
           name: "name",
           label: "Name",
           type: "text",
-          placeholder: "Enter your name",
+          placeholder: "Enter your full name",
           required: true,
         },
         {
@@ -41,6 +37,9 @@ export default function SignUpPage() {
       footer={{
         text: "Already have an account?",
         link: { text: "Sign In", href: "/sign-in" },
+      }}
+      messages={{
+        success: "Your account has been created successfully.",
       }}
       showSocialAuth={true}
       showTermsCheckbox={true}

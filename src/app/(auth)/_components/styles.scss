@@ -50,7 +50,7 @@
   }
 
   &__submit-button {
-    @apply w-full flex justify-center py-3 sm:py-4 px-4 border border-transparent font-primary text-base sm:text-lg font-medium text-white bg-[#502B3A] hover:bg-[#502B3A]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#502B3A];
+    @apply w-full flex justify-center py-3 px-4 border border-transparent font-primary text-base sm:text-lg font-medium text-white bg-[#502B3A] hover:bg-[#502B3A]/80;
   }
 
   &__social-divider {
@@ -74,7 +74,7 @@
   }
 
   &__social-button {
-    @apply w-full flex items-center justify-center gap-2 px-4 py-3 sm:py-4 border border-[#D1A559] font-medium text-sm sm:text-base text-gray-700 bg-white hover:bg-gray-50;
+    @apply w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#D1A559] font-medium text-sm sm:text-base text-gray-700 bg-white hover:bg-gray-50;
   }
 
   &__footer {

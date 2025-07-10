@@ -42,7 +42,7 @@ class ApiClient {
         if (error.response) {
           switch (error.response.status) {
             case 401:
-              redirect('/auth/login');
+              redirect('/sign-in');
               break;
             case 404:
               notFound();

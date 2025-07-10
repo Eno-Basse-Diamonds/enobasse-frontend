@@ -1,16 +1,12 @@
-import { Metadata } from "next";
-import AuthPage from "../_components/auth-page";
-
-export const metadata: Metadata = {
-  title: "Sign In",
-};
+import AuthSection from "../_components/auth-section";
 
 export default function SignInPage() {
   return (
-    <AuthPage
+    <AuthSection
+      type="sign-in"
       title="Welcome Back"
-      heroImage="/images/auth/sign-in.png"
-      logoImage="/images/auth/logo-alt.svg"
+      heroImage="/images/auth/sign-in.webp"
+      logoImage="/images/auth/logo-alt.png"
       formFields={[
         {
           id: "email",
@@ -27,12 +23,16 @@ export default function SignInPage() {
           type: "password",
           placeholder: "Create your password",
           required: true,
+          showForgot: true,
         },
       ]}
       actionButtonText="Sign In"
       footer={{
-        text: "New to EnoBasse?",
+        text: "New to Eno Basse?",
         link: { text: "Create an account", href: "/sign-up" },
+      }}
+      messages={{
+        success: "Welcome back! You’re now logged in.",
       }}
       showSocialAuth={true}
       showTermsCheckbox={false}
