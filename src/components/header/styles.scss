@@ -204,14 +204,14 @@
   }
 
   &__search-overlay {
-    @apply fixed inset-0 z-[9999] bg-white transform transition-transform duration-500 ease-in-out -translate-y-full;
+    @apply fixed inset-0 z-[9999] bg-white transform transition-transform duration-500 ease-in-out -translate-y-full overflow-auto;
 
     &--visible {
       @apply translate-y-0;
     }
 
     &-container {
-      @apply max-w-7xl mx-auto px-4 md:px-8 py-6;
+      @apply mx-auto px-4 md:px-8 py-6;
     }
 
     &-header {
@@ -237,18 +237,16 @@
     }
 
     &-input {
-      @apply flex-1 py-2 pl-4 pr-12 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500;
+      @apply flex-1 py-3 pl-4 pr-12 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500;
     }
 
-    &-form svg {
+    &-form button {
       @apply absolute right-4 top-1/2 transform -translate-y-1/2;
       width: 20px;
       height: 20px;
     }
 
     &-results {
-      @apply max-w-3xl mx-auto;
-
       &-title {
         @apply text-lg font-medium text-gray-500 mb-4;
       }

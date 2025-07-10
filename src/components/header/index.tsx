@@ -13,6 +13,12 @@ import {
   MenuIcon,
 } from "../icons";
 import "./styles.scss";
+import { ProductList } from "@/components/product/list";
+import { useProducts } from "@/lib/hooks/use-products";
+import { ProductsResponse } from "@/lib/types/products";
+import { EmptyState } from "../empty-state";
+import { SearchSlashIcon } from "lucide-react";
+import { ProductListLoader } from "../loaders";
 
 interface NavigationItem {
   label: string;
@@ -422,23 +428,20 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
   initialQuery = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
 
-  useEffect(() => {
-    if (initialQuery) {
-      setSearchQuery(initialQuery);
-    }
-  }, [initialQuery]);
+  const { data, isLoading } = useProducts({
+    search: submittedQuery,
+    page: 1,
+    pageSize: 100,
+    sortBy: "featured",
+  }) as { data?: ProductsResponse; isLoading: boolean; isError: boolean };
+
+  const products = data?.products || [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchResults([
-      "Diamond Ring",
-      "Gold Necklace",
-      "Pearl Earrings",
-      "Sapphire Bracelet",
-      "Ruby Pendant",
-    ]);
+    setSubmittedQuery(searchQuery.trim());
   };
 
   return (
@@ -466,21 +469,29 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
             className="header__search-overlay-input"
             autoFocus
           />
-          <SearchIcon />
+          <button
+            type="submit"
+            className="header__search-overlay-submit"
+            aria-label="Submit search"
+          >
+            <SearchIcon />
+          </button>
         </form>
 
-        {searchResults.length > 0 && (
+        {submittedQuery && (
           <div className="header__search-overlay-results">
-            <h3 className="header__search-overlay-results-title">Results</h3>
-            <ul className="header__search-overlay-results-list">
-              {searchResults.map((result, index) => (
-                <li key={index} className="header__search-overlay-result-item">
-                  <Link href={`/search?q=${encodeURIComponent(result)}`}>
-                    {result}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {isLoading && <ProductListLoader />}
+            {products && products.length > 0 ? (
+              <ProductList products={products} />
+            ) : (
+              !isLoading && (
+                <EmptyState
+                  title="No Results Found"
+                  description="We couldn't find any products that match your query."
+                  icon={<SearchSlashIcon />}
+                />
+              )
+            )}
           </div>
         )}
       </div>
