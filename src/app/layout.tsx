@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Lora, Gantari, Dancing_Script } from "next/font/google";
+import Script from "next/script";
 import { QueryProvider } from "../lib/providers/query-provider";
+import { getServerSession } from "next-auth";
+import SessionProvider from "@/lib/providers/session-provider";
+import { AppAlert } from "@/components/alert";
 import "./globals.scss";
 
 const lora = Lora({
@@ -112,17 +116,24 @@ export const metadata: Metadata = {
   category: "Eno Basse jewellery",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body
         className={`${lora.variable} ${gantari.variable} ${dancingScript.variable} antialiased`}
       >
-        <QueryProvider>{children}</QueryProvider>
+        <SessionProvider session={session}>
+          <QueryProvider>
+            <AppAlert />
+            {children}
+          </QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

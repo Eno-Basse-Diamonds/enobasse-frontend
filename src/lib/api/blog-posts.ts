@@ -119,7 +119,6 @@ export async function updateBlogPost(
       post,
     };
   } catch (error) {
-    console.log(error)
     return handleApiError(error);
   }
 }

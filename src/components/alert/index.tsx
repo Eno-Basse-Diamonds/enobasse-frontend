@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { useAlertStore } from "@/lib/store/alert";
 import "./styles.scss";
 
 interface AlertProps {
+  id?: string;
   type: "success" | "error" | "warning" | "info";
   title?: string;
   children: React.ReactNode;
@@ -14,7 +16,31 @@ interface AlertProps {
   duration?: number;
 }
 
+export const AppAlert = () => {
+  const alerts = useAlertStore((state) => state.alerts);
+  const removeAlert = useAlertStore((state) => state.removeAlert);
+
+  return (
+    <>
+      {alerts.map((alert) => (
+        <Alert
+          key={alert.id}
+          id={alert.id}
+          type={alert.type}
+          title={alert.title}
+          dismissible={alert.dismissible ?? true}
+          onDismiss={() => removeAlert(alert.id)}
+          duration={alert.duration}
+        >
+          {alert.message}
+        </Alert>
+      ))}
+    </>
+  );
+};
+
 export const Alert: React.FC<AlertProps> = ({
+  id,
   type = "info",
   title,
   children,
@@ -24,21 +50,29 @@ export const Alert: React.FC<AlertProps> = ({
   duration,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isExiting, setIsExiting] = useState(false);
+  const removeAlert = useAlertStore((state) => state.removeAlert);
 
   const handleDismiss = useCallback(() => {
-    setIsVisible(false);
-    if (onDismiss) onDismiss();
-  }, [onDismiss]);
+    setIsExiting(true);
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      if (onDismiss) onDismiss();
+      if (id) removeAlert(id);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [onDismiss, id, removeAlert]);
 
   useEffect(() => {
-    if (duration && isVisible) {
+    if (duration && isVisible && !isExiting) {
       const timer = setTimeout(() => {
         handleDismiss();
       }, duration);
 
       return () => clearTimeout(timer);
     }
-  }, [duration, isVisible, handleDismiss]);
+  }, [duration, isVisible, isExiting, handleDismiss]);
 
   if (!isVisible) return null;
 
@@ -65,7 +99,11 @@ export const Alert: React.FC<AlertProps> = ({
   const IconComponent = variant.icon;
 
   return (
-    <div className={`alert ${variant.variantClass} ${className}`}>
+    <div
+      className={`alert ${variant.variantClass} ${className} ${isExiting ? "alert--exiting" : ""}`}
+      role="alert"
+      aria-live="assertive"
+    >
       <div className="alert-container">
         <div className="alert-icon-container">
           <IconComponent className="alert-icon" />
@@ -76,20 +114,17 @@ export const Alert: React.FC<AlertProps> = ({
         </div>
         {dismissible && (
           <div className="alert-dismiss">
-            <div className="alert-dismiss-button">
-              <button
-                type="button"
-                onClick={handleDismiss}
-                className="alert-dismiss-button-inner"
-              >
-                <span className="sr-only">Dismiss</span>
-                <X className="dismiss-icon" />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="alert-dismiss-button"
+              aria-label="Dismiss alert"
+            >
+              <X className="dismiss-icon" />
+            </button>
           </div>
         )}
       </div>
     </div>
   );
-}
-;
+};

@@ -1,20 +1,21 @@
 "use client";
 
-import React, { FC } from "react";
+import { FC, useState } from "react";
+import Link from "next/link";
 import { EyeCloseIcon, EyeOpenIcon } from "@/components/icons";
-import { useState } from "react";
 import "./styles.scss";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  error?: string;
+  errors?: string[];
   helpText?: React.ReactNode;
+  showForgot?: boolean;
 }
 
 export const Input: FC<InputProps> = ({
   label,
   id,
-  error,
+  errors,
   helpText,
   ...props
 }) => {
@@ -25,11 +26,16 @@ export const Input: FC<InputProps> = ({
       </label>
       <input
         id={id}
-        className={`input__field ${error ? "input__field--error" : ""}`}
+        className={`input__field ${errors ? "input__field--error" : ""}`}
         {...props}
       />
       {helpText && <p className="input__help-text">{helpText}</p>}
-      {error && <p className="input__error">{error}</p>}
+      {errors &&
+        errors.map((error, index) => (
+          <p key={index} className="input__error">
+            {error}
+          </p>
+        ))}
     </div>
   );
 };
@@ -40,6 +46,8 @@ export const PasswordInput: FC<PasswordInputProps> = ({
   label,
   id,
   helpText,
+  errors,
+  showForgot = false,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -57,24 +65,39 @@ export const PasswordInput: FC<PasswordInputProps> = ({
         <input
           id={id}
           type={showPassword ? "text" : "password"}
-          className="input__field"
+          className={`input__field ${errors ? "input__field--error" : ""}`}
           {...props}
         />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className="input__toggle-button"
-          aria-label={showPassword ? "Hide password" : "Show password"}
-        >
-          {showPassword ? (
-            <EyeOpenIcon className="input__toggle-icon" />
-          ) : (
-            <EyeCloseIcon className="input__toggle-icon" />
+        <div className="flex flex-row gap-x-2 items-center absolute inset-y-0 right-0 pr-3">
+          {showForgot && (
+            <Link
+              href="/forgot-password"
+              className="text-sm text-primary-300 hover:text-primary-500"
+            >
+              FORGOT?
+            </Link>
           )}
-        </button>
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="input__toggle-button"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <EyeOpenIcon className="input__toggle-icon" />
+            ) : (
+              <EyeCloseIcon className="input__toggle-icon" />
+            )}
+          </button>
+        </div>
       </div>
       {helpText && <p className="input__help-text">{helpText}</p>}
-      {props.error && <p className="input__error">{props.error}</p>}
+      {errors &&
+        errors.map((error, index) => (
+          <p key={index} className="input__error">
+            {error}
+          </p>
+        ))}
     </div>
   );
 };
