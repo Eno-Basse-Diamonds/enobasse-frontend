@@ -45,6 +45,7 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Rings",
     href: "/collections/rings",
     dropdownItems: [
+      { label: "All", href: "/collections/rings" },
       { label: "Engagement Rings", href: "/collections/engagement-rings" },
       { label: "Men's Wedding Rings", href: "/collections/men-wedding-rings" },
       {
@@ -63,6 +64,7 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Wristwears",
     href: "/collections/wristwears",
     dropdownItems: [
+      { label: "All", href: "/collections/wristwears" },
       { label: "Bangles", href: "/collections/bangles" },
       { label: "Bracelets", href: "/collections/bracelets" },
     ],
@@ -72,6 +74,7 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Neckpieces",
     href: "/collections/neckpieces",
     dropdownItems: [
+      { label: "All", href: "/collections/neckpieces" },
       { label: "Necklaces", href: "/collections/necklaces" },
       { label: "Pendants", href: "/collections/pendants" },
     ],
@@ -360,12 +363,6 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
       <div
         className={`header__mobile-dropdown-content ${isOpen ? "header__mobile-dropdown-content--open" : ""}`}
       >
-        <li
-          key={`${item.href}-mobile`}
-          className="header__mobile-dropdown-link"
-        >
-          <Link href={item.href}>All</Link>
-        </li>
         {item.dropdownItems.map((subItem) => (
           <Link
             key={subItem.href}
