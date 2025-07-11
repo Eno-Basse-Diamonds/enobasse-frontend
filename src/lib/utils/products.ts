@@ -56,6 +56,18 @@ export function filterAndSortProducts({
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       break;
+    case "in-store":
+      filtered.sort((a, b) => {
+        // In store products (isCustomDesign == false) come first
+        return Number(!!a.isCustomDesign) - Number(!!b.isCustomDesign);
+      });
+      break;
+    case "custom-design":
+      filtered.sort((a, b) => {
+        // Custom design products (isCustomDesign == true) come first
+        return Number(!!b.isCustomDesign) - Number(!!a.isCustomDesign);
+      });
+      break;
     default:
       break;
   }

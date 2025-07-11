@@ -133,6 +133,8 @@ export default function ProductsPage() {
                   <option value="price-low-high">Price: Low to High</option>
                   <option value="price-high-low">Price: High to Low</option>
                   <option value="newest">Newest Arrivals</option>
+                  <option value="in-store">In Store Products</option>
+                  <option value="custom-design">Custom Design Products</option>
                 </select>
                 <ChevronDownIcon className="collection-detail__sort-icon" />
               </div>
