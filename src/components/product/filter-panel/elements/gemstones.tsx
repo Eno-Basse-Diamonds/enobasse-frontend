@@ -21,6 +21,7 @@ export const Gemstones: React.FC<GemstonesProps> = ({
 }) => {
   const gemstones: FilterOption[]  = [
     { name: "Diamond", type: "gemstone", color: "text-gray-400" },
+    { name: "Moissanite", type: "gemstone", color: "text-gray-400" },
     { name: "Ruby", type: "gemstone", color: "text-red-500" },
     { name: "Sapphire", type: "gemstone", color: "text-blue-600" },
     { name: "Emerald", type: "gemstone", color: "text-green-500" },

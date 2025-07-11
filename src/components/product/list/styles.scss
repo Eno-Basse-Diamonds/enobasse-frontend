@@ -14,7 +14,7 @@
   }
 
   &__image {
-    @apply object-contain transition-opacity duration-500;
+    @apply object-cover transition-opacity duration-500;
 
     &--primary {
       @apply group-hover:opacity-0;
