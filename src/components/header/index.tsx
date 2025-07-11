@@ -360,6 +360,12 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
       <div
         className={`header__mobile-dropdown-content ${isOpen ? "header__mobile-dropdown-content--open" : ""}`}
       >
+        <li
+          key={`${item.href}-mobile`}
+          className="header__mobile-dropdown-link"
+        >
+          <Link href={item.href}>All</Link>
+        </li>
         {item.dropdownItems.map((subItem) => (
           <Link
             key={subItem.href}
@@ -497,5 +503,3 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
     </div>
   );
 };
-
-
