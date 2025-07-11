@@ -434,7 +434,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
     search: submittedQuery,
     page: 1,
     pageSize: 100,
-    sortBy: "featured",
   }) as { data?: ProductsResponse; isLoading: boolean; isError: boolean };
 
   const products = data?.products || [];
@@ -498,3 +497,5 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
     </div>
   );
 };
+
+

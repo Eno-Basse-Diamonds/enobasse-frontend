@@ -1,4 +1,6 @@
 import { Header, Footer } from "@/components";
+import { WhatsAppButton } from "@/components/button";
+import { PrivacyConsent } from "@/components/privacy-consent";
 
 export default function Layout({
   children,
@@ -7,6 +9,8 @@ export default function Layout({
     <>
       <Header />
       {children}
+      <WhatsAppButton />
+      <PrivacyConsent />
       <Footer />
     </>
   );
