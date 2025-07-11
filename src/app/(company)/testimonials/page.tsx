@@ -5,22 +5,22 @@ import "./styles.scss";
 export const metadata: Metadata = {
   title: "Testimonials",
   description:
-    "Read authentic stories from our clients about their Eno Basse jewelry experiences. Discover why collectors trust our craftsmanship and service.",
+    "Read authentic stories from our clients about their Eno Bassé jewelry experiences. Discover why collectors trust our craftsmanship and service.",
   keywords: [
-    "Eno Basse reviews",
+    "Eno Bassé reviews",
     "luxury jewelry testimonials",
     "diamond jewelry feedback",
     "client success stories",
     "fine jewelry customer experiences",
   ],
   openGraph: {
-    title: "Testimonials - Eno Basse Diamonds",
+    title: "Testimonials - Eno Bassé Diamonds",
     description:
-      "Real experiences from Eno Basse collectors. See how our custom jewelry has become part of their life stories.",
+      "Real experiences from Eno Bassé collectors. See how our custom jewelry has become part of their life stories.",
     url: "https://www.enobasse.com/testimonials",
   },
   twitter: {
-    title: "Testimonials - Eno Basse Diamonds",
+    title: "Testimonials - Eno Bassé Diamonds",
     description: "Hear from our clients about their bespoke jewelry journeys.",
   },
   alternates: {
@@ -46,7 +46,7 @@ export default function TestimonialsPage() {
     },
     {
       id: 3,
-      text: "I highly recommend Eno Basse to anyone looking for high-quality, beautifully designed jewellery, diamond engagement rings, earrings, necklaces. Their attention to detail and commitment to customer satisfaction make them stand out",
+      text: "I highly recommend Eno Bassé to anyone looking for high-quality, beautifully designed jewellery, diamond engagement rings, earrings, necklaces. Their attention to detail and commitment to customer satisfaction make them stand out",
       name: "David Udo",
       handle: "@_davidudo",
       avatar: null,

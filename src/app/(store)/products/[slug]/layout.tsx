@@ -36,13 +36,13 @@ export async function generateMetadata({
       : "No description available for this product.";
 
   return {
-    title: `${product.name} - Eno Basse Diamonds`,
+    title: `${product.name} - Eno Bassé Diamonds`,
     description: description,
     alternates: {
       canonical: `/products/${product.slug}`,
     },
     openGraph: {
-      title: `${product.name} - Eno Basse Diamonds`,
+      title: `${product.name} - Eno Bassé Diamonds`,
       description: product.description,
       images: [
         {
@@ -54,7 +54,7 @@ export async function generateMetadata({
       ],
     },
     twitter: {
-      title: `${product.name} - Eno Basse Diamonds"`,
+      title: `${product.name} - Eno Bassé Diamonds"`,
       description: description,
       images: [`${product.images[0].url}`],
     },

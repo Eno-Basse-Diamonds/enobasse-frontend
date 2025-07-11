@@ -18,20 +18,20 @@ interface ProductsFilterOptions {
 }
 
 export const metadata: Metadata = {
-  title: "Products - Eno Basse Diamonds",
+  title: "Products - Eno Bassé Diamonds",
   description:
     "Explore our exquisite collection of diamond jewellery, including rings, necklaces, earrings, and bracelets. Each piece is crafted with precision and care, showcasing the beauty of diamonds.",
   alternates: {
     canonical: `/products`,
   },
   openGraph: {
-    title: "Products - Eno Basse Diamonds",
+    title: "Products - Eno Bassé Diamonds",
     description:
       "Explore our exquisite collection of diamond jewellery, including rings, necklaces, earrings, and bracelets. Each piece is crafted with precision and care, showcasing the beauty of diamonds.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Products - Eno Basse Diamonds",
+    title: "Products - Eno Bassé Diamonds",
     description:
       "Explore our exquisite collection of diamond jewellery, including rings, necklaces, earrings, and bracelets. Each piece is crafted with precision and care, showcasing the beauty of diamonds.",
   },

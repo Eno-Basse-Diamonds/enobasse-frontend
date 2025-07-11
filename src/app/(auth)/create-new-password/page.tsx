@@ -4,22 +4,22 @@ import AuthSection from "../_components/auth-section";
 export const metadata: Metadata = {
   title: "Create New Password",
   description:
-    "Set a new secure password for your Eno Basse account. Ensure your jewelry collection and personal details remain protected.",
+    "Set a new secure password for your Eno Bassé account. Ensure your jewelry collection and personal details remain protected.",
   keywords: [
-    "Eno Basse new password",
+    "Eno Bassé new password",
     "luxury account security",
     "reset jewelry account password",
     "secure password update",
-    "Eno Basse client portal",
+    "Eno Bassé client portal",
   ],
   openGraph: {
-    title: "Create New Password - Eno Basse Diamonds",
+    title: "Create New Password - Eno Bassé Diamonds",
     description:
       "Create a strong new password to protect access to your jewelry collection and client profile.",
     url: "https://www.enobasse.com/create-new-password",
   },
   twitter: {
-    title: "Create New Password - Eno Basse Diamonds",
+    title: "Create New Password - Eno Bassé Diamonds",
     description:
       "Update your password to maintain exclusive access to your jewelry portfolio.",
   },

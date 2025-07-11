@@ -4,22 +4,22 @@ import AuthSection from "../_components/auth-section";
 export const metadata: Metadata = {
   title: "Password Reset",
   description:
-    "Enter your verification code to securely reset your Eno Basse account password. This code expires in 15 minutes for your protection.",
+    "Enter your verification code to securely reset your Eno Bassé account password. This code expires in 15 minutes for your protection.",
   keywords: [
-    "Eno Basse password reset",
+    "Eno Bassé password reset",
     "jewelry account security",
     "verification code",
     "luxury client portal",
     "secure account recovery",
   ],
   openGraph: {
-    title: "Password Reset - Eno Basse Diamonds",
+    title: "Password Reset - Eno Bassé Diamonds",
     description:
       "Protecting your jewelry collection access. Please enter the 6-digit code sent to your registered email.",
     url: "https://www.enobasse.com/password-reset-code",
   },
   twitter: {
-    title: "Password Reset - Eno Basse Diamonds",
+    title: "Password Reset - Eno Bassé Diamonds",
     description:
       "For your security, we've sent a temporary access code. Never share this code.",
   },

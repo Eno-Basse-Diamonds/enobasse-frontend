@@ -3,18 +3,18 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign Up",
   description:
-    "Become an Eno Basse insider for first access to new collections, private events, and bespoke design opportunities. Create your account in moments.",
+    "Become an Eno Bassé insider for first access to new collections, private events, and bespoke design opportunities. Create your account in moments.",
   keywords: [
-    "Eno Basse membership",
+    "Eno Bassé membership",
     "luxury jewelry newsletter",
     "designer jewelry updates",
     "exclusive jewelry offers",
     "fine jewelry account",
   ],
   openGraph: {
-    title: "Sign Up - Eno Basse Diamonds",
+    title: "Sign Up - Eno Bassé Diamonds",
     description:
-      "Unlock doors to our most coveted pieces and experiences. Your invitation to the world of Eno Basse begins here.",
+      "Unlock doors to our most coveted pieces and experiences. Your invitation to the world of Eno Bassé begins here.",
     url: "https://www.enobasse.com/sign-up",
     images: [
       {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sign Up - Eno Basse Diamonds",
+    title: "Sign Up - Eno Bassé Diamonds",
     description:
       "Join our circle of collectors for early access to heirloom pieces and atelier experiences. #JewelryConnoisseur",
     images: ["https://www.enobasse.com/images/auth/sign-up.webp"],

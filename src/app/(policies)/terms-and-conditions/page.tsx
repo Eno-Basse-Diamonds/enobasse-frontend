@@ -5,24 +5,24 @@ import "./styles.scss";
 export const metadata: Metadata = {
   title: "Terms and Conditions",
   description:
-    "Review Eno Basse's terms of service, purchase policies, and website usage guidelines for our luxury jewelry collections.",
+    "Review Eno Bassé's terms of service, purchase policies, and website usage guidelines for our luxury jewelry collections.",
   keywords: [
     "jewelry terms and conditions",
-    "Eno Basse purchase terms",
+    "Eno Bassé purchase terms",
     "luxury jewelry policies",
     "online jewelry store terms",
     "fine jewelry legal",
   ],
   openGraph: {
-    title: "Terms and Conditions - Eno Basse Fine Diamonds",
+    title: "Terms and Conditions - Eno Bassé Fine Diamonds",
     description:
-      "Official terms of service for Eno Basse jewelry purchases, website use, and customer agreements.",
+      "Official terms of service for Eno Bassé jewelry purchases, website use, and customer agreements.",
     url: "https://www.enobasse.com/terms-and-conditions",
   },
   twitter: {
-    title: "Terms and Conditions - Eno Basse Fine Diamonds",
+    title: "Terms and Conditions - Eno Bassé Fine Diamonds",
     description:
-      "Understand your rights and responsibilities when purchasing Eno Basse fine jewelry.",
+      "Understand your rights and responsibilities when purchasing Eno Bassé fine jewelry.",
   },
   alternates: {
     canonical: "https://www.enobasse.com/terms-and-conditions",
@@ -41,10 +41,10 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Introduction</h2>
           <p className="terms-conditions__paragraph">
-            These terms and conditions apply to the Eno Basse Web site located
+            These terms and conditions apply to the Eno Bassé Web site located
             at www.enobasse.com, and all associated Web sites linked to
-            www.enobasse.com by Eno Basse, its subsidiaries and affiliates,
-            including Eno Basse's sites around the world (collectively 'the
+            www.enobasse.com by Eno Bassé, its subsidiaries and affiliates,
+            including Eno Bassé's sites around the world (collectively 'the
             Site'). Please read these terms and conditions (the 'Terms and
             Conditions') carefully.{" "}
             <strong>
@@ -54,8 +54,8 @@ export default function TermsAndConditionsPage() {
           </p>
           <p className="terms-conditions__paragraph">
             These Terms and Conditions govern your use of, and any purchase
-            from, the Eno Basse Site, and constitute an agreement between you
-            and Eno Basse. Eno Basse reserves the right to change or modify any
+            from, the Eno Bassé Site, and constitute an agreement between you
+            and Eno Bassé. Eno Bassé reserves the right to change or modify any
             of these Terms and Conditions or any policy or guideline of the Site
             at any time, and in its sole discretion. Any change or modification
             will be effective immediately upon posting of the revisions on the
@@ -199,7 +199,7 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Information On Our Site</h2>
           <p className="terms-conditions__paragraph">
-            At Eno Basse, we make every attempt to ensure that our online
+            At Eno Bassé, we make every attempt to ensure that our online
             catalog is as accurate and complete as possible. In order to give
             you the opportunity to view our products in great detail, some
             products may appear larger or smaller than their actual size in our
@@ -210,7 +210,7 @@ export default function TermsAndConditionsPage() {
             Our objective is to provide you with as much information and detail
             about your prospective purchase as possible so that you can see the
             beauty and shape of a particular item. In compliance with industry
-            standards and FTC regulations, Eno Basse states that carat total
+            standards and FTC regulations, Eno Bassé states that carat total
             weight in all purchases may vary 0.05 carats from stated weight.
           </p>
           <p className="terms-conditions__paragraph">
@@ -240,11 +240,11 @@ export default function TermsAndConditionsPage() {
             Policy On Ethical Sourcing
           </h2>
           <p className="terms-conditions__paragraph">
-            At Eno Basse, we only purchase diamonds through the largest and most
+            At Eno Bassé, we only purchase diamonds through the largest and most
             respected suppliers who, like us, proudly adhere to and enforce the
             standards established by the Kimberley Process, an international
             system that polices the trade of diamonds to ensure they are from
-            sources free of conflict. Read more about Eno Basse's policy on
+            sources free of conflict. Read more about Eno Bassé's policy on
             ethical sourcing and the steps we take to ensure our diamonds are
             from conflict free sources.
           </p>
@@ -257,7 +257,7 @@ export default function TermsAndConditionsPage() {
             <Link href="/terms-conditions" className="terms-conditions__link">
               Privacy Policy
             </Link>{" "}
-            for information on how Eno Basse collects, uses, and discloses
+            for information on how Eno Bassé collects, uses, and discloses
             personally identifiable information from its customers.
           </p>
         </section>
@@ -266,11 +266,11 @@ export default function TermsAndConditionsPage() {
           <h2 className="terms-conditions__heading">Site Content </h2>
           <p className="terms-conditions__paragraph">
             The Site and all content and other materials, including, without
-            limitation, the Eno Basse logo, and all designs, text, graphics,
+            limitation, the Eno Bassé logo, and all designs, text, graphics,
             pictures, selection, coordination, 'look and feel', information,
             data, software, sound files, other files and the selection and
             arrangement thereof (collectively, the "Site Materials") are the
-            proprietary property of Eno Basse or its licensors or users and are
+            proprietary property of Eno Bassé or its licensors or users and are
             protected by trade dress, copyright, patent and trademark laws, and
             various other intellectual property rights and unfair competition
             laws.
@@ -280,17 +280,17 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Trademarks</h2>
           <p className="terms-conditions__paragraph">
-            Eno Basse, Build Your Own Ring, Build Your Own Three-Stone Ring,
+            Eno Bassé, Build Your Own Ring, Build Your Own Three-Stone Ring,
             Build Your Own Earrings, Build Your Own Diamond Pendant, the Eno
             Basse logos, and any other product or service name or slogan
-            contained in our Site are trademarks of Eno Basse and its suppliers
+            contained in our Site are trademarks of Eno Bassé and its suppliers
             or licensors, and may not be copied, imitated or used, in whole or
-            in part, without the prior written permission of Eno Basse or the
+            in part, without the prior written permission of Eno Bassé or the
             applicable trademark holder. You may not use any metatags or any
-            other "hidden text" utilizing "Eno Basse" or any other name,
-            trademark or product or service name of Eno Basse without our prior
+            other "hidden text" utilizing "Eno Bassé" or any other name,
+            trademark or product or service name of Eno Bassé without our prior
             written permission. All other trademarks, registered trademarks,
-            product names and Eno Basse names or logos mentioned in our Site are
+            product names and Eno Bassé names or logos mentioned in our Site are
             the property of their respective owners.
           </p>
         </section>
@@ -343,10 +343,10 @@ export default function TermsAndConditionsPage() {
           <h2 className="terms-conditions__heading">Infringer Policy</h2>
           <p className="terms-conditions__paragraph">
             In accordance with the Digital Millennium Copyright Act (DMCA) and
-            other applicable law, Eno Basse has adopted a policy of terminating
-            and barring, in appropriate circumstances and at Eno Basse's sole
+            other applicable law, Eno Bassé has adopted a policy of terminating
+            and barring, in appropriate circumstances and at Eno Bassé's sole
             discretion, site users or account holders who are deemed to be
-            repeat infringers. Eno Basse may also at its sole discretion limit
+            repeat infringers. Eno Bassé may also at its sole discretion limit
             access to this site and/or terminate the accounts of any users who
             infringe any intellectual property rights of others, whether or not
             there is any repeat infringement.
@@ -354,7 +354,7 @@ export default function TermsAndConditionsPage() {
           <p className="terms-conditions__paragraph">
             If you believe that your work has been copied and is accessible on
             the Site in a way that constitutes copyright infringement, you may
-            notify Eno Basse by providing the following information (as required
+            notify Eno Bassé by providing the following information (as required
             by the Online Copyright Infringement Liability Limitation Act of the
             Digital Millennium Copyright Act, 17 U.S.C. § 512) to{" "}
             <Link
@@ -382,10 +382,10 @@ export default function TermsAndConditionsPage() {
               Identification of the material that is claimed to be infringing or
               to be the subject of infringing activity and that is to be removed
               or access to which is to be disabled, and information reasonably
-              sufficient to permit Eno Basse to locate the material;{" "}
+              sufficient to permit Eno Bassé to locate the material;{" "}
             </li>
             <li className="terms-conditions__list-item">
-              Information reasonably sufficient to permit Eno Basse to contact
+              Information reasonably sufficient to permit Eno Bassé to contact
               the complaining party, such as an address, telephone number and an
               electronic mail address at which the complaining party may be
               contacted;
@@ -418,12 +418,12 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Third Party Content</h2>
           <p className="terms-conditions__paragraph">
-            Eno Basse may provide links to Web pages and content of third
+            Eno Bassé may provide links to Web pages and content of third
             parties ('Third Party Content') as a service to those interested in
-            this information. Eno Basse does not monitor or have any control
-            over any Third Party Content or third party Sites. Eno Basse does
+            this information. Eno Bassé does not monitor or have any control
+            over any Third Party Content or third party Sites. Eno Bassé does
             not endorse any Third Party Content and can make no guarantee as to
-            its accuracy or completeness. Eno Basse does not represent or
+            its accuracy or completeness. Eno Bassé does not represent or
             warrant the accuracy of any information contained therein, and
             undertakes no responsibility to update or review any Third Party
             Content. Users use these links and Third Party Content contained
@@ -436,14 +436,14 @@ export default function TermsAndConditionsPage() {
             Advertisements And Promotions
           </h2>
           <p className="terms-conditions__paragraph">
-            Eno Basse may run advertisements and promotions from third parties
+            Eno Bassé may run advertisements and promotions from third parties
             on our Site. Your business dealings or correspondence with, or
-            participation in promotions of, advertisers other than Eno Basse,
+            participation in promotions of, advertisers other than Eno Bassé,
             and any terms, conditions, warranties, or representations associated
             with such dealings, are solely between you and such third party. Eno
             Basse is not responsible or liable for any loss or damage of any
             sort incurred as the result of any such dealings or as the result of
-            the presence of such non-Eno Basse advertisers on our Site.
+            the presence of such non-Eno Bassé advertisers on our Site.
           </p>
         </section>
 
@@ -453,16 +453,16 @@ export default function TermsAndConditionsPage() {
             You acknowledge and agree that any materials, including but not
             limited to questions, comments, suggestions, ideas, plans, notes,
             drawings, original or creative materials or other information,
-            regarding this site, Eno Basse, or our products or services that are
-            provided by you to Eno Basse are non-confidential and shall become
-            the sole property of Eno Basse. Eno Basse will own exclusive rights,
+            regarding this site, Eno Bassé, or our products or services that are
+            provided by you to Eno Bassé are non-confidential and shall become
+            the sole property of Eno Bassé. Eno Bassé will own exclusive rights,
             including all intellectual property rights, and will be entitled to
             the unrestricted use and dissemination of these materials for any
             purpose, commercial or otherwise, without acknowledgment or
             compensation to you.
           </p>
           <p className="terms-conditions__paragraph">
-            You grant Eno Basse and its affiliates and sublicensees the right to
+            You grant Eno Bassé and its affiliates and sublicensees the right to
             use the name that you submit in connection with such content, if
             they choose. You represent and warrant that (a) you own and control
             all of the rights to the content that you submit, or that you
@@ -532,29 +532,29 @@ export default function TermsAndConditionsPage() {
               destructive files.
             </li>
             <li className="terms-conditions__list-item">
-              User Content that, in the sole judgment of Eno Basse, is
+              User Content that, in the sole judgment of Eno Bassé, is
               objectionable or which restricts or inhibits any other person from
               using or enjoying the Interactive Areas or our Site, or which may
-              expose Eno Basse or its users to any harm or liability of any
+              expose Eno Bassé or its users to any harm or liability of any
               type.
             </li>
           </ol>
 
           <p className="terms-conditions__paragraph">
-            Eno Basse takes no responsibility and assumes no liability for any
+            Eno Bassé takes no responsibility and assumes no liability for any
             User Content posted, stored, or uploaded by you or any third party,
-            or for any loss or damage thereto, nor is Eno Basse liable for any
+            or for any loss or damage thereto, nor is Eno Bassé liable for any
             mistakes, defamation, slander, libel, omissions, falsehoods,
             obscenity, pornography or profanity you may encounter. Your use of
             Interactive Areas is at your own risk. As a provider of interactive
-            services, Eno Basse is not liable for any statements,
+            services, Eno Bassé is not liable for any statements,
             representations, or User Content provided by its users in any public
             forum, personal home page, or other Interactive Area.
           </p>
 
           <p className="terms-conditions__paragraph">
-            Although Eno Basse has no obligation to screen, edit, or monitor any
-            of the Content posted in any Interactive Area, Eno Basse reserves
+            Although Eno Bassé has no obligation to screen, edit, or monitor any
+            of the Content posted in any Interactive Area, Eno Bassé reserves
             the right, and has absolute discretion, to remove, screen, or edit
             any User Content posted or stored on our Site at any time and for
             any reason without notice, and you are solely responsible for
@@ -568,23 +568,23 @@ export default function TermsAndConditionsPage() {
             may result in, among other things, termination or suspension of your
             rights to use the Interactive Areas and/or our Site. In order to
             cooperate with legitimate governmental requests, subpoenas, or court
-            orders, to protect Eno Basse's systems and customers, or to ensure
-            the integrity and operation of Eno Basse's business and systems, Eno
+            orders, to protect Eno Bassé's systems and customers, or to ensure
+            the integrity and operation of Eno Bassé's business and systems, Eno
             Basse may access and disclose any information it considers necessary
             or appropriate, including, without limitation, user profile
             information (i.e. name, e-mail address, etc.), IP addressing and
             traffic information, usage history, and posted User Content. Eno
             Basse's right to disclose any such information shall govern over any
-            terms of Eno Basse's Privacy Policy.
+            terms of Eno Bassé's Privacy Policy.
           </p>
 
           <p className="terms-conditions__paragraph">
             If you post User Content to our Site, unless we indicate otherwise,
-            you grant Eno Basse and its affiliates a nonexclusive, royalty-free,
+            you grant Eno Bassé and its affiliates a nonexclusive, royalty-free,
             perpetual, irrevocable and fully sublicensable right to use,
             reproduce, modify, adapt, publish, translate, create derivative
             works from, distribute, perform and display such User Content
-            throughout the world in any media. You grant Eno Basse and its
+            throughout the world in any media. You grant Eno Bassé and its
             affiliates and sublicensees the right to use the name that you
             submit in connection with such content, if they choose. You
             represent and warrant that (a) you own and control all of the rights
@@ -601,9 +601,9 @@ export default function TermsAndConditionsPage() {
             SMS Terms And Conditions
           </h2>
           <p className="terms-conditions__paragraph">
-            By signing up for Eno Basse’s Shipping Status Notifications text
+            By signing up for Eno Bassé’s Shipping Status Notifications text
             messages, You agree to receive periodic transactional text messages
-            from Eno Basse. These messages are intended to update you about the
+            from Eno Bassé. These messages are intended to update you about the
             status of your order, and will be sent after you have made a
             purchase when that order status has changed.
           </p>
@@ -625,7 +625,7 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Indemnification</h2>
           <p className="terms-conditions__paragraph">
-            You agree to defend, indemnify and hold harmless Eno Basse, its
+            You agree to defend, indemnify and hold harmless Eno Bassé, its
             independent contractors, service providers and consultants, and
             their respective directors, employees and agents, from and against
             any claims, damages, costs, liabilities, and expenses (including,
@@ -633,7 +633,7 @@ export default function TermsAndConditionsPage() {
             related to any Content you post, store or otherwise transmit on or
             through our Site or your use of or inability to use our Site,
             including without limitation any actual or threatened suit, demand
-            or claim made against Eno Basse and/or its independent contractors,
+            or claim made against Eno Bassé and/or its independent contractors,
             service providers, employees, directors or consultants, arising out
             of or relating to the Content, your conduct, your violation of these
             Terms and Conditions or your violation of the rights of any third
@@ -648,13 +648,13 @@ export default function TermsAndConditionsPage() {
             BASSE, THIS SITE, THE CONTENT CONTAINED THEREIN AND THE PRODUCTS AND
             SERVICES PROVIDED ON OR IN CONNECTION THEREWITH (THE "PRODUCTS AND
             SERVICES") ARE PROVIDED ON AN "AS IS" BASIS WITHOUT WARRANTIES OF
-            ANY KIND, EITHER EXPRESS OR IMPLIED. ENO BASSE DISCLAIMS ALL OTHER
+            ANY KIND, EITHER EXPRESS OR IMPLIED. ENO BASSÉ DISCLAIMS ALL OTHER
             WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION,
             IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
             PURPOSE, TITLE, AND NON-INFRINGEMENT AS TO THE INFORMATION, CONTENT,
-            AND MATERIALS IN OUR SITE. ENO BASSE DOES NOT REPRESENT OR WARRANT
+            AND MATERIALS IN OUR SITE. ENO BASSÉ DOES NOT REPRESENT OR WARRANT
             THAT MATERIALS IN OUR SITE OR THE SERVICES ARE ACCURATE, COMPLETE,
-            RELIABLE, CURRENT OR ERROR-FREE. ENO BASSE DOES NOT REPRESENT OR
+            RELIABLE, CURRENT OR ERROR-FREE. ENO BASSÉ DOES NOT REPRESENT OR
             WARRANT THAT OUR SITE OR ITS SERVERS ARE FREE OF VIRUSES OR OTHER
             HARMFUL COMPONENTS.
           </p>
@@ -663,7 +663,7 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Limitation Of Liability</h2>
           <p className="terms-conditions__paragraph">
-            IN NO EVENT SHALL ENO BASSE, ITS DIRECTORS, MEMBERS, EMPLOYEES OR
+            IN NO EVENT SHALL ENO BASSÉ, ITS DIRECTORS, MEMBERS, EMPLOYEES OR
             AGENTS BE LIABLE FOR ANY DIRECT, SPECIAL, INDIRECT, OR CONSEQUENTIAL
             DAMAGES, OR ANY OTHER DAMAGES OF ANY KIND, INCLUDING BUT NOT LIMITED
             TO LOSS OF USE, LOSS OF PROFITS, OR LOSS OF DATA, WHETHER IN AN
@@ -672,11 +672,11 @@ export default function TermsAndConditionsPage() {
             OUR SITE, THE PRODUCTS AND SERVICES, OR THE CONTENT CONTAINED IN OR
             ACCESSED THROUGH OUR SITE, INCLUDING WITHOUT LIMITATION ANY DAMAGES
             CASED BY OR RESULTING FROM RELIANCE BY USER ON ANY INFORMATION
-            OBTAINED FROM ENO BASSE, OR THAT RESULT FROM MISTAKES, OMISSIONS,
+            OBTAINED FROM ENO BASSÉ, OR THAT RESULT FROM MISTAKES, OMISSIONS,
             INTERRUPTIONS, DELETION OF FILES OR EMAIL, ERRORS, DEFECTS, VIRUSES,
             DELAYS IN OPERATION OR TRANSMISSION OR ANY FAILURE OF PERFORMANCE,
             WHETHER OR NOT RESULTING FROM ACTS OF GOD, COMMUNICATIONS FAILURE,
-            THEFT, DESTRUCTION OR UNAUTHORIZED ACCESS TO ENO BASSE'S RECORDS,
+            THEFT, DESTRUCTION OR UNAUTHORIZED ACCESS TO ENO BASSÉ'S RECORDS,
             PROGRAMS OR SERVICES.
           </p>
         </section>
@@ -703,7 +703,7 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Modification And Notice</h2>
           <p className="terms-conditions__paragraph">
-            You agree that Eno Basse may modify these Terms and Conditions and
+            You agree that Eno Bassé may modify these Terms and Conditions and
             any other policies on our Site at any time and that posting the
             modified Terms and Conditions or policies on our Site will
             constitute sufficient notice of such modification.
@@ -713,7 +713,7 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Termination</h2>
           <p className="terms-conditions__paragraph">
-            Notwithstanding any of these Terms and Conditions, Eno Basse
+            Notwithstanding any of these Terms and Conditions, Eno Bassé
             reserves the right, without notice and in its sole discretion, to
             terminate your license to use this site, and to block or prevent
             future your access to and use of the Site.

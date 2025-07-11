@@ -18,17 +18,17 @@ export const metadata: Metadata = {
     "luxury jewelry blog",
     "diamond education",
     "jewelry care tips",
-    "Eno Basse blog",
+    "Eno Bassé blog",
     "fine jewelry trends",
   ],
   openGraph: {
-    title: "Our Blog - Eno Basse Diamonds",
+    title: "Our Blog - Eno Bassé Diamonds",
     description:
       "Where heritage craftsmanship meets modern design insights. Explore our articles on jewelry selection, care, and the art of adornment.",
     url: "https://www.enobasse.com/blog",
   },
   twitter: {
-    title: "Our Blog - Eno Basse Diamonds",
+    title: "Our Blog - Eno Bassé Diamonds",
     description:
       "From diamond grading to design philosophy—unpack the world of fine jewelry with our experts. #JewelryWisdom",
   },

@@ -9,7 +9,7 @@ interface LogoProps {
 
 export const Logo: FC<LogoProps> = ({
   className,
-  ariaLabel = "Eno Basse Logo",
+  ariaLabel = "Eno Bassé Logo",
   width = 185,
   height = 40,
 }) => {

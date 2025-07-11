@@ -26,19 +26,19 @@ export const generateMetadata = async ({
 
   if (!collection) {
     return {
-      title: "Collection not found - Eno Basse Diamonds",
+      title: "Collection not found - Eno Bassé Diamonds",
       description: "This collection does not exist.",
     };
   }
 
   return {
-    title: `${collection.name} Collection - Eno Basse Diamonds`,
+    title: `${collection.name} Collection - Eno Bassé Diamonds`,
     description: collection.description,
     alternates: {
       canonical: `/collections/${collection.slug}`,
     },
     openGraph: {
-      title: `${collection.name} Collection - Eno Basse Diamonds`,
+      title: `${collection.name} Collection - Eno Bassé Diamonds`,
       description: collection.description,
       images: [
         {
@@ -50,7 +50,7 @@ export const generateMetadata = async ({
       ],
     },
     twitter: {
-      title: `${collection.name} - Eno Basse Diamonds"`,
+      title: `${collection.name} - Eno Bassé Diamonds"`,
       description: collection.description,
       images: [`${collection.image.url}`],
     },

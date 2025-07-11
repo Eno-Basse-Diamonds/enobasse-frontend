@@ -5,22 +5,22 @@ import "./styles.scss";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Learn how Eno Basse protects your personal information. Our commitment to your privacy and data security in all transactions.",
+    "Learn how Eno Bassé protects your personal information. Our commitment to your privacy and data security in all transactions.",
   keywords: [
     "jewelry privacy policy",
     "data security fine jewelry",
-    "Eno Basse data protection",
+    "Eno Bassé data protection",
     "secure jewelry transactions",
     "online jewelry privacy",
   ],
   openGraph: {
-    title: "Privacy Policy - Eno Basse Fine Diamonds",
+    title: "Privacy Policy - Eno Bassé Fine Diamonds",
     description:
-      "Your privacy matters. Learn how we protect your personal information in all Eno Basse jewelry transactions and website interactions.",
+      "Your privacy matters. Learn how we protect your personal information in all Eno Bassé jewelry transactions and website interactions.",
     url: "https://www.enobasse.com/privacy-policy",
   },
   twitter: {
-    title: "Privacy Policy - Eno Basse Fine Diamonds",
+    title: "Privacy Policy - Eno Bassé Fine Diamonds",
     description:
       "How we protect your data when you shop for fine jewelry online. Your privacy is our priority.",
   },
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
         <section className="privacy-policy__section">
           <h2 className="privacy-policy__heading">Introduction</h2>
           <p className="privacy-policy__paragraph">
-            Eno Basse, Inc. ("Eno Basse," "we," "our," or "us"), respects your
+            Eno Bassé, Inc. ("Eno Bassé," "we," "our," or "us"), respects your
             privacy and is committed to protecting your privacy. This Privacy
             Policy describes the information we may collect from you or that you
             may provide to us when you visit www.enobasse.com ("Website") and
@@ -64,7 +64,7 @@ export default function PrivacyPolicyPage() {
           <ul className="privacy-policy__list">
             <li className="privacy-policy__list-item">
               Us offline or through any other means, including on any other
-              website operated by Eno Basse or any third party, including our
+              website operated by Eno Bassé or any third party, including our
               affiliates and subsidiaries.
             </li>
             <li className="privacy-policy__list-item">
@@ -404,7 +404,7 @@ export default function PrivacyPolicyPage() {
                 We may share your information with our business partners in
                 connection with joint marketing activities. For example, we may
                 share your information with a business partner for purposes of
-                providing financing for the purchase of Eno Basse products.
+                providing financing for the purchase of Eno Bassé products.
               </span>
             </div>
             <div className="privacy-policy__data-item">
@@ -434,7 +434,7 @@ export default function PrivacyPolicyPage() {
                 dissolution, or other sale or transfer of some or all of Eno
                 Basse's assets, whether as a going concern or as part of
                 bankruptcy, liquidation, or similar proceeding, in which
-                personal information held by Eno Basse about our Website users
+                personal information held by Eno Bassé about our Website users
                 is among the assets transferred.
               </span>
             </div>
@@ -619,7 +619,7 @@ export default function PrivacyPolicyPage() {
           <p className="privacy-policy__paragraph">
             This Website is operated from the United States. Information
             collected on this Website may be stored and processed in the United
-            States or any other country in which Eno Basse or its affiliates,
+            States or any other country in which Eno Bassé or its affiliates,
             subsidiaries, service providers, or agents maintain facilities. Data
             protection laws in the U.S. and other jurisdictions may be different
             from those of your country of residence. By using this Website, you

@@ -5,26 +5,26 @@ import "./styles.scss";
 export const metadata: Metadata = {
   title: "Shipping & Purchase Policy",
   description:
-    "Eno Basse's shipping and purchase policies. All sales are final with complimentary expedited shipping, lifetime craftsmanship warranty, and secure transactions.",
+    "Eno Bassé's shipping and purchase policies. All sales are final with complimentary expedited shipping, lifetime craftsmanship warranty, and secure transactions.",
   keywords: [
     "jewelry purchase policy",
     "fine jewelry shipping",
     "no returns jewelry",
-    "Eno Basse warranty",
-    "Eno Basse shipping",
-    "Eno Basse return policy",
+    "Eno Bassé warranty",
+    "Eno Bassé shipping",
+    "Eno Bassé return policy",
     "secure jewelry purchase",
   ],
   openGraph: {
-    title: "Shipping & Purchase Policy - Eno Basse Fine Jewelry",
+    title: "Shipping & Purchase Policy - Eno Bassé Fine Jewelry",
     description:
-      "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Basse jewelry pieces.",
+      "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Bassé jewelry pieces.",
     url: "https://www.enobasse.com/shipping-and-return-policy",
   },
   twitter: {
-    title: "Shipping & Purchase Policy - Eno Basse Fine Jewelry",
+    title: "Shipping & Purchase Policy - Eno Bassé Fine Jewelry",
     description:
-      "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Basse jewelry pieces.",
+      "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Bassé jewelry pieces.",
   },
   alternates: {
     canonical: "https://www.enobasse.com/shipping-and-return-policy",
@@ -80,7 +80,7 @@ export default function shippingPage() {
       <section className="shipping__section shipping__section--spaced">
         <h2 className="shipping__heading">Lifetime Warranty</h2>
         <p className="shipping__paragraph">
-          At Eno Basse we are committed to a superior quality standard. Each
+          At Eno Bassé we are committed to a superior quality standard. Each
           piece is handcrafted and quality inspected before shipment. We take
           pride in our standard for diamond quality and skilled craftsmanship.
           We are pleased to offer a three-month warranty against any
@@ -96,10 +96,10 @@ export default function shippingPage() {
       <section className="shipping__section shipping__section--spaced">
         <h2 className="shipping__heading">Insuring Your Jewelry</h2>
         <p className="shipping__paragraph">
-          Eno Basse recommends independently insuring the ring with your
+          Eno Bassé recommends independently insuring the ring with your
           homeowner's or renter's insurance against loss, theft, or damage.
           There are also specialty jewelry insurance companies, like Jeweler's
-          Mutual, that will insure all exquisite Eno Basse pieces.
+          Mutual, that will insure all exquisite Eno Bassé pieces.
         </p>
       </section>
 

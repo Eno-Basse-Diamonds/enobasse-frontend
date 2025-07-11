@@ -35,7 +35,7 @@ export default async function FAQsPage() {
     {
       question: "Do you provide certification for your diamonds?",
       answer:
-        "A full detailed Appraisal Certificate will accompany each and every item purchased from Eno Basse.",
+        "A full detailed Appraisal Certificate will accompany each and every item purchased from Eno Bassé.",
     },
     {
       question: "What is your return policy?",
@@ -60,7 +60,7 @@ export default async function FAQsPage() {
         <div className="faqs-page__header">
           <h1 className="faqs-page__title">Frequently Asked Questions</h1>
           <p className="faqs-page__description">
-            Get answers to all your questions about luxury jewelry at Eno Basse.
+            Get answers to all your questions about luxury jewelry at Eno Bassé.
             Explore our FAQ page for details on products, services, shipping,
             and more.
           </p>
