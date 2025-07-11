@@ -33,8 +33,8 @@ export default function AboutUsPage() {
             <Image
               src="/images/about/package-box.webp"
               alt="Eno Basse packaging box"
-              height={1500}
-              width={1500}
+              height={800}
+              width={800}
               className="about-page__hero-image bg-gray-100"
               quality={100}
             />
