@@ -52,4 +52,8 @@
   &__icon {
     @apply h-4 w-4 text-gray-700;
   }
+
+  &__instore-tag {
+    @apply absolute bottom-2 right-2 bg-secondary-500 text-white text-xs font-semibold px-3 py-1 z-10;
+  }
 }

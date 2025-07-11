@@ -82,6 +82,9 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
                   quality={100}
                 />
               )}
+              {!product.isCustomDesign && (
+                <span className="product-list__instore-tag">In Store</span>
+              )}
             </div>
 
             <motion.div className="product-list__details">

@@ -38,6 +38,7 @@ export interface Product {
   gemstones?: Gemstone[];
   reviews?: Review[];
   ratingDistribution?: RatingDistribution[];
+  isCustomDesign?: boolean;
 }
 
 export interface ProductFilterOptions {
