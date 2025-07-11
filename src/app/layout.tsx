@@ -25,34 +25,34 @@ const dancingScript = Dancing_Script({
 export const metadata: Metadata = {
   title: {
     default:
-      "Eno Basse Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
-    template: "%s - Eno Basse Diamonds",
+      "Eno Bassé Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
+    template: "%s - Eno Bassé Diamonds",
   },
   description:
-    "Discover exquisite handcrafted Eno Basse jewellery pieces at Eno Basse Jewellery. Shop our curated collection of diamond rings, gold necklaces, and custom engagement rings. Ethical sourcing, artisan craftsmanship.",
+    "Discover exquisite handcrafted Eno Bassé jewellery pieces at Eno Bassé Jewellery. Shop our curated collection of diamond rings, gold necklaces, and custom engagement rings. Ethical sourcing, artisan craftsmanship.",
   keywords: [
-    "fine Eno Basse jewellery",
+    "fine Eno Bassé jewellery",
     "diamond rings",
     "gold necklaces",
     "engagement rings",
-    "handmade Eno Basse jewellery",
-    "luxury Eno Basse jewellery",
-    "custom Eno Basse jewellery",
+    "handmade Eno Bassé jewellery",
+    "luxury Eno Bassé jewellery",
+    "custom Eno Bassé jewellery",
     "ethical diamonds",
-    "artisan Eno Basse jewellery",
+    "artisan Eno Bassé jewellery",
   ],
   openGraph: {
-    title: "Eno Basse Diamonds - Handcrafted Fine Jewelry",
+    title: "Eno Bassé Diamonds - Handcrafted Fine Jewelry",
     description:
-      "Exquisite handcrafted Eno Basse jewellery pieces with ethical sourcing and artisan craftsmanship.",
+      "Exquisite handcrafted Eno Bassé jewellery pieces with ethical sourcing and artisan craftsmanship.",
     url: "https://enobasse.com",
-    siteName: "Eno Basse Diamonds",
+    siteName: "Eno Bassé Diamonds",
     images: [
       {
         url: "https://enobasse.com/images/seo/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Eno Basse Jewellery Collection",
+        alt: "Eno Bassé Jewellery Collection",
       },
     ],
     locale: "en_US",
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Eno Basse Diamonds - Handcrafted Fine Jewelry",
+    title: "Eno Bassé Diamonds - Handcrafted Fine Jewelry",
     description:
-      "Exquisite handcrafted Eno Basse jewellery pieces with ethical sourcing and artisan craftsmanship.",
+      "Exquisite handcrafted Eno Bassé jewellery pieces with ethical sourcing and artisan craftsmanship.",
     images: ["https://enobasse.com/images/seo/twitter-image.png"],
     creator: "@EnoBasseDiamond",
   },
@@ -113,7 +113,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  category: "Eno Basse jewellery",
+  category: "Eno Bassé jewellery",
 };
 
 export default async function RootLayout({

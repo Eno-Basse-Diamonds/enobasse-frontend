@@ -226,7 +226,7 @@ export default function ProductPage() {
             <div className="w-full">
               <Image
                 src="/images/packaged-ring.png"
-                alt="Packaged jewellery from Eno Basse"
+                alt="Packaged jewellery from Eno Bassé"
                 width={400}
                 height={400}
                 className="w-full h-auto"

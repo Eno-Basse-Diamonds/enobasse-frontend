@@ -4,23 +4,23 @@ import AuthSection from "../_components/auth-section";
 export const metadata: Metadata = {
   title: "Forgot Password",
   description:
-    "Securely reset your Eno Basse account password. Enter your email to receive a verification link for account recovery.",
+    "Securely reset your Eno Bassé account password. Enter your email to receive a verification link for account recovery.",
   keywords: [
-    "Eno Basse password recovery",
+    "Eno Bassé password recovery",
     "jewelry account access",
     "reset luxury account password",
-    "Eno Basse client portal",
+    "Eno Bassé client portal",
     "secure password reset",
   ],
   openGraph: {
-    title: "Forgot Password - Eno Basse Diamonds",
+    title: "Forgot Password - Eno Bassé Diamonds",
     description:
       "Regain access to your jewelry collection account. We'll send a secure reset link to your registered email.",
     url: "https://www.enobasse.com/forgot-password",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Forgot Password - Eno Basse Diamonds",
+    title: "Forgot Password - Eno Bassé Diamonds",
     description:
       "We'll help you securely regain access to your jewelry account.",
   },

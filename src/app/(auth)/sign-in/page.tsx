@@ -28,7 +28,7 @@ export default function SignInPage() {
       ]}
       actionButtonText="Sign In"
       footer={{
-        text: "New to Eno Basse?",
+        text: "New to Eno Bassé?",
         link: { text: "Create an account", href: "/sign-up" },
       }}
       messages={{

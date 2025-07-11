@@ -102,7 +102,7 @@ export default async function HomePage() {
       href: "/collections/new-arrivals",
       image: {
         src: "/images/collections/collection-03.webp",
-        alt: "Hand with leaf-styled white gold diamond ring holding an Eno Basse jewelry box",
+        alt: "Hand with leaf-styled white gold diamond ring holding an Eno Bassé jewelry box",
       },
     },
     {
@@ -124,7 +124,7 @@ export default async function HomePage() {
             generations - timeless pieces designed to become family heirlooms."
         image={{
           src: "/images/hero.webp",
-          alt: "Woman wearing a necklace, ring, and bracelet from Eno Basse",
+          alt: "Woman wearing a necklace, ring, and bracelet from Eno Bassé",
         }}
         buttons={[
           { text: "See Collections", href: "/collections" },
@@ -135,7 +135,7 @@ export default async function HomePage() {
       <SectionContainer id="categories">
         <SectionHeading
           id="categories-heading"
-          title="Explore Eno Basse"
+          title="Explore Eno Bassé"
           description="Our craftsmen work with the finest materials with the sole aim of attaining perfection in every jewellery piece."
         />
         <div className="md:hidden">
@@ -168,7 +168,7 @@ export default async function HomePage() {
       <HelpSection
         title="Need Help?"
         body={[
-          "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Basse team is here to assist you every step of the way. We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
+          "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Bassé team is here to assist you every step of the way. We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
           "Every piece of jewellery tells a story… From glittering necklaces to radiant rings, we lead you to the perfect jewellery to tell your story, the best expression of you. Our team consists of artisans with over 50 years of experience and a wide range of expertise who are eager to help you find and design the perfect piece.",
         ]}
         button={{ text: "Contact Us", href: "/contact" }}
@@ -181,12 +181,12 @@ export default async function HomePage() {
       <AboutSection
         title="Company Profile"
         description={[
-          "Eno Basse was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery. Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
+          "Eno Bassé was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery. Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
         ]}
         button={{ text: "About Us", href: "/about" }}
         image={{
           src: "/images/founder.webp",
-          alt: "Eno Basse founder",
+          alt: "Eno Bassé founder",
         }}
       />
 

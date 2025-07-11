@@ -5,16 +5,16 @@ import "./styles.scss";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Discover the legacy of Eno Basse - artisan-crafted fine jewelry blending traditional techniques with contemporary design.",
-  keywords: ["Eno Basse history", "About Eno Basse"],
+    "Discover the legacy of Eno Bassé - artisan-crafted fine jewelry blending traditional techniques with contemporary design.",
+  keywords: ["Eno Bassé history", "About Eno Bassé"],
   openGraph: {
-    title: "About Us - Eno Basse Diamonds",
+    title: "About Us - Eno Bassé Diamonds",
     description:
-      "Eno Basse has created quality jewelry using time-honored techniques and exceptional gemstones.",
+      "Eno Bassé has created quality jewelry using time-honored techniques and exceptional gemstones.",
     url: "https://www.enobasse.com/about",
   },
   twitter: {
-    title: "About Us - Eno Basse Diamonds",
+    title: "About Us - Eno Bassé Diamonds",
     description: "Meet the artisan behind our quality creations.",
   },
   alternates: {
@@ -32,7 +32,7 @@ export default function AboutUsPage() {
           <div className="about-page__hero">
             <Image
               src="/images/about/package-box.webp"
-              alt="Eno Basse packaging box"
+              alt="Eno Bassé packaging box"
               height={800}
               width={800}
               className="about-page__hero-image bg-gray-100"
@@ -41,9 +41,9 @@ export default function AboutUsPage() {
           </div>
           <div className="about-page__content">
             <p>
-              Eno Basse Gemstones and Allied Services is a registered company
+              Eno Bassé Gemstones and Allied Services is a registered company
               founded in 2021 by Eyakenoabasi Bob. We are a jewellery design
-              company where unique and timeless pieces are created. Eno Basse
+              company where unique and timeless pieces are created. Eno Bassé
               was founded with the vision of procuring gemstones to create
               gorgeous, one-of-a-kind jewellery. Each piece is a true work of
               art made with the world's finest and most precious gems. We have
@@ -75,7 +75,7 @@ export default function AboutUsPage() {
             <div className="about-page__founder-image">
               <Image
                 src="/images/about/founder.webp"
-                alt="Eno Basse founder profile picture"
+                alt="Eno Bassé founder profile picture"
                 height={1500}
                 width={1500}
                 quality={100}
@@ -130,7 +130,7 @@ export default function AboutUsPage() {
                 <div className="about-page__founder-info-signature">
                   <Image
                     src="/images/about/signature.webp"
-                    alt="Eno Basse founder name signature"
+                    alt="Eno Bassé founder name signature"
                     height={1500}
                     width={1500}
                     quality={100}
@@ -157,7 +157,7 @@ export default function AboutUsPage() {
                   colorful pieces used for jewellery designs.
                 </p>
                 <p>
-                  Contact the Eno Basse team today and let us create a
+                  Contact the Eno Bassé team today and let us create a
                   masterpiece together.
                 </p>
               </div>
@@ -165,7 +165,7 @@ export default function AboutUsPage() {
             <div className="about-page__section-image md:order-2">
               <Image
                 src="/images/about/sourcing-gemstone.webp"
-                alt="Eno Basse gemstones collection"
+                alt="Eno Bassé gemstones collection"
                 height={1500}
                 width={1500}
                 quality={100}
@@ -180,7 +180,7 @@ export default function AboutUsPage() {
             <div className="about-page__section-image">
               <Image
                 src="/images/about/making-the-jewlery.webp"
-                alt="Eno Basse jewellery making process"
+                alt="Eno Bassé jewellery making process"
                 height={1500}
                 width={1500}
                 quality={100}
@@ -198,7 +198,7 @@ export default function AboutUsPage() {
                   add a touch of uniqueness and glamour to one's style.
                 </p>
                 <p>
-                  Here at Eno Basse, we work with our clients to turn the
+                  Here at Eno Bassé, we work with our clients to turn the
                   designs they have envisioned into reality.
                 </p>
                 <p>
@@ -216,7 +216,7 @@ export default function AboutUsPage() {
                   heirloom.
                 </p>
                 <p>
-                  Eno Basse is definitely your guaranteed plug for Jewellery
+                  Eno Bassé is definitely your guaranteed plug for Jewellery
                   design.
                 </p>
               </div>
@@ -231,7 +231,7 @@ export default function AboutUsPage() {
               <h2 className="about-page__section-title">Dirt to Wealth</h2>
               <div className="about-page__section-text">
                 <p>
-                  Eno Basse offers a training programme on the identification of
+                  Eno Bassé offers a training programme on the identification of
                   African gems, how to source for them, how to cut them and how
                   to market them. The training also covers exportation, trading
                   and other value added services associated with these
@@ -262,7 +262,7 @@ export default function AboutUsPage() {
             <div className="about-page__section-image  md:order-2">
               <Image
                 src="/images/about/dirt-to-wealth.webp"
-                alt="Eno Basse Dirt to Wealth initiative"
+                alt="Eno Bassé Dirt to Wealth initiative"
                 height={1500}
                 width={1500}
                 quality={100}

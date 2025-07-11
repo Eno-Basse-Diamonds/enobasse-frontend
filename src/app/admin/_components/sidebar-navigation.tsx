@@ -22,7 +22,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
           <Image
             className="sidebar-navigation__logo"
             src="/images/logo.png"
-            alt="Eno Basse logo"
+            alt="Eno Bassé logo"
             quality={100}
             height={100}
             width={100}

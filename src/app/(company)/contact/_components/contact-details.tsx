@@ -7,7 +7,7 @@ export const ContactDetails = () => {
       <div>
         <h1 className="contact-details__header">Contact</h1>
         <p className="contact-details__description">
-          Your questions or feedback are always welcome at Eno Basse. Join in a
+          Your questions or feedback are always welcome at Eno Bassé. Join in a
           conversation with one of our Diamond and Jewelry Consultants to help
           you make the right decision.
         </p>

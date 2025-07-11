@@ -30,7 +30,7 @@ export const generateMetadata = async ({
       canonical: `/blog/${post.slug}`,
     },
     openGraph: {
-      title: `${post.title} - Eno Basse Diamonds`,
+      title: `${post.title} - Eno Bassé Diamonds`,
       description: post.excerpt,
       publishedTime: new Date(post.createdAt).toISOString(),
       images: [
@@ -44,7 +44,7 @@ export const generateMetadata = async ({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title} - Eno Basse Diamonds`,
+      title: `${post.title} - Eno Bassé Diamonds`,
       description: post.excerpt,
       images: [`https://enobasse.com${post.image.src}`],
     },

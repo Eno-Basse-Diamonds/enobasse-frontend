@@ -3,17 +3,17 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign In",
   description:
-    "Access your Eno Basse account to view order history, saved designs, and exclusive member benefits. Secure 256-bit encryption enabled.",
+    "Access your Eno Bassé account to view order history, saved designs, and exclusive member benefits. Secure 256-bit encryption enabled.",
   keywords: [
-    "Eno Basse login",
-    "Eno Basse sign in",
+    "Eno Bassé login",
+    "Eno Bassé sign in",
     "luxury jewelry account",
     "secure client portal",
     "jewelry order tracking",
     "saved designs access",
   ],
   openGraph: {
-    title: "Sign In - Eno Basse Diamonds",
+    title: "Sign In - Eno Bassé Diamonds",
     description:
       "Your secure gateway to purchased pieces, design consultations, and collection wishlists.",
     url: "https://www.enobasse.com/sign-in",
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
         height: 630,
       },
     ],
-    siteName: "Eno Basse Diamonds",
+    siteName: "Eno Bassé Diamonds",
   },
   twitter: {
-    title: "Sign In - Eno Basse Diamonds",
+    title: "Sign In - Eno Bassé Diamonds",
     description:
       "Securely access your heirloom jewelry records and upcoming appointments.",
     images: ["https://www.enobasse.com/images/auth/sign-in.webp"],

@@ -4,22 +4,22 @@ import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Sitemap",
-  description: "Complete overview of all pages on Eno Basse Diamonds website",
+  description: "Complete overview of all pages on Eno Bassé Diamonds website",
   keywords: [
-    "Eno Basse sitemap",
+    "Eno Bassé sitemap",
     "jewelry website navigation",
     "diamond collections index",
     "luxury jewelry pages",
     "site structure overview",
   ],
   openGraph: {
-    title: "Sitemap - Eno Basse Diamonds",
+    title: "Sitemap - Eno Bassé Diamonds",
     description:
-      "Navigate all sections of Eno Basse Diamonds' online presence including jewelry collections, about us, and client services.",
+      "Navigate all sections of Eno Bassé Diamonds' online presence including jewelry collections, about us, and client services.",
     url: "https://www.enobasse.com/sitemap",
   },
   twitter: {
-    title: "Sitemap - Eno Basse Diamonds",
+    title: "Sitemap - Eno Bassé Diamonds",
     description:
       "Access all areas of our luxury jewelry website through our comprehensive sitemap.",
   },
