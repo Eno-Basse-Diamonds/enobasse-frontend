@@ -14,7 +14,7 @@ import {
 } from "../icons";
 import "./styles.scss";
 import { ProductList } from "@/components/product/list";
-import { useProducts } from "@/lib/hooks/use-products";
+import { useProductsSearch } from "@/lib/hooks/use-products";
 import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
 import { SearchSlashIcon } from "lucide-react";
@@ -433,7 +433,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
 
-  const { data, isLoading } = useProducts({
+  const { data, isLoading } = useProductsSearch({
     search: submittedQuery,
     page: 1,
     pageSize: 100,

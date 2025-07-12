@@ -2,6 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getProduct, getProducts, getRelatedProducts } from "@/lib/api/products";
 import { Product, ProductFilterOptions } from "@/lib/types/products";
 
+export function useProductsSearch(options?: ProductFilterOptions) {
+  return useQuery({
+    queryKey: ["productSearch", options],
+    queryFn: () => getProducts(options),
+  });
+}
+
+
 export function useProducts(options?: ProductFilterOptions) {
   return useQuery({
     queryKey: ["products", options],
