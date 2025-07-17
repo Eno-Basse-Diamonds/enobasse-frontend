@@ -108,7 +108,7 @@ export default async function HomePage() {
     {
       id: "trending-now",
       title: "Trending Now",
-      href: "/collections/trending",
+      href: "/collections/trending-now",
       image: {
         src: "/images/collections/collection-04.webp",
         alt: "Diamond cross yellow gold pendant",

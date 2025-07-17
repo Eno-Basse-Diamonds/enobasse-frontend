@@ -49,7 +49,7 @@
     @apply relative w-full h-full;
 
     img {
-      @apply object-contain;
+      @apply object-cover;
     }
   }
 

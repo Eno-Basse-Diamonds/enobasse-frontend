@@ -43,39 +43,39 @@ export const PrivacyConsent = () => {
       <div className="relative">
         <div
           className={`
-            bg-gray-900 text-white p-6 shadow-2xl max-w-xl ml-6 mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
+            bg-primary-500 p-6 shadow-2xl max-w-xl sm:ml-6 sm:mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
           `}
         >
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors duration-200"
+            className="absolute top-4 right-4 text-white transition-colors duration-200"
             aria-label="Close"
           >
             <X size={18} />
           </button>
 
           <div className="pr-8">
-            <h3 className="text-lg font-light mb-3 text-white tracking-wide">
+            <h3 className="text-lg font-primary font-light mb-3 text-white tracking-wide">
               Privacy & Cookies
             </h3>
 
-            <p className="text-sm leading-relaxed mb-4 font-light">
+            <p className="text-white text-sm leading-relaxed mb-4 font-light">
               We use cookies and similar technologies to enhance your
               experience, analyze site traffic, and personalize content. By
               continuing to browse, you consent to our use of cookies.
             </p>
 
-            <div className="text-xs text-gray-400 mb-4">
+            <div className="text-xs text-gray-100 mb-4">
               <Link
                 href="/privacy-policy"
-                className="underline hover:text-white transition-colors duration-200"
+                className="underline"
               >
                 Privacy Policy
               </Link>
               {" • "}
               <Link
                 href="/terms-and-conditions"
-                className="underline hover:text-white transition-colors duration-200"
+                className="underline"
               >
                 Cookie Policy
               </Link>
@@ -85,7 +85,7 @@ export const PrivacyConsent = () => {
               <button
                 onClick={handleAccept}
                 className="
-                  flex-1 bg-white text-black px-4 py-2
+                  flex-1 bg-white text-primary-500 px-4 py-2
                   font-medium text-sm tracking-wide
                   hover:bg-gray-100 transition-all duration-200
                   transform
@@ -96,13 +96,7 @@ export const PrivacyConsent = () => {
 
               <button
                 onClick={handleDecline}
-                className="
-                  px-4 py-2 border border-gray-600 text-gray-300
-                  font-medium text-sm tracking-wide
-                  hover:border-white hover:text-white
-                  transition-all duration-200
-                  transform
-                "
+                className=" px-4 py-2 border border-white text-white font-medium text-sm tracking-wide"
               >
                 DECLINE
               </button>

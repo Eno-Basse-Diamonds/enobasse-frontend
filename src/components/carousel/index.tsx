@@ -89,8 +89,8 @@ export const Carousel: React.FC<CarouselProps> = ({
                 index < currentIndex || index >= currentIndex + itemsPerPage
               }
             >
-              <Link href={item.href} passHref legacyBehavior>
-                <a className="carousel__link">
+              <Link href={item.href} passHref>
+                <div className="carousel__link">
                   <div className="carousel__image-container">
                     <div className="carousel__image-wrapper">
                       <Image
@@ -108,7 +108,7 @@ export const Carousel: React.FC<CarouselProps> = ({
                   <figcaption className="carousel__caption">
                     {item.title}
                   </figcaption>
-                </a>
+                </div>
               </Link>
             </li>
           ))}
