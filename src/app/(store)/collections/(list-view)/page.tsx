@@ -17,7 +17,7 @@ export default function CollectionsPage() {
       <SectionContainer
         id="collections"
         aria-labelledby="collections-heading"
-        className="collections-page__grid"
+        className={isLoading ? "" : "collections-page__grid"}
       >
         <h2 id="collections-heading" className="sr-only">
           Collections
