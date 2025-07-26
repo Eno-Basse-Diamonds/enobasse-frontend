@@ -18,46 +18,100 @@ import {
   GemstoneSelector,
   Divider,
 } from "@/components";
-import { WishlistIcon } from "@/components/icons";
 import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
 import { Engraving } from "./_components/engraving";
 import { ImageGallery } from "./_components/image-gallery";
 import { ProductDetails } from "./_components/product-details";
 import { Reviews } from "./_components/reviews";
+import { Heart } from "lucide-react";
+import { WishlistIcon } from "@/components/icons";
 import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { calculateAverageRating } from "@/lib/utils/reviews";
-import { data } from "motion/react-client";
+import { useWishlistStore } from "@/lib/store/wishlist";
+import { useSession } from "next-auth/react";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: product } = useProduct(slug);
   const { data: relatedProductsData } = useRelatedProducts(slug, 4);
   const relatedProducts = relatedProductsData || [];
+  const { data: session } = useSession();
 
   const [selectedMetal, setSelectedMetal] = useState<Metal | undefined>(
-    product?.metals?.[0] || product?.variants[0]?.metals[0]
+    Array.isArray(product?.metals) && product.metals.length > 0
+      ? product.metals[0]
+      : Array.isArray(product?.variants) &&
+          product.variants.length > 0 &&
+          Array.isArray(product.variants[0].metals) &&
+          product.variants[0].metals.length > 0
+        ? product.variants[0].metals[0]
+        : undefined
   );
   const [selectedGemstone, setSelectedGemstone] = useState<
     Gemstone | undefined
-  >(product?.gemstones?.[0] || product?.variants[0]?.gemstones[0]);
+  >(
+    Array.isArray(product?.gemstones) && product.gemstones.length > 0
+      ? product.gemstones[0]
+      : Array.isArray(product?.variants) &&
+          product.variants.length > 0 &&
+          Array.isArray(product.variants[0].gemstones) &&
+          product.variants[0].gemstones.length > 0
+        ? product.variants[0].gemstones[0]
+        : undefined
+  );
 
-  const initialVariant = product?.variants.find((v) => {
-    const metal = v.metals[0];
-    const gemstone = v.gemstones[0];
-    const hasMetal = metal.type === selectedMetal?.type;
-    const hasGemstone = gemstone.type === selectedGemstone?.type;
-    if (hasMetal && hasGemstone) return v;
-  });
+  const initialVariant =
+    product?.variants.find((v) => {
+      if (
+        !Array.isArray(v.metals) ||
+        v.metals.length === 0 ||
+        !Array.isArray(v.gemstones) ||
+        v.gemstones.length === 0
+      ) {
+        return false;
+      }
+      const metal = v.metals[0];
+      const gemstone = v.gemstones[0];
+      const hasMetal = metal && metal.type === selectedMetal?.type;
+      const hasGemstone = gemstone && gemstone.type === selectedGemstone?.type;
+      if (hasMetal && hasGemstone) return v;
+      return false;
+    }) ?? product?.variants[0];
 
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariant | undefined
   >(initialVariant);
 
+  const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
+  const isInWishlist = (productVariantId: string | number) => {
+    return items.some((item) => item.productVariant?.id === productVariantId);
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!selectedVariant || !hydrated) return;
+
+    if (isInWishlist(selectedVariant.id)) {
+      await removeItem(selectedVariant.id, session?.user?.email ?? undefined);
+    } else {
+      await addItem(
+        selectedVariant,
+        product?.slug || "",
+        session?.user?.email ?? undefined
+      );
+    }
+  };
+
+  useEffect(() => {
+    hydrate(session?.user?.email ?? undefined);
+  }, [session, hydrate]);
+
   useEffect(() => {
     if (!product?.variants) return;
     const matchingVariant = product.variants.find(
       (v) =>
+        Array.isArray(v.metals) &&
         v.metals.some((m) => m.type === selectedMetal?.type) &&
+        Array.isArray(v.gemstones) &&
         v.gemstones.some((g) => g.type === selectedGemstone?.type)
     );
     if (matchingVariant) setSelectedVariant(matchingVariant);
@@ -77,9 +131,25 @@ export default function ProductPage() {
 
   const productDetails = [
     { label: "SKU", value: selectedVariant.sku },
-    { label: "Metal", value: `${metals[0].purity} ${metals[0].type}` },
-    { label: `${metals[0].type} Weight`, value: metals[0].weight },
-    { label: `${gemstones[0].type} Weight`, value: gemstones[0].weight },
+    {
+      label: "Metal",
+      value:
+        Array.isArray(metals) && metals.length > 0
+          ? `${metals[0]?.purity ?? ""} ${metals[0]?.type ?? ""}`
+          : "N/A",
+    },
+    {
+      label: `${Array.isArray(metals) && metals.length > 0 ? (metals[0]?.type ?? "Metal") : "Metal"} Weight`,
+      value:
+        Array.isArray(metals) && metals.length > 0
+          ? (metals[0]?.weight ?? "N/A")
+          : "N/A",
+    },
+    {
+      label: `${gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"} Weight`,
+      value:
+        gemstones && gemstones[0]?.weight != null ? gemstones[0].weight : "N/A",
+    },
   ];
 
   const breadcrumbItems = [
@@ -143,8 +213,22 @@ export default function ProductPage() {
                     count={product.reviews?.length || 0}
                     showCount={true}
                   />
-                  <button>
-                    <WishlistIcon />
+                  <button
+                    onClick={handleWishlistToggle}
+                    aria-label={
+                      isInWishlist(selectedVariant.id)
+                        ? "Remove from wishlist"
+                        : "Add to wishlist"
+                    }
+                  >
+                    {isInWishlist(selectedVariant.id) ? (
+                      <Heart
+                        fill="#D1A559"
+                        className="text-secondary-500 h-5 w-5"
+                      />
+                    ) : (
+                      <WishlistIcon className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Lora, Gantari, Dancing_Script } from "next/font/google";
-import Script from "next/script";
 import { QueryProvider } from "../lib/providers/query-provider";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/lib/providers/session-provider";

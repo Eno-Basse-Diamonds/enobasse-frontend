@@ -97,3 +97,13 @@
 .empty-state-icon {
   @apply h-16 w-16 text-[#502B3A];
 }
+
+.wishlist-heart-filled {
+  color: red;
+  transition: color 0.2s;
+}
+
+.wishlist-heart-outline {
+  color: #aaa;
+  transition: color 0.2s;
+}

@@ -14,6 +14,7 @@ export interface Gemstone {
 }
 
 export interface ProductVariant {
+  id: number | string;
   sku: string;
   title: string;
   description: string;

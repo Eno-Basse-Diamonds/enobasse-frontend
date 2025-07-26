@@ -16,15 +16,18 @@ import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
 import { Product, ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { ringSizes } from "@/lib/utils/constants";
 import "./styles.scss";
+import { useWishlistStore } from "@/lib/store/wishlist";
 
 interface ProductQuickViewProps {
   product: Product;
   onClose: () => void;
+  onWishlistToggle: (product: Product) => void;
 }
 
 export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   product,
   onClose,
+  onWishlistToggle,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
@@ -46,11 +49,14 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
     new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
   );
 
+  const { items } = useWishlistStore();
+  const isInWishlist = items.some((item) => item.productVariant?.id === selectedVariant.id);
+
   useEffect(() => {
     const matchingVariant = product.variants.find(
       (v) =>
-        v.metals.some((m) => m.type === selectedMetal?.type) &&
-        v.gemstones.some((g) => g.type === selectedGemstone?.type)
+        Array.isArray(v.metals) && v.metals.some((m) => m.type === selectedMetal?.type) &&
+        Array.isArray(v.gemstones) && v.gemstones.some((g) => g.type === selectedGemstone?.type)
     );
     if (matchingVariant) {
       setSelectedVariant(matchingVariant);
@@ -325,11 +331,32 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
             >
               <div className="product-quick-view__action-buttons hidden md:grid ">
                 <Button size="lg">Add to Cart</Button>
-                <Button variant="outline" size="lg">Wishlist</Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => onWishlistToggle(product)}
+                  aria-label={
+                    isInWishlist ? "Remove from wishlist" : "Add to wishlist"
+                  }
+                >
+                  <span className="ml-2">
+                    {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+                  </span>
+                </Button>
               </div>
               <div className="product-quick-view__action-buttons grid md:hidden">
-                <Button>Add to Cart</Button>
-                <Button variant="outline">Wishlist</Button>
+                <Button variant="outline">Add to Cart</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => onWishlistToggle(product)}
+                  aria-label={
+                    isInWishlist ? "Remove from wishlist" : "Add to wishlist"
+                  }
+                >
+                  <span className="ml-2">
+                    {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+                  </span>
+                </Button>
               </div>
               <Link
                 className="product-quick-view__details-link"
