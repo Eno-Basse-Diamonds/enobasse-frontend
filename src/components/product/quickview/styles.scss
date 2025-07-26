@@ -98,7 +98,7 @@
   }
 
   &__title {
-    @apply text-lg md:text-2xl font-primary text-primary-500;
+    @apply text-lg font-semibold md:text-2xl font-primary text-primary-500;
   }
 
   &__price {

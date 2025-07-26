@@ -2,29 +2,30 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { WishlistItem as WishlistItemInterface } from "@/lib/data/wishlist-items";
+import { WishlistItem as WishlistItemInterface } from "@/lib/types/wishlists";
+import { useWishlistStore } from "@/lib/store/wishlist";
+import { useSession } from "next-auth/react";
+import { getCurrencySymbol } from "@/lib/utils/money";
 
 type WishlistItemProps = {
   item: WishlistItemInterface;
-  onRemove?: (id: string | number) => void;
-  onAddToCart?: (id: string | number) => void;
 };
 
-export const WishlistItem: React.FC<WishlistItemProps> = ({
-  item,
-  onRemove,
-  onAddToCart,
-}) => {
+export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
+  const variant = item.productVariant;
+  const { removeItem } = useWishlistStore();
+  const { data: session } = useSession();
+
   return (
     <li className="wishlist-page__item">
       <div className="wishlist-page__item-content">
         <Link
-          href={`/products/${item.slug}`}
+          href={`/products/${item.productSlug}`}
           className="wishlist-page__image-link"
         >
           <Image
-            src={item.image.src}
-            alt={item.image.alt}
+            src={variant.images?.[0].url}
+            alt={variant.images?.[0]?.alt || variant.title}
             fill
             className="size-full object-contain"
             sizes="(max-width: 768px) 100px, 150px"
@@ -36,20 +37,25 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
             <div>
               <h3 className="wishlist-page__title">
                 <Link
-                  href={`/products/${item.slug}`}
+                  href={`/products/${item.productSlug}`}
                   className="wishlist-page__title-link"
                 >
-                  {item.name}
+                  {variant.title}
                 </Link>
               </h3>
               <p className="wishlist-page__specs">
-                {`${item.gemstone.weight}ct`} {item.gemstone.name} |{" "}
-                {item.metal.purity} {item.metal.name}
+                {variant.gemstones?.[0] &&
+                  (variant.gemstones[0].weight
+                    ? `${variant.gemstones[0].weight}ct ${variant.gemstones[0].type}`
+                    : variant.gemstones[0].type)}
+                {variant.gemstones?.[0] && variant.metals?.[0] ? " | " : null}
+                {variant.metals?.[0] &&
+                  `${variant.metals[0].purity} ${variant.metals[0].type}`}
               </p>
             </div>
             <p className="wishlist-page__price">
-              {item.currency}
-              {item.price.toLocaleString(undefined, {
+              {getCurrencySymbol(variant.currency)}
+              {variant.price?.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -57,34 +63,25 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
           </div>
 
           <div className="wishlist-page__actions-row">
-            <div className="wishlist-page__stock-status">
-              {item.inStock ? (
-                <span className="wishlist-page__in-stock">
-                  <span className="wishlist-page__stock-dot"></span>
-                  In Stock
-                </span>
-              ) : (
-                <span className="wishlist-page__out-of-stock">
-                  Out of Stock
-                </span>
-              )}
-            </div>
-
             <div className="wishlist-page__item-actions">
               <button
                 type="button"
                 className="wishlist-page__add-to-cart"
-                disabled={!item.inStock}
                 onClick={() => {}}
               >
-                Add to Cart
+                ADD TO CART
               </button>
               <button
                 type="button"
                 className="wishlist-page__remove-btn"
-                onClick={() => {}}
+                onClick={async () => {
+                  await removeItem(
+                    variant.id,
+                    session?.user?.email ?? undefined
+                  );
+                }}
               >
-                Remove
+                REMOVE
               </button>
             </div>
           </div>

@@ -5,6 +5,7 @@ import {
 } from "./blog";
 import { CollectionListLoader } from "./collections";
 import { ProductListLoader, ProductsPageLoader } from "./products";
+import { WishlistLoader } from "./wishlist";
 
 export {
   AdminBlogSkeletonLoader,
@@ -12,5 +13,6 @@ export {
   BlogPostDetailLoader,
   CollectionListLoader,
   ProductListLoader,
-  ProductsPageLoader
+  ProductsPageLoader,
+  WishlistLoader
 };

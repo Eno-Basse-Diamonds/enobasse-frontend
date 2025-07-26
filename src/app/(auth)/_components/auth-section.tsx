@@ -69,7 +69,7 @@ export default function AuthSection({
   const addAlert = useAlertStore((state) => state.addAlert);
   const router = useRouter();
   const userEmail = useUserStore((state) => state.email);
-  const setUserEmail = useUserStore((state) => state.setEmail);
+  const setUser = useUserStore((state) => state.setUser);
 
   const showAlert = (type: "success" | "error", message: string) => {
     addAlert({
@@ -106,7 +106,7 @@ export default function AuthSection({
       });
     },
     "forgot-password": async (formData) => {
-      setUserEmail(formData.email);
+      setUser({ id: "", email: formData.email });
       const response = await handleRequestResetPassword(formData);
       if (response?.errors) return response;
       router.push("/password-reset-code");
@@ -167,7 +167,6 @@ export default function AuthSection({
       }
 
       const result = await handler(formData);
-      console.log(result?.errors);
       if (result?.errors) {
         setErrors(result.errors);
       } else {
@@ -196,7 +195,7 @@ export default function AuthSection({
           priority
         />
 
-        <div className="auth-page__logo-container">
+        <Link href="/" className="auth-page__logo-container">
           <Image
             src={logoImage}
             alt="Brand Logo"
@@ -205,7 +204,7 @@ export default function AuthSection({
             quality={100}
             className="auth-page__logo"
           />
-        </div>
+        </Link>
       </section>
 
       <section className="auth-page__form-section">

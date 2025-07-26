@@ -10,7 +10,6 @@ export async function handleRequestResetPassword(
   formData: Record<string, string>
 ) {
   const response = (await requestResetPassword(formData.email)) as any;
-  console.log(response);
   return response;
 }
 

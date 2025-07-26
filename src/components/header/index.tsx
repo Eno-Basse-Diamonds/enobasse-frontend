@@ -19,6 +19,8 @@ import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
 import { SearchSlashIcon } from "lucide-react";
 import { ProductListLoader } from "../loaders";
+import { useWishlistStore } from "@/lib/store/wishlist";
+import { useSession } from "next-auth/react";
 
 interface NavigationItem {
   label: string;
@@ -208,6 +210,9 @@ interface UserActionsProps {
 }
 
 const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
+  const wishlistItems = useWishlistStore((state) => state.items);
+  const { data: session } = useSession();
+
   const actions = [
     {
       href: "#",
@@ -215,8 +220,8 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
       icon: <SearchIcon />,
       onClick: onSearchClick,
     },
-    { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon /> },
-    { href: "/account", label: "Account", icon: <AccountIcon /> },
+    { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon />, showBadge: true },
+    { href: "/account", label: "Account", icon: <AccountIcon />, showDot: !!session?.user },
     { href: "/cart", label: "Cart", icon: <CartIcon /> },
   ];
 
@@ -233,8 +238,23 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
           aria-label={action.label}
           className="header__user-action"
           onClick={action.onClick}
+          style={{ position: 'relative', display: 'inline-block' }}
         >
           {action.icon}
+          {action.label === "Wishlist" && wishlistItems.length > 0 && (
+            <span
+              className="wishlist-badge absolute top-[2px] right-[2px] bg-primary-500 text-white rounded-full text-xs min-w-[18px] h-[18px] flex items-center justify-center px-1.5 z-10 ring-2 ring-white translate-x-[40%] -translate-y-[40%]"
+              aria-label={`Wishlist items: ${wishlistItems.length}`}
+            >
+              {wishlistItems.length}
+            </span>
+          )}
+          {action.label === "Account" && action.showDot && (
+            <span
+              className="absolute top-[2px] right-[2px] bg-primary-500 rounded-full w-2 h-2 z-10 ring-2 ring-white translate-x-[40%] -translate-y-[40%]"
+              aria-label="User authenticated"
+            />
+          )}
         </Link>
       ))}
     </div>
