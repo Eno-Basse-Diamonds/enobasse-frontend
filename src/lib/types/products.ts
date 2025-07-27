@@ -5,12 +5,12 @@ export type MetalName = "White Gold" | "Yellow Gold" | "Rose Gold" | "Platinum";
 export interface Metal {
   type: MetalName;
   purity?: string | null;
-  weight?: string;
+  weightGrams?: string;
 }
 
 export interface Gemstone {
   type: string;
-  weight?: string;
+  weightCarat?: string;
 }
 
 export interface ProductVariant {
@@ -31,7 +31,6 @@ export interface Product {
   slug: string;
   description: string;
   priceRange: { min: number; max: number; currency: string };
-  createdAt: any;
   category: string;
   images: Array<{ url: string; alt: string }>;
   variants: ProductVariant[];
@@ -40,6 +39,7 @@ export interface Product {
   reviews?: Review[];
   ratingDistribution?: RatingDistribution[];
   isCustomDesign?: boolean;
+  createdAt: any;
 }
 
 export interface ProductFilterOptions {

@@ -18,6 +18,7 @@ interface WishlistState {
   addItem: (
     productVariant: ProductVariant,
     productSlug: string,
+    productCategory: string,
     accountEmail?: string
   ) => Promise<void>;
   removeItem: (
@@ -68,12 +69,13 @@ export const useWishlistStore = create<WishlistState>()(
       addItem: async (
         productVariant: ProductVariant,
         productSlug: string,
+        productCategory: string,
         accountEmail?: string
       ) => {
         set({ loading: true, error: null });
         try {
           if (accountEmail) {
-            await addToWishlist(accountEmail, productVariant.id, productSlug);
+            await addToWishlist(accountEmail, productVariant.id, productSlug, productCategory);
             const response = await getWishlist(accountEmail);
             set({ items: response.items });
           } else {
@@ -90,6 +92,7 @@ export const useWishlistStore = create<WishlistState>()(
                 addedAt: new Date().toISOString(),
                 productVariant,
                 productSlug,
+                productCategory: productCategory || "",
               };
               return { items: [...state.items, newItem] };
             });

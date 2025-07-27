@@ -20,6 +20,7 @@ import { EmptyState } from "../empty-state";
 import { SearchSlashIcon } from "lucide-react";
 import { ProductListLoader } from "../loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
+import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 
 interface NavigationItem {
@@ -211,6 +212,7 @@ interface UserActionsProps {
 
 const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
   const wishlistItems = useWishlistStore((state) => state.items);
+  const cartItems = useCartStore((state) => state.items);
   const { data: session } = useSession();
 
   const actions = [
@@ -222,7 +224,7 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
     },
     { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon />, showBadge: true },
     { href: "/account", label: "Account", icon: <AccountIcon />, showDot: !!session?.user },
-    { href: "/cart", label: "Cart", icon: <CartIcon /> },
+    { href: "/cart", label: "Cart", icon: <CartIcon />, showBadge: true },
   ];
 
   return (
@@ -247,6 +249,14 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
               aria-label={`Wishlist items: ${wishlistItems.length}`}
             >
               {wishlistItems.length}
+            </span>
+          )}
+          {action.label === "Cart" && cartItems.length > 0 && (
+            <span
+              className="cart-badge absolute top-[2px] right-[2px] bg-primary-500 text-white rounded-full text-xs min-w-[18px] h-[18px] flex items-center justify-center px-1.5 z-10 ring-2 ring-white translate-x-[40%] -translate-y-[40%]"
+              aria-label={`Cart items: ${cartItems.length}`}
+            >
+              {cartItems.length}
             </span>
           )}
           {action.label === "Account" && action.showDot && (

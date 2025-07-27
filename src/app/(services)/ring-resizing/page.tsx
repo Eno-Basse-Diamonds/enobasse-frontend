@@ -8,24 +8,7 @@ import { RingDetailsForm } from "./_components/ring-details-form";
 import { AdditionalInfoForm } from "./_components/additional-info-form";
 import { Alert } from "@/components/alert";
 import { useRingResizingStore } from "@/lib/store/ring-resizing";
-import { CldUploadWidget } from "next-cloudinary";
 import { sendRingResizingMessage } from "@/lib/api/contact";
-
-interface FormData {
-  personalInfo: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-  };
-  ringType: string;
-  currentSize: string;
-  desiredSize: string;
-  urgency: string;
-  inscriptionText: string;
-  notes: string;
-  images: string[];
-}
 
 interface FormErrors {
   firstName?: string;

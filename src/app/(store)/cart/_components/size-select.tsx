@@ -4,10 +4,10 @@ import { ChevronDownIcon } from "@/components/icons";
 
 interface SizeSelectProps {
   id: string | number;
-  sizes: string[] | number[];
-  selectedSize: string | number;
+  sizes: number[];
+  selectedSize?: number;
   mobile?: boolean;
-  onChange?: (size: string) => void;
+  onChange?: (size: number) => void;
 }
 
 export const SizeSelect = ({
@@ -15,6 +15,7 @@ export const SizeSelect = ({
   sizes,
   selectedSize,
   mobile = false,
+  onChange,
 }: SizeSelectProps) => {
   return (
     <div className={`${mobile ? "my-2 md:hidden max-w-28" : "w-28"}`}>
@@ -28,9 +29,10 @@ export const SizeSelect = ({
         <select
           id={`size-${mobile ? "mobile" : "desktop"}-${id}`}
           className="cart-page__size-select"
-          defaultValue={selectedSize}
-          onChange={(e) => {}}
+          value={selectedSize ?? ""}
+          onChange={(e) => onChange && onChange(Number(e.target.value))}
         >
+          <option value="">Select Size</option>
           {sizes.map((size) => (
             <option key={size} value={size}>
               Size {size}

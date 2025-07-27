@@ -8,11 +8,12 @@ export const getWishlist = async (accountEmail: string): Promise<Wishlist> => {
 export const addToWishlist = async (
   accountEmail: string,
   productVariantId: string | number,
-  productSlug: string
+  productSlug: string,
+  productCategory?: string
 ): Promise<WishlistItem> => {
   return api.post(
     `/wishlist`,
-    { productVariantId, productSlug },
+    { productVariantId, productSlug, productCategory },
     { params: { accountEmail } }
   );
 };

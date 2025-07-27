@@ -5,83 +5,129 @@ import Link from "next/link";
 import { CloseIcon } from "@/components/icons";
 import { QuantityControl } from "./quantity-control";
 import { SizeSelect } from "./size-select";
-import { StockStatus } from "./stock-status";
-import { CartItem } from "@/lib/data/cart-items";
+import { CartItem } from "@/lib/types/carts";
+import { useCartStore } from "@/lib/store/cart";
+import { useSession } from "next-auth/react";
+import { getCurrencySymbol } from "@/lib/utils/money";
+import { Engraving } from "@/app/(store)/products/[slug]/_components/engraving";
 
 interface CartItemCardProps {
   item: CartItem;
-  ringSizes: string[];
-  onQuantityChange?: (id: string, quantity: number) => void;
-  onRemove?: (id: string) => void;
-  onSizeChange?: (id: string, size: string) => void;
+  ringSizes: number[];
 }
 
 export const CartItemCard: React.FC<CartItemCardProps> = ({
   item,
   ringSizes,
 }) => {
+  const { removeItem, updateItem } = useCartStore();
+  const { data: session } = useSession();
+  const accountEmail = session?.user?.email ?? undefined;
+
+  const handleDecrement = () => {
+    if (item.quantity > 1) {
+      updateItem(
+        item.productVariant.id,
+        { quantity: item.quantity - 1 },
+        accountEmail
+      );
+    }
+  };
+
+  const handleIncrement = () => {
+    updateItem(
+      item.productVariant.id,
+      { quantity: item.quantity + 1 },
+      accountEmail
+    );
+  };
+
+  const handleRemove = () => {
+    removeItem(item.productVariant.id, accountEmail);
+  };
+
+  const imageUrl =
+    item.productVariant.images?.[0]?.url || "/images/cart-item.png";
+  const imageAlt = item.productVariant.images?.[0]?.alt || "Product image";
+  const title = item.productVariant.title || "Product";
+  const price = item.productVariant.price || 0;
+  const currency = item.productVariant.currency || "$";
+  const metals = item.productVariant.metals;
+  const gemstones = item.productVariant.gemstones;
+  const metalStr =
+    metals && metals.length > 0
+      ? `${metals[0].purity || ""} ${metals[0].type || ""}`
+      : "";
+  const gemstoneStr =
+    gemstones && gemstones.length > 0
+      ? `${gemstones[0].weightCarat ? `${gemstones[0].weightCarat}ct ` : ""}${gemstones[0].type || ""}`
+      : "";
+
+  const engravableProducts = ["Rings", "Wristwears", "Neckpieces"];
+  console.log(item.productCategory)
+  const canBeEngraved = engravableProducts.includes(item.productCategory);
+  const isRing = item.productCategory === "Rings" ? true : false;
+
   return (
     <li className="cart-page__item">
       <div className="cart-page__item-content">
-        <div className="cart-page__image-container">
+        <Link
+          href={`/products/${item.productSlug}`}
+          className="cart-page__image-container"
+        >
           <Image
-            src={item.image.src}
-            alt={item.image.alt}
+            src={imageUrl}
+            alt={imageAlt}
             fill
-            className="size-full object-contain"
+            className="size-full object-cover"
           />
-        </div>
+        </Link>
 
         <div className="cart-page__details">
           <div className="flex flex-col h-full">
             <div className="flex justify-between gap-4">
               <div className="flex-1">
                 <Link
-                  href={`/products/${item.slug}`}
+                  href={`/products/${item.productSlug}`}
                   className="hover:underline transition-all"
                 >
-                  <h3 className="cart-page__title">{item.name}</h3>
+                  <h3 className="cart-page__title">{title}</h3>
                 </Link>
 
                 <p className="cart-page__specs">
-                  {`${item.gemstone.weight}ct ${item.gemstone.name} | ${item.metal.purity} ${item.metal.name}`}
+                  {gemstoneStr && metalStr
+                    ? `${gemstoneStr} | ${metalStr}`
+                    : metalStr || gemstoneStr}
                 </p>
 
                 <p className="cart-page__price">
-                  {item.currency}
-                  {item.price.toLocaleString(undefined, {
+                  {getCurrencySymbol(currency)}
+                  {price.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
                 </p>
-
-                {item.category === "ring" && (
-                  <SizeSelect
-                    id={item.id}
-                    sizes={ringSizes}
-                    selectedSize={item.size || 6}
-                    mobile
-                  />
-                )}
               </div>
 
               <div className="hidden md:flex flex-col items-end gap-2">
-                {item.category === "ring" && (
-                  <SizeSelect
-                    id={item.id}
-                    sizes={ringSizes}
-                    selectedSize={item.size || "6"}
-                  />
-                )}
-
                 <QuantityControl
                   quantity={item.quantity}
-                  onDecrement={() => {}}
-                  onIncrement={() => {}}
+                  onDecrement={handleDecrement}
+                  onIncrement={handleIncrement}
                 />
+                {isRing && (
+                  <SizeSelect
+                    id="cart-ring-size"
+                    sizes={ringSizes}
+                    selectedSize={item.size}
+                    onChange={(size) =>
+                      updateItem(item.productVariant.id, { size }, accountEmail)
+                    }
+                  />
+                )}
               </div>
 
-              <button className="cart-page__remove-btn" onClick={() => {}}>
+              <button className="cart-page__remove-btn" onClick={handleRemove}>
                 <CloseIcon className="h-5 w-5" />
               </button>
             </div>
@@ -90,12 +136,44 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               <div className="flex md:hidden items-center gap-2">
                 <QuantityControl
                   quantity={item.quantity}
-                  onDecrement={() => {}}
-                  onIncrement={() => {}}
+                  onDecrement={handleDecrement}
+                  onIncrement={handleIncrement}
                 />
+                {isRing && (
+                  <SizeSelect
+                    id="cart-ring-size-mobile"
+                    sizes={ringSizes}
+                    selectedSize={item.size}
+                    mobile
+                    onChange={(size) =>
+                      updateItem(item.productVariant.id, { size }, accountEmail)
+                    }
+                  />
+                )}
               </div>
 
-              <StockStatus inStock={item.inStock} />
+              <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-4 w-full justify-between">
+                <div className="cart-page__total-price text-primary-500 text-base whitespace-nowrap">
+                  <span className="font-semibold">Total:</span>{" "}
+                  {getCurrencySymbol(currency)}
+                  {(price * item.quantity).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
+                {canBeEngraved && (
+                  <Engraving
+                    engraving={item.engraving}
+                    setEngraving={(val) =>
+                      updateItem(
+                        item.productVariant.id,
+                        { engraving: val },
+                        accountEmail
+                      )
+                    }
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
