@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import { getCurrencySymbol } from "@/lib/utils/money";
@@ -28,9 +29,12 @@ import { WishlistIcon } from "@/components/icons";
 import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { calculateAverageRating } from "@/lib/utils/reviews";
 import { useWishlistStore } from "@/lib/store/wishlist";
+import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 
 export default function ProductPage() {
+  const router = useRouter();
+
   const { slug } = useParams<{ slug: string }>();
   const { data: product } = useProduct(slug);
   const { data: relatedProductsData } = useRelatedProducts(slug, 4);
@@ -87,6 +91,14 @@ export default function ProductPage() {
     return items.some((item) => item.productVariant?.id === productVariantId);
   };
 
+  const [engraving, setEngraving] = useState<
+    { text: string; fontStyle: string } | undefined
+  >(undefined);
+  const [selectedSize, setSelectedSize] = useState<number | undefined>(
+    undefined
+  );
+  const quantity = 1;
+
   const handleWishlistToggle = async () => {
     if (!selectedVariant || !hydrated) return;
 
@@ -96,9 +108,26 @@ export default function ProductPage() {
       await addItem(
         selectedVariant,
         product?.slug || "",
+        product?.category || "",
         session?.user?.email ?? undefined
       );
     }
+  };
+
+  const { addItem: addCartItem } = useCartStore();
+
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+    addCartItem(
+      selectedVariant,
+      product?.slug || "",
+      product?.category || "",
+      quantity,
+      session?.user?.email ?? undefined,
+      selectedSize,
+      engraving
+    );
+    router.push("/cart");
   };
 
   useEffect(() => {
@@ -125,7 +154,7 @@ export default function ProductPage() {
   const uniqueGemstones = Array.from(
     new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
   );
-  const isRing = product.category === "rings";
+  const isRing = product.category === "Rings";
 
   const { metals, gemstones } = selectedVariant;
 
@@ -142,13 +171,15 @@ export default function ProductPage() {
       label: `${Array.isArray(metals) && metals.length > 0 ? (metals[0]?.type ?? "Metal") : "Metal"} Weight`,
       value:
         Array.isArray(metals) && metals.length > 0
-          ? (metals[0]?.weight ?? "N/A")
+          ? (metals[0]?.weightGrams ?? "N/A")
           : "N/A",
     },
     {
       label: `${gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"} Weight`,
       value:
-        gemstones && gemstones[0]?.weight != null ? gemstones[0].weight : "N/A",
+        gemstones && gemstones[0]?.weightCarat != null
+          ? gemstones[0].weightCarat
+          : "N/A",
     },
   ];
 
@@ -257,8 +288,17 @@ export default function ProductPage() {
                   )}
 
                 <div className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]">
-                  <Engraving />
-                  {isRing && <RingSizeSelector />}
+                  <Engraving
+                    engraving={engraving}
+                    setEngraving={setEngraving}
+                  />
+                  {isRing && (
+                    <RingSizeSelector
+                      selectedSize={selectedSize}
+                      onSetSelectedSize={setSelectedSize}
+                      isDropdown={true}
+                    />
+                  )}
                 </div>
                 <p className="product-page__price">
                   Price:{" "}
@@ -268,13 +308,15 @@ export default function ProductPage() {
                   </span>
                 </p>
                 <div className="product-page__actions hidden md:flex">
-                  <Button size="xl">Add to Cart</Button>
+                  <Button size="xl" onClick={handleAddToCart}>
+                    Add to Cart
+                  </Button>
                   <Button variant="outline" size="xl">
                     Buy Now
                   </Button>
                 </div>
                 <div className="product-page__actions flex md:hidden">
-                  <Button>Add to Cart</Button>
+                  <Button onClick={handleAddToCart}>Add to Cart</Button>
                   <Button variant="outline">Buy Now</Button>
                 </div>
               </div>

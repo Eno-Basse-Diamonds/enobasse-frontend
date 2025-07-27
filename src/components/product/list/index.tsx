@@ -8,9 +8,9 @@ import { HeartIcon, EyeOpenIcon } from "@/components/icons";
 import { ProductQuickView } from "../quickview";
 import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
-import "./styles.scss";
 import { Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
+import "./styles.scss";
 
 interface ProductListProps {
   products: Product[];
@@ -52,75 +52,77 @@ const ProductListItem = React.memo(
     isInWishlist: boolean;
     onWishlistToggle: (e: React.MouseEvent) => void;
     onQuickView: (e: React.MouseEvent) => void;
-  }) => (
-    <motion.div
-      className="product-list__item group"
-      variants={item}
-      whileHover={hoverScale}
-    >
-      <Link href={`/products/${product.slug}`} className="product-list__link">
-        <div className="product-list__image-container">
-          <Image
-            src={product.images[0].url}
-            alt={product.images[0].alt}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className={`product-list__image bg-gray-100 ${
-              product.images[1] ? "product-list__image--primary" : ""
-            }`}
-            quality={100}
-          />
-          {product.images[1] && (
+  }) => {
+    return (
+      <motion.div
+        className="product-list__item group"
+        variants={item}
+        whileHover={hoverScale}
+      >
+        <Link href={`/products/${product.slug}`} className="product-list__link">
+          <div className="product-list__image-container">
             <Image
-              src={product.images[1].url}
-              alt={product.images[1].alt}
+              src={product.images[0].url}
+              alt={product.images[0].alt}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="product-list__image product-list__image--secondary bg-gray-100"
+              className={`product-list__image bg-gray-100 ${
+                product.images[1] ? "product-list__image--primary" : ""
+              }`}
               quality={100}
             />
+            {product.images[1] && (
+              <Image
+                src={product.images[1].url}
+                alt={product.images[1].alt}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="product-list__image product-list__image--secondary bg-gray-100"
+                quality={100}
+              />
+            )}
+            {!product.isCustomDesign && (
+              <span className="product-list__instore-tag">In Store</span>
+            )}
+          </div>
+
+          <motion.div className="product-list__details">
+            <h3 className="product-list__title">{product.name}</h3>
+            <p className="product-list__price">
+              {product.priceRange.min === product.priceRange.max
+                ? `$${product.priceRange.min.toLocaleString()}`
+                : `$${product.priceRange.min.toLocaleString()} - $${product.priceRange.max.toLocaleString()}`}
+            </p>
+          </motion.div>
+        </Link>
+
+        <motion.button
+          className="product-list__button product-list__button--quick-view"
+          onClick={onQuickView}
+          whileHover={buttonHover}
+          whileTap={{ scale: 0.95 }}
+        >
+          <EyeOpenIcon className="product-list__icon" />
+        </motion.button>
+
+        <motion.button
+          className={`product-list__button product-list__button--wishlist ${
+            isInWishlist ? "product-list__button--active" : ""
+          }`}
+          onClick={onWishlistToggle}
+          whileHover={buttonHover}
+          whileTap={{ scale: 0.95 }}
+          aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+        >
+          {isInWishlist ? (
+            <Heart fill="#D1A559" className="text-secondary-500 h-4 w-4" />
+          ) : (
+            <HeartIcon className="product-list__icon" />
           )}
-          {!product.isCustomDesign && (
-            <span className="product-list__instore-tag">In Store</span>
-          )}
-        </div>
-
-        <motion.div className="product-list__details">
-          <h3 className="product-list__title">{product.name}</h3>
-          <p className="product-list__price">
-            {product.priceRange.min === product.priceRange.max
-              ? `$${product.priceRange.min.toLocaleString()}`
-              : `$${product.priceRange.min.toLocaleString()} - $${product.priceRange.max.toLocaleString()}`}
-          </p>
-        </motion.div>
-      </Link>
-
-      <motion.button
-        className="product-list__button product-list__button--quick-view"
-        onClick={onQuickView}
-        whileHover={buttonHover}
-        whileTap={{ scale: 0.95 }}
-      >
-        <EyeOpenIcon className="product-list__icon" />
-      </motion.button>
-
-      <motion.button
-        className={`product-list__button product-list__button--wishlist ${
-          isInWishlist ? "product-list__button--active" : ""
-        }`}
-        onClick={onWishlistToggle}
-        whileHover={buttonHover}
-        whileTap={{ scale: 0.95 }}
-        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-      >
-        {isInWishlist ? (
-          <Heart fill="#D1A559" className="text-secondary-500 h-4 w-4" />
-        ) : (
-          <HeartIcon className="product-list__icon" />
-        )}
-      </motion.button>
-    </motion.div>
-  )
+        </motion.button>
+      </motion.div>
+    );
+  }
 );
 ProductListItem.displayName = "ProductListItem";
 
@@ -156,6 +158,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
         await addItem(
           product.variants[0],
           product.slug,
+          product.category,
           session?.user?.email ?? undefined
         );
       }

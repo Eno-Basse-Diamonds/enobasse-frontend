@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
@@ -13,10 +14,12 @@ import {
   MinusIcon,
 } from "@/components/icons";
 import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
+import { RingSizeSelector } from "@/components/select-menu";
 import { Product, ProductVariant, Metal, Gemstone } from "@/lib/types/products";
-import { ringSizes } from "@/lib/utils/constants";
-import "./styles.scss";
 import { useWishlistStore } from "@/lib/store/wishlist";
+import { useCartStore } from "@/lib/store/cart";
+import { useSession } from "next-auth/react";
+import "./styles.scss";
 
 interface ProductQuickViewProps {
   product: Product;
@@ -29,8 +32,12 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   onClose,
   onWishlistToggle,
 }) => {
+  const router = useRouter();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState<number | undefined>(
+    undefined
+  );
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     product.variants[0]
@@ -43,20 +50,39 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   >(product.gemstones?.[0]);
 
   const hasMultipleVariants = product.variants.length > 1;
-  const isRing = product.category === "rings";
+  const isRing = product.category === "Rings";
 
   const uniqueGemstones = Array.from(
     new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
   );
 
   const { items } = useWishlistStore();
-  const isInWishlist = items.some((item) => item.productVariant?.id === selectedVariant.id);
+  const isInWishlist = items.some(
+    (item) => item.productVariant?.id === selectedVariant.id
+  );
+
+  const { addItem } = useCartStore();
+  const { data: session } = useSession();
+
+  const onAddToCart = () => {
+    addItem(
+      selectedVariant,
+      product.slug,
+      product.category,
+      quantity,
+      session?.user?.email ?? undefined,
+      selectedSize
+    );
+    router.push("/cart");
+  };
 
   useEffect(() => {
     const matchingVariant = product.variants.find(
       (v) =>
-        Array.isArray(v.metals) && v.metals.some((m) => m.type === selectedMetal?.type) &&
-        Array.isArray(v.gemstones) && v.gemstones.some((g) => g.type === selectedGemstone?.type)
+        Array.isArray(v.metals) &&
+        v.metals.some((m) => m.type === selectedMetal?.type) &&
+        Array.isArray(v.gemstones) &&
+        v.gemstones.some((g) => g.type === selectedGemstone?.type)
     );
     if (matchingVariant) {
       setSelectedVariant(matchingVariant);
@@ -256,73 +282,58 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 </motion.div>
               )}
 
-            {isRing && (
+            <div className="flex flex-row justify-between gap-x-2">
               <motion.div
                 className="product-quick-view__section"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
+                transition={{ delay: 0.4 }}
               >
-                <div className="flex justify-between items-center w-full mb-2">
-                  <h3 className="product-quick-view__section-title">Size</h3>
-                  <Link
-                    href="/ring-size-guide"
-                    className="product-quick-view__size-guide-link"
-                  >
-                    Size guide
-                  </Link>
-                </div>
-                <div className="product-quick-view__size-options">
-                  {ringSizes.map((size) => (
+                <div>
+                  <h3 className="product-quick-view__section-title">
+                    Quantity
+                  </h3>
+                  <div className="product-quick-view__quantity-controls">
                     <motion.button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`product-quick-view__size-button ${
-                        selectedSize === size
-                          ? "product-quick-view__size-button--selected"
-                          : "product-quick-view__size-button--unselected"
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      onClick={() =>
+                        setQuantity((prev) => Math.max(1, prev - 1))
+                      }
+                      className="product-quick-view__quantity-button"
+                      whileHover={buttonHover}
+                      whileTap={buttonTap}
                     >
-                      {size}
+                      <MinusIcon className="h-3 w-3" />
                     </motion.button>
-                  ))}
+                    <span className="product-quick-view__quantity-value">
+                      {quantity}
+                    </span>
+                    <motion.button
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                      className="product-quick-view__quantity-button"
+                      whileHover={buttonHover}
+                      whileTap={buttonTap}
+                    >
+                      <PlusIcon className="h-3 w-3" />
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
-            )}
 
-            <motion.div
-              className="product-quick-view__section"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <div>
-                <h3 className="product-quick-view__section-title">Quantity</h3>
-                <div className="product-quick-view__quantity-controls">
-                  <motion.button
-                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                    className="product-quick-view__quantity-button"
-                    whileHover={buttonHover}
-                    whileTap={buttonTap}
-                  >
-                    <MinusIcon className="h-3 w-3" />
-                  </motion.button>
-                  <span className="product-quick-view__quantity-value">
-                    {quantity}
-                  </span>
-                  <motion.button
-                    onClick={() => setQuantity((prev) => prev + 1)}
-                    className="product-quick-view__quantity-button"
-                    whileHover={buttonHover}
-                    whileTap={buttonTap}
-                  >
-                    <PlusIcon className="h-3 w-3" />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
+              {isRing && (
+                <motion.div
+                  className="product-quick-view__section"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  <h3 className="product-quick-view__section-title">Size</h3>
+                  <RingSizeSelector
+                    selectedSize={selectedSize}
+                    onSetSelectedSize={setSelectedSize}
+                  />
+                </motion.div>
+              )}
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -330,7 +341,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               transition={{ delay: 0.45 }}
             >
               <div className="product-quick-view__action-buttons hidden md:grid ">
-                <Button size="lg">Add to Cart</Button>
+                <Button size="lg" onClick={onAddToCart}>
+                  Add to Cart
+                </Button>
                 <Button
                   variant="outline"
                   size="lg"
@@ -345,7 +358,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 </Button>
               </div>
               <div className="product-quick-view__action-buttons grid md:hidden">
-                <Button variant="outline">Add to Cart</Button>
+                <Button variant="outline" onClick={onAddToCart}>
+                  Add to Cart
+                </Button>
                 <Button
                   variant="outline"
                   onClick={() => onWishlistToggle(product)}

@@ -5,7 +5,10 @@ import { PlusIcon, CloseIcon } from "@/components/icons";
 import * as motion from "motion/react-client";
 import { useAnimation, AnimatePresence } from "motion/react";
 
-export const Engraving = () => {
+export const Engraving: React.FC<{
+  engraving: { text: string; fontStyle: string } | undefined;
+  setEngraving: (val: { text: string; fontStyle: string } | undefined) => void;
+}> = ({ engraving, setEngraving }) => {
   const [showEngravingModal, setShowEngravingModal] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -26,12 +29,12 @@ export const Engraving = () => {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
-      const header = document.querySelector('header');
+      const header = document.querySelector("header");
       if (header) header.style.zIndex = "0";
     } else {
-      const header = document.querySelector('header');
+      const header = document.querySelector("header");
       if (header) header.style.zIndex = "20";
-      const timer = setTimeout(() =>  setIsMounted(false), 50);
+      const timer = setTimeout(() => setIsMounted(false), 50);
       return () => clearTimeout(timer);
     }
 
@@ -42,32 +45,71 @@ export const Engraving = () => {
     };
   }, [showEngravingModal]);
 
+  const handleRemoveEngraving = () => {
+    setEngraving(undefined);
+  };
+
   return (
     <>
-      <motion.button
-        className="engraving__button"
-        onClick={() => setShowEngravingModal(true)}
-        whileHover={{
-          color: "#3A1E2B",
-          scale: 1.02,
-          transition: { duration: 0.2 },
-        }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <motion.div whileHover={{ rotate: 90 }}>
-          <PlusIcon className="size-5" />
+      {engraving ? (
+        <motion.div
+          className="flex items-center justify-between gap-3 py-2 px-3 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
+          onClick={() => setShowEngravingModal(true)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          whileHover={{ y: -1 }}
+          role="button"
+          aria-label={`Edit engraving: ${engraving.text}`}
+          tabIndex={0}
+        >
+          <span
+            className="text-sm font-medium text-primary-800 flex-grow truncate"
+            style={{ fontFamily: engraving.fontStyle }}
+            title={engraving.text}
+          >
+            {engraving.text}
+          </span>
+
+          <motion.button
+            className="flex items-center justify-center p-1 text-primary-800 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveEngraving();
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Remove engraving"
+          >
+            <CloseIcon className="w-4 h-4" />
+          </motion.button>
         </motion.div>
-        Add Engraving
-      </motion.button>
+      ) : (
+        <motion.button
+          className="engraving__button"
+          onClick={() => setShowEngravingModal(true)}
+          whileHover={{
+            color: "#3A1E2B",
+            scale: 1.02,
+            transition: { duration: 0.2 },
+          }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div whileHover={{ rotate: 90 }}>
+            <PlusIcon className="w-5 h-5" />
+          </motion.div>
+          Add Engraving
+        </motion.button>
+      )}
 
       <AnimatePresence>
         {isMounted && (
-          <div className="engraving__modal-overlay">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="engraving__modal-backdrop"
+              className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setShowEngravingModal(false)}
             />
 
@@ -77,25 +119,31 @@ export const Engraving = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="engraving__modal-content"
+              className="relative z-10 w-full max-w-md p-6 bg-white shadow-xl"
             >
-              <div className="engraving__modal-header">
+              <div className="space-y-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="engraving__modal-title">Add Engraving</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Add Engraving
+                  </h3>
                   <motion.button
                     onClick={() => setShowEngravingModal(false)}
-                    className="engraving__modal-close"
+                    className="text-gray-500 hover:text-primary-800"
                     whileHover={{
                       scale: 1.1,
                       color: "#502B3A",
                     }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <CloseIcon className="h-6 w-6" />
+                    <CloseIcon className="w-6 h-6" />
                   </motion.button>
                 </div>
-                <div className="engraving__modal-body">
-                  <EngravingPanel />
+                <div className="space-y-4">
+                  <EngravingPanel
+                    engraving={engraving}
+                    setEngraving={setEngraving}
+                    closeModal={() => setShowEngravingModal(false)}
+                  />
                 </div>
               </div>
             </motion.div>
@@ -106,14 +154,26 @@ export const Engraving = () => {
   );
 };
 
-const EngravingPanel: React.FC = () => {
+const EngravingPanel: React.FC<{
+  engraving: { text: string; fontStyle: string } | undefined;
+  setEngraving: (val: { text: string; fontStyle: string }) => void;
+  closeModal: () => void;
+}> = ({ engraving, setEngraving, closeModal }) => {
   const MAX_CHARS = 20;
-  const [engravingText, setEngravingText] = useState("");
+  const [engravingText, setEngravingText] = useState(engraving?.text || "");
   const [selectedFont, setSelectedFont] = useState({
-    name: "Arial",
-    fontFamily: "Arial, sans-serif",
+    name: engraving?.fontStyle || "Arial",
+    fontFamily: engraving?.fontStyle || "Arial, sans-serif",
   });
   const charsLeftControls = useAnimation();
+
+  useEffect(() => {
+    setEngravingText(engraving?.text || "");
+    setSelectedFont({
+      name: engraving?.fontStyle || "Arial",
+      fontFamily: engraving?.fontStyle || "Arial, sans-serif",
+    });
+  }, [engraving]);
 
   const fonts = [
     { name: "Arial", fontFamily: "Arial, sans-serif" },
@@ -124,12 +184,14 @@ const EngravingPanel: React.FC = () => {
     { name: "Dancing Script", fontFamily: '"Dancing Script", cursive' },
   ];
 
-  const handleSaveEngraving = () => {};
+  const handleSaveEngraving = () => {
+    setEngraving({ text: engravingText, fontStyle: selectedFont.fontFamily });
+    closeModal();
+  };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= MAX_CHARS) {
       setEngravingText(e.target.value);
-
       if (e.target.value.length > engravingText.length) {
         charsLeftControls.start({
           scale: [1, 1.1, 1],
@@ -170,6 +232,7 @@ const EngravingPanel: React.FC = () => {
             <motion.button
               key={font.name}
               className={`engraving-panel__font-button ${
+                engraving?.fontStyle === font.fontFamily ||
                 selectedFont.name === font.name
                   ? "engraving-panel__font-button--selected"
                   : ""

@@ -1,14 +1,14 @@
 import { SectionContainer, PageHeading } from "@/components";
 import { ChevronDownIcon } from "@/components/icons";
-import { getCartItems } from "@/lib/api/cart";
 import { CheckoutFormSection } from "./_components/checkout-form-section";
 import { OrderSummary } from "./_components/order-summary";
 import { PaymentMethod } from "./_components/payment-method";
 import { FormInput } from "./_components/form-input";
+import { useCartStore } from "@/lib/store/cart";
 import "./styles.scss";
 
-export default async function CheckoutPage() {
-  const cartItems = await getCartItems();
+export default function CheckoutPage() {
+  const { items: cartItems } = useCartStore();
 
   return (
     <div className="checkout-page">

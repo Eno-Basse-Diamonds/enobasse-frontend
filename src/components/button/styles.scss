@@ -32,7 +32,7 @@
 
   // Color variants
   &--primary {
-    @apply bg-primary-500 text-white border-transparent hover:bg-primary-400;
+    @apply bg-primary-500 text-white border-transparent hover:bg-primary-500/90;
   }
 
   &--secondary {

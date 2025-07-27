@@ -13,4 +13,5 @@ export interface WishlistItem {
   addedAt: string;
   productSlug: string;
   productVariant: ProductVariant;
+  productCategory: string;
 }

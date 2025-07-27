@@ -3,16 +3,19 @@ import { CheckoutCartItem } from "./chekout-cart-item";
 import { CartItem } from "@/lib/data/cart-items";
 
 type OrderSummaryProps = {
-  items: CartItem[];
+  items: Array<{
+    productVariant: { price: number; currency?: string };
+    quantity: number;
+  }>;
 };
 
 export function OrderSummary({ items }: OrderSummaryProps) {
   const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
+    (sum, item) => sum + item.productVariant.price * item.quantity,
+    0
   );
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const currency = items[0]?.currency || "$";
+  const currency = items[0]?.productVariant.currency || "$";
 
   const formattedPrice = (amount: number) => {
     return amount.toLocaleString(undefined, {
@@ -27,9 +30,9 @@ export function OrderSummary({ items }: OrderSummaryProps) {
 
       <div className="order-summary__items-list">
         <ul className="divide-y divide-gray-200">
-          {items.map((item) => (
+          {/* {items.map((item) => (
             <CheckoutCartItem key={item.id} item={item} />
-          ))}
+          ))} */}
         </ul>
       </div>
 

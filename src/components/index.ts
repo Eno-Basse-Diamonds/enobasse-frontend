@@ -25,6 +25,7 @@ import { MetalTypeSelector } from "./checkbox";
 import { GemstoneSelector } from "./checkbox";
 import { FilterPanelDesktop, FilterPanelMobile } from "./product/filter-panel";
 import { Alert } from "./alert";
+import { SizeGuide } from "./size-guide";
 
 export {
   Header,
@@ -57,4 +58,5 @@ export {
   FilterPanelDesktop,
   FilterPanelMobile,
   Alert,
+  SizeGuide,
 };

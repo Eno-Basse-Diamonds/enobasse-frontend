@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { WishlistItem as WishlistItemInterface } from "@/lib/types/wishlists";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useSession } from "next-auth/react";
+import { useCartStore } from "@/lib/store/cart";
 import { getCurrencySymbol } from "@/lib/utils/money";
 
 type WishlistItemProps = {
@@ -12,9 +14,26 @@ type WishlistItemProps = {
 };
 
 export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
+  const router = useRouter();
+
   const variant = item.productVariant;
   const { removeItem } = useWishlistStore();
   const { data: session } = useSession();
+
+  const { addItem: addCartItem } = useCartStore();
+  const quantity = 1;
+
+  const handleAddToCart = () => {
+    addCartItem(
+      variant,
+      item.productSlug,
+      item.productCategory,
+      quantity,
+      session?.user?.email ?? undefined
+    );
+    removeItem(variant.id, session?.user?.email ?? undefined);
+    router.push("/cart");
+  };
 
   return (
     <li className="wishlist-page__item">
@@ -45,8 +64,8 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
               </h3>
               <p className="wishlist-page__specs">
                 {variant.gemstones?.[0] &&
-                  (variant.gemstones[0].weight
-                    ? `${variant.gemstones[0].weight}ct ${variant.gemstones[0].type}`
+                  (variant.gemstones[0].weightCarat
+                    ? `${variant.gemstones[0].weightCarat}ct ${variant.gemstones[0].type}`
                     : variant.gemstones[0].type)}
                 {variant.gemstones?.[0] && variant.metals?.[0] ? " | " : null}
                 {variant.metals?.[0] &&
@@ -67,7 +86,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
               <button
                 type="button"
                 className="wishlist-page__add-to-cart"
-                onClick={() => {}}
+                onClick={handleAddToCart}
               >
                 ADD TO CART
               </button>

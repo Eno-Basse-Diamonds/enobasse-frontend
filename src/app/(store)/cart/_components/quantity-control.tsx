@@ -4,12 +4,14 @@ interface QuantityControlProps {
   quantity: number;
   onDecrement: () => void;
   onIncrement: () => void;
+  onChange?: (value: number) => void;
 }
 
 export const QuantityControl: React.FC<QuantityControlProps> = ({
   quantity,
   onDecrement,
   onIncrement,
+  onChange,
 }) => {
   return (
     <div className="cart-page__quantity-control">
@@ -24,7 +26,8 @@ export const QuantityControl: React.FC<QuantityControlProps> = ({
         type="text"
         className="cart-page__quantity-input"
         value={quantity}
-        readOnly
+        readOnly={!onChange}
+        onChange={onChange ? (e) => onChange(Number(e.target.value)) : undefined}
       />
       <button
         type="button"

@@ -153,7 +153,7 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
             animate={{ opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
-            {displayedGemstone.weight}ct {displayedGemstone.type}
+            {displayedGemstone.weightCarat}ct {displayedGemstone.type}
           </motion.span>
         </motion.h3>
         <div className="flex flex-wrap gap-3">
@@ -163,7 +163,7 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
 
             return (
               <motion.div
-                key={`${gemstone.type} ${gemstone.weight}`}
+                key={`${gemstone.type} ${gemstone.weightCarat}`}
                 className={`relative rounded-full p-[2px] ${
                   isActive
                     ? `${colors.border} border-2`
@@ -191,7 +191,7 @@ export const GemstoneSelector: React.FC<GemstoneOptionsProps> = ({
                   }}
                   transition={{ duration: 0.3 }}
                 >
-                  {gemstone.weight}
+                  {gemstone.weightCarat}
                 </motion.button>
                 {isActive && (
                   <motion.div

@@ -1,6 +1,6 @@
 export const WishlistLoader = () => {
   return (
-    <div className="my-8 max-w-4xl mx-auto">
+    <div className="my-8 px-4 lg:px-8 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <div className="h-5 w-24 bg-gray-200 rounded animate-pulse"></div>
         <div className="h-5 w-28 bg-gray-200 rounded animate-pulse"></div>
@@ -39,4 +39,3 @@ export const WishlistLoader = () => {
     </div>
   );
 };
-
