@@ -4,6 +4,8 @@ import { QueryProvider } from "../lib/providers/query-provider";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/lib/providers/session-provider";
 import { AppAlert } from "@/components/alert";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.scss";
 
 const lora = Lora({
@@ -127,6 +129,8 @@ export default async function RootLayout({
       <body
         className={`${lora.variable} ${gantari.variable} ${dancingScript.variable} antialiased`}
       >
+        <Analytics />
+        <SpeedInsights />
         <SessionProvider session={session}>
           <QueryProvider>
             <AppAlert />
