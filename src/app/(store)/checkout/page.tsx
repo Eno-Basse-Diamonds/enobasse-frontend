@@ -1,14 +1,27 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { SectionContainer, PageHeading } from "@/components";
 import { ChevronDownIcon } from "@/components/icons";
 import { CheckoutFormSection } from "./_components/checkout-form-section";
 import { OrderSummary } from "./_components/order-summary";
-import { PaymentMethod } from "./_components/payment-method";
 import { FormInput } from "./_components/form-input";
 import { useCartStore } from "@/lib/store/cart";
+import { useAccountStore } from "@/lib/store/account";
+import { useSession } from "next-auth/react";
+import { countries } from "@/lib/utils/constants";
 import "./styles.scss";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const { items: cartItems } = useCartStore();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (cartItems.length === 0) router.replace("/cart");
+  }, [cartItems, router]);
 
   return (
     <div className="checkout-page">
@@ -16,7 +29,6 @@ export default function CheckoutPage() {
       <SectionContainer id="checkout">
         <div className="checkout-page__container">
           <div className="checkout-page__columns">
-            {/* Left Column - Forms */}
             <div className="checkout-page__left-column">
               <CheckoutFormSection title="Contact Information">
                 <form className="form">
@@ -25,26 +37,29 @@ export default function CheckoutPage() {
                     label="Email address"
                     type="email"
                     placeholder="e.g you@example.com"
+                    required
                   />
                   <FormInput
                     id="phone"
                     label="Phone number"
                     placeholder="e.g +234 805 710 4772"
+                    required
                   />
                 </form>
               </CheckoutFormSection>
 
-              <CheckoutFormSection title="Shipping Address">
+              <CheckoutFormSection title="Shipping & Billing">
                 <form className="form">
                   <div className="form__grid-2">
-                    <FormInput id="first-name" label="First name" />
-                    <FormInput id="last-name" label="Last name" />
+                    <FormInput id="first-name" label="First name" required />
+                    <FormInput id="last-name" label="Last name" required />
                   </div>
 
                   <FormInput
                     id="address"
                     label="Address"
                     placeholder="123 Main St"
+                    required
                   />
 
                   <FormInput
@@ -53,7 +68,7 @@ export default function CheckoutPage() {
                   />
 
                   <div className="form__grid-2">
-                    <FormInput id="city" label="City" />
+                    <FormInput id="city" label="City" required />
                     <div>
                       <label
                         htmlFor="country"
@@ -62,10 +77,15 @@ export default function CheckoutPage() {
                         Country
                       </label>
                       <div className="form__select-container">
-                        <select id="country" className="form__select">
-                          <option>United States</option>
-                          <option>Canada</option>
-                          <option>Mexico</option>
+                        <select id="country" className="form__select" required>
+                          {countries.map((country) => (
+                            <option
+                              key={country.code}
+                              selected={country.default}
+                            >
+                              {country.name}
+                            </option>
+                          ))}
                         </select>
                         <div className="form__select-icon">
                           <ChevronDownIcon className="h-4 w-4 text-[#502B3A]" />
@@ -75,8 +95,12 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="form__grid-2">
-                    <FormInput id="region" label="State/Province" />
-                    <FormInput id="postal-code" label="ZIP/Postal code" />
+                    <FormInput id="region" label="State/Province" required />
+                    <FormInput
+                      id="postal-code"
+                      label="ZIP/Postal code"
+                      required
+                    />
                   </div>
 
                   <div className="form__checkbox-container">
@@ -95,49 +119,30 @@ export default function CheckoutPage() {
                   </div>
                 </form>
               </CheckoutFormSection>
-
-              <CheckoutFormSection title="Payment">
-                <div className="form">
-                  <div className="pb-2">
-                    <h3 className="sr-only">Payment Method</h3>
-                    <div className="form__radio-group">
-                      <PaymentMethod
-                        id="credit-card"
-                        name="payment-method"
-                        label="Credit card"
-                        checked
-                      />
-                      <PaymentMethod
-                        id="bank-transfer"
-                        name="payment-method"
-                        label="Bank transfer"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form">
-                    <FormInput
-                      id="card-number"
-                      label="Card number"
-                      placeholder="0000 0000 0000 0000"
-                    />
-
-                    <div className="form__grid-2">
-                      <FormInput
-                        id="expiration-date"
-                        label="Expiration date"
-                        placeholder="MM/YY"
-                      />
-                      <FormInput id="cvc" label="CVC" placeholder="CVC" />
-                    </div>
-                  </div>
-                </div>
-              </CheckoutFormSection>
             </div>
 
-            {/* Right Column - Order Summary */}
             <div className="checkout-page__right-column">
               <OrderSummary items={cartItems} />
+
+              <div className="mt-4 w-full text-center">
+                <div className="text-sm text-[#502B3A]/70">
+                  By clicking Pay you agree to our{" "}
+                  <Link
+                    href="/terms-and-conditions"
+                    className="underline font-semibold hover:text-[#D1A559]"
+                  >
+                    Terms & Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="underline font-semibold hover:text-[#D1A559]"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -20,7 +20,7 @@ import {
   Divider,
 } from "@/components";
 import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
-import { Engraving } from "./_components/engraving";
+import { Engraving } from "@/components";
 import { ImageGallery } from "./_components/image-gallery";
 import { ProductDetails } from "./_components/product-details";
 import { Reviews } from "./_components/reviews";

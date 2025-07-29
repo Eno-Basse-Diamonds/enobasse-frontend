@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SectionContainer, PageHeading, EmptyState } from "@/components";
 import { CartLoader } from "@/components/loaders";
@@ -15,6 +16,12 @@ import "./styles.scss";
 export default function CartPage() {
   const { items, hydrated, hydrate } = useCartStore();
   const { data: session } = useSession();
+
+  const router = useRouter();
+
+  const handleCheckout = () => {
+    router.push("/checkout");
+  };
 
   useEffect(() => {
     hydrate(session?.user?.email ?? undefined);
@@ -61,7 +68,7 @@ export default function CartPage() {
                       ))}
                     </ul>
                   </div>
-                  <OrderSummary items={items} />
+                  <OrderSummary items={items} onCheckout={handleCheckout} />
                 </div>
               </>
             )}

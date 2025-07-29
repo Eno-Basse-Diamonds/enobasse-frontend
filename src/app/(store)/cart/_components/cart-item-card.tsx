@@ -3,13 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CloseIcon } from "@/components/icons";
+import { Engraving } from "@/components";
 import { QuantityControl } from "./quantity-control";
 import { SizeSelect } from "./size-select";
 import { CartItem } from "@/lib/types/carts";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { getCurrencySymbol } from "@/lib/utils/money";
-import { Engraving } from "@/app/(store)/products/[slug]/_components/engraving";
 
 interface CartItemCardProps {
   item: CartItem;
