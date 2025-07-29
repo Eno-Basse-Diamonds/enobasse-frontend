@@ -12,7 +12,10 @@ interface OrderSummaryProps {
   onCheckout?: () => void;
 }
 
-export const OrderSummary: React.FC<OrderSummaryProps> = ({ items }) => {
+export const OrderSummary: React.FC<OrderSummaryProps> = ({
+  items,
+  onCheckout,
+}) => {
   const subtotal = items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
     0
@@ -44,7 +47,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({ items }) => {
           </span>
         </div>
       </div>
-      <Button size="lg" className="w-full" onClick={() => {}}>
+      <Button size="lg" className="w-full" onClick={onCheckout}>
         Checkout
       </Button>
       <div className="mt-4 text-center text-[#502B3A]/70">

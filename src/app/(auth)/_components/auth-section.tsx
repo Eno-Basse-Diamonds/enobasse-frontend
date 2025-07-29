@@ -1,21 +1,20 @@
 "use client";
 
 import { ReactNode, FormEvent, useState } from "react";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Input, PasswordInput } from "@/components";
 import { AuthGoogleIcon } from "@/components/icons";
-import { useAlertStore } from "@/lib/store/alert";
-import { handleSignUp } from "@/lib/actions/auth";
 import {
   handleChangePassword,
   handleRequestResetPassword,
   handleResetCode,
 } from "@/lib/actions/account";
-import { useUserStore } from "@/lib/store/user";
+import { handleSignUp } from "@/lib/actions/auth";
+import { useAlertStore } from "@/lib/store/alert";
+import { useAccountStore } from "@/lib/store/account";
 import "./styles.scss";
 
 interface AuthFormField {
@@ -68,8 +67,8 @@ export default function AuthSection({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addAlert = useAlertStore((state) => state.addAlert);
   const router = useRouter();
-  const userEmail = useUserStore((state) => state.email);
-  const setUser = useUserStore((state) => state.setUser);
+  const accountEmail = useAccountStore((state) => state.email);
+  const setAccount = useAccountStore((state) => state.setAccount);
 
   const showAlert = (type: "success" | "error", message: string) => {
     addAlert({
@@ -106,7 +105,7 @@ export default function AuthSection({
       });
     },
     "forgot-password": async (formData) => {
-      setUser({ id: "", email: formData.email });
+      setAccount({ id: "", email: formData.email });
       const response = await handleRequestResetPassword(formData);
       if (response?.errors) return response;
       router.push("/password-reset-code");
@@ -114,7 +113,7 @@ export default function AuthSection({
     "password-reset-code": async (formData) => {
       const response = await handleResetCode({
         ...formData,
-        email: userEmail || "",
+        email: accountEmail || "",
       });
       if (response?.errors) return response;
       router.push("/create-new-password");
@@ -125,7 +124,7 @@ export default function AuthSection({
       }
       const response = await handleChangePassword({
         ...formData,
-        email: userEmail || "",
+        email: accountEmail || "",
       });
       if (response?.errors) return response;
       router.push("/sign-in");

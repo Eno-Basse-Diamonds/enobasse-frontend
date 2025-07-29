@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { PlusIcon, CloseIcon } from "@/components/icons";
 import * as motion from "motion/react-client";
 import { useAnimation, AnimatePresence } from "motion/react";
+import "./styles.scss";
 
 export const Engraving: React.FC<{
   engraving: { text: string; fontStyle: string } | undefined;

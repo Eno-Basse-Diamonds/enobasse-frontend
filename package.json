@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
+    "@paystack/inline-js": "^2.22.7",
     "@tanstack/react-query": "^5.79.0",
     "@tanstack/react-query-devtools": "^5.79.0",
     "@types/uuid": "^10.0.0",

@@ -1,12 +1,12 @@
 import Link from "next/link";
+import { Button } from "@/components";
 import { CheckoutCartItem } from "./chekout-cart-item";
-import { CartItem } from "@/lib/data/cart-items";
+import { CartItem } from "@/lib/types/carts";
+import { getCurrencySymbol } from "@/lib/utils/money";
+import { ringSizes } from "@/lib/utils/constants";
 
 type OrderSummaryProps = {
-  items: Array<{
-    productVariant: { price: number; currency?: string };
-    quantity: number;
-  }>;
+  items: CartItem[];
 };
 
 export function OrderSummary({ items }: OrderSummaryProps) {
@@ -30,9 +30,9 @@ export function OrderSummary({ items }: OrderSummaryProps) {
 
       <div className="order-summary__items-list">
         <ul className="divide-y divide-gray-200">
-          {/* {items.map((item) => (
-            <CheckoutCartItem key={item.id} item={item} />
-          ))} */}
+          {items.map((item) => (
+            <CheckoutCartItem key={item.id} item={item} ringSizes={ringSizes} />
+          ))}
         </ul>
       </div>
 
@@ -42,27 +42,27 @@ export function OrderSummary({ items }: OrderSummaryProps) {
             Subtotal ({totalItems} items)
           </span>
           <span className="order-summary__value">
-            {currency}
+            {getCurrencySymbol(currency)}
             {formattedPrice(subtotal)}
           </span>
         </div>
         <div className="order-summary__row">
           <span className="order-summary__label">Shipping</span>
-          <span className="order-summary__value">Free</span>
+          <span className="order-summary__value">N/A</span>
         </div>
         <div className="order-summary__total-row">
           <span className="order-summary__total-label">Total</span>
           <span className="order-summary__total-value">
-            {currency}
+            {getCurrencySymbol(currency)}
             {formattedPrice(subtotal)}
           </span>
         </div>
       </div>
 
-      <button className="order-summary__checkout-btn">
-        Pay {currency}
+      <Button size="lg" className="w-full mt-5" onClick={() => {}}>
+        Pay {getCurrencySymbol(currency)}
         {formattedPrice(subtotal)}
-      </button>
+      </Button>
 
       <div className="order-summary__return-link">
         or <Link href="/cart">Return to Cart</Link>
