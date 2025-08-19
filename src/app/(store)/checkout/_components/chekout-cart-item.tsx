@@ -14,9 +14,14 @@ import { getCurrencySymbol } from "@/lib/utils/money";
 interface CheckoutCartItemProps {
   item: CartItem;
   ringSizes: number[];
+  currency: string;
 }
 
-export function CheckoutCartItem({ item, ringSizes }: CheckoutCartItemProps) {
+export function CheckoutCartItem({
+  item,
+  ringSizes,
+  currency,
+}: CheckoutCartItemProps) {
   const { removeItem, updateItem } = useCartStore();
   const { data: session } = useSession();
   const accountEmail = session?.user?.email ?? undefined;
@@ -48,7 +53,6 @@ export function CheckoutCartItem({ item, ringSizes }: CheckoutCartItemProps) {
   const imageAlt = item.productVariant.images?.[0]?.alt || "Product image";
   const title = item.productVariant.title || "Product";
   const price = item.productVariant.price || 0;
-  const currency = item.productVariant.currency || "$";
   const metals = item.productVariant.metals;
   const gemstones = item.productVariant.gemstones;
   const metalStr =
@@ -57,7 +61,9 @@ export function CheckoutCartItem({ item, ringSizes }: CheckoutCartItemProps) {
       : "";
   const gemstoneStr =
     gemstones && gemstones.length > 0
-      ? `${gemstones[0].weightCarat ? `${gemstones[0].weightCarat}ct ` : ""}${gemstones[0].type || ""}`
+      ? `${gemstones[0].weightCarat ? `${gemstones[0].weightCarat}ct ` : ""}${
+          gemstones[0].type || ""
+        }`
       : "";
 
   const engravableProducts = ["Rings", "Wristwears", "Neckpieces"];
@@ -68,7 +74,13 @@ export function CheckoutCartItem({ item, ringSizes }: CheckoutCartItemProps) {
     <li className="py-4 flex items-start">
       <div className="flex-shrink-0 h-24 w-24 overflow-hidden border border-gray-200 relative">
         <Link href={`/products/${item.productSlug}`}>
-          <Image src={imageUrl} alt={imageAlt} fill className="object-cover" />
+          <Image
+            src={imageUrl}
+            alt={imageAlt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
+          />
         </Link>
       </div>
 
@@ -125,16 +137,13 @@ export function CheckoutCartItem({ item, ringSizes }: CheckoutCartItemProps) {
                 {item.quantity > 1 && (
                   <>
                     {getCurrencySymbol(currency)}
-                    {price} each
+                    {price.toLocaleString()} each
                   </>
                 )}
               </p>
               <p className="text-base font-medium text-[#502B3A] mt-2">
                 {getCurrencySymbol(currency)}
-                {(price * item.quantity).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {(price * item.quantity).toLocaleString()}
               </p>
             </div>
           </div>

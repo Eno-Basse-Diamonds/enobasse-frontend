@@ -17,8 +17,9 @@ import { ChevronDownIcon } from "@/components/icons";
 import { ProductsPageLoader } from "@/components/loaders";
 import { FilterOption } from "@/lib/types/products";
 import { useCollection } from "@/lib/hooks/use-collections";
+import { useAccountStore } from "@/lib/store/account";
 import { filterAndSortProducts } from "@/lib/utils/products";
-import { metalOptions, gemstones } from "@/lib/utils/constants";
+import { metalOptions } from "@/lib/utils/constants";
 import "./styles.scss";
 
 const containerVariants = {
@@ -42,8 +43,15 @@ export default function CollectionPage() {
   const { slug } = useParams<{ slug: string }>();
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState("featured");
+  const { preferredCurrency, isHydrated } = useAccountStore();
 
-  const { data, isLoading } = useCollection(slug);
+  const { data, isLoading } = useCollection(
+    slug,
+    {
+      currency: preferredCurrency,
+    },
+    isHydrated
+  );
   const { collection, products } = data || {};
 
   const filteredAndSortedProducts = useMemo(
@@ -161,7 +169,6 @@ export default function CollectionPage() {
           >
             <FilterPanelDesktop
               metalOptions={metalOptions as FilterOption[]}
-              gemstones={gemstones as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
             />
@@ -174,7 +181,6 @@ export default function CollectionPage() {
             <div className="lg:hidden">
               <FilterPanelMobile
                 metalOptions={metalOptions as FilterOption[]}
-                gemstones={gemstones as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
               />

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { useAccountStore } from "@/lib/store/account";
 import {
   FacebookIcon,
   XIcon,
@@ -65,7 +67,9 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
       icon: (
         <FacebookIcon className="share-dropdown__icon" aria-hidden="true" />
       ),
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`,
     },
     {
       name: "X",
@@ -103,7 +107,9 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`share-dropdown__toggle ${isOpen ? "share-dropdown__toggle--active" : ""}`}
+        className={`share-dropdown__toggle ${
+          isOpen ? "share-dropdown__toggle--active" : ""
+        }`}
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label={label}
@@ -148,6 +154,119 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
             </li>
           ))}
         </ul>
+      )}
+    </div>
+  );
+};
+
+export const CurrencyDropdown: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const preferredCurrency = useAccountStore((state) => state.preferredCurrency);
+  const isHydrated = useAccountStore((state) => state.isHydrated);
+  const setPreferredCurrency = useAccountStore(
+    (state) => state.setPreferredCurrency
+  );
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const currencies = [
+    { value: "USD", label: "USD", flag: "/images/flags/usd.png" },
+    { value: "NGN", label: "NGN", flag: "/images/flags/ngn.webp" },
+  ];
+
+  const handleCurrencyChange = async (currency: string) => {
+    if (currency !== preferredCurrency) {
+      await setPreferredCurrency(currency);
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  if (!isHydrated) {
+    return (
+      <div className="relative">
+        <button className="flex items-center space-x-1 px-1 py-1 text-sm font-medium text-gray-700">
+          <span className="flex flex-row items-center mr-2">
+            <div className="h-4 w-6 bg-gray-200 animate-pulse mr-2" />
+            <div className="h-4 w-8 bg-gray-200 animate-pulse" />
+          </span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center space-x-1 px-1 py-1 text-sm font-medium text-gray-700 hover:text-gray-900"
+      >
+        <span className="flex flex-row items-center mr-2">
+          <Image
+            src={
+              currencies.find((c) => c.value === preferredCurrency)?.flag || ""
+            }
+            alt={`${preferredCurrency} Flag`}
+            height={50}
+            width={100}
+            className="h-4 w-auto mr-2"
+          />{" "}
+          {preferredCurrency}
+        </span>
+        <svg
+          className="w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-[7.2rem] bg-white shadow-md border border-gray-200 z-10">
+          {currencies.map((currency) => (
+            <button
+              key={currency.value}
+              onClick={() => handleCurrencyChange(currency.value)}
+              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+                preferredCurrency === currency.value
+                  ? "bg-gray-100"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              <Image
+                src={currency.flag}
+                alt={`${currency.label} Flag`}
+                height={50}
+                width={100}
+                className="h-4 w-auto mr-2"
+              />
+              {currency.label}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

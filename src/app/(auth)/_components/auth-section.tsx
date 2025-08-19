@@ -69,6 +69,7 @@ export default function AuthSection({
   const router = useRouter();
   const accountEmail = useAccountStore((state) => state.email);
   const setAccount = useAccountStore((state) => state.setAccount);
+  const { setIsAuthenticated } = useAccountStore();
 
   const showAlert = (type: "success" | "error", message: string) => {
     addAlert({
@@ -95,6 +96,8 @@ export default function AuthSection({
         redirect: true,
         callbackUrl: "/account",
       });
+      setIsAuthenticated(true)
+      setAccount({ email: formData.email });
     },
     "sign-in": async (formData) => {
       await signIn("credentials", {
@@ -103,9 +106,11 @@ export default function AuthSection({
         redirect: true,
         callbackUrl: "/account",
       });
+      setIsAuthenticated(true)
+      setAccount({ email: formData.email });
     },
     "forgot-password": async (formData) => {
-      setAccount({ id: "", email: formData.email });
+      setAccount({ email: formData.email });
       const response = await handleRequestResetPassword(formData);
       if (response?.errors) return response;
       router.push("/password-reset-code");
@@ -284,7 +289,7 @@ export default function AuthSection({
             {isSubmitting ? "Submitting..." : actionButtonText}
           </button>
 
-          {showSocialAuth && (
+          {/* {showSocialAuth && (
             <>
               <div className="auth-page__social-divider">
                 <div className="auth-page__divider-line" aria-hidden="true">
@@ -308,7 +313,7 @@ export default function AuthSection({
                 </button>
               </div>
             </>
-          )}
+          )} */}
 
           {footer && (
             <p className="auth-page__footer">

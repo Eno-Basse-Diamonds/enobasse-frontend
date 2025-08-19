@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { SectionContainer, PageHeading } from "@/components";
 import { EmptyState } from "@/components";
 import { HeartIcon } from "@/components/icons";
@@ -9,21 +10,42 @@ import { WishlistHeader } from "./_components/wishlist-header";
 import { WishlistItem } from "./_components/wishlist-item";
 import { WishlistLoader } from "@/components/loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
-import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
 import "./styles.scss";
 
 export default function WishlistPage() {
-  const { clear, items, hydrated, hydrate } = useWishlistStore();
   const { data: session } = useSession();
+  const { preferredCurrency, isHydrated } = useAccountStore();
+  const { clear, items, hydrated, hydrate, loading, refreshWithCurrency } = useWishlistStore();
+  const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
 
   useEffect(() => {
-    hydrate(session?.user?.email ?? undefined);
-  }, [session, hydrate]);
+    if (!isHydrated) return;
+
+    const handleCurrencyChange = async () => {
+      if (preferredCurrency && preferredCurrency !== lastCurrency) {
+        if (session?.user?.email) {
+          await hydrate(session.user.email, preferredCurrency);
+        } else {
+          await refreshWithCurrency(preferredCurrency);
+        }
+        setLastCurrency(preferredCurrency);
+      } else if (session?.user?.email && preferredCurrency && !hydrated) {
+        await hydrate(session.user.email, preferredCurrency);
+        setLastCurrency(preferredCurrency);
+      } else if (!session && !hydrated) {
+        await hydrate();
+        setLastCurrency(preferredCurrency);
+      }
+    };
+
+    handleCurrencyChange();
+  }, [session, hydrate, refreshWithCurrency, preferredCurrency, hydrated, isHydrated, lastCurrency]);
 
   return (
     <div className="wishlist-page">
       <PageHeading title="Wishlist" />
-      {!hydrated ? (
+      {!hydrated || loading ? (
         <WishlistLoader />
       ) : (
         <SectionContainer id="wishlist">
@@ -58,7 +80,11 @@ export default function WishlistPage() {
                 <div className="wishlist-page__list-container">
                   <ul role="list" className="wishlist-page__list">
                     {items.map((item) => (
-                      <WishlistItem key={item.id} item={item} />
+                      <WishlistItem
+                        key={item.id}
+                        item={item}
+                        currentCurrency={preferredCurrency}
+                      />
                     ))}
                   </ul>
                 </div>

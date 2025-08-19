@@ -4,9 +4,10 @@ import {
   BlogPostDetailLoader,
 } from "./blog";
 import { CollectionListLoader } from "./collections";
-import { ProductListLoader, ProductsPageLoader } from "./products";
+import { ProductListLoader, ProductsPageLoader, ProductDetailPageLoader } from "./products";
 import { WishlistLoader } from "./wishlist";
 import { CartLoader } from "./cart";
+import { OrderHistoryLoader } from "./orders";
 
 export {
   AdminBlogSkeletonLoader,
@@ -17,4 +18,6 @@ export {
   ProductsPageLoader,
   WishlistLoader,
   CartLoader,
+  ProductDetailPageLoader,
+  OrderHistoryLoader
 };

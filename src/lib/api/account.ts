@@ -1,3 +1,4 @@
+import { UpdateAccount } from "../types/accounts";
 import { api } from "../utils/api";
 
 export const requestResetPassword = async (email: string) => {
@@ -10,4 +11,17 @@ export const resetCode = async (email: string, resetCode: string) => {
 
 export const changePassword = async (email: string, newPassword: string) => {
   return api.put("/accounts/change-password", { email, newPassword });
+};
+
+export const updateAccount = async (
+  email: string,
+  accountDto: UpdateAccount
+) => {
+  return api.patch(`/accounts/${email}`, accountDto);
+};
+
+export const getPreferredCurrency = async (
+  email: string | null | undefined
+): Promise<string> => {
+  return api.get(`/accounts/${email}/preferred-currency`);
 };

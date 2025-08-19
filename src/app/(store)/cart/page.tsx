@@ -1,21 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SectionContainer, PageHeading, EmptyState } from "@/components";
+import { CurrencyDropdown } from "@/components/dropdown";
 import { CartLoader } from "@/components/loaders";
 import { CartItemCard } from "./_components/cart-item-card";
 import { OrderSummary } from "./_components/order-summary";
 import { EmptyStateIcon } from "./_components/empty-state-icon";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
 import { ringSizes } from "@/lib/utils/constants";
 import "./styles.scss";
 
 export default function CartPage() {
-  const { items, hydrated, hydrate } = useCartStore();
+  const { items, hydrated, hydrate, loading, refreshWithCurrency } =
+    useCartStore();
   const { data: session } = useSession();
+  const { preferredCurrency, isHydrated } = useAccountStore();
+  const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
 
   const router = useRouter();
 
@@ -24,13 +29,40 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    hydrate(session?.user?.email ?? undefined);
-  }, [session, hydrate]);
+    if (!isHydrated) return;
+
+    const handleCurrencyChange = async () => {
+      if (preferredCurrency && preferredCurrency !== lastCurrency) {
+        if (session?.user?.email) {
+          await refreshWithCurrency(session.user.email, preferredCurrency);
+        } else {
+          await refreshWithCurrency(preferredCurrency);
+        }
+        setLastCurrency(preferredCurrency);
+      } else if (session?.user?.email && preferredCurrency && !hydrated) {
+        await hydrate(session.user.email, preferredCurrency);
+        setLastCurrency(preferredCurrency);
+      } else if (!session && !hydrated) {
+        await hydrate();
+        setLastCurrency(preferredCurrency);
+      }
+    };
+
+    handleCurrencyChange();
+  }, [
+    session,
+    hydrate,
+    refreshWithCurrency,
+    preferredCurrency,
+    hydrated,
+    isHydrated,
+    lastCurrency,
+  ]);
 
   return (
     <div className="cart-page">
       <PageHeading title="Shopping Cart" />
-      {!hydrated ? (
+      {!hydrated || loading ? (
         <CartLoader />
       ) : (
         <SectionContainer id="cart">

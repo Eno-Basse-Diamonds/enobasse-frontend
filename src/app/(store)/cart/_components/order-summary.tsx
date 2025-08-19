@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { Button } from "@/components";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { useAccountStore } from "@/lib/store/account";
 
 interface OrderSummaryProps {
   items: Array<{
-    productVariant: { price: number; currency?: string };
+    productVariant: {
+      price: number;
+      prices?: Record<string, number>;
+      currency?: string;
+    };
     quantity: number;
   }>;
   onCheckout?: () => void;
@@ -16,11 +21,12 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   items,
   onCheckout,
 }) => {
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
-  );
-  const currency = items[0]?.productVariant.currency || "$";
+  const { preferredCurrency } = useAccountStore();
+
+  const subtotal = items.reduce((sum, item) => {
+    const price = item.productVariant.price || 0;
+    return sum + price * item.quantity;
+  }, 0);
 
   return (
     <div className="cart-page__summary">
@@ -29,21 +35,15 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
         <div className="cart-page__summary-row">
           <span className="cart-page__summary-label">Subtotal</span>
           <span className="cart-page__summary-value">
-            {getCurrencySymbol(currency)}
-            {subtotal.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {getCurrencySymbol(preferredCurrency)}
+            {subtotal.toLocaleString(undefined)}
           </span>
         </div>
         <div className="cart-page__summary-row">
           <span className="cart-page__summary-label">Total</span>
           <span className="cart-page__total">
-            {getCurrencySymbol(currency)}
-            {subtotal.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {getCurrencySymbol(preferredCurrency)}
+            {subtotal.toLocaleString(undefined)}
           </span>
         </div>
       </div>

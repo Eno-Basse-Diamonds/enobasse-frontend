@@ -6,15 +6,20 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getProducts } from "@/lib/api/products";
+import { getPreferredCurrency } from "@/lib/api/account";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/config/auth";
 
 interface ProductsFilterOptions {
   page?: number;
+  pageSize?: number;
   sortBy?: string;
   sortOrder?: "ASC" | "DESC";
   minPrice?: number;
   maxPrice?: number;
   metals?: string[];
   gemstones?: string[];
+  currency?: string;
 }
 
 export const metadata: Metadata = {
@@ -44,14 +49,17 @@ interface ProductListLayoutProps {
 export default async function ProductListLayout({
   children,
 }: ProductListLayoutProps) {
+  const session = await getServerSession(authOptions);
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const queryClient = new QueryClient();
 
   const filterOptions: ProductsFilterOptions = {
     page: 1,
+    pageSize: 36,
     sortBy: "featured",
-    sortOrder: "DESC",
     metals: [],
     gemstones: [],
+    currency: preferredCurrency,
   };
 
   await queryClient.prefetchQuery({

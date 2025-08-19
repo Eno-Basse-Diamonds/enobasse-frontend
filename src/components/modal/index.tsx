@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { PlusIcon, CloseIcon } from "@/components/icons";
 import * as motion from "motion/react-client";
 import { useAnimation, AnimatePresence } from "motion/react";
+import { useAccountStore } from "@/lib/store/account";
 import "./styles.scss";
 
 export const Engraving: React.FC<{

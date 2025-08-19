@@ -21,3 +21,12 @@ export interface CollectionWithProducts {
     hasPreviousPage: boolean;
   };
 }
+export interface CollectionFilterOptions {
+  sortBy?: string;
+  sortOrder?: "ASC" | "DESC";
+  minPrice?: number;
+  maxPrice?: number;
+  metals?: string[];
+  gemstones?: string[];
+  currency?: string;
+}

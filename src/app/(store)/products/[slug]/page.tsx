@@ -31,25 +31,33 @@ import { calculateAverageRating } from "@/lib/utils/reviews";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
+import { ProductDetailPageLoader } from "@/components/loaders";
 
 export default function ProductPage() {
   const router = useRouter();
+  const { preferredCurrency, isHydrated } = useAccountStore();
 
   const { slug } = useParams<{ slug: string }>();
-  const { data: product } = useProduct(slug);
-  const { data: relatedProductsData } = useRelatedProducts(slug, 4);
-  const relatedProducts = relatedProductsData || [];
+  const { data: product, isLoading: productLoading } = useProduct(
+    slug,
+    preferredCurrency,
+    isHydrated
+  );
+
+  const { data: relatedProducts, isLoading: relatedLoading } =
+    useRelatedProducts(slug, 4, preferredCurrency, isHydrated);
   const { data: session } = useSession();
 
   const [selectedMetal, setSelectedMetal] = useState<Metal | undefined>(
     Array.isArray(product?.metals) && product.metals.length > 0
       ? product.metals[0]
       : Array.isArray(product?.variants) &&
-          product.variants.length > 0 &&
-          Array.isArray(product.variants[0].metals) &&
-          product.variants[0].metals.length > 0
-        ? product.variants[0].metals[0]
-        : undefined
+        product.variants.length > 0 &&
+        Array.isArray(product.variants[0].metals) &&
+        product.variants[0].metals.length > 0
+      ? product.variants[0].metals[0]
+      : undefined
   );
   const [selectedGemstone, setSelectedGemstone] = useState<
     Gemstone | undefined
@@ -57,11 +65,11 @@ export default function ProductPage() {
     Array.isArray(product?.gemstones) && product.gemstones.length > 0
       ? product.gemstones[0]
       : Array.isArray(product?.variants) &&
-          product.variants.length > 0 &&
-          Array.isArray(product.variants[0].gemstones) &&
-          product.variants[0].gemstones.length > 0
-        ? product.variants[0].gemstones[0]
-        : undefined
+        product.variants.length > 0 &&
+        Array.isArray(product.variants[0].gemstones) &&
+        product.variants[0].gemstones.length > 0
+      ? product.variants[0].gemstones[0]
+      : undefined
   );
 
   const initialVariant =
@@ -109,7 +117,8 @@ export default function ProductPage() {
         selectedVariant,
         product?.slug || "",
         product?.category || "",
-        session?.user?.email ?? undefined
+        session?.user?.email ?? undefined,
+        preferredCurrency
       );
     }
   };
@@ -146,8 +155,16 @@ export default function ProductPage() {
     if (matchingVariant) setSelectedVariant(matchingVariant);
   }, [selectedMetal, selectedGemstone, product]);
 
-  if (!product || !selectedVariant) {
+  if (productLoading && relatedLoading) {
+    return <ProductDetailPageLoader />;
+  }
+
+  if (!product) {
     return notFound();
+  }
+
+  if (!selectedVariant) {
+    setSelectedVariant(product.variants[0]);
   }
 
   const hasMultipleVariants = product.variants.length > 1;
@@ -156,10 +173,11 @@ export default function ProductPage() {
   );
   const isRing = product.category === "Rings";
 
-  const { metals, gemstones } = selectedVariant;
+  const metals = selectedVariant?.metals ?? [];
+  const gemstones = selectedVariant?.gemstones ?? [];
 
   const productDetails = [
-    { label: "SKU", value: selectedVariant.sku },
+    { label: "SKU", value: selectedVariant?.sku ?? "N/A" },
     {
       label: "Metal",
       value:
@@ -168,14 +186,20 @@ export default function ProductPage() {
           : "N/A",
     },
     {
-      label: `${Array.isArray(metals) && metals.length > 0 ? (metals[0]?.type ?? "Metal") : "Metal"} Weight`,
+      label: `${
+        Array.isArray(metals) && metals.length > 0
+          ? metals[0]?.type ?? "Metal"
+          : "Metal"
+      } Weight`,
       value:
         Array.isArray(metals) && metals.length > 0
-          ? (metals[0]?.weightGrams ?? "N/A")
+          ? metals[0]?.weightGrams ?? "N/A"
           : "N/A",
     },
     {
-      label: `${gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"} Weight`,
+      label: `${
+        gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"
+      } Weight`,
       value:
         gemstones && gemstones[0]?.weightCarat != null
           ? gemstones[0].weightCarat
@@ -220,7 +244,7 @@ export default function ProductPage() {
                 url={typeof window !== "undefined" ? window.location.href : ""}
               />
             </div>
-            <ImageGallery images={selectedVariant.images} />
+            <ImageGallery images={selectedVariant?.images ?? []} />
             <div className="hidden md:block">
               <div className="mt-8 mb-4">
                 <h2 className="text-xl text-primary-300 mb-3">Description</h2>
@@ -235,7 +259,9 @@ export default function ProductPage() {
           <div className="product-page__info">
             <div className="product-page__sticky-container">
               <div className="space-y-6 md:space-y-7">
-                <h1 className="product-page__title">{selectedVariant.title}</h1>
+                <h1 className="product-page__title">
+                  {selectedVariant?.title ?? product.name}
+                </h1>
                 <div className="product-page__rating-container">
                   <Rating
                     rating={calculateAverageRating(
@@ -247,12 +273,12 @@ export default function ProductPage() {
                   <button
                     onClick={handleWishlistToggle}
                     aria-label={
-                      isInWishlist(selectedVariant.id)
+                      isInWishlist(selectedVariant?.id ?? "")
                         ? "Remove from wishlist"
                         : "Add to wishlist"
                     }
                   >
-                    {isInWishlist(selectedVariant.id) ? (
+                    {isInWishlist(selectedVariant?.id ?? "") ? (
                       <Heart
                         fill="#D1A559"
                         className="text-secondary-500 h-5 w-5"
@@ -304,7 +330,9 @@ export default function ProductPage() {
                   Price:{" "}
                   <span>
                     {getCurrencySymbol(product.priceRange.currency)}
-                    {selectedVariant.price.toLocaleString(undefined)}
+                    {selectedVariant?.price != null
+                      ? selectedVariant.price.toLocaleString(undefined)
+                      : "N/A"}
                   </span>
                 </p>
                 <div className="product-page__actions hidden md:flex">
@@ -383,17 +411,19 @@ export default function ProductPage() {
         </div>
       </SectionContainer>
 
-      <SectionContainer id="related-products">
-        <div className="mb-8 max-w-7xl mx-auto">
-          <Divider
-            label="Might as well interest you"
-            className="px-4 bg-white md:text-xl text-[#502B3A] font-primary"
-          />
-        </div>
-        <div>
-          <ProductList products={relatedProducts} />
-        </div>
-      </SectionContainer>
+      {relatedProducts && (
+        <SectionContainer id="related-products">
+          <div className="mb-8 max-w-7xl mx-auto">
+            <Divider
+              label="Might as well interest you"
+              className="px-4 bg-white md:text-xl text-[#502B3A] font-primary"
+            />
+          </div>
+          <div>
+            <ProductList products={relatedProducts} />
+          </div>
+        </SectionContainer>
+      )}
     </div>
   );
 }

@@ -19,6 +19,7 @@ import { Product, ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
+import { getCurrencySymbol } from "@/lib/utils/money";
 import "./styles.scss";
 
 interface ProductQuickViewProps {
@@ -244,7 +245,8 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 {selectedVariant.title}
               </h2>
               <p className="product-quick-view__price">
-                ${selectedVariant.price.toLocaleString(undefined)}
+                {getCurrencySymbol(product.priceRange.currency)}
+                {selectedVariant.price.toLocaleString(undefined)}
               </p>
             </motion.div>
 
