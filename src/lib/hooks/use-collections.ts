@@ -3,7 +3,11 @@ import {
   getCollections,
   getCollectionWithProducts,
 } from "@/lib/api/collections";
-import { Collection, CollectionWithProducts } from "@/lib/types/collections";
+import {
+  Collection,
+  CollectionWithProducts,
+  CollectionFilterOptions,
+} from "@/lib/types/collections";
 
 export function useCollections() {
   return useQuery<Collection[]>({
@@ -12,9 +16,14 @@ export function useCollections() {
   });
 }
 
-export function useCollection(slug: string) {
+export function useCollection(
+  slug: string,
+  options?: CollectionFilterOptions,
+  enabled: boolean = true
+) {
   return useQuery<CollectionWithProducts>({
-    queryKey: ["collection", slug],
-    queryFn: () => getCollectionWithProducts(slug),
+    queryKey: ["collection", slug, options],
+    queryFn: () => getCollectionWithProducts(slug, options),
+    enabled: enabled,
   });
 }

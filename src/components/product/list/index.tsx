@@ -3,14 +3,16 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import * as motion from "motion/react-client";
+import { Heart } from "lucide-react";
 import { HeartIcon, EyeOpenIcon } from "@/components/icons";
 import { ProductQuickView } from "../quickview";
 import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
-import { Heart } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { getCurrencySymbol } from "@/lib/utils/money";
 import "./styles.scss";
+import { useAccountStore } from "@/lib/store/account";
 
 interface ProductListProps {
   products: Product[];
@@ -90,8 +92,14 @@ const ProductListItem = React.memo(
             <h3 className="product-list__title">{product.name}</h3>
             <p className="product-list__price">
               {product.priceRange.min === product.priceRange.max
-                ? `$${product.priceRange.min.toLocaleString()}`
-                : `$${product.priceRange.min.toLocaleString()} - $${product.priceRange.max.toLocaleString()}`}
+                ? `${getCurrencySymbol(
+                    product.priceRange.currency
+                  )}${product.priceRange.min.toLocaleString()}`
+                : `${getCurrencySymbol(
+                    product.priceRange.currency
+                  )}${product.priceRange.min.toLocaleString()} - ${getCurrencySymbol(
+                    product.priceRange.currency
+                  )}${product.priceRange.max.toLocaleString()}`}
             </p>
           </motion.div>
         </Link>
@@ -130,12 +138,26 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
     null
   );
+  const { preferredCurrency, isHydrated } = useAccountStore();
   const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
   const { data: session } = useSession();
+  const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
 
   useEffect(() => {
-    hydrate(session?.user?.email ?? undefined);
-  }, [session, hydrate]);
+    if (!isHydrated) return;
+
+    if (
+      session?.user?.email &&
+      preferredCurrency &&
+      preferredCurrency !== lastCurrency
+    ) {
+      hydrate(session.user.email, preferredCurrency);
+      setLastCurrency(preferredCurrency);
+    } else if (session?.user?.email && preferredCurrency && !hydrated) {
+      hydrate(session.user.email, preferredCurrency);
+      setLastCurrency(preferredCurrency);
+    }
+  }, [session, hydrate, preferredCurrency, hydrated, isHydrated, lastCurrency]);
 
   const wishlistProductVariantIds = useMemo(() => {
     const set = new Set<string | number>();
@@ -159,11 +181,19 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
           product.variants[0],
           product.slug,
           product.category,
-          session?.user?.email ?? undefined
+          session?.user?.email ?? undefined,
+          preferredCurrency
         );
       }
     },
-    [hydrated, wishlistProductVariantIds, addItem, removeItem, session]
+    [
+      hydrated,
+      wishlistProductVariantIds,
+      addItem,
+      removeItem,
+      session,
+      preferredCurrency,
+    ]
   );
 
   const handleQuickView = useCallback((product: Product) => {

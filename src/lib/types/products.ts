@@ -19,6 +19,7 @@ export interface ProductVariant {
   title: string;
   description: string;
   price: number;
+  originalPrice?: number;
   currency: string;
   metals: Metal[];
   gemstones: Gemstone[];
@@ -50,6 +51,7 @@ export interface ProductFilterOptions {
   page?: number;
   pageSize?: number;
   search?: string;
+  currency?: string;
 }
 
 export interface ProductsResponse {

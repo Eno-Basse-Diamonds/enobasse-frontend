@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { Metadata } from "next";
 import {
   dehydrate,
@@ -6,6 +5,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getProduct } from "@/lib/api/products";
+import { getPreferredCurrency } from "@/lib/api/account";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/config/auth";
 import "./styles.scss";
 
 interface ProductPageProps {
@@ -13,15 +15,13 @@ interface ProductPageProps {
   children: React.ReactNode;
 }
 
-const cachedGetProduct = cache(async (slug: string) => {
-  return getProduct(slug);
-});
-
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await cachedGetProduct(slug);
+  const session = await getServerSession(authOptions);
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const product = await getProduct(slug, preferredCurrency);
 
   if (!product) {
     return {
@@ -66,11 +66,13 @@ export default async function ProductPage({
   children,
 }: ProductPageProps) {
   const { slug } = await params;
+  const session = await getServerSession(authOptions);
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["product", slug],
-    queryFn: () => getProduct(slug),
+    queryKey: ["product", slug, preferredCurrency],
+    queryFn: () => getProduct(slug, preferredCurrency),
   });
 
   return (

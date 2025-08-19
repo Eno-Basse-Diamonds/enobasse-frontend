@@ -1,6 +1,13 @@
 import { api } from "../utils/api";
 import { SignupFormSchema } from "../validations/auth";
 
+interface UserAccount {
+  id: string;
+  name: string;
+  email: string;
+  preferredCurrency: string;
+}
+
 export const createAccount = async (
   name: string,
   email: string,
@@ -26,11 +33,14 @@ export const createAccount = async (
   return response;
 };
 
-export const validateAccount = async (email: string, password: string) => {
+export const validateAccount = async (
+  email: string,
+  password: string
+): Promise<UserAccount> => {
   return api.post("/auth/validate-account", { email, password });
 };
 
-export const findAccount = async (email: string) => {
+export const findAccount = async (email: string): Promise<UserAccount> => {
   return api.post("/accounts/email", { param: { email } });
 };
 

@@ -12,8 +12,8 @@ import {
   CloseIcon,
   MenuIcon,
 } from "../icons";
-import "./styles.scss";
 import { ProductList } from "@/components/product/list";
+import { CurrencyDropdown } from "../dropdown";
 import { useProductsSearch } from "@/lib/hooks/use-products";
 import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
@@ -22,6 +22,8 @@ import { ProductListLoader } from "../loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
+import "./styles.scss";
+import { useAccountStore } from "@/lib/store/account";
 
 interface NavigationItem {
   label: string;
@@ -222,8 +224,18 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
       icon: <SearchIcon />,
       onClick: onSearchClick,
     },
-    { href: "/wishlist", label: "Wishlist", icon: <WishlistIcon />, showBadge: true },
-    { href: "/account", label: "Account", icon: <AccountIcon />, showDot: !!session?.user },
+    {
+      href: "/wishlist",
+      label: "Wishlist",
+      icon: <WishlistIcon />,
+      showBadge: true,
+    },
+    {
+      href: "/account",
+      label: "Account",
+      icon: <AccountIcon />,
+      showDot: !!session?.user,
+    },
     { href: "/cart", label: "Cart", icon: <CartIcon />, showBadge: true },
   ];
 
@@ -233,6 +245,9 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
       role="toolbar"
       aria-label="User actions"
     >
+      <div className="hidden lg:block">
+        <CurrencyDropdown />
+      </div>
       {actions.map((action) => (
         <Link
           key={action.href}
@@ -240,7 +255,7 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
           aria-label={action.label}
           className="header__user-action"
           onClick={action.onClick}
-          style={{ position: 'relative', display: 'inline-block' }}
+          style={{ position: "relative", display: "inline-block" }}
         >
           {action.icon}
           {action.label === "Wishlist" && wishlistItems.length > 0 && (
@@ -331,9 +346,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
   navItems,
 }) => (
   <div
-    className={`header__mobile-menu ${isOpen ? "header__mobile-menu--open" : ""}`}
+    className={`header__mobile-menu ${
+      isOpen ? "header__mobile-menu--open" : ""
+    }`}
   >
     <div className="header__mobile-menu-container">
+      <div className="mt-3 flex justify-end px-4">
+        <CurrencyDropdown />
+      </div>
       <nav className="header__mobile-nav" aria-label="Mobile menu">
         <ul className="header__mobile-nav-list">
           {navItems.map((item) => (
@@ -387,11 +407,15 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
       >
         <span>{item.title}</span>
         <ChevronDownIcon
-          className={`header__mobile-dropdown-icon ${isOpen ? "header__mobile-dropdown-icon--rotated" : ""}`}
+          className={`header__mobile-dropdown-icon ${
+            isOpen ? "header__mobile-dropdown-icon--rotated" : ""
+          }`}
         />
       </button>
       <div
-        className={`header__mobile-dropdown-content ${isOpen ? "header__mobile-dropdown-content--open" : ""}`}
+        className={`header__mobile-dropdown-content ${
+          isOpen ? "header__mobile-dropdown-content--open" : ""
+        }`}
       >
         {item.dropdownItems.map((subItem) => (
           <Link
@@ -462,12 +486,31 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
+  const { preferredCurrency } = useAccountStore();
 
-  const { data, isLoading } = useProductsSearch({
-    search: submittedQuery,
-    page: 1,
-    pageSize: 100,
-  }) as { data?: ProductsResponse; isLoading: boolean; isError: boolean };
+  useEffect(() => {
+    if (!isVisible) {
+      setSearchQuery("");
+      setSubmittedQuery("");
+    }
+  }, [isVisible]);
+
+  const shouldFetch = isVisible && submittedQuery.trim().length > 0;
+
+  const searchParams = shouldFetch
+    ? {
+        search: submittedQuery,
+        page: 1,
+        pageSize: 100,
+        currency: preferredCurrency,
+      }
+    : undefined;
+
+  const { data, isLoading } = useProductsSearch(searchParams, shouldFetch) as {
+    data?: ProductsResponse;
+    isLoading: boolean;
+    isError: boolean;
+  };
 
   const products = data?.products || [];
 
@@ -476,15 +519,23 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
     setSubmittedQuery(searchQuery.trim());
   };
 
+  const handleClose = () => {
+    setSearchQuery("");
+    setSubmittedQuery("");
+    onClose();
+  };
+
   return (
     <div
-      className={`header__search-overlay ${isVisible ? "header__search-overlay--visible" : ""}`}
+      className={`header__search-overlay ${
+        isVisible ? "header__search-overlay--visible" : ""
+      }`}
     >
       <div className="header__search-overlay-container">
         <div className="header__search-overlay-header">
           <LogoLink href="/" />
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="header__search-overlay-close"
             aria-label="Close search"
           >
@@ -499,7 +550,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="header__search-overlay-input"
-            autoFocus
           />
           <button
             type="submit"

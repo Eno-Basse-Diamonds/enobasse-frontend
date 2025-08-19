@@ -1,6 +1,11 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { notFound, redirect } from 'next/navigation';
-import { API_URL } from './constants';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import {
+  setupCache,
+  type CacheOptions,
+  type CacheRequestConfig,
+} from "axios-cache-interceptor";
+import { notFound, redirect } from "next/navigation";
+import { API_URL } from "./constants";
 
 export class ApiError extends Error {
   constructor(
@@ -9,8 +14,12 @@ export class ApiError extends Error {
     public errors?: Record<string, string[]>
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
+}
+
+export interface ApiRequestConfig extends AxiosRequestConfig {
+  cache?: boolean | CacheOptions;
 }
 
 class ApiClient {
@@ -18,12 +27,22 @@ class ApiClient {
   private axiosInstance: AxiosInstance;
 
   private constructor() {
-    this.axiosInstance = axios.create({
-      baseURL: API_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    this.axiosInstance = setupCache(
+      axios.create({
+        baseURL: API_URL,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      {
+        ttl: 60 * 1000,
+        methods: ["get"],
+        cachePredicate: {
+          statusCheck: (status) => status >= 200 && status < 300,
+        },
+        cacheTakeover: false,
+      }
+    );
 
     this.setupInterceptors();
   }
@@ -42,7 +61,7 @@ class ApiClient {
         if (error.response) {
           switch (error.response.status) {
             case 401:
-              redirect('/sign-in');
+              redirect("/sign-in");
               break;
             case 404:
               notFound();
@@ -50,7 +69,7 @@ class ApiClient {
             default:
               const errorData = error.response.data as any;
               throw new ApiError(
-                errorData.message || 'An unexpected error occurred',
+                errorData.message || "An unexpected error occurred",
                 error.response.status,
                 errorData.errors
               );
@@ -61,28 +80,109 @@ class ApiClient {
     );
   }
 
-  public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.get<T>(url, config);
+  private buildCacheConfig(
+    cacheDuration?: number,
+    cacheOptions?: CacheOptions
+  ): CacheRequestConfig {
+    const cacheConfig: CacheRequestConfig = {};
+
+    if (cacheDuration !== undefined) {
+      cacheConfig.cache = {
+        ttl: cacheDuration,
+        ...cacheOptions,
+      };
+    } else if (cacheOptions !== undefined) {
+      cacheConfig.cache = cacheOptions;
+    }
+
+    return cacheConfig;
+  }
+
+  public async get<T>(
+    url: string,
+    config?: ApiRequestConfig & { cacheDuration?: number }
+  ): Promise<T> {
+    const { cacheDuration, ...axiosConfig } = config || {};
+
+    const cacheConfig = this.buildCacheConfig(
+      cacheDuration,
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+    );
+
+    const finalConfig = { ...axiosConfig, ...cacheConfig };
+
+    const response = await this.axiosInstance.get<T>(url, finalConfig);
     return response.data;
   }
 
-  public async post<T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.post<T>(url, data, config);
+  public async post<T, D = unknown>(
+    url: string,
+    data?: D,
+    config?: ApiRequestConfig & { cacheDuration?: number }
+  ): Promise<T> {
+    const { cacheDuration, ...axiosConfig } = config || {};
+
+    const cacheConfig = this.buildCacheConfig(
+      cacheDuration,
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+    );
+
+    const finalConfig = { ...axiosConfig, ...cacheConfig };
+
+    const response = await this.axiosInstance.post<T>(url, data, finalConfig);
     return response.data;
   }
 
-  public async put<T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.put<T>(url, data, config);
+  public async put<T, D = unknown>(
+    url: string,
+    data?: D,
+    config?: ApiRequestConfig & { cacheDuration?: number }
+  ): Promise<T> {
+    const { cacheDuration, ...axiosConfig } = config || {};
+
+    const cacheConfig = this.buildCacheConfig(
+      cacheDuration,
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+    );
+
+    const finalConfig = {...axiosConfig,  ...cacheConfig };
+
+    const response = await this.axiosInstance.put<T>(url, data, finalConfig);
     return response.data;
   }
 
-  public async patch<T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.patch<T>(url, data, config);
+  public async patch<T, D = unknown>(
+    url: string,
+    data?: D,
+    config?: ApiRequestConfig & { cacheDuration?: number }
+  ): Promise<T> {
+    const { cacheDuration, ...axiosConfig } = config || {};
+
+    const cacheConfig = this.buildCacheConfig(
+      cacheDuration,
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+    );
+
+    const finalConfig = { ...axiosConfig, ...cacheConfig };
+
+    const response = await this.axiosInstance.patch<T>(url, data, finalConfig);
     return response.data;
   }
 
-  public async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.axiosInstance.delete<T>(url, config);
+  public async delete<T>(
+    url: string,
+    config?: ApiRequestConfig & { cacheDuration?: number }
+  ): Promise<T> {
+    const { cacheDuration, ...axiosConfig } = config || {};
+
+    const cacheConfig = this.buildCacheConfig(
+      cacheDuration,
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+    );
+
+    const finalConfig = { ...axiosConfig, ...cacheConfig };
+
+    const response = await this.axiosInstance.delete<T>(url, finalConfig);
     return response.data;
   }
 }

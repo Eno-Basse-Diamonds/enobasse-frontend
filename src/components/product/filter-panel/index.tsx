@@ -15,14 +15,12 @@ interface FilterOption {
 
 interface FilterPanelProps {
   metalOptions: FilterOption[];
-  gemstones: FilterOption[];
   selectedFilters?: FilterOption[];
   onFilterChange?: (filters: FilterOption[]) => void;
 }
 
 export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
   metalOptions,
-  gemstones,
   selectedFilters = [],
   onFilterChange,
 }) => {
@@ -127,7 +125,6 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
 
 export const FilterPanelDesktop: React.FC<FilterPanelProps> = ({
   metalOptions,
-  gemstones,
   selectedFilters = [],
   onFilterChange,
 }) => {

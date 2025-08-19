@@ -17,7 +17,8 @@ import { ChevronDownIcon } from "@/components/icons";
 import { useProducts } from "@/lib/hooks/use-products";
 import { ProductsResponse, FilterOption } from "@/lib/types/products";
 import { filterAndSortProducts } from "@/lib/utils/products";
-import { metalOptions, gemstones } from "@/lib/utils/constants";
+import { metalOptions } from "@/lib/utils/constants";
+import { useAccountStore } from "@/lib/store/account";
 import "./styles.scss";
 
 const containerVariants = {
@@ -37,19 +38,21 @@ export default function ProductsPage() {
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState<string>("featured");
   const [currentPage, setCurrentPage] = useState(1);
+  const { preferredCurrency, isHydrated } = useAccountStore();
   const pageSize = 36;
 
   const { data, isLoading } = useProducts({
     page: currentPage,
     pageSize,
     sortBy,
+    currency: preferredCurrency,
     metals: selectedFilters
       .filter((f) => f.type === "metal")
       .map((f) => f.name),
     gemstones: selectedFilters
       .filter((f) => f.type === "gemstone")
       .map((f) => f.name),
-  }) as { data: ProductsResponse; isLoading: boolean };
+  }, isHydrated) as { data: ProductsResponse; isLoading: boolean };
 
   const { products, meta } = data || {};
 
@@ -75,6 +78,9 @@ export default function ProductsPage() {
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, []);
 
   return (
@@ -93,10 +99,8 @@ export default function ProductsPage() {
           >
             <FilterPanelDesktop
               metalOptions={metalOptions as FilterOption[]}
-              gemstones={gemstones as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
-
             />
           </motion.aside>
           <motion.div
@@ -106,7 +110,6 @@ export default function ProductsPage() {
             <div className="lg:hidden">
               <FilterPanelMobile
                 metalOptions={metalOptions as FilterOption[]}
-                gemstones={gemstones as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
               />

@@ -6,6 +6,8 @@ type FormInputProps = {
   containerClassName?: string;
   inputClassName?: string;
   required?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export function FormInput({
@@ -14,6 +16,8 @@ export function FormInput({
   type = "text",
   placeholder = "",
   required = false,
+  value,
+  onChange,
 }: FormInputProps) {
   return (
     <div className="form-input">
@@ -26,6 +30,8 @@ export function FormInput({
         className="form-input__field"
         placeholder={placeholder}
         required={required}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );

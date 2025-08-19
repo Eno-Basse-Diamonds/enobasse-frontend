@@ -11,13 +11,14 @@ export const getProducts = async (
   return api.get("/products", { params: options });
 };
 
-export const getProduct = async (slug: string): Promise<Product> => {
-  return api.get(`/products/${slug}`);
+export const getProduct = async (slug: string, currency: string,): Promise<Product> => {
+  return api.get(`/products/${slug}`, { params: { currency: currency } });
 };
 
 export const getRelatedProducts = async (
   slug: string,
-  limit: number
+  limit: number,
+  currency: string,
 ): Promise<Product[]> => {
-  return api.get(`/products/${slug}/related`, { params: { limit } });
+  return api.get(`/products/${slug}/related`, { params: { limit, currency } });
 };

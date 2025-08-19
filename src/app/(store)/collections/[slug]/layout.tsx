@@ -5,11 +5,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getServerSession } from "next-auth";
 import { getCollectionWithProducts } from "@/lib/api/collections";
-
-const cachedGetCollection = cache(async (slug: string) => {
-  return getCollectionWithProducts(slug);
-});
+import { getPreferredCurrency } from "@/lib/api/account";
+import { authOptions } from "@/lib/config/auth";
 
 interface CollectionLayoutProps {
   children: React.ReactNode;
@@ -22,7 +21,11 @@ export const generateMetadata = async ({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> => {
   const { slug } = await params;
-  const { collection } = await cachedGetCollection(slug);
+  const session = await getServerSession(authOptions);
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const { collection } = await getCollectionWithProducts(slug, {
+    currency: preferredCurrency,
+  });
 
   if (!collection) {
     return {
@@ -63,11 +66,13 @@ export default async function CollectionLayout({
 }: CollectionLayoutProps) {
   const { slug } = await params;
   const queryClient = new QueryClient();
-  const collection = await cachedGetCollection(slug);
+  const session = await getServerSession(authOptions);
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const options = { currency: preferredCurrency };
 
   await queryClient.prefetchQuery({
-    queryKey: ["collection", slug],
-    queryFn: () => collection,
+    queryKey: ["collection", slug, options],
+    queryFn: () => getCollectionWithProducts(slug, options),
   });
 
   return (

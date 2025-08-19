@@ -2,9 +2,10 @@ import { api } from "../utils/api";
 import { CartItem } from "../types/carts";
 
 export const getCart = async (
-  accountEmail: string
+  accountEmail: string,
+  currency: string = "USD"
 ): Promise<{ items: CartItem[] }> => {
-  return api.get(`/cart`, { params: { accountEmail } });
+  return api.get(`/cart`, { params: { accountEmail, currency }, cache: false });
 };
 
 export const addToCart = async (
@@ -14,7 +15,7 @@ export const addToCart = async (
   productCategory: string,
   quantity: number,
   size?: number,
-  engraving?: { text: string; fontStyle: string },
+  engraving?: { text: string; fontStyle: string }
 ): Promise<CartItem> => {
   return api.post(
     `/cart`,

@@ -10,6 +10,7 @@ import { CartItem } from "@/lib/types/carts";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { useAccountStore } from "@/lib/store/account";
 
 interface CartItemCardProps {
   item: CartItem;
@@ -22,6 +23,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
 }) => {
   const { removeItem, updateItem } = useCartStore();
   const { data: session } = useSession();
+  const { preferredCurrency } = useAccountStore();
   const accountEmail = session?.user?.email ?? undefined;
 
   const handleDecrement = () => {
@@ -50,8 +52,9 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
     item.productVariant.images?.[0]?.url || "/images/cart-item.png";
   const imageAlt = item.productVariant.images?.[0]?.alt || "Product image";
   const title = item.productVariant.title || "Product";
+
   const price = item.productVariant.price || 0;
-  const currency = item.productVariant.currency || "$";
+
   const metals = item.productVariant.metals;
   const gemstones = item.productVariant.gemstones;
   const metalStr =
@@ -60,11 +63,12 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
       : "";
   const gemstoneStr =
     gemstones && gemstones.length > 0
-      ? `${gemstones[0].weightCarat ? `${gemstones[0].weightCarat}ct ` : ""}${gemstones[0].type || ""}`
+      ? `${gemstones[0].weightCarat ? `${gemstones[0].weightCarat}ct ` : ""}${
+          gemstones[0].type || ""
+        }`
       : "";
 
   const engravableProducts = ["Rings", "Wristwears", "Neckpieces"];
-  console.log(item.productCategory)
   const canBeEngraved = engravableProducts.includes(item.productCategory);
   const isRing = item.productCategory === "Rings" ? true : false;
 
@@ -80,6 +84,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
             alt={imageAlt}
             fill
             className="size-full object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
           />
         </Link>
 
@@ -101,11 +106,8 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 </p>
 
                 <p className="cart-page__price">
-                  {getCurrencySymbol(currency)}
-                  {price.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {getCurrencySymbol(preferredCurrency)}
+                  {price.toLocaleString()}
                 </p>
               </div>
 
@@ -155,11 +157,8 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-4 w-full justify-between">
                 <div className="cart-page__total-price text-primary-500 text-base whitespace-nowrap">
                   <span className="font-semibold">Total:</span>{" "}
-                  {getCurrencySymbol(currency)}
-                  {(price * item.quantity).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {getCurrencySymbol(preferredCurrency)}
+                  {(price * item.quantity).toLocaleString()}
                 </div>
                 {canBeEngraved && (
                   <Engraving

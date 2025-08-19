@@ -11,15 +11,17 @@ import { getCurrencySymbol } from "@/lib/utils/money";
 
 type WishlistItemProps = {
   item: WishlistItemInterface;
+  currentCurrency: string;
 };
 
-export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
+export const WishlistItem: React.FC<WishlistItemProps> = ({
+  item,
+  currentCurrency,
+}) => {
   const router = useRouter();
-
   const variant = item.productVariant;
   const { removeItem } = useWishlistStore();
   const { data: session } = useSession();
-
   const { addItem: addCartItem } = useCartStore();
   const quantity = 1;
 
@@ -35,6 +37,9 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
     router.push("/cart");
   };
 
+  const displayCurrency = currentCurrency || variant.currency;
+  const displayPrice = variant.price;
+
   return (
     <li className="wishlist-page__item">
       <div className="wishlist-page__item-content">
@@ -46,7 +51,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
             src={variant.images?.[0].url}
             alt={variant.images?.[0]?.alt || variant.title}
             fill
-            className="size-full object-contain"
+            className="size-full object-cover"
             sizes="(max-width: 768px) 100px, 150px"
           />
         </Link>
@@ -73,11 +78,8 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item }) => {
               </p>
             </div>
             <p className="wishlist-page__price">
-              {getCurrencySymbol(variant.currency)}
-              {variant.price?.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {getCurrencySymbol(displayCurrency)}
+              {displayPrice?.toLocaleString()}
             </p>
           </div>
 

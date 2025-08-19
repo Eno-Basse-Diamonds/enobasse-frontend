@@ -27,6 +27,7 @@ import { FilterPanelDesktop, FilterPanelMobile } from "./product/filter-panel";
 import { Alert } from "./alert";
 import { SizeGuide } from "./size-guide";
 import { Engraving } from "./modal";
+import { CurrencyDropdown } from "./dropdown";
 
 export {
   Header,
@@ -61,4 +62,5 @@ export {
   Alert,
   SizeGuide,
   Engraving,
+  CurrencyDropdown,
 };

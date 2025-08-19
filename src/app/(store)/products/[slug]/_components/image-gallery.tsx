@@ -43,11 +43,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   <Image
                     src={img.url}
                     alt={img.alt}
-                    fill
+                    width={800}
+                    height={800}
                     className="image-gallery__image"
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    quality={100}
+                    quality={index === 0 ? 60 : 100}
                     priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               ))}
