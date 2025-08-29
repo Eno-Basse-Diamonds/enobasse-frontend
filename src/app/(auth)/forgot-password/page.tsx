@@ -34,8 +34,8 @@ export default function ForgotPasswordPage() {
     <AuthSection
       type="forgot-password"
       title="Forgot Password"
-      heroImage="/images/auth/forgot-password.webp"
-      logoImage="/images/auth/logo-alt.png"
+      heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507385/forgot-password_k0hbxj.webp"
+      logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
       formFields={[
         {
           id: "email",

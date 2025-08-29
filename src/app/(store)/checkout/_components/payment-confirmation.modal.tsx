@@ -106,7 +106,7 @@ export const PaymentConfirmationModal: React.FC<
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 relative">
                 <Image
-                  src="/images/logos/gtbank.png"
+                  src="https://res.cloudinary.com/enobasse/image/upload/v1756511213/gtbank_ttbzya.png"
                   alt="GT Bank"
                   fill
                   className="object-contain"
@@ -115,7 +115,7 @@ export const PaymentConfirmationModal: React.FC<
               <span className="font-semibold">GT Bank</span>
               <div className="w-6 h-6 relative">
                 <Image
-                  src="/images/flags/ngn.webp"
+                  src="https://res.cloudinary.com/enobasse/image/upload/v1756511302/ngn_zgy73q.webp"
                   alt="NGN"
                   fill
                   className="object-contain"
@@ -131,7 +131,7 @@ export const PaymentConfirmationModal: React.FC<
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 relative">
                 <Image
-                  src="/images/logos/gtbank.png"
+                  src="https://res.cloudinary.com/enobasse/image/upload/v1756511213/gtbank_ttbzya.png"
                   alt="GT Bank"
                   fill
                   className="object-contain"
@@ -140,7 +140,7 @@ export const PaymentConfirmationModal: React.FC<
               <span className="font-semibold">GT Bank</span>
               <div className="w-6 h-6 relative">
                 <Image
-                  src="/images/flags/usd.png"
+                  src="https://res.cloudinary.com/enobasse/image/upload/v1756511303/usd_cvttar.png"
                   alt="USD"
                   fill
                   className="object-contain"
@@ -156,7 +156,7 @@ export const PaymentConfirmationModal: React.FC<
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 relative">
                 <Image
-                  src="/images/logos/zelle.png"
+                  src="https://res.cloudinary.com/enobasse/image/upload/v1756511215/zelle_z2wzsv.png"
                   alt="Zelle"
                   fill
                   className="object-contain"

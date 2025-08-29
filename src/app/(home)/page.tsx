@@ -34,43 +34,43 @@ export default async function HomePage() {
 
   const carouselItems = [
     {
-      image: "/images/categories/rings.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512330/rings_yahtc5.webp",
       alt: "White gold diamond ring",
       title: "Rings",
       href: "/collections/rings",
     },
     {
-      image: "/images/categories/engagement-rings.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512325/engagement-rings_fptggu.webp",
       alt: "White gold diamond engagement ring",
       title: "Engagement Rings",
       href: "/collections/engagement-rings",
     },
     {
-      image: "/images/categories/earrings.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
       alt: "White gold diamond earrings",
       title: "Earrings",
       href: "/collections/earrings",
     },
     {
-      image: "/images/categories/pendants.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
       alt: "White gold diamond cross pendant",
       title: "Pendants",
       href: "/collections/pendants",
     },
     {
-      image: "/images/categories/necklaces.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
       alt: "White gold diamond necklace",
       title: "Necklace",
       href: "/collections/necklace",
     },
     {
-      image: "/images/categories/bangles.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512321/bangles_lka5bf.webp",
       alt: "White gold diamond bangle",
       title: "Bangles",
       href: "/collections/bangles",
     },
     {
-      image: "/images/categories/bracelets.webp",
+      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
       alt: "White gold diamond bracelets",
       title: "Bracelets",
       href: "/collections/bracelets",
@@ -83,7 +83,7 @@ export default async function HomePage() {
       title: "Best Sellers",
       href: "/collections/best-sellers",
       image: {
-        src: "/images/collections/collection-01.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512492/collection-01_anaytq.webp",
         alt: "Butterfly shaped white gold diamond ring in a box",
       },
     },
@@ -92,7 +92,7 @@ export default async function HomePage() {
       title: "Valentine's Day Gifts",
       href: "/collection/valentine-gifts",
       image: {
-        src: "/images/collections/collection-02.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512494/collection-02_toaant.webp",
         alt: "Hands with a butterfly shaped white gold diamond ring on one finger",
       },
     },
@@ -101,7 +101,7 @@ export default async function HomePage() {
       title: "New Arrivals",
       href: "/collections/new-arrivals",
       image: {
-        src: "/images/collections/collection-03.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512496/collection-03_puyvz5.webp",
         alt: "Hand with leaf-styled white gold diamond ring holding an Eno Bassé jewelry box",
       },
     },
@@ -110,7 +110,7 @@ export default async function HomePage() {
       title: "Trending Now",
       href: "/collections/trending-now",
       image: {
-        src: "/images/collections/collection-04.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512495/collection-04_elxnkm.webp",
         alt: "Diamond cross yellow gold pendant",
       },
     },
@@ -123,7 +123,7 @@ export default async function HomePage() {
         description="We create antique jewellery that can be passed down through
             generations - timeless pieces designed to become family heirlooms."
         image={{
-          src: "/images/hero.webp",
+          src: "https://res.cloudinary.com/enobasse/image/upload/v1756506784/hero_iobwnd.webp",
           alt: "Woman wearing a necklace, ring, and bracelet from Eno Bassé",
         }}
         buttons={[
@@ -173,7 +173,7 @@ export default async function HomePage() {
         ]}
         button={{ text: "Contact Us", href: "/contact" }}
         image={{
-          src: "/images/need-help.webp",
+          src: "https://res.cloudinary.com/enobasse/image/upload/v1756506786/need-help_ef4rer.webp",
           alt: "White gold diamond earrings",
         }}
       />
@@ -185,7 +185,7 @@ export default async function HomePage() {
         ]}
         button={{ text: "About Us", href: "/about" }}
         image={{
-          src: "/images/founder.webp",
+          src: "https://res.cloudinary.com/enobasse/image/upload/v1756506784/founder_kkigdd.webp",
           alt: "Eno Bassé founder",
         }}
       />
@@ -199,13 +199,13 @@ export default async function HomePage() {
           text: "Contact Us",
           href: "/maintenance-repairs",
         }}
-        videoSrc="/videos/maintenance.mp4"
+        videoSrc="https://res.cloudinary.com/enobasse/video/upload/v1756511716/maintenance_gfxt92.mp4"
       />
 
       <CTASection
         heading="Want to design your own? Calm, we can do it!"
         image={{
-          src: "/images/call-to-action.webp",
+          src: "https://res.cloudinary.com/enobasse/image/upload/v1756506782/call-to-action_ea4ylx.webp",
           alt: "Ruby ring with gold metal in a box.",
         }}
         button={{ text: "Shop Now", href: "/collections" }}

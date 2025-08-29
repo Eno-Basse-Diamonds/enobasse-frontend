@@ -170,8 +170,16 @@ export const CurrencyDropdown: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currencies = [
-    { value: "USD", label: "USD", flag: "/images/flags/usd.png" },
-    { value: "NGN", label: "NGN", flag: "/images/flags/ngn.webp" },
+    {
+      value: "USD",
+      label: "USD",
+      flag: "https://res.cloudinary.com/enobasse/image/upload/v1756511303/usd_cvttar.png",
+    },
+    {
+      value: "NGN",
+      label: "NGN",
+      flag: "https://res.cloudinary.com/enobasse/image/upload/v1756511302/ngn_zgy73q.webp",
+    },
   ];
 
   const handleCurrencyChange = async (currency: string) => {

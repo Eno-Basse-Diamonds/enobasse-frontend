@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://www.enobasse.com/images/auth/sign-in.webp",
+        url: "https://res.cloudinary.com/enobasse/image/upload/v1756507388/sign-in_luzacd.webp",
         width: 1200,
         height: 630,
       },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "Sign In - Eno Bassé Diamonds",
     description:
       "Securely access your heirloom jewelry records and upcoming appointments.",
-    images: ["https://www.enobasse.com/images/auth/sign-in.webp"],
+    images: ["https://res.cloudinary.com/enobasse/image/upload/v1756507388/sign-in_luzacd.webp"],
   },
   alternates: {
     canonical: "https://www.enobasse.com/sign-in",

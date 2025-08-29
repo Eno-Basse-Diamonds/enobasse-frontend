@@ -9,7 +9,7 @@ export const SizeGuide: React.FC = () => {
           <div className="p-6 text-center">
             <div className="mx-auto mb-4 flex items-center justify-center">
               <Image
-                src="/images/logo.png"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756506781/logo_gvieez.png"
                 alt="Eno Bassé Diamonds Logo"
                 height={30}
                 width={30}

@@ -22,7 +22,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
         <Image
           src={
             imageError
-              ? "/images/collections/collection-fallback.png"
+              ? "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png"
               : collection.image.url
           }
           alt={collection.image.alt}

@@ -33,8 +33,8 @@ export default function CreateNewPasswordPage() {
     <AuthSection
       type="create-new-password"
       title="Create New Password"
-      heroImage="/images/auth/create-new-password.webp"
-      logoImage="/images/auth/logo-alt.png"
+      heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507390/create-new-password_logxft.webp"
+      logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
       formFields={[
         {
           id: "newPassword",

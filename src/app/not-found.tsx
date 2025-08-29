@@ -47,7 +47,7 @@ export default function NotFound() {
 
         <figure className="not-found__image-wrapper">
           <Image
-            src="/images/404.png"
+            src="https://res.cloudinary.com/enobasse/image/upload/v1756506783/404_otai1t.png"
             alt="Not found image"
             width={500}
             height={500}
