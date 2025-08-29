@@ -48,8 +48,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
     removeItem(item.productVariant.id, accountEmail);
   };
 
-  const imageUrl =
-    item.productVariant.images?.[0]?.url || "/images/cart-item.png";
+  const imageUrl = item.productVariant.images?.[0]?.url;
   const imageAlt = item.productVariant.images?.[0]?.alt || "Product image";
   const title = item.productVariant.title || "Product";
 

@@ -96,7 +96,7 @@ export default function AuthSection({
         redirect: true,
         callbackUrl: "/account",
       });
-      setIsAuthenticated(true)
+      setIsAuthenticated(true);
       setAccount({ email: formData.email });
     },
     "sign-in": async (formData) => {
@@ -106,7 +106,7 @@ export default function AuthSection({
         redirect: true,
         callbackUrl: "/account",
       });
-      setIsAuthenticated(true)
+      setIsAuthenticated(true);
       setAccount({ email: formData.email });
     },
     "forgot-password": async (formData) => {
@@ -196,16 +196,16 @@ export default function AuthSection({
           fill
           className="auth-page__hero-image"
           quality={100}
-          priority
+          priority={true}
+          loading="eager"
         />
 
         <Link href="/" className="auth-page__logo-container">
           <Image
             src={logoImage}
             alt="Brand Logo"
-            width={128}
-            height={40}
-            quality={100}
+            width={250}
+            height={100}
             className="auth-page__logo"
           />
         </Link>

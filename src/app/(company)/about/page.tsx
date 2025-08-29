@@ -31,7 +31,7 @@ export default function AboutUsPage() {
           <h1 className="about-page__title">About Us</h1>
           <div className="about-page__hero">
             <Image
-              src="/images/about/package-box.webp"
+              src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/package-box_faeatt.webp"
               alt="Eno Bassé packaging box"
               height={800}
               width={800}
@@ -74,7 +74,7 @@ export default function AboutUsPage() {
           <div className="about-page__founder-container">
             <div className="about-page__founder-image">
               <Image
-                src="/images/about/founder.webp"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756510664/founder_jcgqhh.webp"
                 alt="Eno Bassé founder profile picture"
                 height={1500}
                 width={1500}
@@ -129,7 +129,7 @@ export default function AboutUsPage() {
                 </p>
                 <div className="about-page__founder-info-signature">
                   <Image
-                    src="/images/about/signature.webp"
+                    src="https://res.cloudinary.com/enobasse/image/upload/v1756510657/signature_vh5lg6.webp"
                     alt="Eno Bassé founder name signature"
                     height={1500}
                     width={1500}
@@ -164,7 +164,7 @@ export default function AboutUsPage() {
             </div>
             <div className="about-page__section-image md:order-2">
               <Image
-                src="/images/about/sourcing-gemstone.webp"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/sourcing-gemstone_iahzmq.webp"
                 alt="Eno Bassé gemstones collection"
                 height={1500}
                 width={1500}
@@ -179,7 +179,7 @@ export default function AboutUsPage() {
           <div className="about-page__section-container">
             <div className="about-page__section-image">
               <Image
-                src="/images/about/making-the-jewlery.webp"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/making-the-jewlery_qeun0d.webp"
                 alt="Eno Bassé jewellery making process"
                 height={1500}
                 width={1500}
@@ -261,7 +261,7 @@ export default function AboutUsPage() {
             </div>
             <div className="about-page__section-image  md:order-2">
               <Image
-                src="/images/about/dirt-to-wealth.webp"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/dirt-to-wealth_bx89m5.webp"
                 alt="Eno Bassé Dirt to Wealth initiative"
                 height={1500}
                 width={1500}

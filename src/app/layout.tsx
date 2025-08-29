@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     siteName: "Eno Bassé Diamonds",
     images: [
       {
-        url: "https://enobasse.com/images/seo/og-image.png",
+        url: "https://res.cloudinary.com/enobasse/image/upload/v1756511099/og-image_wrcfog.png",
         width: 1200,
         height: 630,
         alt: "Eno Bassé Jewellery Collection",
@@ -65,7 +65,9 @@ export const metadata: Metadata = {
     title: "Eno Bassé Diamonds - Handcrafted Fine Jewelry",
     description:
       "Exquisite handcrafted Eno Bassé jewellery pieces with ethical sourcing and artisan craftsmanship.",
-    images: ["https://enobasse.com/images/seo/twitter-image.png"],
+    images: [
+      "https://res.cloudinary.com/enobasse/image/upload/v1756511103/twitter-image_spmjkj.png",
+    ],
     creator: "@EnoBasseDiamond",
   },
   robots: {

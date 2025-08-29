@@ -33,8 +33,8 @@ export default function PasswordResetCodePage() {
     <AuthSection
       type="password-reset-code"
       title="Password Rest Code"
-      heroImage="/images/auth/reset-code.webp"
-      logoImage="/images/auth/logo-alt.png"
+      heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507386/reset-code_hsywrh.webp"
+      logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
       formFields={[
         {
           id: "reset-code",

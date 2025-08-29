@@ -5,8 +5,8 @@ export default function SignInPage() {
     <AuthSection
       type="sign-in"
       title="Welcome Back"
-      heroImage="/images/auth/sign-in.webp"
-      logoImage="/images/auth/logo-alt.png"
+      heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507388/sign-in_luzacd.webp"
+      logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
       formFields={[
         {
           id: "email",

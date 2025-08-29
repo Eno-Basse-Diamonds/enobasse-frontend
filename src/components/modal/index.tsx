@@ -310,7 +310,10 @@ const EngravingPreview: React.FC<EngravingPreviewProps> = ({
       >
         <motion.div
           className="engraving-preview__background"
-          style={{ backgroundImage: "url('/images/ring-band.png')" }}
+          style={{
+            backgroundImage:
+              "url('https://res.cloudinary.com/enobasse/image/upload/v1756506783/ring-band_ycchj3.png')",
+          }}
           transition={{
             repeat: Infinity,
             repeatType: "reverse",

@@ -379,7 +379,7 @@ export default function ProductPage() {
           <div className="flex justify-start">
             <div className="w-full">
               <Image
-                src="/images/packaged-ring.png"
+                src="https://res.cloudinary.com/enobasse/image/upload/v1756506788/packaged-ring_hspfeo.png"
                 alt="Packaged jewellery from Eno Bassé"
                 width={400}
                 height={400}

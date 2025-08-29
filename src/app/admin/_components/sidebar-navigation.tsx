@@ -21,7 +21,7 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
         <div className="sidebar-navigation__logo-container">
           <Image
             className="sidebar-navigation__logo"
-            src="/images/logo.png"
+            src="https://res.cloudinary.com/enobasse/image/upload/v1756506781/logo_gvieez.png"
             alt="Eno Bassé logo"
             quality={100}
             height={100}

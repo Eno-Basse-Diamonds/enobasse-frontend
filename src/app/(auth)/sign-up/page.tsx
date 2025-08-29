@@ -5,8 +5,8 @@ export default function SignUpPage() {
     <AuthSection
       type="sign-up"
       title="Join the World of Timeless Luxury"
-      heroImage="/images/auth/sign-up.webp"
-      logoImage="/images/auth/logo-alt.png"
+      heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507385/sign-up_tfq8h3.webp"
+      logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
       formFields={[
         {
           id: "name",
