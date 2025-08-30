@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Input, PasswordInput } from "@/components";
-import { AuthGoogleIcon } from "@/components/icons";
 import {
   handleChangePassword,
   handleRequestResetPassword,
