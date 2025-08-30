@@ -36,35 +36,6 @@ export function OrderSummary({
     return amount.toLocaleString();
   };
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
-
-    const Paystack = (await import("@paystack/inline-js")).default;
-    const paystack = new Paystack();
-
-    paystack.newTransaction({
-      key: process.env.PAYSTACK_PUBLIC_KEY || "",
-      email: process.env.PAYSTACK_EMAI || "",
-      amount: subtotal * 100,
-      currency: "NGN",
-      onSuccess: (transaction) => {
-        // Create order
-        // Clear cart
-        // Redirect to order history page
-        // Show success alert message
-        setIsProcessing(false);
-      },
-      onCancel: () => {
-        setIsProcessing(false);
-      },
-      onError: (error) => {
-        console.error("Payment error:", error.message);
-        // Show error message
-        setIsProcessing(false);
-      },
-    });
-  };
-
   useEffect(() => {
     if (isProcessing) {
       document.body.style.overflow = "hidden";

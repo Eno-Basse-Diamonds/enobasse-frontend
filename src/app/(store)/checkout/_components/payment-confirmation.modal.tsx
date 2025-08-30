@@ -7,7 +7,6 @@ import { CheckIcon, CloseIcon } from "@/components/icons";
 import { useOrdersStore } from "@/lib/store/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
-import { OrderItem } from "@/lib/types/orders";
 import { useSession } from "next-auth/react";
 
 interface PaymentConfirmationModalProps {
