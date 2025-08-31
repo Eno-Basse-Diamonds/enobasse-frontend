@@ -34,9 +34,10 @@ export const PersonalInfoForm = ({
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            First Name
+            First Name *
           </label>
           <input
+            id="firstName"
             type="text"
             value={personalInfo.firstName}
             onChange={(e) => onInputChange("firstName", e.target.value)}
@@ -51,9 +52,10 @@ export const PersonalInfoForm = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Last Name
+            Last Name *
           </label>
           <input
+            id="lastName"
             type="text"
             value={personalInfo.lastName}
             onChange={(e) => onInputChange("lastName", e.target.value)}
@@ -68,9 +70,10 @@ export const PersonalInfoForm = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Email Address
+            Email Address *
           </label>
           <input
+            id="email"
             type="email"
             value={personalInfo.email}
             onChange={(e) => onInputChange("email", e.target.value)}
@@ -85,9 +88,10 @@ export const PersonalInfoForm = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Phone Number
+            Phone Number *
           </label>
           <input
+            id="phoneNumber"
             type="tel"
             value={personalInfo.phone}
             onChange={(e) => onInputChange("phone", e.target.value)}

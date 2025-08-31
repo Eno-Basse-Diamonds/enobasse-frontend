@@ -35,9 +35,12 @@ export const CustomerDetailsForm = ({
             First Name <span className="text-red-500">*</span>
           </label>
           <input
+            id="firstName"
             type="text"
             value={formData.personalInfo.firstName}
-            onChange={(e) => onInputChange("personalInfo", "firstName", e.target.value)}
+            onChange={(e) =>
+              onInputChange("personalInfo", "firstName", e.target.value)
+            }
             className={`w-full px-4 py-3 border ${
               errors.firstName ? "border-red-500" : "border-slate-300"
             }`}
@@ -53,9 +56,12 @@ export const CustomerDetailsForm = ({
             Last Name <span className="text-red-500">*</span>
           </label>
           <input
+            id="lastName"
             type="text"
             value={formData.personalInfo.lastName}
-            onChange={(e) => onInputChange("personalInfo", "lastName", e.target.value)}
+            onChange={(e) =>
+              onInputChange("personalInfo", "lastName", e.target.value)
+            }
             className={`w-full px-4 py-3 border ${
               errors.lastName ? "border-red-500" : "border-slate-300"
             }`}
@@ -71,9 +77,12 @@ export const CustomerDetailsForm = ({
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
+            id="email"
             type="email"
             value={formData.personalInfo.email}
-            onChange={(e) => onInputChange("personalInfo", "email", e.target.value)}
+            onChange={(e) =>
+              onInputChange("personalInfo", "email", e.target.value)
+            }
             className={`w-full px-4 py-3 border ${
               errors.email ? "border-red-500" : "border-slate-300"
             }`}
@@ -89,9 +98,12 @@ export const CustomerDetailsForm = ({
             Phone Number <span className="text-red-500">*</span>
           </label>
           <input
+            id="phoneNumber"
             type="tel"
             value={formData.personalInfo.phone}
-            onChange={(e) => onInputChange("personalInfo", "phone", e.target.value)}
+            onChange={(e) =>
+              onInputChange("personalInfo", "phone", e.target.value)
+            }
             className={`w-full px-4 py-3 border ${
               errors.phone ? "border-red-500" : "border-slate-300"
             }`}

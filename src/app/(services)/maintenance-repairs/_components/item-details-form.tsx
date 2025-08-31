@@ -31,7 +31,10 @@ export const ItemDetailsForm = ({
 }: ItemDetailsFormProps) => {
   const onFileUpload = (result: any) => {
     if (result.info && result.info.secure_url) {
-      onInputChange("images", [...formData.images, result.info.secure_url].join(","));
+      onInputChange(
+        "images",
+        [...formData.images, result.info.secure_url].join(",")
+      );
     }
   };
 
@@ -77,19 +80,6 @@ export const ItemDetailsForm = ({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Brand
-              </label>
-              <input
-                type="text"
-                value={formData.brand}
-                onChange={(e) => onInputChange("brand", e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-                placeholder="e.g., Tiffany & Co., Cartier"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Metal Type *
               </label>
               <div className="relative">
@@ -105,9 +95,7 @@ export const ItemDetailsForm = ({
                   <option value="gold">Gold</option>
                   <option value="silver">Silver</option>
                   <option value="platinum">Platinum</option>
-                  <option value="palladium">Palladium</option>
-                  <option value="titanium">Titanium</option>
-                  <option value="other">Other</option>
+                  <option value="none">None</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               </div>
@@ -130,73 +118,16 @@ export const ItemDetailsForm = ({
                   }`}
                 >
                   <option value="">Select karat</option>
-                  <option value="24k">24K</option>
                   <option value="22k">22K</option>
                   <option value="18k">18K</option>
                   <option value="14k">14K</option>
                   <option value="10k">10K</option>
-                  <option value="925">925 Sterling Silver</option>
-                  <option value="950">950 Platinum</option>
-                  <option value="900">900 Platinum</option>
-                  <option value="other">Other</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               </div>
               {errors?.karat && (
                 <p className="text-red-500 text-sm mt-1">{errors.karat}</p>
               )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Estimated Value
-              </label>
-              <input
-                type="text"
-                value={formData.estimatedValue}
-                onChange={(e) =>
-                  onInputChange("estimatedValue", e.target.value)
-                }
-                className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-                placeholder="$0.00"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Purchase Date
-              </label>
-              <input
-                type="date"
-                value={formData.purchaseDate}
-                onChange={(e) => onInputChange("purchaseDate", e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Serial Number
-              </label>
-              <input
-                type="text"
-                value={formData.serialNumber}
-                onChange={(e) => onInputChange("serialNumber", e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Item Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => onInputChange("description", e.target.value)}
-                rows={3}
-                className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-                placeholder="Describe the item in detail..."
-              />
             </div>
           </div>
         </div>
@@ -205,7 +136,7 @@ export const ItemDetailsForm = ({
       {/* Photos Section */}
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-2">
-          Item Photos
+          Item Photos (Optional)
         </label>
         <div className="border-2 border-dashed border-slate-300 p-6 text-center hover:border-secondary-500 transition-colors">
           <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />

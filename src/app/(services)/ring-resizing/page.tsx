@@ -50,25 +50,71 @@ export default function RingResizingPage() {
   ];
 
   const ringSizes = [
-    "3", "3.25", "3.5", "3.75", "4", "4.25", "4.5", "4.75", "5", "5.25", "5.5", "5.75",
-    "6", "6.25", "6.5", "6.75", "7", "7.25", "7.5", "7.75", "8", "8.25", "8.5", "8.75",
-    "9", "9.25", "9.5", "9.75", "10", "10.25", "10.5", "10.75", "11", "11.25", "11.5", "11.75",
-    "12", "12.25", "12.5", "12.75", "13"
+    "3",
+    "3.25",
+    "3.5",
+    "3.75",
+    "4",
+    "4.25",
+    "4.5",
+    "4.75",
+    "5",
+    "5.25",
+    "5.5",
+    "5.75",
+    "6",
+    "6.25",
+    "6.5",
+    "6.75",
+    "7",
+    "7.25",
+    "7.5",
+    "7.75",
+    "8",
+    "8.25",
+    "8.5",
+    "8.75",
+    "9",
+    "9.25",
+    "9.5",
+    "9.75",
+    "10",
+    "10.25",
+    "10.5",
+    "10.75",
+    "11",
+    "11.25",
+    "11.5",
+    "11.75",
+    "12",
+    "12.25",
+    "12.5",
+    "12.75",
+    "13",
   ];
 
   const handleInputChange = (
     section: string,
     field: string,
-    value: string
+    value: string | boolean
   ) => {
     if (section === "personalInfo") {
       setFormData({
         ...formData,
         personalInfo: { ...formData.personalInfo, [field]: value },
       });
-    } else if (section === "ringType" || section === "currentSize" || section === "desiredSize" || section === "urgency") {
+    } else if (
+      section === "ringType" ||
+      section === "currentSize" ||
+      section === "desiredSize" ||
+      section === "urgency"
+    ) {
       setFormData({ ...formData, [section]: value });
-    } else if (section === "inscriptionText" || section === "notes") {
+    } else if (
+      section === "hasInscription" ||
+      section === "inscriptionText" ||
+      section === "notes"
+    ) {
       setFormData({ ...formData, [section]: value });
     }
 
@@ -109,8 +155,10 @@ export default function RingResizingPage() {
       }
     } else if (step === 2) {
       if (!formData.ringType) newErrors.ringType = "Ring type is required";
-      if (!formData.currentSize) newErrors.currentSize = "Current size is required";
-      if (!formData.desiredSize) newErrors.desiredSize = "Desired size is required";
+      if (!formData.currentSize)
+        newErrors.currentSize = "Current size is required";
+      if (!formData.desiredSize)
+        newErrors.desiredSize = "Desired size is required";
     }
 
     setErrors(newErrors);
@@ -123,7 +171,9 @@ export default function RingResizingPage() {
       setCurrentStep(Math.min(currentStep + 1, 3));
     } else {
       setAlertType("error");
-      setAlertMessage("Please fill in all required fields correctly before proceeding.");
+      setAlertMessage(
+        "Please fill in all required fields correctly before proceeding."
+      );
       setShowAlert(true);
     }
   };
@@ -137,7 +187,9 @@ export default function RingResizingPage() {
     e.preventDefault();
     if (!validateStep(currentStep)) {
       setAlertType("error");
-      setAlertMessage("Please fill in all required fields correctly before submitting.");
+      setAlertMessage(
+        "Please fill in all required fields correctly before submitting."
+      );
       setShowAlert(true);
       return;
     }
@@ -161,7 +213,9 @@ export default function RingResizingPage() {
 
       await sendRingResizingMessage(message);
       setAlertType("success");
-      setAlertMessage("Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.");
+      setAlertMessage(
+        "Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline."
+      );
       setShowAlert(true);
       setIsSubmitted(true);
       resetForm();
@@ -169,7 +223,9 @@ export default function RingResizingPage() {
     } catch (error) {
       console.error("Error submitting form:", error);
       setAlertType("error");
-      setAlertMessage("There was an error submitting your request. Please try again later.");
+      setAlertMessage(
+        "There was an error submitting your request. Please try again later."
+      );
       setShowAlert(true);
     } finally {
       setIsSubmitting(false);
@@ -271,15 +327,21 @@ export default function RingResizingPage() {
             {currentStep === 3 && (
               <AdditionalInfoForm
                 formData={{
-                  hasInscription: !!formData.inscriptionText,
-                  inscriptionText: formData.inscriptionText || '',
-                  notes: formData.notes || '',
-                  images: formData.images
+                  hasInscription: formData.hasInscription,
+                  inscriptionText: formData.inscriptionText || "",
+                  notes: formData.notes || "",
+                  images: formData.images,
                 }}
-                onInputChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                onInputChange={(
+                  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
                   const { name, value, type } = e.target;
-                  if (type === 'checkbox') {
-                    handleInputChange(name, name, (e.target as HTMLInputElement).checked.toString());
+                  if (type === "checkbox") {
+                    handleInputChange(
+                      name,
+                      name,
+                      (e.target as HTMLInputElement).checked
+                    );
                   } else {
                     handleInputChange(name, name, value);
                   }

@@ -50,19 +50,10 @@ interface MaintenanceRepairsMessage {
   name: string;
   email: string;
   phone: string;
-  address: string;
-  city: string;
-  state: string;
   message: {
     itemType: string;
-    brand: string;
     metalType: string;
     karat: string;
-    purchaseDate: string;
-    purchaseLocation: string;
-    description: string;
-    serialNumber: string;
-    estimatedValue: string;
     serviceType: string;
     urgency: string;
     serviceDescription: string;

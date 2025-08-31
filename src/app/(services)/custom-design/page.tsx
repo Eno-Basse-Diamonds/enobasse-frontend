@@ -53,19 +53,6 @@ interface FormData {
   contactPreference: "email" | "phone";
 }
 
-interface CustomDesignMessage {
-  name: string;
-  email: string;
-  phone: string;
-  message: {
-    description: string;
-    timeline: string;
-    contactPreference: "email" | "phone";
-    designSpecs: DesignSpecs;
-    inspirationImages: string[];
-  };
-}
-
 export default function CustomDesignPage() {
   const { formData, currentStep, setFormData, setCurrentStep, resetForm } = useCustomDesignStore();
   const [errors, setErrors] = useState<FormErrors>({});

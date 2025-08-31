@@ -4,9 +4,6 @@ interface CustomerDetailsFormProps {
     lastName: string;
     email: string;
     phone: string;
-    address: string;
-    city: string;
-    state: string;
   };
   errors?: {
     firstName?: string;
@@ -37,6 +34,7 @@ export const CustomerDetailsForm = ({
               First Name *
             </label>
             <input
+              id="firstName"
               type="text"
               required
               value={formData.firstName}
@@ -55,6 +53,7 @@ export const CustomerDetailsForm = ({
               Last Name *
             </label>
             <input
+              id="lastName"
               type="text"
               required
               value={formData.lastName}
@@ -73,6 +72,7 @@ export const CustomerDetailsForm = ({
               Email Address *
             </label>
             <input
+              id="email"
               type="email"
               required
               value={formData.email}
@@ -91,6 +91,7 @@ export const CustomerDetailsForm = ({
               Phone Number *
             </label>
             <input
+              id="phoneNumber"
               type="tel"
               required
               value={formData.phone}
@@ -102,42 +103,6 @@ export const CustomerDetailsForm = ({
             {errors?.phone && (
               <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
             )}
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Address
-            </label>
-            <input
-              type="text"
-              value={formData.address}
-              onChange={(e) => onInputChange("address", e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              City
-            </label>
-            <input
-              type="text"
-              value={formData.city}
-              onChange={(e) => onInputChange("city", e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              State
-            </label>
-            <input
-              type="text"
-              value={formData.state}
-              onChange={(e) => onInputChange("state", e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 border-slate-300"
-            />
           </div>
         </div>
       </div>
