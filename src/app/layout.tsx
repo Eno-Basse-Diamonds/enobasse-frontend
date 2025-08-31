@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Script from 'next/script';
+import Script from "next/script";
 import { Lora, Gantari, Dancing_Script } from "next/font/google";
 import { QueryProvider } from "../lib/providers/query-provider";
 import { getServerSession } from "next-auth";
@@ -7,6 +7,7 @@ import SessionProvider from "@/lib/providers/session-provider";
 import { AppAlert } from "@/components/alert";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { domAnimation, LazyMotion } from "motion/react";
 import "./globals.scss";
 
 const lora = Lora({
@@ -134,8 +135,10 @@ export default async function RootLayout({
       >
         <SessionProvider session={session}>
           <QueryProvider>
-            <AppAlert />
-            {children}
+            <LazyMotion features={domAnimation}>
+              <AppAlert />
+              {children}
+            </LazyMotion>
           </QueryProvider>
         </SessionProvider>
         <Script
