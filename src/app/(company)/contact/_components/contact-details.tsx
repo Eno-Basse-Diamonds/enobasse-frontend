@@ -33,19 +33,29 @@ export const ContactDetails = () => {
           </Link>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-start space-x-4">
           <Phone
             strokeWidth={1.5}
-            className="w-6 h-6 text-primary-200 flex-shrink-0"
+            className="w-6 h-6 text-primary-200 flex-shrink-0 mt-2"
           />
-          <Link
-            href="tel:+2349164886579"
-            className="text-primary-400 hover:text-primary-500"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            +234 916 488 6579
-          </Link>
+          <div className="flex flex-col gap-2">
+            <Link
+              href="tel:+2349164886579"
+              className="text-primary-400 hover:text-primary-500"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              +234 916 488 6579
+            </Link>
+            <Link
+              href="tel:+2349083038076"
+              className="text-primary-400 hover:text-primary-500"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              +234 908 303 8076
+            </Link>
+          </div>
         </div>
 
         <div className="flex items-center space-x-4">
