@@ -50,10 +50,10 @@ export const ServiceDetailsForm = ({
                   <option value="polishing">Polishing & Restoration</option>
                   <option value="repair">Repair</option>
                   <option value="resizing">Ring Resizing</option>
-                  <option value="stone-setting">Stone Setting</option>
+                  <option value="stone-replacement">Stone Replacement</option>
                   <option value="chain-repair">Chain Repair</option>
                   <option value="prong-repair">Prong Repair</option>
-                  <option value="appraisal">Appraisal</option>
+                  <option value="appraisal">Appraisal/Authentication</option>
                   <option value="other">Other</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
@@ -92,7 +92,7 @@ export const ServiceDetailsForm = ({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Preferred Contact Method
+                Preferred Contact Method (Optional)
               </label>
               <div className="relative">
                 <select
@@ -100,7 +100,7 @@ export const ServiceDetailsForm = ({
                   onChange={(e) =>
                     onInputChange("preferredContact", e.target.value)
                   }
-                  className="w-full px-4 py-3 border border-slate-300 border-slate-300 appearance-none"
+                  className="w-full px-4 py-3 border border-slate-300 appearance-none"
                 >
                   <option value="">Select contact method</option>
                   <option value="email">Email</option>
@@ -113,7 +113,7 @@ export const ServiceDetailsForm = ({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Delivery Method
+                Delivery Method (Optional)
               </label>
               <div className="relative">
                 <select
@@ -121,7 +121,7 @@ export const ServiceDetailsForm = ({
                   onChange={(e) =>
                     onInputChange("pickupDelivery", e.target.value)
                   }
-                  className="w-full px-4 py-3 border border-slate-300 border-slate-300 appearance-none"
+                  className="w-full px-4 py-3 border border-slate-300 appearance-none"
                 >
                   <option value="">Select delivery method</option>
                   <option value="drop-off">Drop-off at Store</option>
@@ -134,23 +134,16 @@ export const ServiceDetailsForm = ({
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Service Description *
+                Service Description (Optional)
               </label>
               <textarea
                 required
                 value={formData.description}
                 onChange={(e) => onInputChange("description", e.target.value)}
                 rows={4}
-                className={`w-full px-4 py-3 border border-slate-300 ${
-                  errors?.description ? "border-red-300" : "border-slate-300"
-                }`}
+                className="w-full px-4 py-3 border border-slate-300"
                 placeholder="Please describe the issue or service needed in detail..."
               />
-              {errors?.description && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.description}
-                </p>
-              )}
             </div>
           </div>
         </div>

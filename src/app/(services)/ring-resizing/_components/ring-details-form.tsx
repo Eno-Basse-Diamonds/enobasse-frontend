@@ -117,7 +117,7 @@ export const RingDetailsForm = ({
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Service Priority
+              Service Priority (Optional)
             </label>
             <div className="relative">
               <select

@@ -45,22 +45,12 @@ export const DesignSpecsForm = ({
     "White Gold",
     "Rose Gold",
     "Platinum",
+    "None",
   ];
 
-  const metalPurities = [
-    "24K",
-    "18K",
-    "14K",
-    "10K",
-  ];
+  const metalPurities = ["18K", "14K", "10K", "None"];
 
-  const gemstones = [
-    "Diamond",
-    "Sapphire",
-    "Ruby",
-    "Emerald",
-    "Pearl",
-  ];
+  const gemstones = ["Diamond", "Sapphire", "Ruby", "Emerald", "Pearl", "None"];
 
   const budgetRanges = [
     "Lower than $1,000",
@@ -81,16 +71,6 @@ export const DesignSpecsForm = ({
     "Other",
   ];
 
-  const styles = [
-    "Classic",
-    "Modern",
-    "Vintage",
-    "Art Deco",
-    "Minimalist",
-    "Bold Statement",
-    "Nature Inspired",
-  ];
-
   return (
     <div className="bg-white border border-primary-100 shadow-md p-4 py-8 md:p-8 mb-8">
       <div className="flex items-center justify-center space-x-3 mb-6">
@@ -102,7 +82,7 @@ export const DesignSpecsForm = ({
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Jewelry Type
+            Jewelry Type *
           </label>
           <div className="relative">
             <select
@@ -129,7 +109,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Metal Type
+            Metal Type *
           </label>
           <div className="relative">
             <select
@@ -156,7 +136,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Metal Purity
+            Metal Purity *
           </label>
           <div className="relative">
             <select
@@ -183,7 +163,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Primary Gemstone
+            Primary Gemstone (Optional)
           </label>
           <div className="relative">
             <select
@@ -193,7 +173,7 @@ export const DesignSpecsForm = ({
                 errors.gemstone ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
             >
-              <option value="">Select gemstone (optional)</option>
+              <option value="">Select gemstone</option>
               {gemstones.map((gem) => (
                 <option key={gem} value={gem}>
                   {gem}
@@ -209,7 +189,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Size
+            Size (Optional)
           </label>
           <input
             type="text"
@@ -222,7 +202,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Budget Range
+            Budget Range *
           </label>
           <div className="relative">
             <select
@@ -249,7 +229,7 @@ export const DesignSpecsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Occasion
+            Occasion *
           </label>
           <div className="relative">
             <select

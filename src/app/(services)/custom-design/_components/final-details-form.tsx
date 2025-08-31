@@ -39,7 +39,7 @@ export const FinalDetailsForm = ({
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Design Description
+            Design Description (Optional)
           </label>
           <textarea
             value={description}
@@ -52,7 +52,7 @@ export const FinalDetailsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Upload Inspiration Images
+            Upload Inspiration Images (Optional)
           </label>
           <div className="border-2 border-dashed border-slate-300 p-6 text-center hover:border-secondary-500 transition-colors">
             <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
@@ -94,7 +94,7 @@ export const FinalDetailsForm = ({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Preferred Timeline
+            Preferred Timeline *
           </label>
           <div className="relative">
             <select

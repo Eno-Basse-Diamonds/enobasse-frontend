@@ -75,7 +75,9 @@ export const AdditionalInfoForm = ({
         <div className="p-8">
           <div className="border-2 border-dashed border-slate-300 p-8 text-center hover:border-primary-500 transition-colors">
             <Upload className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <p className="text-slate-600 mb-2">Drag & drop images or click to browse</p>
+            <p className="text-slate-600 mb-2">
+              Drag & drop images or click to browse
+            </p>
             <p className="text-sm text-slate-500 mb-4">
               Helps us provide accurate assessment (optional)
             </p>
@@ -123,7 +125,7 @@ export const AdditionalInfoForm = ({
         <div className="p-8">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Special Instructions or Notes
+              Special Instructions or Notes (Optional)
             </label>
             <textarea
               name="notes"

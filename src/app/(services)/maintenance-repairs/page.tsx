@@ -93,8 +93,6 @@ export default function MaintenanceRepairsForm() {
         newErrors.serviceInfo = { ...newErrors.serviceInfo, serviceType: "Service type is required" };
       if (!formData.serviceInfo.urgency)
         newErrors.serviceInfo = { ...newErrors.serviceInfo, urgency: "Urgency is required" };
-      if (!formData.serviceInfo.description.trim())
-        newErrors.serviceInfo = { ...newErrors.serviceInfo, description: "Description is required" };
     }
 
     setErrors(newErrors);
@@ -123,19 +121,10 @@ export default function MaintenanceRepairsForm() {
         name: `${formData.customerInfo.firstName} ${formData.customerInfo.lastName}`,
         email: formData.customerInfo.email,
         phone: formData.customerInfo.phone,
-        address: formData.customerInfo.address,
-        city: formData.customerInfo.city,
-        state: formData.customerInfo.state,
         message: {
           itemType: formData.itemInfo.itemType,
-          brand: formData.itemInfo.brand,
           metalType: formData.itemInfo.metalType,
           karat: formData.itemInfo.karat,
-          purchaseDate: formData.itemInfo.purchaseDate,
-          purchaseLocation: formData.itemInfo.purchaseLocation,
-          description: formData.itemInfo.description,
-          serialNumber: formData.itemInfo.serialNumber,
-          estimatedValue: formData.itemInfo.estimatedValue,
           serviceType: formData.serviceInfo.serviceType,
           urgency: formData.serviceInfo.urgency,
           serviceDescription: formData.serviceInfo.description,
