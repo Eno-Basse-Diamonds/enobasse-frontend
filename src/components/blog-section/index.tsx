@@ -85,7 +85,7 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
           )}
         </figure>
         <div className="bg-white p-4 sm:p-5 flex-grow flex flex-col">
-          <h3 className="font-medium text-primary-500 text-base sm:text-lg md:text-xl mb-1 line-clamp-2">
+          <h3 className="font-medium font-primary text-primary-500 text-base sm:text-lg md:text-xl mb-1 line-clamp-2">
             {post.title}
           </h3>
           <p className="font-light text-sm sm:text-base md:text-[15px] text-neutral-300 mb-3 sm:mb-4 md:mb-5 flex-grow line-clamp-3">

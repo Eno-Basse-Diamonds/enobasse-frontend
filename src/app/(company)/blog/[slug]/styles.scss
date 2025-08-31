@@ -25,7 +25,7 @@
     }
 
     &-list {
-      @apply space-y-1 list-disc list-inside;
+      @apply space-y-1 list-disc px-4;
 
       &-item {
         @apply ml-0;
@@ -40,7 +40,7 @@
       }
 
       &-sublist {
-        @apply ml-4 mt-1 space-y-1 list-disc list-inside;
+        @apply ml-4 mt-1 space-y-1 list-disc px-4;
       }
     }
   }
