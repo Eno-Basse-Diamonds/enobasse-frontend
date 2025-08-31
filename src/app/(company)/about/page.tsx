@@ -60,7 +60,7 @@ export default function AboutUsPage() {
               We are devoted to creating unique, innovative and quality
               jewellery pieces.
             </p>
-            <ul className="list-disc list-inside space-y-2 text-primary-400">
+            <ul className="list-disc list-outside space-y-2 text-primary-400 px-4">
               <li>
                 To bestow that bride-to-be with the perfect engagement ring;
               </li>

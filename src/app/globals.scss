@@ -165,7 +165,7 @@ body {
   }
 
   &__list {
-    @apply list-disc list-inside text-primary-500 mb-4 space-y-2;
+    @apply list-disc px-4 text-primary-500 mb-4 space-y-2;
   }
 
   &__list-item {
@@ -259,7 +259,7 @@ body {
   }
 
   &__list {
-    @apply list-disc list-inside text-primary-500 mb-4 space-y-2;
+    @apply list-disc px-4 text-primary-500 mb-4 space-y-2;
   }
 
   &__list-item {
