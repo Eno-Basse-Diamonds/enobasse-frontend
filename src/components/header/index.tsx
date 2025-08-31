@@ -22,8 +22,8 @@ import { ProductListLoader } from "../loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
-import "./styles.scss";
 import { useAccountStore } from "@/lib/store/account";
+import "./styles.scss";
 
 interface NavigationItem {
   label: string;

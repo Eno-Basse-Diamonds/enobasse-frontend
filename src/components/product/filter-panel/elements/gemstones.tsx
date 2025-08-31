@@ -32,15 +32,15 @@ export const Gemstones: React.FC<GemstonesProps> = ({
   ];
 
   return (
-    <div className="product-filter-panel__filter-section product-filter-panel__filter-section--last">
-      <h3 className="product-filter-panel__title">Gemstones</h3>
-      <div className="product-filter-panel__options">
+    <div className="pb-4 lg:pb-8 pt-8">
+      <h3 className="text-base font-semibold mb-4">Gemstones</h3>
+      <div className="grid grid-cols-4 lg:grid-cols-3 gap-3">
         {gemstones.map((gemstone) => (
           <motion.label
             key={gemstone.name}
             whileHover="hover"
             variants={hoverVariants}
-            className={`product-filter-panel__option ${
+            className={`flex flex-col items-center gap-2 p-3 transition text-center cursor-pointer hover:bg-gray-50 ${
               selectedFilters.some((f) => f.name === gemstone.name)
                 ? "bg-gray-100"
                 : ""
@@ -54,11 +54,11 @@ export const Gemstones: React.FC<GemstonesProps> = ({
             />
             <motion.div
               whileHover={{ rotate: 10 }}
-              className="product-filter-panel__icon product-filter-panel__icon--gemstone"
+              className="w-12 h-12 flex items-center justify-center"
             >
               <DiamondIcon className={`w-10 h-10 ${gemstone.color}`} />
             </motion.div>
-            <span className="product-filter-panel__label">{gemstone.name}</span>
+            <span className="text-xs font-medium">{gemstone.name}</span>
           </motion.label>
         ))}
       </div>

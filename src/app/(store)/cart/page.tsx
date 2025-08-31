@@ -13,7 +13,6 @@ import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { ringSizes } from "@/lib/utils/constants";
-import "./styles.scss";
 
 export default function CartPage() {
   const { items, hydrated, hydrate, loading, refreshWithCurrency } =
@@ -60,13 +59,13 @@ export default function CartPage() {
   ]);
 
   return (
-    <div className="cart-page">
+    <div className="my-12">
       <PageHeading title="Shopping Cart" />
       {!hydrated || loading ? (
         <CartLoader />
       ) : (
         <SectionContainer id="cart">
-          <div className="cart-page__container">
+          <div className="max-w-6xl mx-auto">
             {items.length === 0 ? (
               <EmptyState
                 icon={<EmptyStateIcon />}
@@ -88,8 +87,8 @@ export default function CartPage() {
                     </Link>
                   </div>
                 )}
-                <div className="cart-page__content">
-                  <div className="cart-page__items-container">
+                <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-12">
+                  <div className="bg-white overflow-hidden mx-auto w-full flex-none lg:max-w-xl xl:max-w-2xl">
                     <ul className="divide-y divide-gray-100">
                       {items.map((item) => (
                         <CartItemCard

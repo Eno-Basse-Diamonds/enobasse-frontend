@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Sitemap",
@@ -81,16 +80,25 @@ export default async function SitemapPage() {
   ];
 
   return (
-    <div className="sitemap-page">
-      <h1>Sitemap</h1>
-      <div className="sitemap-grid">
+    <div className="px-4 lg:px-8 mt-12 pb-16 text-primary-500">
+      <h1 className="font-primary text-3xl md:text-4xl font-semibold text-center mb-12">
+        Sitemap
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {sections.map((section) => (
-          <div key={section.title} className="sitemap-section">
-            <h2>{section.title}</h2>
-            <ul>
+          <div key={section.title} className="space-y-4">
+            <h2 className="text-2xl font-primary text-secondary-500 mb-4">
+              {section.title}
+            </h2>
+            <ul className="space-y-2">
               {section.links.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href}>{link.name}</Link>
+                  <Link
+                    href={link.href}
+                    className="text-primary-500 hover:text-secondary-500 transition-colors duration-200"
+                  >
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>

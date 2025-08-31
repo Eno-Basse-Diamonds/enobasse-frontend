@@ -1,7 +1,7 @@
 export const EmptyStateIcon: React.FC = () => {
   return (
     <svg
-      className="empty-state-icon"
+      className="h-16 w-16 text-[#502B3A]"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"

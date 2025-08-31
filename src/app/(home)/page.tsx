@@ -11,8 +11,6 @@ import {
   HeroSection,
   SectionHeading,
   SectionContainer,
-  Header,
-  Footer,
 } from "@/components";
 import { AboutSection } from "./_components/about-section";
 import { BlogHeader } from "./_components/blog-header";
@@ -20,7 +18,6 @@ import { BlogContent } from "./_components/blog-content";
 import { HelpSection } from "./_components/help-section";
 import { ServicesSection } from "./_components/services-section";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
-import "./styles.scss";
 
 export default async function HomePage() {
   const queryClient = new QueryClient();

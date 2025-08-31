@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { countries } from "@/lib/utils/constants";
 import { getCurrencySymbol } from "@/lib/utils/money";
-import "./styles.scss";
 
 interface FormData {
   email: string;
@@ -147,14 +146,14 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="checkout-page">
+    <div className="bg-gray-50 py-12">
       <PageHeading title="Checkout" />
       <SectionContainer id="checkout">
-        <div className="checkout-page__container">
-          <div className="checkout-page__columns">
-            <div className="checkout-page__left-column">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="lg:w-3/5">
               <CheckoutFormSection title="Contact Information">
-                <form className="form">
+                <div className="space-y-4">
                   <FormInput
                     id="email"
                     label="Email address"
@@ -172,12 +171,12 @@ export default function CheckoutPage() {
                     value={formData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
                   />
-                </form>
+                </div>
               </CheckoutFormSection>
 
               <CheckoutFormSection title="Shipping & Billing">
-                <form className="form">
-                  <div className="form__grid-2">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <FormInput
                       id="first-name"
                       label="First name"
@@ -218,7 +217,7 @@ export default function CheckoutPage() {
                     }
                   />
 
-                  <div className="form__grid-2">
+                  <div className="grid grid-cols-2 gap-4">
                     <FormInput
                       id="city"
                       label="City"
@@ -235,10 +234,10 @@ export default function CheckoutPage() {
                       >
                         Country
                       </label>
-                      <div className="form__select-container">
+                      <div className="relative">
                         <select
                           id="country"
-                          className="form__select"
+                          className="block w-full px-4 py-2 pr-8 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559] appearance-none bg-white"
                           required
                           value={formData.country}
                           onChange={(e) =>
@@ -251,14 +250,14 @@ export default function CheckoutPage() {
                             </option>
                           ))}
                         </select>
-                        <div className="form__select-icon">
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#502B3A]">
                           <ChevronDownIcon className="h-4 w-4 text-[#502B3A]" />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="form__grid-2">
+                  <div className="grid grid-cols-2 gap-4">
                     <FormInput
                       id="region"
                       label="State/Province"
@@ -279,26 +278,26 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  <div className="form__checkbox-container">
+                  <div className="flex items-center">
                     <input
                       id="save-address"
                       name="save-address"
                       type="checkbox"
-                      className="form__checkbox"
+                      className="h-4 w-4 text-[#D1A559] focus:ring-[#D1A559] border-gray-300 rounded"
                       checked
                     />
                     <label
                       htmlFor="save-address"
-                      className="form__checkbox-label"
+                      className="ml-2 block text-sm text-[#502B3A]"
                     >
                       Save this information for next time
                     </label>
                   </div>
-                </form>
+                </div>
               </CheckoutFormSection>
             </div>
 
-            <div className="checkout-page__right-column">
+            <div className="lg:w-2/5">
               <OrderSummary
                 items={cartItems}
                 onPayNow={handlePayNow}

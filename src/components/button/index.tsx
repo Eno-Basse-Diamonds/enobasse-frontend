@@ -4,7 +4,6 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "../icons";
-import "./styles.scss";
 
 type IconProps = {
   size?: number;
@@ -68,17 +67,46 @@ export const Button: React.FC<ButtonProps> = ({
   const isDisabled = disabled || loading;
 
   const getButtonClasses = () => {
-    const baseClass = "button";
-    const sizeClass = `button--${size}`;
-    const variantClass = `button--${variant}`;
-    return `${baseClass} ${sizeClass} ${variantClass} ${className}`;
+    const baseClass =
+      "inline-flex items-center justify-center border font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200";
+
+    const sizeClasses = {
+      xs: "px-2 py-1 text-xs gap-1",
+      sm: "px-3 py-1.5 text-sm gap-1.5",
+      md: "px-4 py-2 text-base gap-2",
+      lg: "px-6 py-3 text-lg gap-2.5",
+      xl: "px-8 py-4 text-xl gap-3",
+    };
+
+    const variantClasses = {
+      primary:
+        "bg-primary-500 text-white border-transparent hover:bg-primary-500/90",
+      secondary:
+        "bg-secondary-500 text-white border-transparent hover:bg-secondary-400",
+      outline:
+        "bg-transparent text-primary-500 border-primary-500 hover:bg-primary-500/10 border",
+      ghost:
+        "bg-transparent text-primary-500 border-transparent hover:bg-primary-500/10",
+      danger: "bg-red-600 text-white border-transparent hover:bg-red-500",
+    };
+
+    return `${baseClass} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
   };
 
-  const getIconSizeClass = () => `button__icon--${size}`;
+  const getIconSizeClass = () => {
+    const iconSizes = {
+      xs: "w-3.5 h-3.5",
+      sm: "w-4 h-4",
+      md: "w-4 h-4",
+      lg: "w-5 h-5",
+      xl: "w-5 h-5",
+    };
+    return iconSizes[size];
+  };
 
   const renderLeadingIcon = () => {
     if (loading) {
-      return <Loader2 className={`button__spinner ${getIconSizeClass()}`} />;
+      return <Loader2 className={`animate-spin ${getIconSizeClass()}`} />;
     }
     if (leadingIcon) {
       return React.cloneElement(leadingIcon, {
@@ -140,14 +168,15 @@ export const BackButton: React.FC = () => {
 
   return (
     <button
-      className="back-button"
+      className="text-[#502B3A] hover:text-[#D1A559] transition-colors"
       aria-label="Go back to previous page"
       onClick={handleBack}
     >
-      <ArrowLeftIcon className="back-button__icon" />
+      <ArrowLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
     </button>
   );
 };
+
 export const WhatsAppButton = () => {
   const phoneNumber = "2349164886579";
 

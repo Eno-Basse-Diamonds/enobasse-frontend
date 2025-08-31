@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-query";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
 import { PageHeading } from "@/components";
-import "./styles.scss";
 import { ReactNode, Suspense } from "react";
 import { BlogSectionSkeletonLoader } from "@/components/loaders";
 
@@ -53,7 +52,7 @@ export default async function BlogPageLayout({
   });
 
   return (
-    <main className="blog-page">
+    <main className="mt-12 md:mt-16 mb-16 md:mb-20 lg:mb-28 text-primary-500">
       <PageHeading title="Our Blog" />
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<BlogSectionSkeletonLoader />}>{children}</Suspense>

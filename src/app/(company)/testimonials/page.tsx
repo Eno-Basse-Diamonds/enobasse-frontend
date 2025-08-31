@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Testimonials",
@@ -69,45 +68,48 @@ export default function TestimonialsPage() {
   };
 
   return (
-    <div className="testimonials">
-      <div className="testimonials__container">
-        <div className="testimonials__header">
-          <h1 className="testimonials__subtitle">Testimonials</h1>
-          <h2 className="testimonials__title">
+    <div className="pt-12 pb-24 sm:pb-32">
+      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+        <div className="mx-auto max-w-xl text-center">
+          <h1 className="text-lg font-semibold leading-8 tracking-tight text-secondary-500">
+            Testimonials
+          </h1>
+          <h2 className="mt-2 text-3xl md:text-4xl font-primary font-semibold tracking-tight text-primary-500">
             Read what our customers are saying about us!
           </h2>
         </div>
 
-        <div className="testimonials__content">
-          <div className="testimonials__grid">
+        <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+          <div className="grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="testimonials__card">
-                <blockquote className="testimonials__card-quote">
+              <div
+                key={testimonial.id}
+                className="bg-gray-50 p-8 text-sm leading-6 flex flex-col h-full"
+              >
+                <blockquote className="text-primary-500 flex-grow">
                   <p>"{testimonial.text}"</p>
                 </blockquote>
-                <div className="testimonials__card-footer">
+                <div className="mt-6 flex items-center gap-x-4">
                   {testimonial.avatar ? (
                     <Image
-                      className="testimonials__card-avatar"
+                      className="h-10 w-10 rounded-full bg-gray-50"
                       src={testimonial.avatar}
                       alt={testimonial.name}
                       width={100}
                       height={100}
                     />
                   ) : (
-                    <div className="testimonials__card-initials">
-                      <span className="testimonials__card-initial">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">
+                      <span className="text-sm font-medium text-primary-500">
                         {getInitials(testimonial.name)}
                       </span>
                     </div>
                   )}
-                  <div className="testimonials__card-info">
-                    <div className="testimonials__card-name">
+                  <div>
+                    <div className="font-semibold text-primary-500">
                       {testimonial.name}
                     </div>
-                    <div className="testimonials__card-handle">
-                      {testimonial.handle}
-                    </div>
+                    <div className="text-primary-400">{testimonial.handle}</div>
                   </div>
                 </div>
               </div>

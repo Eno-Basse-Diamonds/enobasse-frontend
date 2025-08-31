@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import "./styles.scss";
 
 interface SectionContainerProps {
   id: string;
@@ -16,7 +15,7 @@ export const SectionContainer: React.FC<SectionContainerProps> = ({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className={`section-container ${className}`}
+      className={`px-4 lg:px-8 mt-10 md:mt-16 ${className}`}
     >
       {children}
     </section>

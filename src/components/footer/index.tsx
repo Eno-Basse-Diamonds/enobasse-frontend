@@ -14,7 +14,6 @@ import {
   LinkedInIcon,
 } from "@/components/icons";
 import { subscribeToNewsletter } from "@/lib/api/contact";
-import "./styles.scss";
 
 interface NavItem {
   label: string;
@@ -40,20 +39,26 @@ export const Footer: React.FC<FooterProps> = ({
   className = "",
 }) => {
   return (
-    <footer className={`footer ${className}`} aria-label="Site footer">
+    <footer
+      className={`bg-[#D1A55933]/20 px-4 md:px-8 ${className}`}
+      aria-label="Site footer"
+    >
       <div>
         <nav aria-label="Footer navigation">
-          <div className="footer__container">
+          <div className="flex flex-row flex-wrap gap-8 justify-between py-12">
             <Navigation />
-            <div className="footer__socials-and-newsletter">
+            <div className="flex flex-col flex-1 gap-y-8 items-center mb-4 lg:mb-0 lg:flex-none lg:items-start">
               <Socials />
               <Newsletter />
             </div>
           </div>
         </nav>
-        <div className="footer__logo-and-copyright" role="contentinfo">
+        <div
+          className="py-8 flex items-center justify-between border-t border-secondary-200"
+          role="contentinfo"
+        >
           <div>
-            <Logo className="footer__logo" aria-hidden="true" />
+            <Logo className="-mx-9 h-6 lg:h-7" aria-hidden="true" />
           </div>
           <Copyright companyName={companyName} year={copyrightYear} />
         </div>
@@ -125,21 +130,21 @@ const Navigation: React.FC = () => {
   ];
 
   return (
-    <div className="footer__navigation">
+    <div className="w-full flex flex-row lg:w-auto flex-wrap gap-y-10 gap-x-20 justify-between order-2 lg:order-1">
       {navigation.map((section) => (
         <section key={section.id} aria-labelledby={section.id}>
-          <h2 id={section.id} className="footer__navigation-title">
+          <h2
+            id={section.id}
+            className="mb-4 text-base font-medium text-[#1B1B1D] uppercase"
+          >
             {section.title}
           </h2>
-          <ul className="footer__navigation-links">
+          <ul className="text-[#1B1B1D] font-light text-sm">
             {section.navItems.map((item) => (
-              <li
-                key={`${section.id}-${item.href}`}
-                className="footer__navigation-link-item"
-              >
+              <li key={`${section.id}-${item.href}`} className="mb-2">
                 <Link
                   href={item.href}
-                  className="footer__navigation-link"
+                  className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-[1px] after:h-[1px] after:w-full after:bg-[#1B1B1D] after:transition-transform after:duration-100 after:transform after:scale-x-0 after:origin-left hover:after:scale-x-100"
                   aria-label={item.ariaLabel}
                 >
                   {item.label}
@@ -181,20 +186,26 @@ const Newsletter: React.FC = () => {
   };
 
   return (
-    <section aria-labelledby="newsletter-heading">
-      <h2 id="newsletter-heading" className="footer__newsletter-heading">
+    <section
+      aria-labelledby="newsletter-heading"
+      className="order-2 lg:order-1"
+    >
+      <h2
+        id="newsletter-heading"
+        className="font-medium text-center lg:text-left text-base text-[#1B1B1D] uppercase mb-1"
+      >
         Subscribe to Our Newsletter
       </h2>
-      <p className="footer__newsletter-subheading">
+      <p className="font-light text-center lg:text-left text-sm text-[#1B1B1D]">
         Signup for our newsletter to stay up to date on news and events.
       </p>
       <form
-        className="footer__newsletter-form"
+        className="relative w-full mt-5 z-10"
         aria-label="Newsletter subscription"
         onSubmit={handleSubmit}
         noValidate
       >
-        <div className="footer__newsletter-form-group">
+        <div className="relative">
           <label htmlFor="email" className="sr-only">
             Email address
           </label>
@@ -202,7 +213,7 @@ const Newsletter: React.FC = () => {
             type="email"
             id="email"
             name="email"
-            className="footer__newsletter-form-input"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none pr-12"
             placeholder="Enter email address"
             required
             aria-required="true"
@@ -212,7 +223,7 @@ const Newsletter: React.FC = () => {
           />
           <button
             type="submit"
-            className="footer__newsletter-form-button"
+            className="absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80"
             aria-label="Subscribe"
             disabled={isSubmitting || !email}
           >
@@ -225,15 +236,11 @@ const Newsletter: React.FC = () => {
         </div>
       </form>
       {isSuccess && (
-        <p className="footer__newsletter-message footer__newsletter-message--success">
+        <p className="mt-2 text-sm text-green-600">
           Thank you for subscribing!
         </p>
       )}
-      {error && (
-        <p className="footer__newsletter-message footer__newsletter-message--error">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </section>
   );
 };
@@ -274,8 +281,8 @@ const Socials: React.FC = () => {
   ];
 
   return (
-    <nav aria-label="Social media links">
-      <div className="footer__socials">
+    <nav aria-label="Social media links" className="order-2 lg:order-1">
+      <div className="flex flex-row items-center justify-center gap-x-5">
         {socialLinks.map((link, index) => (
           <a
             key={`social-${index}`}
@@ -300,10 +307,10 @@ interface CopyrightProps {
 const Copyright: React.FC<CopyrightProps> = ({ companyName, year }) => {
   return (
     <div>
-      <span className="footer__copyright-text--desktop">
+      <span className="hidden md:block text-sm font-light text-[#1B1B1D]">
         © {year} {companyName}. All rights reserved.
       </span>
-      <span className="footer__copyright-text--mobile">
+      <span className="block md:hidden text-sm font-light text-[#1B1B1D]">
         © {year} {companyName}.
       </span>
     </div>

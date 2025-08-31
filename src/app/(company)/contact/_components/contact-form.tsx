@@ -76,9 +76,9 @@ export const ContactForm: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="contact-form__wrapper">
-          <div className="contact-form__group">
-            <div className="contact-form__row">
+        <div className="bg-white border border-primary-100 shadow-sm py-6 px-4 sm:px-6 md:p-8">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
                 id="firstName"
                 name="firstName"
@@ -126,7 +126,7 @@ export const ContactForm: React.FC = () => {
               rows={6}
             />
 
-            <div className="contact-form__submit">
+            <div className="flex justify-end">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Sending..." : "Send message"}
               </Button>
@@ -136,17 +136,20 @@ export const ContactForm: React.FC = () => {
       </form>
 
       {showSuccessModal && (
-        <div className="contact-form__modal-overlay">
-          <div className="contact-form__modal-content">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[99999] backdrop-blur-sm">
+          <div className="bg-white p-6 max-w-md w-full">
             <div className="text-center">
-              <CircleCheck strokeWidth={1.5} className="contact-form__icon" />
-              <h3 className="contact-form__modal-title">
+              <CircleCheck
+                strokeWidth={1.5}
+                className="mx-auto h-12 w-12 text-green-500"
+              />
+              <h3 className="mt-2 text-lg font-medium text-gray-900">
                 Message Sent Successfully!
               </h3>
-              <div className="contact-form__modal-body">
+              <div className="mt-2 text-sm text-gray-500">
                 Thank you for contacting us. We&#39;ll get back to you soon.
               </div>
-              <div className="contact-form__modal-footer">
+              <div className="mt-4">
                 <Button
                   type="button"
                   onClick={() => setShowSuccessModal(false)}
@@ -187,7 +190,10 @@ const InputField: React.FC<InputFieldProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={id} className="contact-form__label">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-primary-500 mb-2"
+      >
         {label}
       </label>
       {rows ? (
@@ -198,7 +204,7 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
-          className="contact-form__input"
+          className="w-full px-3 py-2 border border-primary-100 focus:ring-0"
         />
       ) : (
         <input
@@ -208,7 +214,7 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
-          className="contact-form__input"
+          className="w-full px-3 py-2 border border-primary-100 focus:ring-0"
         />
       )}
     </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.scss";
 
 interface SectionHeadingProps {
   id: string;
@@ -13,12 +12,17 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   description,
 }) => {
   return (
-    <header className="section-heading">
-      <h2 id={id} className="section-heading__title">
+    <header className="flex flex-col pt-6 pb-4 gap-y-4 items-center text-center">
+      <h2
+        id={id}
+        className="font-primary font-semibold text-2xl md:text-3xl lg:text-4xl text-[#502B3A]"
+      >
         {title}
       </h2>
       {description && (
-        <p className="section-heading__description">{description}</p>
+        <p className="font-light md:text-lg lg:text-xl text-[#1B1B1D] max-w-2xl">
+          {description}
+        </p>
       )}
     </header>
   );

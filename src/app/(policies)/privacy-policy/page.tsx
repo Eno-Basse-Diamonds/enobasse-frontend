@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Metadata } from "next";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",

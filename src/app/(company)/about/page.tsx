@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -24,22 +23,24 @@ export const metadata: Metadata = {
 
 export default function AboutUsPage() {
   return (
-    <div className="about-page">
-      <div className="about-page__container">
+    <div className="min-h-screen pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
-        <div className="about-page__header">
-          <h1 className="about-page__title">About Us</h1>
-          <div className="about-page__hero">
+        <div className="mb-10 md:mb-16">
+          <h1 className="text-center font-primary text-3xl md:text-4xl font-semibold text-primary-500 mb-6">
+            About Us
+          </h1>
+          <div className="relative -mx-4 md:mx-auto mb-10 md:mb-16">
             <Image
               src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/package-box_faeatt.webp"
               alt="Eno Bassé packaging box"
               height={800}
               width={800}
-              className="about-page__hero-image bg-gray-100"
+              className="w-full h-80 lg:h-96 object-cover bg-gray-100"
               quality={100}
             />
           </div>
-          <div className="about-page__content">
+          <div className="max-w-4xl mx-auto text-primary-400 leading-relaxed space-y-4">
             <p>
               Eno Bassé Gemstones and Allied Services is a registered company
               founded in 2021 by Eyakenoabasi Bob. We are a jewellery design
@@ -54,7 +55,7 @@ export default function AboutUsPage() {
               We are devoted to creating unique, innovative and quality
               jewellery pieces.
             </p>
-            <ul className="about-page__section-list">
+            <ul className="list-disc list-inside space-y-2 text-primary-400">
               <li>
                 To bestow that bride-to-be with the perfect engagement ring;
               </li>
@@ -70,23 +71,24 @@ export default function AboutUsPage() {
         </div>
 
         {/* Founder Section */}
-        <div className="about-page__founder">
-          <div className="about-page__founder-container">
-            <div className="about-page__founder-image">
+        <div className="py-6 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510664/founder_jcgqhh.webp"
                 alt="Eno Bassé founder profile picture"
                 height={1500}
                 width={1500}
                 quality={100}
+                className="w-full h-auto"
               />
             </div>
 
-            <div className="about-page__founder-info">
-              <h2 className="about-page__founder-info-title">
+            <div className="space-y-6">
+              <h2 className="font-primary text-2xl md:text-3xl font-semibold text-primary-500 mb-8">
                 Founder's Profile
               </h2>
-              <div className="about-page__founder-info-content">
+              <div className="space-y-6 text-primary-400 leading-relaxed">
                 <p>
                   Eyakenoabasi Bob is Nigerian Jewellery Designer born on August
                   27. Like her birthstones, Peridot, Spinel and Sardonyx, she is
@@ -127,7 +129,7 @@ export default function AboutUsPage() {
                   the zeal, talent and qualifications required to grow her brand
                   successfully
                 </p>
-                <div className="about-page__founder-info-signature">
+                <div className="mx-auto md:mx-0 mt-8 max-w-[200px]">
                   <Image
                     src="https://res.cloudinary.com/enobasse/image/upload/v1756510657/signature_vh5lg6.webp"
                     alt="Eno Bassé founder name signature"
@@ -142,13 +144,13 @@ export default function AboutUsPage() {
         </div>
 
         {/* Sourcing Section */}
-        <div className="about-page__section">
-          <div className="about-page__section-container">
-            <div className="about-page__section-content order-2">
-              <h2 className="about-page__section-title">
+        <div className="py-6 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="order-2 space-y-6">
+              <h2 className="font-primary text-2xl md:text-3xl font-semibold text-primary-500 mb-8">
                 Sourcing for Gemstones
               </h2>
-              <div className="about-page__section-text">
+              <div className="text-primary-400 leading-relaxed space-y-4">
                 <p>
                   Gemstones are a luxury with so much value which is why the Eno
                   Basse team prioritizes ethical mining and sourcing of
@@ -162,35 +164,37 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
-            <div className="about-page__section-image md:order-2">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/sourcing-gemstone_iahzmq.webp"
                 alt="Eno Bassé gemstones collection"
                 height={1500}
                 width={1500}
                 quality={100}
+                className="w-full h-auto"
               />
             </div>
           </div>
         </div>
 
         {/* Making Jewellery Section */}
-        <div className="about-page__section">
-          <div className="about-page__section-container">
-            <div className="about-page__section-image">
+        <div className="py-6 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/making-the-jewlery_qeun0d.webp"
                 alt="Eno Bassé jewellery making process"
                 height={1500}
                 width={1500}
                 quality={100}
+                className="w-full h-auto"
               />
             </div>
-            <div className="about-page__section-content">
-              <h2 className="about-page__section-title">
+            <div className="space-y-6">
+              <h2 className="font-primary text-2xl md:text-3xl font-semibold text-primary-500 mb-8">
                 Making the Jewellery
               </h2>
-              <div className="about-page__section-text">
+              <div className="text-primary-400 leading-relaxed space-y-4">
                 <p>
                   You know the saying that goes, "Diamonds are a girl's best
                   friend"? Well, it's absolutely true! When perfectly cut and
@@ -225,11 +229,13 @@ export default function AboutUsPage() {
         </div>
 
         {/* Dirt to Wealth Section */}
-        <div className="about-page__section">
-          <div className="about-page__section-container">
-            <div className="about-page__section-content order-2">
-              <h2 className="about-page__section-title">Dirt to Wealth</h2>
-              <div className="about-page__section-text">
+        <div className="py-6 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="order-2 space-y-6">
+              <h2 className="font-primary text-2xl md:text-3xl font-semibold text-primary-500 mb-8">
+                Dirt to Wealth
+              </h2>
+              <div className="text-primary-400 leading-relaxed space-y-4">
                 <p>
                   Eno Bassé offers a training programme on the identification of
                   African gems, how to source for them, how to cut them and how
@@ -259,13 +265,14 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
-            <div className="about-page__section-image  md:order-2">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/dirt-to-wealth_bx89m5.webp"
                 alt="Eno Bassé Dirt to Wealth initiative"
                 height={1500}
                 width={1500}
                 quality={100}
+                className="w-full h-auto"
               />
             </div>
           </div>

@@ -11,7 +11,6 @@ import { ProductQuickView } from "../quickview";
 import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { getCurrencySymbol } from "@/lib/utils/money";
-import "./styles.scss";
 import { useAccountStore } from "@/lib/store/account";
 
 interface ProductListProps {
@@ -57,19 +56,22 @@ const ProductListItem = React.memo(
   }) => {
     return (
       <motion.div
-        className="product-list__item group"
+        className="group relative flex flex-col overflow-hidden bg-white"
         variants={item}
         whileHover={hoverScale}
       >
-        <Link href={`/products/${product.slug}`} className="product-list__link">
-          <div className="product-list__image-container">
+        <Link
+          href={`/products/${product.slug}`}
+          className="flex h-full flex-col"
+        >
+          <div className="relative aspect-square overflow-hidden border border-gray-200">
             <Image
               src={product.images[0].url}
               alt={product.images[0].alt}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className={`product-list__image bg-gray-100 ${
-                product.images[1] ? "product-list__image--primary" : ""
+              className={`object-cover bg-gray-100 transition-opacity duration-500 ${
+                product.images[1] ? "group-hover:opacity-0" : ""
               }`}
               quality={100}
             />
@@ -79,18 +81,20 @@ const ProductListItem = React.memo(
                 alt={product.images[1].alt}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="product-list__image product-list__image--secondary bg-gray-100"
+                className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 quality={100}
               />
             )}
             {!product.isCustomDesign && (
-              <span className="product-list__instore-tag">In Store</span>
+              <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-xs font-semibold text-white">
+                In Store
+              </span>
             )}
           </div>
 
-          <motion.div className="product-list__details">
-            <h3 className="product-list__title">{product.name}</h3>
-            <p className="product-list__price">
+          <motion.div className="mt-4 flex flex-grow flex-col">
+            <h3 className="mb-1 flex-grow text-gray-700">{product.name}</h3>
+            <p className="mt-auto font-medium text-gray-900">
               {product.priceRange.min === product.priceRange.max
                 ? `${getCurrencySymbol(
                     product.priceRange.currency
@@ -105,16 +109,16 @@ const ProductListItem = React.memo(
         </Link>
 
         <motion.button
-          className="product-list__button product-list__button--quick-view"
+          className="absolute top-2 left-2 rounded-full bg-white/80 p-2 hover:bg-white lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity lg:duration-300"
           onClick={onQuickView}
           whileHover={buttonHover}
           whileTap={{ scale: 0.95 }}
         >
-          <EyeOpenIcon className="product-list__icon" />
+          <EyeOpenIcon className="h-4 w-4 text-gray-700" />
         </motion.button>
 
         <motion.button
-          className={`product-list__button product-list__button--wishlist ${
+          className={`absolute top-2 right-2 rounded-full bg-white/80 p-2 hover:bg-white ${
             isInWishlist ? "product-list__button--active" : ""
           }`}
           onClick={onWishlistToggle}
@@ -123,9 +127,9 @@ const ProductListItem = React.memo(
           aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
           {isInWishlist ? (
-            <Heart fill="#D1A559" className="text-secondary-500 h-4 w-4" />
+            <Heart fill="#D1A559" className="h-4 w-4 text-secondary-500" />
           ) : (
-            <HeartIcon className="product-list__icon" />
+            <HeartIcon className="h-4 w-4 text-gray-700" />
           )}
         </motion.button>
       </motion.div>
@@ -202,7 +206,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
 
   return (
     <motion.div
-      className="product-list"
+      className="grid grid-cols-2 gap-x-6 gap-y-14 md:grid-cols-3 lg:grid-cols-4"
       variants={container}
       initial="hidden"
       animate="show"

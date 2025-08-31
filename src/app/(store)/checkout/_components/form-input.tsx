@@ -21,13 +21,16 @@ export function FormInput({
 }: FormInputProps) {
   return (
     <div className="form-input">
-      <label htmlFor={id} className="form-input__label">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-[#502B3A] mb-1"
+      >
         {label}
       </label>
       <input
         type={type}
         id={id}
-        className="form-input__field"
+        className="w-full px-4 py-2 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559]"
         placeholder={placeholder}
         required={required}
         value={value}

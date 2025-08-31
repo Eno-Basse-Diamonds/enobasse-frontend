@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
-import "./styles.scss";
 
 interface PaginationProps {
   currentPage: number;
@@ -31,7 +30,10 @@ export const Pagination: React.FC<PaginationProps> = ({
   );
 
   return (
-    <nav className="pagination" aria-label="Pagination">
+    <nav
+      className="flex items-center justify-center gap-1 sm:gap-2"
+      aria-label="Pagination"
+    >
       {/* Previous Button */}
       <PaginationButton
         page={currentPage - 1}
@@ -53,7 +55,9 @@ export const Pagination: React.FC<PaginationProps> = ({
           >
             1
           </PaginationButton>
-          {startPage > 2 && <span className="pagination__ellipsis">...</span>}
+          {startPage > 2 && (
+            <span className="px-1 sm:px-2 text-[#502B3A]">...</span>
+          )}
         </>
       )}
 
@@ -74,7 +78,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {endPage < totalPages && (
         <>
           {endPage < totalPages - 1 && (
-            <span className="pagination__ellipsis">...</span>
+            <span className="px-1 sm:px-2 text-[#502B3A]">...</span>
           )}
           <PaginationButton
             page={totalPages}
@@ -121,23 +125,25 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
   direction,
   onPageChange,
 }) => {
-  const baseClass = "pagination__button";
-  const modifierClasses = [
-    active && `${baseClass}--active`,
-    disabled && `${baseClass}--disabled`,
-    direction && `${baseClass}--${direction}`,
-  ].filter(Boolean);
+  const baseClasses =
+    "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 transition-colors duration-200 border text-[#502B3A] border-[#502B3A]/20 hover:bg-[#D1A559]/10 hover:border-[#D1A559]/40";
+  const activeClasses = active
+    ? "bg-[#502B3A] text-white hover:bg-[#502B3A] border-[#502B3A]"
+    : "";
+  const disabledClasses = disabled
+    ? "opacity-40 cursor-not-allowed border border-gray-400 text-gray-500"
+    : "";
 
-  const className = [baseClass, ...modifierClasses].join(" ");
+  const className = `${baseClasses} ${activeClasses} ${disabledClasses}`;
 
   if (disabled) {
     return (
       <span className={className} aria-label={ariaLabel} aria-disabled="true">
         {direction === "prev" && (
-          <ChevronLeftIcon className="pagination__icon" />
+          <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
         )}
         {direction === "next" && (
-          <ChevronRightIcon className="pagination__icon" />
+          <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
         )}
         {!direction && children}
       </span>
@@ -154,8 +160,12 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
         onClick={() => onPageChange(page)}
         disabled={disabled}
       >
-        {direction === "prev" && <ChevronLeftIcon className="pagination__icon" />}
-        {direction === "next" && <ChevronRightIcon className="pagination__icon" />}
+        {direction === "prev" && (
+          <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+        )}
+        {direction === "next" && (
+          <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+        )}
         {!direction && children}
       </button>
     );
@@ -169,8 +179,12 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
       aria-current={active ? "page" : undefined}
       aria-label={ariaLabel}
     >
-      {direction === "prev" && <ChevronLeftIcon className="pagination__icon" />}
-      {direction === "next" && <ChevronRightIcon className="pagination__icon" />}
+      {direction === "prev" && (
+        <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+      )}
+      {direction === "next" && (
+        <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+      )}
       {!direction && children}
     </Link>
   );

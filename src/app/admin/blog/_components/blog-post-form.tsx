@@ -163,8 +163,11 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     <>
       <AlertMessage state={state} />
 
-      <div className="modal-overlay">
-        <form onSubmit={handleSubmit} className="modal-form">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white w-full max-w-7xl h-full flex flex-col shadow-2xl"
+        >
           <FormHeader
             title={formTitle}
             showPreview={showPreview}
@@ -172,7 +175,7 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
             onClose={onClose}
           />
 
-          <div className="modal-content">
+          <div className="flex-1 flex overflow-hidden">
             <FormFields
               formData={formData}
               errors={state.errors}
@@ -204,7 +207,7 @@ const AlertMessage = ({ state }: { state: FormState }) => {
   if (!state.message) return null;
 
   return (
-    <div className="alert-message-container">
+    <div className="fixed top-4 right-4 max-w-md w-full z-[9999]">
       <Alert
         type={state.success ? "success" : "error"}
         className="mb-6"
@@ -229,9 +232,9 @@ const FormHeader: React.FC<FormHeaderProps> = ({
   onTogglePreview,
   onClose,
 }) => (
-  <div className="form-header">
-    <h3 className="form-header__title">{title}</h3>
-    <div className="form-header__actions">
+  <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
+    <h3 className="text-2xl font-semibold text-primary-500">{title}</h3>
+    <div className="flex items-center space-x-3">
       <Button
         size="sm"
         variant="outline"
@@ -269,11 +272,11 @@ const FormFields = ({
   onTagInputChange: (value: string) => void;
 }) => (
   <div
-    className={`form-fields form-fields__scrollbar ${
-      showPreview ? "form-fields--preview" : "form-fields--full"
+    className={`p-6 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#D1A559] ${
+      showPreview ? "w-1/2 border-r border-gray-200" : "w-full"
     }`}
   >
-    <div className="form-fields__container">
+    <div className="space-y-6">
       <FormField
         label="Blog Title *"
         name="title"
@@ -326,7 +329,7 @@ const FormFields = ({
         onChange={(e) => onInputChange("content", e.target.value)}
         rows={16}
         placeholder={MARKDOWN_PLACEHOLDER}
-        className="form-fields__content-textarea"
+        className="font-mono text-primary-500"
         error={errors?.content?.[0]}
       />
 
@@ -356,17 +359,19 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
   error,
 }) => (
-  <div className="form-field">
-    <label className="form-field__label">{label}</label>
+  <div className="block">
+    <label className="block text-sm font-semibold text-primary-400 mb-2">
+      {label}
+    </label>
     <input
       type="text"
       name={name}
       value={value}
       onChange={onChange}
-      className="form-field__input"
+      className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
       placeholder={placeholder}
     />
-    {error && <p className="form-field__error">{error}</p>}
+    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>
 );
 
@@ -397,23 +402,25 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
   className = "",
   helpText,
 }) => (
-  <div className="form-textarea-field">
-    <label className="form-textarea-field__label">{label}</label>
+  <div className="block">
+    <label className="block text-sm font-semibold text-primary-400 mb-2">
+      {label}
+    </label>
     <textarea
       name={name}
       value={value}
       onChange={onChange}
       rows={rows}
-      className={`form-textarea-field__textarea ${className}`}
+      className={`w-full p-4 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300 ${className}`}
       placeholder={placeholder}
     />
     {characterCount !== undefined && maxCharacters !== undefined && (
-      <p className="form-textarea-field__character-count">
+      <p className="text-xs text-gray-500 mt-1">
         {characterCount}/{maxCharacters} characters
       </p>
     )}
-    {helpText && <p className="form-textarea-field__help-text">{helpText}</p>}
-    {error && <p className="form-textarea-field__error">{error}</p>}
+    {helpText && <p className="text-xs text-gray-500 mt-1">{helpText}</p>}
+    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>
 );
 
@@ -427,8 +434,10 @@ const ImageUploadField = ({
   onImageChange: (field: keyof typeof formData.image, value: string) => void;
 }) => (
   <div className="image-upload">
-    <label className="image-upload__label">Featured Image *</label>
-    <div className="image-upload__controls">
+    <label className="block text-sm font-semibold text-primary-400 mb-2">
+      Featured Image *
+    </label>
+    <div className="flex flex-row gap-2 items-center">
       <CldUploadWidget
         uploadPreset="blog-posts"
         options={{
@@ -456,12 +465,12 @@ const ImageUploadField = ({
         name="image.alt"
         value={formData.image.alt}
         onChange={(e) => onImageChange("alt", e.target.value)}
-        className="image-upload__alt-input"
+        className="h-10 px-3 py-2 border text-sm border-primary-100 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
         placeholder="Image alt text"
       />
     </div>
     {formData.image.src && (
-      <div className="image-upload__preview">
+      <div className="mt-3">
         <CldImage
           src={formData.image.src}
           alt={formData.image.alt || "Preview"}
@@ -471,11 +480,13 @@ const ImageUploadField = ({
           gravity="auto"
           quality="auto"
           format="avif"
-          className="image-upload__image"
+          className="w-full h-48 object-cover border border-gray-200"
         />
       </div>
     )}
-    {errors?.image && <p className="image-upload__error">{errors.image[0]}</p>}
+    {errors?.image && (
+      <p className="text-red-500 text-sm mt-1">{errors.image[0]}</p>
+    )}
   </div>
 );
 
@@ -496,14 +507,14 @@ const TagsField: React.FC<TagsFieldProps> = ({
   onTagInputChange,
   error,
 }) => (
-  <div className="tags-field">
-    <label className="tags-field__label">Tags *</label>
-    <div className="tags-field__input-container">
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">Tags *</label>
+    <div className="flex gap-2">
       <input
         type="text"
         value={tagInput}
         onChange={(e) => onTagInputChange(e.target.value)}
-        className="tags-field__input"
+        className="flex-1 border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
         placeholder="Add tags..."
         onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), onAddTag())}
       />
@@ -511,21 +522,24 @@ const TagsField: React.FC<TagsFieldProps> = ({
         Add
       </Button>
     </div>
-    <div className="tags-field__tags-container">
+    <div className="flex flex-wrap gap-2">
       {tags.map((tag) => (
-        <span key={tag} className="tags-field__tag">
+        <span
+          key={tag}
+          className="inline-flex items-center bg-gray-100 px-3 py-1 text-sm text-gray-800"
+        >
           {tag}
           <button
             type="button"
             onClick={() => onRemoveTag(tag)}
-            className="tags-field__remove-button"
+            className="ml-1 text-gray-500 hover:text-gray-700 focus:outline-none"
           >
             &times;
           </button>
         </span>
       ))}
     </div>
-    {error && <p className="tags-field__error">{error}</p>}
+    {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
   </div>
 );
 
@@ -541,37 +555,39 @@ const StatusField: React.FC<StatusFieldProps> = ({
   error,
 }) => (
   <div className="status-field">
-    <label className="status-field__label">Status *</label>
-    <div className="status-field__options">
-      <label className="status-field__option">
+    <label className="block text-sm font-semibold text-primary-400 mb-2">
+      Status *
+    </label>
+    <div className="flex items-center space-x-4">
+      <label className="inline-flex items-center">
         <input
           type="radio"
           name="isPublished"
           checked={isPublished}
           onChange={() => onChange(true)}
-          className="status-field__radio"
+          className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
         />
-        <span className="status-field__option-label">Publish</span>
+        <span className="ml-2">Publish</span>
       </label>
-      <label className="status-field__option">
+      <label className="inline-flex items-center">
         <input
           type="radio"
           name="isPublished"
           checked={!isPublished}
           onChange={() => onChange(false)}
-          className="status-field__radio"
+          className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
         />
-        <span className="status-field__option-label">Draft</span>
+        <span className="ml-2">Draft</span>
       </label>
     </div>
-    {error && <p className="status-field__error">{error}</p>}
+    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
   </div>
 );
 
 const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
-  <div className="preview-section">
-    <div className="preview-section__container">
-      <h1 className="preview-section__title">
+  <div className="w-1/2 bg-gray-50 p-6 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#D1A559]">
+    <div className="bg-white p-8 shadow-sm max-w-none">
+      <h1 className="font-primary text-3xl mb-4 font-semibold text-primary-500">
         {formData.title || "Blog Title Preview"}
       </h1>
       {formData.image?.src && (
@@ -584,31 +600,31 @@ const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
           gravity="auto"
           quality="auto"
           format="avif"
-          className="preview-section__image"
+          className="w-full h-64 object-cover mb-6 border border-gray-200"
         />
       )}
-      <div className="preview-section__meta">
-        <span className="preview-section__meta-item">
+      <div className="flex items-center space-x-6 text-sm text-primary-400 mb-6 pb-6 border-b border-primary-500/10">
+        <span className="flex items-center">
           <User className="w-4 h-4 mr-2" />
           {ADMIN.name}
         </span>
-        <span className="preview-section__meta-item">
+        <span className="flex items-center">
           <Calendar className="w-4 h-4 mr-2" />
           {new Date().toLocaleDateString()}
         </span>
         <span
-          className={`preview-section__status ${
+          className={`px-3 py-1 text-xs font-semibold ${
             formData.isPublished
-              ? "preview-section__status--published"
-              : "preview-section__status--draft"
+              ? "bg-green-100 text-green-800"
+              : "bg-yellow-100 text-yellow-800"
           }`}
         >
           {formData.isPublished ? "Published" : "Draft"}
         </span>
       </div>
-      <div className="preview-section__content">
+      <div className="max-w-none">
         {formData.content ? (
-          <article className="blog-detail__content-main blog-post">
+          <article className="blog-detail__content-main text-neutral-300 font-light leading-relaxed">
             <Markdown
               components={{
                 h1: createHeadingRenderer(1),
@@ -621,7 +637,7 @@ const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
             </Markdown>
           </article>
         ) : (
-          <p className="preview-section__empty-content">
+          <p className="text-gray-400 italic">
             Content preview will appear here...
           </p>
         )}
@@ -643,7 +659,7 @@ const FormFooter: React.FC<FormFooterProps> = ({
   isValid,
   submitButtonText,
 }) => (
-  <div className="form-footer">
+  <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
     <Button variant="outline" onClick={onClose}>
       Cancel
     </Button>

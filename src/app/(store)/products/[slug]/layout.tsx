@@ -8,7 +8,6 @@ import { getProduct } from "@/lib/api/products";
 import { getPreferredCurrency } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/config/auth";
-import "./styles.scss";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;

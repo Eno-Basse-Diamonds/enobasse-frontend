@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Metadata } from "next";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Shipping & Purchase Policy",
@@ -43,9 +42,9 @@ export default function shippingPage() {
         <p className="shipping__paragraph">
           Enjoy free expedited shipping with every new purchase. All shipments
           are fully insured and shipped via{" "}
-          <span className="shipping__highlight">FedEx</span> 2nd Day Air
+          <span className="shipping__highlight">GIG</span> 2nd Day Air
           Delivery. International orders are shipped{" "}
-          <span className="shipping__highlight">FedEx</span> International
+          <span className="shipping__highlight">GIG</span> International
           Priority.
         </p>
       </section>

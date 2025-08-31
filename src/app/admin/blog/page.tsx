@@ -1,5 +1,4 @@
 import { AdminBlogClient } from "./_components/admin-blog-client";
-import "./styles.scss";
 
 interface AdminBlogPageProps {
   searchParams: Promise<{ page?: string }>;

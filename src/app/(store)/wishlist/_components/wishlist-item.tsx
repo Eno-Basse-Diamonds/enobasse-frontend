@@ -41,11 +41,11 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
   const displayPrice = variant.price;
 
   return (
-    <li className="wishlist-page__item">
-      <div className="wishlist-page__item-content">
+    <li className="py-4 transition-colors">
+      <div className="flex gap-4">
         <Link
           href={`/products/${item.productSlug}`}
-          className="wishlist-page__image-link"
+          className="shrink-0 relative size-24 md:size-40 overflow-hidden border border-gray-200"
         >
           <Image
             src={variant.images?.[0].url}
@@ -56,18 +56,18 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
           />
         </Link>
 
-        <div className="wishlist-page__details">
-          <div className="wishlist-page__title-row">
+        <div className="flex flex-col flex-1">
+          <div className="flex justify-between gap-2">
             <div>
-              <h3 className="wishlist-page__title">
+              <h3 className="font-medium text-[#502B3A]">
                 <Link
                   href={`/products/${item.productSlug}`}
-                  className="wishlist-page__title-link"
+                  className="hover:underline transition-all"
                 >
                   {variant.title}
                 </Link>
               </h3>
-              <p className="wishlist-page__specs">
+              <p className="text-sm text-[#502B3A]/70 mt-1">
                 {variant.gemstones?.[0] &&
                   (variant.gemstones[0].weightCarat
                     ? `${variant.gemstones[0].weightCarat}ct ${variant.gemstones[0].type}`
@@ -77,24 +77,24 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
                   `${variant.metals[0].purity} ${variant.metals[0].type}`}
               </p>
             </div>
-            <p className="wishlist-page__price">
+            <p className="font-medium text-[#502B3A] whitespace-nowrap">
               {getCurrencySymbol(displayCurrency)}
               {displayPrice?.toLocaleString()}
             </p>
           </div>
 
-          <div className="wishlist-page__actions-row">
-            <div className="wishlist-page__item-actions">
+          <div className="mt-auto pt-4 flex justify-between items-center">
+            <div className="flex gap-3">
               <button
                 type="button"
-                className="wishlist-page__add-to-cart"
+                className="font-medium text-sm text-[#D1A559] border-[#D1A559] hover:underline"
                 onClick={handleAddToCart}
               >
                 ADD TO CART
               </button>
               <button
                 type="button"
-                className="wishlist-page__remove-btn"
+                className="font-medium text-sm text-red-500 hover:underline"
                 onClick={async () => {
                   await removeItem(
                     variant.id,

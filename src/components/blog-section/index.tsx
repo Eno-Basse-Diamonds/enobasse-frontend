@@ -7,29 +7,34 @@ import * as motion from "motion/react-client";
 import { BlogPost } from "@/lib/types/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { Image as ImageIcon } from "lucide-react";
-import "./styles.scss";
 
 interface BlogSectionProps {
   posts: BlogPost[];
 }
 
-export const BlogSection: React.FC<BlogSectionProps> = React.memo(({ posts }) => {
-  const sortedPosts = useMemo(() => {
-    return [...posts].sort((a, b) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+export const BlogSection: React.FC<BlogSectionProps> = React.memo(
+  ({ posts }) => {
+    const sortedPosts = useMemo(() => {
+      return [...posts].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    }, [posts]);
+
+    return (
+      <ul
+        className="mt-8 md:mt-10 lg:mt-12 grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        role="list"
+      >
+        {sortedPosts.map((post, index) => (
+          <BlogCard key={post.id} post={post} index={index} />
+        ))}
+      </ul>
     );
-  }, [posts]);
+  }
+);
 
-  return (
-    <ul className="blog-section" role="list">
-      {sortedPosts.map((post, index) => (
-        <BlogCard key={post.id} post={post} index={index} />
-      ))}
-    </ul>
-  );
-});
-
-BlogSection.displayName = 'BlogSection';
+BlogSection.displayName = "BlogSection";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -39,15 +44,16 @@ interface BlogCardProps {
 const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
   const [imageError, setImageError] = useState(false);
 
-  const formattedDate = useMemo(() =>
-    dateToOrdinalDayMonthYear(post.createdAt),
+  const formattedDate = useMemo(
+    () => dateToOrdinalDayMonthYear(post.createdAt),
     [post.createdAt]
   );
 
   return (
     <motion.li
       role="listitem"
-      className="blog-section__item"
+      className="hover:shadow-md transition-shadow duration-300 border border-secondary-200 overflow-hidden"
+      style={{ transformOrigin: "center" }}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
@@ -57,17 +63,17 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
       }}
       whileHover={{ scale: 1.02 }}
     >
-      <Link href={`/blog/${post.slug}`} className="blog-section__link">
-        <figure className="blog-section__figure">
+      <Link href={`/blog/${post.slug}`} className="h-full flex flex-col">
+        <figure className="h-60 lg:h-72 flex-shrink-0 relative">
           {imageError ? (
-            <div className="blog-section__image-fallback">
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
               <ImageIcon className="w-12 h-12 text-gray-400" />
             </div>
           ) : (
             <Image
               src={post.image.src}
               alt={post.title}
-              className="blog-section__image object-cover bg-gray-100"
+              className="object-cover bg-gray-100"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               quality={100}
@@ -76,15 +82,21 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
             />
           )}
         </figure>
-        <div className="blog-section__content">
-          <h3 className="blog-section__title">{post.title}</h3>
-          <p className="blog-section__excerpt">{post.excerpt}</p>
-          <div className="blog-section__meta">
-            <p className="blog-section__author">{post.author.name}</p>
-            <span className="blog-section__divider">•</span>
+        <div className="bg-white p-4 sm:p-5 flex-grow flex flex-col">
+          <h3 className="font-medium text-primary-500 text-base sm:text-lg md:text-xl mb-1 line-clamp-2">
+            {post.title}
+          </h3>
+          <p className="font-light text-sm sm:text-base md:text-[15px] text-neutral-300 mb-3 sm:mb-4 md:mb-5 flex-grow line-clamp-3">
+            {post.excerpt}
+          </p>
+          <div className="flex items-center gap-x-2">
+            <p className="font-light text-sm sm:text-base text-primary-300">
+              {post.author.name}
+            </p>
+            <span className="text-primary-300">•</span>
             <time
               dateTime={new Date(post.createdAt).toISOString()}
-              className="blog-section__date"
+              className="font-light text-sm sm:text-base text-primary-300"
             >
               {formattedDate}
             </time>
@@ -95,4 +107,4 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
   );
 });
 
-BlogCard.displayName = 'BlogCard';
+BlogCard.displayName = "BlogCard";

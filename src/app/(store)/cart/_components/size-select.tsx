@@ -28,7 +28,7 @@ export const SizeSelect = ({
       <div className="relative">
         <select
           id={`size-${mobile ? "mobile" : "desktop"}-${id}`}
-          className="cart-page__size-select"
+          className="block w-full appearance-none border border-gray-300 bg-transparent py-1.5 pl-3 pr-5 text-sm text-[#502B3A] focus:border-[#502B3A] focus:outline-none focus:ring-1 focus:ring-[#502B3A]"
           value={selectedSize ?? ""}
           onChange={(e) => onChange && onChange(Number(e.target.value))}
         >

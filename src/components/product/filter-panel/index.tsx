@@ -4,7 +4,6 @@ import { useState } from "react";
 import { CloseIcon, FilterIcon } from "@/components/icons";
 import { MetalOptions } from "./elements/metal-options";
 import { Gemstones } from "./elements/gemstones";
-import "./styles.scss";
 
 interface FilterOption {
   name: string;
@@ -54,19 +53,22 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
   };
 
   return (
-    <div className="product-filter-panel">
+    <div className="w-full flex flex-col gap-y-4 items-center mb-6">
       <button
         onClick={() => setIsOpen(true)}
-        className="product-filter-panel__button"
+        className="border border-primary-300 w-full flex flex-row gap-x-4 items-center justify-center mx-auto text-primary-500 px-5 py-3 lg:hidden"
       >
         <FilterIcon />
         Filters
       </button>
 
       {localFilters.length > 0 && (
-        <div className="product-filter-panel__tags">
+        <div className="flex flex-wrap gap-2 mb-4 lg:hidden">
           {localFilters.map((filter) => (
-            <div key={filter.name} className="product-filter-panel__tag">
+            <div
+              key={filter.name}
+              className="bg-gray-100 text-gray-700 px-3 py-1 text-sm flex items-center gap-2"
+            >
               <span>{filter.name}</span>
               <button
                 onClick={() => removeFilter(filter.name)}
@@ -80,19 +82,21 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
       )}
 
       <div
-        className={`product-filter-panel__mobile-panel ${isOpen ? "active" : ""}`}
+        className={`fixed inset-0 bg-white z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
+          isOpen ? "translate-y-0" : "translate-y-full"
+        }`}
       >
-        <div className="product-filter-panel__mobile-header">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h3>Filters</h3>
           <button
             onClick={() => setIsOpen(false)}
-            className="product-filter-panel__close-filter"
+            className="p-2 hover:bg-gray-100 rounded-full"
           >
             <CloseIcon className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="product-filter-panel__mobile-content">
+        <div className="p-4 overflow-y-auto h-[calc(100vh-8rem)]">
           <MetalOptions
             metalOptions={metalOptions}
             selectedFilters={localFilters}
@@ -104,16 +108,16 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
           />
         </div>
 
-        <div className="product-filter-panel__mobile-footer">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex gap-4">
           <button
             onClick={resetFilters}
-            className="product-filter-panel__reset-filters"
+            className="flex-1 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             Reset Filters
           </button>
           <button
             onClick={applyFilters}
-            className="product-filter-panel__apply-filters"
+            className="flex-1 py-3 bg-[#502B3A] text-white hover:bg-[#502B3A]/90"
           >
             Apply Filters
           </button>

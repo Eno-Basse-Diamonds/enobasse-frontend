@@ -46,22 +46,29 @@ export const Reviews: React.FC<ReviewsProps> = ({
 
   return (
     <motion.section
-      className="reviews"
+      className="w-full max-w-[1550px] mx-auto"
       aria-labelledby="reviews-heading"
       initial="hidden"
       animate="show"
       variants={container}
     >
-      <div className="reviews__grid">
-        <motion.aside className="reviews__sidebar" variants={item}>
+      <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-5 lg:gap-24">
+        <motion.aside className="lg:col-span-2" variants={item}>
           <div className="reviews__heading">
-            <h2 id="reviews-heading">Customer Reviews</h2>
-            <div className="reviews__rating-container">
+            <h2
+              id="reviews-heading"
+              className="font-primary text-2xl md:text-3xl lg:text-4xl text-[#502B3A] mb-3"
+            >
+              Customer Reviews
+            </h2>
+            <div className="flex items-center flex-wrap gap-2 mb-4">
               <div className="flex items-center">
                 <Rating
                   rating={calculateAverageRating(ratingDistribution)}
                   showRatingNumber={true}
-                  aria-label={`Average rating: ${calculateAverageRating(ratingDistribution)} out of 5 stars`}
+                  aria-label={`Average rating: ${calculateAverageRating(
+                    ratingDistribution
+                  )} out of 5 stars`}
                   count={reviews?.length || 0}
                   showCount={false}
                 />
@@ -71,22 +78,25 @@ export const Reviews: React.FC<ReviewsProps> = ({
 
           <div
             id="reviews-section"
-            className="reviews__distribution"
+            className="mb-6 md:mb-8"
             aria-label="Rating distribution"
           >
             {ratingDistribution.map((rating) => (
               <motion.div
                 key={rating.stars}
-                className="reviews__distribution-row"
+                className="flex items-center mb-2 md:mb-3"
                 variants={item}
               >
-                <div className="reviews__stars-container">
-                  <span className="reviews__stars-count">{rating.stars}</span>
-                  <StarIcon className="reviews__star-icon" aria-hidden="true" />
+                <div className="flex items-center w-10 md:w-12">
+                  <span className="text-[#502B3A] w-4">{rating.stars}</span>
+                  <StarIcon
+                    className="text-[#D1A559] ml-1 h-4 w-4"
+                    aria-hidden="true"
+                  />
                 </div>
-                <div className="reviews__progress-container">
+                <div className="flex-1 mx-2 md:mx-3">
                   <div
-                    className="reviews__progress-bar"
+                    className="w-full bg-gray-100 h-2 md:h-2.5"
                     role="progressbar"
                     aria-valuenow={rating.percentage}
                     aria-valuemin={0}
@@ -94,7 +104,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
                     aria-label={`${rating.stars} star rating percentage`}
                   >
                     <motion.div
-                      className="reviews__progress-fill"
+                      className="bg-[#D1A559] h-2 md:h-2.5 transition-all duration-300"
                       style={{ width: `${rating.percentage}%` }}
                       initial="hidden"
                       animate="show"
@@ -103,8 +113,8 @@ export const Reviews: React.FC<ReviewsProps> = ({
                     />
                   </div>
                 </div>
-                <div className="reviews__percentage">
-                  <span className="reviews__percentage-text">
+                <div className="w-8 md:w-10 text-right">
+                  <span className="text-[#502B3A]/80 text-xs md:text-sm font-medium">
                     {rating.percentage}%
                   </span>
                 </div>
@@ -112,9 +122,11 @@ export const Reviews: React.FC<ReviewsProps> = ({
             ))}
           </div>
 
-          <motion.div className="reviews__cta" variants={item}>
-            <h3 className="reviews__cta-heading">Share your thoughts</h3>
-            <p className="reviews__cta-text">
+          <motion.div className="mt-6 md:mt-8 lg:mt-12" variants={item}>
+            <h3 className="text-lg lg:text-xl font-semibold text-[#502B3A] mb-2">
+              Share your thoughts
+            </h3>
+            <p className="text-[#502B3A]/80 text-sm md:text-base mb-4">
               If you&#39;ve used this product, share your thoughts with other
               customers
             </p>
@@ -122,7 +134,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
               variant="outline"
               aria-label="Write a review"
               onClick={() => setIsModalOpen(true)}
-              className="reviews__cta-button"
+              className="w-full sm:w-auto text-[#502B3A] text-sm md:text-base"
             >
               Write a review
             </Button>
@@ -130,7 +142,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
         </motion.aside>
 
         <motion.div
-          className="reviews__main"
+          className="space-y-6 md:space-y-8 lg:col-span-3"
           role="feed"
           aria-labelledby="reviews-heading"
           variants={container}
@@ -147,7 +159,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
             reviews.map((review, index) => (
               <motion.article
                 key={review.id}
-                className="reviews__review"
+                className="border-b border-gray-200 pb-6 md:pb-8 last:border-b-0"
                 aria-posinset={index + 1}
                 aria-setsize={reviews.length}
                 itemScope
@@ -156,17 +168,17 @@ export const Reviews: React.FC<ReviewsProps> = ({
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <div className="flex flex-col sm:flex-row gap-6">
-                  <div className="reviews__user-info">
-                    <div className="reviews__user-container">
+                  <div className="flex flex-col items-stretch justify-between gap-y-3 md:gap-y-4 w-full md:w-52">
+                    <div className="flex flex-row items-center gap-x-2">
                       <motion.div
-                        className="reviews__avatar"
+                        className="relative h-10 w-10 md:h-12 md:w-12 rounded-full overflow-hidden bg-gray-100"
                         transition={{ type: "spring" }}
                       >
                         <ReviewAuthorImage review={review} />
                       </motion.div>
                       <div>
                         <h4
-                          className="reviews__user-name"
+                          className="text-sm md:text-base font-semibold text-[#502B3A]"
                           itemProp="author"
                           itemScope
                           itemType="https://schema.org/Person"
@@ -188,7 +200,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
                       </div>
                     </div>
                     <time
-                      className="reviews__date"
+                      className="text-xs md:text-sm text-[#502B3A]/70"
                       dateTime={review.createdAt}
                       itemProp="datePublished"
                     >
@@ -196,8 +208,11 @@ export const Reviews: React.FC<ReviewsProps> = ({
                     </time>
                   </div>
 
-                  <div className="reviews__review-content">
-                    <p className="reviews__review-text" itemProp="reviewBody">
+                  <div className="flex-1">
+                    <p
+                      className="text-[#502B3A]/80 text-sm md:text-base leading-relaxed"
+                      itemProp="reviewBody"
+                    >
                       {review.content}
                     </p>
                   </div>
