@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
-import { blurDataURL } from "@/lib/utils/constants";
 
 interface CarouselItem {
   href: string;
@@ -99,8 +98,6 @@ export const Carousel: React.FC<CarouselProps> = ({
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="w-full h-full object-cover transform scale-100 transition-transform duration-500 ease-in-out group-hover:scale-105"
-                        placeholder="blur"
-                        blurDataURL={blurDataURL}
                       />
                     </div>
                   </div>
