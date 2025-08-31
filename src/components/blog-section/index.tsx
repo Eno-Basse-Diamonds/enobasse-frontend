@@ -7,6 +7,7 @@ import * as motion from "motion/react-client";
 import { BlogPost } from "@/lib/types/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { Image as ImageIcon } from "lucide-react";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface BlogSectionProps {
   posts: BlogPost[];
@@ -75,9 +76,10 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
               alt={post.title}
               className="object-cover bg-gray-100"
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              quality={100}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
               priority={index < 3}
+              placeholder="blur"
+              blurDataURL={blurDataURL}
               onError={() => setImageError(true)}
             />
           )}

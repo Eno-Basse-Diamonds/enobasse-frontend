@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BlogPost } from '@/lib/types/blog-post';
+import { BlogPost } from "@/lib/types/blog-post";
 import { ImageIcon } from "lucide-react";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface RelatedPostsProps {
   posts: BlogPost[];
@@ -13,14 +14,16 @@ interface RelatedPostsProps {
 
 export const RelatedPosts = ({ posts }: RelatedPostsProps) => {
   return (
-    <div className={"blog-detail__related"}>
-      <h2 className="blog-detail__related-title">Related Blogs</h2>
-      <div className="blog-detail__related-grid">
+    <section className="mt-16">
+      <h2 className="text-2xl font-primary text-primary-500 mb-6">
+        Related Blogs
+      </h2>
+      <div className="grid gap-6 grid-cols-1">
         {posts.map((post) => (
           <RelatedPostCard key={post.id} post={post} />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
@@ -28,9 +31,9 @@ const RelatedPostCard = ({ post }: { post: BlogPost }) => {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <Link href={`/blog/${post.slug}`}>
-      <article className="blog-detail__related-item group">
-        <div className="blog-detail__related-item-image">
+    <Link href={`/blog/${post.slug}`} className="group">
+      <article className="flex flex-col sm:flex-row gap-4 transition-colors">
+        <div className="relative aspect-video sm:aspect-square sm:h-32 sm:w-56 flex-shrink-0 overflow-hidden">
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center bg-gray-100">
               <ImageIcon className="w-8 h-8 text-gray-400" />
@@ -39,32 +42,32 @@ const RelatedPostCard = ({ post }: { post: BlogPost }) => {
             <Image
               src={post.image.src}
               alt={post.image.alt}
-              title={post.image.alt}
-              width={320}
-              height={240}
-              quality={80}
-              className="blog-detail__related-item-image-content bg-gray-100"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 224px, 224px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105 bg-gray-100"
               onError={() => setImageError(true)}
+              placeholder="blur"
+              blurDataURL={blurDataURL}
             />
           )}
         </div>
-        <div className="blog-detail__related-item-content">
+        <div className="flex flex-col justify-between w-full">
           <div>
-            <h3 className="blog-detail__related-item-title">
+            <h3 className="text-lg font-medium text-primary-500 group-hover:text-secondary-500 transition-colors font-primary">
               {post.title}
             </h3>
-            <p className="blog-detail__related-item-excerpt">
+            <p className="mt-1 text-sm text-primary-400 line-clamp-2">
               {post.excerpt}
             </p>
           </div>
-          <div className="blog-detail__related-item-meta">
+          <div className="mt-3 flex items-center justify-between">
             <time
               dateTime={new Date(post.createdAt).toISOString()}
-              className="blog-detail__related-item-date"
+              className="text-sm font-medium text-primary-200"
             >
               {dateToOrdinalDayMonthYear(post.createdAt)}
             </time>
-            <span className="blog-detail__related-item-time">
+            <span className="text-xs font-medium text-secondary-500">
               {post.readingTime} mins
             </span>
           </div>

@@ -14,6 +14,7 @@ import {
 import { handleSignUp } from "@/lib/actions/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface AuthFormField {
   id: string;
@@ -193,9 +194,11 @@ export default function AuthSection({
           alt="Auth page hero image"
           fill
           className="object-cover"
-          quality={100}
           priority={true}
           loading="eager"
+          sizes="(max-width: 1024px) 100vw, 60vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
 
         <Link
@@ -208,6 +211,9 @@ export default function AuthSection({
             width={250}
             height={100}
             className="h-auto w-24 sm:w-32"
+            priority={true}
+            loading="eager"
+            sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 250px"
           />
         </Link>
       </section>

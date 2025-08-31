@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Head from "next/head";
+import Script from 'next/script';
 import { Lora, Gantari, Dancing_Script } from "next/font/google";
 import { QueryProvider } from "../lib/providers/query-provider";
 import { getServerSession } from "next-auth";
@@ -129,24 +129,22 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
-        <script
-          defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id="5e014b11-092d-4049-bcdd-5af656e31c6e"
-        ></script>
-      </Head>
       <body
         className={`${lora.variable} ${gantari.variable} ${dancingScript.variable} antialiased`}
       >
-        <Analytics />
-        <SpeedInsights />
         <SessionProvider session={session}>
           <QueryProvider>
             <AppAlert />
             {children}
           </QueryProvider>
         </SessionProvider>
+        <Script
+          src="https://cloud.umami.is/script.js"
+          strategy="afterInteractive"
+          data-website-id="5e014b11-092d-4049-bcdd-5af656e31c6e"
+        />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface HelpSectionProps {
   title: string;
@@ -21,11 +22,12 @@ export const HelpSection: React.FC<HelpSectionProps> = ({
         <Image
           src={image.src}
           alt={image.alt}
-          height={1000}
-          width={1000}
-          loading="lazy"
-          quality={100}
-          className="w-full"
+          height={600}
+          width={600}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
+          className="w-full h-auto"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
       </figure>
       <article className="px-4 md:px-0 mx-auto max-w-4xl flex flex-col items-start">

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface CTASectionProps {
   heading: string;
@@ -41,10 +42,11 @@ export const CTASection: React.FC<CTASectionProps> = ({
         <Image
           src={image.src}
           alt={image.alt}
-          height={500}
-          width={500}
-          loading="lazy"
+          fill
+          sizes="(max-width: 1023px) 100vw, 50vw"
           className="w-full h-full object-cover"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
       </figure>
     </section>

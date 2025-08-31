@@ -12,6 +12,7 @@ import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface ProductListProps {
   products: Product[];
@@ -73,7 +74,6 @@ const ProductListItem = React.memo(
               className={`object-cover bg-gray-100 transition-opacity duration-500 ${
                 product.images[1] ? "group-hover:opacity-0" : ""
               }`}
-              quality={100}
             />
             {product.images[1] && (
               <Image
@@ -82,7 +82,6 @@ const ProductListItem = React.memo(
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                quality={100}
               />
             )}
             {!product.isCustomDesign && (

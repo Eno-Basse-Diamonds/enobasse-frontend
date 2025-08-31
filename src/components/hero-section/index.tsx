@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import "./styles.scss";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface HeroSectionProps {
   title: string;
@@ -27,9 +28,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           alt={image.alt}
           fill
           className="hero__image-container__image"
-          quality={100}
           priority
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
       </figure>
 
@@ -61,9 +63,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           alt={image.alt}
           fill
           className="hero__image-container__image"
-          quality={100}
           priority
           sizes="50vw"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
       </figure>
     </section>
