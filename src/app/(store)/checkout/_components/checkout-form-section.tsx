@@ -8,8 +8,8 @@ export function CheckoutFormSection({
   children,
 }: CheckoutFormSectionProps) {
   return (
-    <div className="checkout-form-section">
-      <h2 className="checkout-form-section__title">{title}</h2>
+    <div className="bg-white shadow p-8 mb-6">
+      <h2 className="text-xl font-semibold text-[#502B3A] mb-6">{title}</h2>
       {children}
     </div>
   );

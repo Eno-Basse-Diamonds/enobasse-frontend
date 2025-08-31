@@ -1,7 +1,7 @@
 import Image from "next/image";
 import * as motion from "motion/react-client";
 
-const hoverVariants = {
+const metalHoverVariants = {
   hover: {
     y: -5,
     scale: 1.02,
@@ -28,18 +28,18 @@ interface MetalOptionProps {
 export const MetalOptions: React.FC<MetalOptionProps> = ({
   metalOptions,
   selectedFilters,
-  toggleFilter
+  toggleFilter,
 }) => {
   return (
-    <div className="product-filter-panel__filter-section">
-      <h3 className="product-filter-panel__title">Metal Options</h3>
-      <div className="product-filter-panel__options">
+    <div className="pb-4 lg:pb-8">
+      <h3 className="text-base font-semibold mb-4">Metal Options</h3>
+      <div className="grid grid-cols-4 lg:grid-cols-3 gap-3">
         {metalOptions.map((metal) => (
           <motion.label
             key={metal.name}
             whileHover="hover"
-            variants={hoverVariants}
-            className={`product-filter-panel__option ${
+            variants={metalHoverVariants}
+            className={`flex flex-col items-center gap-2 p-3 transition text-center cursor-pointer hover:bg-gray-50 ${
               selectedFilters.some((f) => f.name === metal.name)
                 ? "bg-gray-100"
                 : ""
@@ -53,7 +53,7 @@ export const MetalOptions: React.FC<MetalOptionProps> = ({
             />
             <motion.div
               whileHover={{ rotate: 5 }}
-              className="product-filter-panel__icon"
+              className="w-12 h-12 flex items-center justify-center"
             >
               <Image
                 src={metal.image!.src}
@@ -63,7 +63,7 @@ export const MetalOptions: React.FC<MetalOptionProps> = ({
                 className="object-cover w-full h-full"
               />
             </motion.div>
-            <span className="product-filter-panel__label">{metal.name}</span>
+            <span className="text-xs font-medium">{metal.name}</span>
           </motion.label>
         ))}
       </div>

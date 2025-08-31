@@ -1,5 +1,3 @@
-import "./styles.scss";
-
 interface DividerProps {
   label: string;
   className?: string;
@@ -7,12 +5,20 @@ interface DividerProps {
 
 export const Divider: React.FC<DividerProps> = ({ label, className }) => {
   return (
-    <div className="divider">
-      <div className="divider__line-container" aria-hidden="true">
-        <div className="divider__line"></div>
+    <div className="relative">
+      <div className="absolute inset-0 flex items-center" aria-hidden="true">
+        <div className="w-full border-t border-[#D1A559]/60"></div>
       </div>
-      <div className="divider__text">
-        <span className={className ? className : "divider__span"}>{label}</span>
+      <div className="relative flex justify-center">
+        <span
+          className={
+            className
+              ? className
+              : "px-2 bg-white text-xs sm:text-sm text-[#502B3A]"
+          }
+        >
+          {label}
+        </span>
       </div>
     </div>
   );

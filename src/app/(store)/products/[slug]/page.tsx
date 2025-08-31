@@ -232,13 +232,13 @@ export default function ProductPage() {
   ];
 
   return (
-    <div className="product-page">
+    <div className="my-6 md:my-12">
       <div className="-mb-6 md:mb-auto">
         <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       </div>
       <SectionContainer id="product-details">
-        <div className="product-page__grid">
-          <div className="product-page__gallery">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-x-4 md:gap-x-12">
+          <div className="lg:col-span-3">
             <div className="flex w-full justify-end">
               <ShareDropdown
                 url={typeof window !== "undefined" ? window.location.href : ""}
@@ -256,13 +256,13 @@ export default function ProductPage() {
             </div>
           </div>
 
-          <div className="product-page__info">
-            <div className="product-page__sticky-container">
+          <div className="lg:col-span-2 mt-4 md:mt-0">
+            <div className="sticky top-4 md:top-32 h-auto md:h-[calc(100vh-6rem)] overflow-y-auto pb-8 md:pb-0">
               <div className="space-y-6 md:space-y-7">
-                <h1 className="product-page__title">
+                <h1 className="font-primary text-xl md:text-2xl lg:text-3xl text-[#502B3A] mb-3 md:mb-5">
                   {selectedVariant?.title ?? product.name}
                 </h1>
-                <div className="product-page__rating-container">
+                <div className="mb-6 md:mb-10 flex justify-between items-center w-full">
                   <Rating
                     rating={calculateAverageRating(
                       product.ratingDistribution ?? []
@@ -326,16 +326,16 @@ export default function ProductPage() {
                     />
                   )}
                 </div>
-                <p className="product-page__price">
+                <p className="text-[#502B3A]/60 text-base md:text-lg">
                   Price:{" "}
-                  <span>
+                  <span className="font-semibold text-[#502B3A] text-xl md:text-2xl">
                     {getCurrencySymbol(product.priceRange.currency)}
                     {selectedVariant?.price != null
                       ? selectedVariant.price.toLocaleString(undefined)
                       : "N/A"}
                   </span>
                 </p>
-                <div className="product-page__actions hidden md:flex">
+                <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
                   <Button size="xl" onClick={handleAddToCart}>
                     Add to Cart
                   </Button>
@@ -343,7 +343,7 @@ export default function ProductPage() {
                     Buy Now
                   </Button>
                 </div>
-                <div className="product-page__actions flex md:hidden">
+                <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
                   <Button onClick={handleAddToCart}>Add to Cart</Button>
                   <Button variant="outline">Buy Now</Button>
                 </div>

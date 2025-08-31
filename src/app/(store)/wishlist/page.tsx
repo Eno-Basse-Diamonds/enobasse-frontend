@@ -11,12 +11,12 @@ import { WishlistItem } from "./_components/wishlist-item";
 import { WishlistLoader } from "@/components/loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useAccountStore } from "@/lib/store/account";
-import "./styles.scss";
 
 export default function WishlistPage() {
   const { data: session } = useSession();
   const { preferredCurrency, isHydrated } = useAccountStore();
-  const { clear, items, hydrated, hydrate, loading, refreshWithCurrency } = useWishlistStore();
+  const { clear, items, hydrated, hydrate, loading, refreshWithCurrency } =
+    useWishlistStore();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
 
   useEffect(() => {
@@ -40,19 +40,27 @@ export default function WishlistPage() {
     };
 
     handleCurrencyChange();
-  }, [session, hydrate, refreshWithCurrency, preferredCurrency, hydrated, isHydrated, lastCurrency]);
+  }, [
+    session,
+    hydrate,
+    refreshWithCurrency,
+    preferredCurrency,
+    hydrated,
+    isHydrated,
+    lastCurrency,
+  ]);
 
   return (
-    <div className="wishlist-page">
+    <div className="my-12">
       <PageHeading title="Wishlist" />
       {!hydrated || loading ? (
         <WishlistLoader />
       ) : (
         <SectionContainer id="wishlist">
-          <div className="wishlist-page__container">
+          <div className="my-8 max-w-4xl mx-auto">
             {items.length === 0 ? (
               <EmptyState
-                icon={<HeartIcon className="h-16 w-16" />}
+                icon={<HeartIcon className="h-16 w-16 text-[#502B3A]" />}
                 title="Your wishlist is empty"
                 description="Start adding items you love to your wishlist"
                 action={{ text: "Browse Products", href: "/products" }}
@@ -77,8 +85,8 @@ export default function WishlistPage() {
                     clear(session?.user?.email ?? undefined);
                   }}
                 />
-                <div className="wishlist-page__list-container">
-                  <ul role="list" className="wishlist-page__list">
+                <div className="bg-white overflow-hidden">
+                  <ul role="list" className="divide-y divide-gray-100">
                     {items.map((item) => (
                       <WishlistItem
                         key={item.id}

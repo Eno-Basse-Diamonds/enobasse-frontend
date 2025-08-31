@@ -47,10 +47,12 @@ export function OrderSummary({
   }, [isProcessing]);
 
   return (
-    <div className="order-summary">
-      <h2 className="order-summary__title">Order Summary</h2>
+    <div className="bg-white shadow p-6">
+      <h2 className="text-xl font-semibold text-[#502B3A] mb-6">
+        Order Summary
+      </h2>
 
-      <div className="order-summary__items-list">
+      <div className="mb-6">
         <ul className="divide-y divide-gray-200">
           {items.map((item) => (
             <CheckoutCartItem
@@ -63,23 +65,23 @@ export function OrderSummary({
         </ul>
       </div>
 
-      <div className="order-summary__divider">
-        <div className="order-summary__row">
-          <span className="order-summary__label">
+      <div className="space-y-4 border-t border-gray-200 pt-4">
+        <div className="flex justify-between">
+          <span className="text-sm text-[#502B3A]">
             Subtotal ({totalItems} items)
           </span>
-          <span className="order-summary__value">
+          <span className="text-sm font-medium text-[#502B3A]">
             {getCurrencySymbol(displayCurrency)}
             {formattedPrice(subtotal)}
           </span>
         </div>
-        <div className="order-summary__row">
-          <span className="order-summary__label">Shipping</span>
-          <span className="order-summary__value">N/A</span>
+        <div className="flex justify-between">
+          <span className="text-sm text-[#502B3A]">Shipping</span>
+          <span className="text-sm font-medium text-[#502B3A]">N/A</span>
         </div>
-        <div className="order-summary__total-row">
-          <span className="order-summary__total-label">Total</span>
-          <span className="order-summary__total-value">
+        <div className="flex justify-between border-t border-gray-200 pt-4">
+          <span className="text-base font-medium text-[#502B3A]">Total</span>
+          <span className="text-base font-bold text-[#502B3A]">
             {getCurrencySymbol(displayCurrency)}
             {formattedPrice(subtotal)}
           </span>
@@ -99,8 +101,14 @@ export function OrderSummary({
             )}`}
       </Button>
 
-      <div className="order-summary__return-link">
-        or <Link href="/cart">Return to Cart</Link>
+      <div className="mt-4 text-center text-sm text-[#502B3A]/70">
+        or{" "}
+        <Link
+          href="/cart"
+          className="font-medium text-[#502B3A] hover:text-[#D1A559]"
+        >
+          Return to Cart
+        </Link>
       </div>
     </div>
   );

@@ -20,7 +20,6 @@ import { useCollection } from "@/lib/hooks/use-collections";
 import { useAccountStore } from "@/lib/store/account";
 import { filterAndSortProducts } from "@/lib/utils/products";
 import { metalOptions } from "@/lib/utils/constants";
-import "./styles.scss";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -94,22 +93,19 @@ export default function CollectionPage() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="collection-detail"
+      className="mt-12 mb-24"
     >
       <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       <SectionContainer id="collection-products">
-        <motion.header
-          variants={itemVariants}
-          className="collection-detail__header"
-        >
-          <div className="collection-detail__header--mobile">
-            <div className="collection-detail__image-container">
+        <motion.header variants={itemVariants} className="mb-6 lg:mb-12">
+          <div className="lg:hidden">
+            <div className="h-48 w-full relative overflow-hidden">
               <Image
                 src={collection.image.url}
                 alt={collection.image.alt}
                 fill
                 sizes="100%"
-                className="collection-detail__image"
+                className="object-cover"
                 priority
                 quality={100}
               />
@@ -118,19 +114,19 @@ export default function CollectionPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="collection-detail__info-panel"
+              className="bg-[#502B3A] p-6 text-white mt-2"
             >
-              <h1 className="collection-detail__title">{collection.name}</h1>
-              <p className="collection-detail__description">
-                {collection.description}
-              </p>
+              <h1 className="text-2xl font-primary font-medium mb-3">
+                {collection.name}
+              </h1>
+              <p className="text-sm font-light">{collection.description}</p>
             </motion.div>
           </div>
-          <div className="collection-detail__header--desktop">
+          <div className="hidden lg:block relative h-80 overflow-hidden">
             <motion.div
               whileHover="hover"
               variants={imageHoverVariants}
-              className="collection-detail__image-container--desktop"
+              className="w-full h-full"
             >
               <Image
                 src={collection.image.url}
@@ -138,22 +134,20 @@ export default function CollectionPage() {
                 fill
                 sizes="100%"
                 priority
-                className="collection-detail__image"
+                className="object-cover"
               />
             </motion.div>
-            <div className="collection-detail__info-panel--desktop">
+            <div className="absolute inset-0 px-8 bg-black/30 flex items-center justify-start">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="collection-detail__info-panel-content"
+                className="text-white max-w-2xl bg-[#502B3A] p-8"
               >
-                <h1 className="collection-detail__title collection-detail__title--desktop">
+                <h1 className="text-3xl font-primary font-medium mb-4">
                   {collection.name}
                 </h1>
-                <p className="collection-detail__description collection-detail__description--desktop">
-                  {collection.description}
-                </p>
+                <p className="text-base font-light">{collection.description}</p>
               </motion.div>
             </div>
           </div>
@@ -161,11 +155,11 @@ export default function CollectionPage() {
 
         <motion.div
           variants={containerVariants}
-          className="collection-detail__content"
+          className="flex flex-col lg:flex-row gap-8"
         >
           <motion.aside
             variants={itemVariants}
-            className="collection-detail__sidebar hidden lg:block"
+            className="hidden lg:block lg:w-1/4 divide-y divide-gray-200"
           >
             <FilterPanelDesktop
               metalOptions={metalOptions as FilterOption[]}
@@ -174,10 +168,7 @@ export default function CollectionPage() {
             />
           </motion.aside>
 
-          <motion.div
-            variants={itemVariants}
-            className="collection-detail__products-container"
-          >
+          <motion.div variants={itemVariants} className="lg:w-3/4">
             <div className="lg:hidden">
               <FilterPanelMobile
                 metalOptions={metalOptions as FilterOption[]}
@@ -189,9 +180,9 @@ export default function CollectionPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="collection-detail__products-header"
+              className="flex justify-between items-center mb-6"
             >
-              <p className="collection-detail__products-count">
+              <p className="text-gray-600">
                 {filteredAndSortedProducts.length}{" "}
                 {filteredAndSortedProducts.length === 1
                   ? "product"
@@ -199,7 +190,7 @@ export default function CollectionPage() {
               </p>
               <div className="relative">
                 <select
-                  className="collection-detail__sort-select"
+                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50"
                   value={sortBy}
                   onChange={(e) => handleSortChange(e.target.value)}
                 >
@@ -210,7 +201,7 @@ export default function CollectionPage() {
                   <option value="in-store">In Store Products</option>
                   <option value="custom-design">Custom Design Products</option>
                 </select>
-                <ChevronDownIcon className="collection-detail__sort-icon" />
+                <ChevronDownIcon className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
               </div>
             </motion.div>
 

@@ -5,7 +5,6 @@ import { PlusIcon, CloseIcon } from "@/components/icons";
 import * as motion from "motion/react-client";
 import { useAnimation, AnimatePresence } from "motion/react";
 import { useAccountStore } from "@/lib/store/account";
-import "./styles.scss";
 
 export const Engraving: React.FC<{
   engraving: { text: string; fontStyle: string } | undefined;
@@ -88,7 +87,7 @@ export const Engraving: React.FC<{
         </motion.div>
       ) : (
         <motion.button
-          className="engraving__button"
+          className="text-[#502B3A] font-light text-sm flex flex-row items-center gap-x-3"
           onClick={() => setShowEngravingModal(true)}
           whileHover={{
             color: "#3A1E2B",
@@ -205,39 +204,40 @@ const EngravingPanel: React.FC<{
   };
 
   return (
-    <div className="engraving-panel">
-      <div className="engraving-panel__section">
-        <label className="engraving-panel__label">Enter Your Engraving</label>
+    <div className="mt-4">
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#502B3A] mb-2">
+          Enter Your Engraving
+        </label>
         <input
           type="text"
-          className="engraving-panel__input"
+          className="w-full text-sm px-3 py-2 border border-[#502B3A]/50 focus:ring-[#D1A559] focus:border-[#D1A559]"
           placeholder="Enter your engraving text here..."
           value={engravingText}
           onChange={handleTextChange}
           maxLength={MAX_CHARS}
         />
-        <p className="engraving-panel__char-count">
+        <p className="ml-auto mt-1 text-xs inline-flex w-full justify-end text-[#502B3A]/60">
           Characters Left:
-          <motion.span
-            className="engraving-panel__char-count-number"
-            animate={charsLeftControls}
-          >
+          <motion.span className="ml-1" animate={charsLeftControls}>
             {MAX_CHARS - engravingText.length}
           </motion.span>
         </p>
       </div>
 
-      <div className="engraving-panel__section">
-        <label className="engraving-panel__label">Choose Font</label>
-        <div className="engraving-panel__font-grid">
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-[#502B3A] mb-2">
+          Choose Font
+        </label>
+        <div className="grid grid-cols-6 gap-2">
           {fonts.map((font) => (
             <motion.button
               key={font.name}
-              className={`engraving-panel__font-button ${
+              className={`py-2 px-3 border text-lg border-gray-300 ${
                 engraving?.fontStyle === font.fontFamily ||
                 selectedFont.name === font.name
-                  ? "engraving-panel__font-button--selected"
-                  : ""
+                  ? "bg-secondary-500 text-white border-[#D1A559]"
+                  : "bg-white text-[#502B3A]"
               }`}
               style={{ fontFamily: font.fontFamily }}
               onClick={() => setSelectedFont(font)}
@@ -260,7 +260,7 @@ const EngravingPanel: React.FC<{
       />
 
       <motion.p
-        className="engraving-panel__disclaimer"
+        className="text-sm text-[#502B3A] mb-6"
         initial={{ opacity: 0.8 }}
         whileHover={{ opacity: 1 }}
       >
@@ -269,8 +269,8 @@ const EngravingPanel: React.FC<{
       </motion.p>
 
       <motion.button
-        className={`engraving-panel__save-button ${
-          !engravingText ? "engraving-panel__save-button--disabled" : ""
+        className={`w-full py-2 px-4 bg-[#502B3A] text-white ${
+          !engravingText ? "opacity-50 cursor-not-allowed" : ""
         }`}
         onClick={handleSaveEngraving}
         disabled={!engravingText}
@@ -301,15 +301,15 @@ const EngravingPreview: React.FC<EngravingPreviewProps> = ({
   fontFamily,
 }) => {
   return (
-    <div className="engraving-preview">
-      <h3 className="engraving-preview__title">Engraving Preview</h3>
+    <div className="relative w-full mb-3">
+      <h3 className="text-sm text-[#502B3A] mb-3">Engraving Preview</h3>
 
       <motion.div
-        className="engraving-preview__container"
+        className="relative h-32 flex items-center justify-center overflow-hidden"
         whileHover={{ scale: 1.01 }}
       >
         <motion.div
-          className="engraving-preview__background"
+          className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-20"
           style={{
             backgroundImage:
               "url('https://res.cloudinary.com/enobasse/image/upload/v1756506783/ring-band_ycchj3.png')",
@@ -322,7 +322,7 @@ const EngravingPreview: React.FC<EngravingPreviewProps> = ({
         ></motion.div>
         <motion.svg
           viewBox="0 0 248 120"
-          className="engraving-preview__svg"
+          className="h-32 border border-[#502B3A]"
           preserveAspectRatio="xMidYMid meet"
           whileHover={{ borderColor: "#D1A559" }}
         >
@@ -334,7 +334,7 @@ const EngravingPreview: React.FC<EngravingPreviewProps> = ({
           ></path>
           <text
             textAnchor="middle"
-            className="engraving-preview__text"
+            className="text-[#502B3A] text-sm font-medium"
             fontSize="14"
             fontWeight="500"
           >

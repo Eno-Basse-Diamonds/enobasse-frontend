@@ -29,19 +29,21 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   }, 0);
 
   return (
-    <div className="cart-page__summary">
-      <h2 className="cart-page__summary-title">Order Summary</h2>
+    <div className="bg-gray-50 p-6 sm:p-8 mx-auto flex-1 space-y-6 lg:mt-0 lg:w-full mt-6 sm:mt-8">
+      <h2 className="text-xl font-semibold text-[#502B3A] mb-4">
+        Order Summary
+      </h2>
       <div className="space-y-3 mb-3 divide-y divide-gray-200">
-        <div className="cart-page__summary-row">
-          <span className="cart-page__summary-label">Subtotal</span>
-          <span className="cart-page__summary-value">
+        <div className="flex justify-between pt-3">
+          <span className="text-[#502B3A]/70">Subtotal</span>
+          <span className="font-medium text-[#502B3A]">
             {getCurrencySymbol(preferredCurrency)}
             {subtotal.toLocaleString(undefined)}
           </span>
         </div>
-        <div className="cart-page__summary-row">
-          <span className="cart-page__summary-label">Total</span>
-          <span className="cart-page__total">
+        <div className="flex justify-between pt-3">
+          <span className="text-[#502B3A]/70">Total</span>
+          <span className="font-bold text-[#502B3A]">
             {getCurrencySymbol(preferredCurrency)}
             {subtotal.toLocaleString(undefined)}
           </span>
@@ -52,7 +54,10 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
       </Button>
       <div className="mt-4 text-center text-[#502B3A]/70">
         or{" "}
-        <Link href="/products" className="cart-page__continue-shopping">
+        <Link
+          href="/products"
+          className="hover:text-[#502B3A] text-sm font-medium"
+        >
           Continue Shopping
         </Link>
       </div>

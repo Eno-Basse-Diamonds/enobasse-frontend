@@ -91,8 +91,8 @@ export function AdminBlogClient({ page }: AdminBlogClientProps) {
         <AdminBlogSkeletonLoader />
       ) : (
         <>
-          <div className="admin-blog-page__content">
-            <div className="admin-blog-page__header-actions">
+          <div className="flex-1 p-8">
+            <div className="flex items-center justify-end mb-8">
               <Button
                 leadingIcon={<Plus />}
                 onClick={() => {
@@ -110,7 +110,7 @@ export function AdminBlogClient({ page }: AdminBlogClientProps) {
               onDelete={handleDelete}
             />
 
-            <div className="admin-blog-page__pagination">
+            <div className="mb-12 mt-12 md:mt-16 lg:mt-20 px-4 sm:px-6">
               <Pagination
                 currentPage={page}
                 totalPages={data?.totalPages || 1}
@@ -127,3 +127,4 @@ export function AdminBlogClient({ page }: AdminBlogClientProps) {
     </>
   );
 }
+

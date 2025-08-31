@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
-import "./styles.scss";
 
 interface CarouselItem {
   href: string;
@@ -50,7 +49,7 @@ export const Carousel: React.FC<CarouselProps> = ({
     (slideIndex: number) => {
       setCurrentIndex(slideIndex * itemsPerPage);
     },
-    [itemsPerPage],
+    [itemsPerPage]
   );
 
   const visibleStart = currentIndex + 1;
@@ -58,7 +57,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div
-      className={`carousel ${className}`}
+      className={`relative mx-auto px-4 ${className}`}
       role="region"
       aria-label={ariaLabel}
       aria-live="polite"
@@ -66,15 +65,15 @@ export const Carousel: React.FC<CarouselProps> = ({
     >
       <button
         onClick={prevSlide}
-        className="carousel__button carousel__button--prev"
+        className="absolute top-1/3 md:top-1/2 z-10 -translate-y-1/2 rounded-full bg-white md:bg-[#D1A559]/20 p-2 md:p-3 shadow-md hover:bg-[#502B3A]/90 hover:text-white transition-all duration-300 left-0"
         aria-label="Previous item"
       >
-        <ChevronLeftIcon className="carousel__button-icon" />
+        <ChevronLeftIcon className="h-4 w-4" />
       </button>
 
-      <div className="carousel__container">
+      <div className="overflow-hidden">
         <ul
-          className="carousel__list"
+          className="flex transition-transform duration-500 ease-in-out"
           style={{
             transform: `translateX(-${currentIndex * itemWidthPercentage}%)`,
           }}
@@ -83,16 +82,16 @@ export const Carousel: React.FC<CarouselProps> = ({
           {items.map((item, index) => (
             <li
               key={item.id ? `item-${item.id}` : `item-${index}`}
-              className="carousel__item"
+              className="flex-shrink-0 px-3"
               style={{ width: `${itemWidthPercentage}%` }}
               aria-hidden={
                 index < currentIndex || index >= currentIndex + itemsPerPage
               }
             >
               <Link href={item.href} passHref>
-                <div className="carousel__link">
-                  <div className="carousel__image-container">
-                    <div className="carousel__image-wrapper">
+                <div className="cursor-pointer block">
+                  <div className="relative w-full pt-[100%] overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                       <Image
                         src={item.image}
                         alt={item.alt}
@@ -101,11 +100,11 @@ export const Carousel: React.FC<CarouselProps> = ({
                         width={500}
                         loading="lazy"
                         quality={100}
-                        className="carousel__image"
+                        className="w-full h-full object-cover transform scale-100 transition-transform duration-500 ease-in-out group-hover:scale-105"
                       />
                     </div>
                   </div>
-                  <figcaption className="carousel__caption">
+                  <figcaption className="font-primary mt-4 text-center text-base md:text-lg font-normal text-[#502B3A]">
                     {item.title}
                   </figcaption>
                 </div>
@@ -117,14 +116,13 @@ export const Carousel: React.FC<CarouselProps> = ({
 
       <button
         onClick={nextSlide}
-        className="carousel__button carousel__button--next"
+        className="absolute top-1/3 md:top-1/2 z-10 -translate-y-1/2 rounded-full bg-white md:bg-[#D1A559]/20 p-2 md:p-3 shadow-md hover:bg-[#502B3A]/90 hover:text-white transition-all duration-300 right-0"
         aria-label="Next item"
-
       >
-        <ChevronRightIcon className="carousel__button-icon" />
+        <ChevronRightIcon className="h-4 w-4" />
       </button>
 
-      <div className="carousel__indicators" role="tablist">
+      <div className="flex justify-center mt-6 space-x-2" role="tablist">
         {Array.from({ length: totalSlides }).map((_, index) => {
           const isActive = Math.floor(currentIndex / itemsPerPage) === index;
 
@@ -132,8 +130,8 @@ export const Carousel: React.FC<CarouselProps> = ({
             <button
               key={`indicator-${index}`}
               onClick={() => goToSlide(index)}
-              className={`carousel__indicator ${
-                isActive ? "carousel__indicator--active" : ""
+              className={`h-2 w-2 rounded-full transition-colors duration-200 ${
+                isActive ? "bg-[#502B3A] scale-125" : "bg-gray-300"
               }`}
               role="tab"
               aria-label={`Slide ${index + 1}`}

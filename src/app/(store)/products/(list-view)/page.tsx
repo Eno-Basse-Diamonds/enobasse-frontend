@@ -19,7 +19,6 @@ import { ProductsResponse, FilterOption } from "@/lib/types/products";
 import { filterAndSortProducts } from "@/lib/utils/products";
 import { metalOptions } from "@/lib/utils/constants";
 import { useAccountStore } from "@/lib/store/account";
-import "./styles.scss";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,18 +40,21 @@ export default function ProductsPage() {
   const { preferredCurrency, isHydrated } = useAccountStore();
   const pageSize = 36;
 
-  const { data, isLoading } = useProducts({
-    page: currentPage,
-    pageSize,
-    sortBy,
-    currency: preferredCurrency,
-    metals: selectedFilters
-      .filter((f) => f.type === "metal")
-      .map((f) => f.name),
-    gemstones: selectedFilters
-      .filter((f) => f.type === "gemstone")
-      .map((f) => f.name),
-  }, isHydrated) as { data: ProductsResponse; isLoading: boolean };
+  const { data, isLoading } = useProducts(
+    {
+      page: currentPage,
+      pageSize,
+      sortBy,
+      currency: preferredCurrency,
+      metals: selectedFilters
+        .filter((f) => f.type === "metal")
+        .map((f) => f.name),
+      gemstones: selectedFilters
+        .filter((f) => f.type === "gemstone")
+        .map((f) => f.name),
+    },
+    isHydrated
+  ) as { data: ProductsResponse; isLoading: boolean };
 
   const { products, meta } = data || {};
 
@@ -84,17 +86,17 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <div className="products-page">
+    <div className="my-12">
       <PageHeading title="All Products" />
       <SectionContainer id="all-products">
         <motion.div
-          className="products-page__container"
+          className="flex flex-col lg:flex-row gap-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           <motion.aside
-            className="products-page__sidebar"
+            className="lg:w-1/4 divide-y divide-gray-200 hidden lg:block"
             variants={itemVariants}
           >
             <FilterPanelDesktop
@@ -103,10 +105,7 @@ export default function ProductsPage() {
               onFilterChange={handleFilterChange}
             />
           </motion.aside>
-          <motion.div
-            variants={itemVariants}
-            className="collection-detail__products-container"
-          >
+          <motion.div variants={itemVariants} className="lg:w-3/4">
             <div className="lg:hidden">
               <FilterPanelMobile
                 metalOptions={metalOptions as FilterOption[]}
@@ -118,9 +117,9 @@ export default function ProductsPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="collection-detail__products-header"
+              className="flex justify-between items-center mb-6"
             >
-              <p className="collection-detail__products-count">
+              <p className="text-gray-600">
                 {filteredAndSortedProducts.length}{" "}
                 {filteredAndSortedProducts.length === 1
                   ? "product"
@@ -128,7 +127,7 @@ export default function ProductsPage() {
               </p>
               <div className="relative">
                 <select
-                  className="collection-detail__sort-select"
+                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50"
                   value={sortBy}
                   onChange={(e) => handleSortChange(e.target.value)}
                 >
@@ -139,7 +138,7 @@ export default function ProductsPage() {
                   <option value="in-store">In Store Products</option>
                   <option value="custom-design">Custom Design Products</option>
                 </select>
-                <ChevronDownIcon className="collection-detail__sort-icon" />
+                <ChevronDownIcon className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
               </div>
             </motion.div>
 

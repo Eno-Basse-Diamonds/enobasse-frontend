@@ -14,7 +14,6 @@ import {
 import { handleSignUp } from "@/lib/actions/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
-import "./styles.scss";
 
 interface AuthFormField {
   id: string;
@@ -187,35 +186,40 @@ export default function AuthSection({
   };
 
   return (
-    <main className="auth-page">
-      <section className="auth-page__hero-section">
+    <main className="h-screen flex flex-col lg:flex-row justify-center">
+      <section className="hidden lg:block lg:w-[60%] lg:h-full relative overflow-hidden bg-gray-100">
         <Image
           src={heroImage}
           alt="Auth page hero image"
           fill
-          className="auth-page__hero-image"
+          className="object-cover"
           quality={100}
           priority={true}
           loading="eager"
         />
 
-        <Link href="/" className="auth-page__logo-container">
+        <Link
+          href="/"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10"
+        >
           <Image
             src={logoImage}
             alt="Brand Logo"
             width={250}
             height={100}
-            className="auth-page__logo"
+            className="h-auto w-24 sm:w-32"
           />
         </Link>
       </section>
 
-      <section className="auth-page__form-section">
-        <header className="auth-page__header">
-          <h1 className="auth-page__title">{title}</h1>
+      <section className="lg:w-[40%] p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center relative">
+        <header className="mb-6 sm:mb-8 mt-2 sm:mt-4">
+          <h1 className="font-primary text-center lg:text-left text-2xl sm:text-3xl md:text-4xl text-[#502B3A]">
+            {title}
+          </h1>
         </header>
 
-        <form className="auth-page__form" onSubmit={handleSubmit}>
+        <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
           {formFields.map((field) => (
             <div key={field.id} className="auth-page__field-container">
               {field.type === "password" ? (
@@ -249,13 +253,13 @@ export default function AuthSection({
           ))}
 
           {showTermsCheckbox && (
-            <div className="auth-page__terms-checkbox">
+            <div className="flex items-start">
               <div className="flex items-center h-5">
                 <input
                   id="terms-and-conditions"
                   name="terms-and-conditions"
                   type="checkbox"
-                  className="auth-page__checkbox-input"
+                  className="h-4 w-4 border-gray-300"
                   required
                   checked={formData["terms-and-conditions"] === "on"}
                   onChange={handleInputChange}
@@ -263,14 +267,14 @@ export default function AuthSection({
               </div>
               <label
                 htmlFor="terms-and-conditions"
-                className="auth-page__checkbox-label"
+                className="ml-2 block text-xs sm:text-sm text-[#787878]"
               >
                 {termsText || (
                   <>
                     I agree to all{" "}
                     <Link
                       href="/terms-and-conditions"
-                      className="auth-page__terms-link"
+                      className="text-[#787878] font-semibold underline underline-offset-1 hover:text-[#D1A559]"
                     >
                       Terms & Conditions
                     </Link>
@@ -282,7 +286,7 @@ export default function AuthSection({
 
           <button
             type="submit"
-            className="auth-page__submit-button"
+            className="w-full flex justify-center py-3 px-4 border border-transparent font-primary text-base sm:text-lg font-medium text-white bg-[#502B3A] hover:bg-[#502B3A]/80"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : actionButtonText}
@@ -290,22 +294,22 @@ export default function AuthSection({
 
           {/* {showSocialAuth && (
             <>
-              <div className="auth-page__social-divider">
-                <div className="auth-page__divider-line" aria-hidden="true">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
                   <div className="w-full border-t border-gray-300" />
                 </div>
-                <div className="auth-page__divider-text">
-                  <span className="auth-page__divider-span">
+                <div className="relative flex justify-center">
+                  <span className="px-2 bg-white text-xs sm:text-sm text-[#787878]">
                     or continue with
                   </span>
                 </div>
               </div>
 
-              <div className="auth-page__social-buttons">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => signIn("google", { redirect: false })}
                   type="button"
-                  className="auth-page__social-button"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#D1A559] font-medium text-sm sm:text-base text-gray-700 bg-white hover:bg-gray-50"
                 >
                   <AuthGoogleIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   Google
@@ -315,12 +319,12 @@ export default function AuthSection({
           )} */}
 
           {footer && (
-            <p className="auth-page__footer">
+            <p className="text-center text-xs sm:text-sm text-gray-600">
               {footer.text}{" "}
               {footer.link && (
                 <Link
                   href={footer.link.href}
-                  className="auth-page__footer-link"
+                  className="font-medium underline underline-offset-1 text-[#D1A559] hover:text-[#D1A559]/80"
                 >
                   {footer.link.text}
                 </Link>

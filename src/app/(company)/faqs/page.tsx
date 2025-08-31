@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import "./styles.scss";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -55,22 +54,26 @@ export default async function FAQsPage() {
   ];
 
   return (
-    <div className="faqs-page">
-      <div className="faqs-page__container">
-        <div className="faqs-page__header">
-          <h1 className="faqs-page__title">Frequently Asked Questions</h1>
-          <p className="faqs-page__description">
+    <div className="min-h-screen pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="font-primary text-3xl md:text-4xl font-semibold text-primary-500 mb-6">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-primary-400 max-w-3xl mx-auto leading-relaxed">
             Get answers to all your questions about luxury jewelry at Eno Bassé.
             Explore our FAQ page for details on products, services, shipping,
             and more.
           </p>
         </div>
 
-        <div className="faqs-page__grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {faqs.map((faq, index) => (
-            <div key={index} className="faqs-page__item">
-              <h3 className="faqs-page__question">{faq.question}</h3>
-              <p className="faqs-page__answer">{faq.answer}</p>
+            <div key={index} className="space-y-4">
+              <h3 className="font-primary text-lg font-semibold text-primary-500 leading-tight">
+                {faq.question}
+              </h3>
+              <p className="text-primary-400 leading-relaxed">{faq.answer}</p>
             </div>
           ))}
         </div>

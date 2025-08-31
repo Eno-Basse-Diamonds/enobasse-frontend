@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components";
 import { SidebarNavigation } from "./_components/sidebar-navigation";
-import "./styles.scss";
 
 export default function AdminLayout({
   children,
@@ -52,21 +51,23 @@ export default function AdminLayout({
 
   return (
     <>
-      <div className="admin-layout">
+      <div className="hidden md:flex h-full bg-gray-50">
         <SidebarNavigation sidebarItems={sidebarItems} />
-        <div className="admin-layout__content bg-gray-100">{children}</div>
+        <div className="flex-1 ml-72 bg-gray-100">{children}</div>
       </div>
 
-      <div className="mobile-restricted-view">
-        <div className="mobile-restricted-view__container">
-          <div className="mobile-restricted-view__icon">
-            <TriangleAlert />
+      <div className="md:hidden flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 text-center">
+        <div className="max-w-md mx-auto space-y-4">
+          <div className="text-red-500 mb-4">
+            <TriangleAlert className="h-12 w-12 mx-auto" />
           </div>
-          <h1 className="mobile-restricted-view__title">Access Restricted</h1>
-          <p className="mobile-restricted-view__message">
+          <h1 className="font-primary text-2xl font-bold text-primary-500">
+            Access Restricted
+          </h1>
+          <p className="text-primary-300">
             Admin dashboard is only available on tablet and desktop devices.
           </p>
-          <div className="mobile-restricted-view__button">
+          <div className="pt-4">
             <Button href="/">Go Home</Button>
           </div>
         </div>

@@ -20,7 +20,6 @@ import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { getCurrencySymbol } from "@/lib/utils/money";
-import "./styles.scss";
 
 interface ProductQuickViewProps {
   product: Product;
@@ -136,40 +135,40 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
 
   return (
     <motion.div
-      className="product-quick-view"
+      className="fixed inset-0 z-50 flex items-center justify-center"
       initial="hidden"
       animate="visible"
       exit="hidden"
     >
       <motion.div
-        className="product-quick-view__backdrop"
+        className="fixed inset-0 bg-gray-600/90 transition-opacity duration-300"
         onClick={onClose}
         variants={backdrop}
       ></motion.div>
 
-      <div className="product-quick-view__container">
+      <div className="relative w-full h-full md:h-[80vh] md:px-4 lg:h-[85vh]">
         <motion.div
-          className="product-quick-view__modal"
+          className="relative w-full h-full bg-white flex flex-col overflow-hidden md:flex-row md:mx-auto md:w-[90%] lg:w-[80%] lg:max-w-[80rem]"
           variants={modal}
           onClick={(e) => e.stopPropagation()}
         >
           <motion.button
             onClick={onClose}
-            className="product-quick-view__close-button"
+            className="absolute top-4 right-4 z-10 p-2 rounded-full transition-colors duration-200 hover:bg-white"
             whileHover={buttonHover}
             whileTap={buttonTap}
           >
             <CloseIcon className="h-5 w-5 text-gray-800" />
           </motion.button>
 
-          <div className="product-quick-view__image-container">
+          <div className="relative flex-shrink-0 w-full h-[45vh] md:w-1/2 md:h-full">
             <motion.div
               key={currentImageIndex}
               initial="exit"
               animate="enter"
               exit="exit"
               variants={imageTransition}
-              className="product-quick-view__image"
+              className="relative w-full h-full"
             >
               <Image
                 src={selectedVariant.images[currentImageIndex].url}
@@ -186,13 +185,13 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               <>
                 <motion.button
                   onClick={handlePrevImage}
-                  className="product-quick-view__nav-button product-quick-view__nav-button--prev"
+                  className="absolute top-1/2 -translate-y-1/2 p-2 bg-gray-100 transition-colors duration-200 rounded-full hover:bg-gray-50 left-4"
                 >
                   <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
                 </motion.button>
                 <motion.button
                   onClick={handleNextImage}
-                  className="product-quick-view__nav-button product-quick-view__nav-button--next"
+                  className="absolute top-1/2 -translate-y-1/2 p-2 bg-gray-100 transition-colors duration-200 rounded-full hover:bg-gray-50 right-4"
                 >
                   <ChevronRightIcon className="h-5 w-5 text-gray-800" />
                 </motion.button>
@@ -200,7 +199,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
             )}
 
             <motion.div
-              className="product-quick-view__thumbnail-container"
+              className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 px-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -209,10 +208,10 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 <motion.button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`product-quick-view__thumbnail-button ${
+                  className={`relative w-12 h-12 overflow-hidden ${
                     currentImageIndex === index
-                      ? "product-quick-view__thumbnail-button--active"
-                      : "product-quick-view__thumbnail-button--inactive"
+                      ? "border-2 border-primary-500"
+                      : "opacity-70"
                   }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
@@ -230,21 +229,21 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           </div>
 
           <motion.div
-            className="product-quick-view__content bg-slate-50"
+            className="w-full p-6 overflow-y-auto bg-slate-50 md:w-1/2 md:p-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
             <motion.div
-              className="product-quick-view__header"
+              className="mb-6"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="product-quick-view__title">
+              <h2 className="text-lg font-semibold md:text-2xl font-primary text-primary-500">
                 {selectedVariant.title}
               </h2>
-              <p className="product-quick-view__price">
+              <p className="md:text-xl font-medium text-primary-500 mt-2">
                 {getCurrencySymbol(product.priceRange.currency)}
                 {selectedVariant.price.toLocaleString(undefined)}
               </p>
@@ -254,7 +253,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               product.metals &&
               product.metals.length > 1 && (
                 <motion.div
-                  className="product-quick-view__section"
+                  className="mb-6"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 }}
@@ -271,7 +270,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               product.gemstones &&
               uniqueGemstones.length > 1 && (
                 <motion.div
-                  className="product-quick-view__section"
+                  className="mb-6"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
@@ -286,32 +285,30 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
 
             <div className="flex flex-row justify-between gap-x-2">
               <motion.div
-                className="product-quick-view__section"
+                className="mb-6"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <div>
-                  <h3 className="product-quick-view__section-title">
+                  <h3 className="text-sm font-medium text-gray-800 mb-2">
                     Quantity
                   </h3>
-                  <div className="product-quick-view__quantity-controls">
+                  <div className="flex items-center gap-2 p-1 border border-primary-500/20 w-fit">
                     <motion.button
                       onClick={() =>
                         setQuantity((prev) => Math.max(1, prev - 1))
                       }
-                      className="product-quick-view__quantity-button"
+                      className="p-2 text-primary-500 transition-colors duration-200 hover:bg-primary-500/10"
                       whileHover={buttonHover}
                       whileTap={buttonTap}
                     >
                       <MinusIcon className="h-3 w-3" />
                     </motion.button>
-                    <span className="product-quick-view__quantity-value">
-                      {quantity}
-                    </span>
+                    <span className="px-4 font-medium">{quantity}</span>
                     <motion.button
                       onClick={() => setQuantity((prev) => prev + 1)}
-                      className="product-quick-view__quantity-button"
+                      className="p-2 text-primary-500 transition-colors duration-200 hover:bg-primary-500/10"
                       whileHover={buttonHover}
                       whileTap={buttonTap}
                     >
@@ -323,12 +320,14 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
 
               {isRing && (
                 <motion.div
-                  className="product-quick-view__section"
+                  className="mb-6"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35 }}
                 >
-                  <h3 className="product-quick-view__section-title">Size</h3>
+                  <h3 className="text-sm font-medium text-gray-800 mb-2">
+                    Size
+                  </h3>
                   <RingSizeSelector
                     selectedSize={selectedSize}
                     onSetSelectedSize={setSelectedSize}
@@ -342,7 +341,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
             >
-              <div className="product-quick-view__action-buttons hidden md:grid ">
+              <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
                 <Button size="lg" onClick={onAddToCart}>
                   Add to Cart
                 </Button>
@@ -359,7 +358,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   </span>
                 </Button>
               </div>
-              <div className="product-quick-view__action-buttons grid md:hidden">
+              <div className="grid-cols-2 gap-4 mb-4 grid md:hidden">
                 <Button variant="outline" onClick={onAddToCart}>
                   Add to Cart
                 </Button>
@@ -376,7 +375,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 </Button>
               </div>
               <Link
-                className="product-quick-view__details-link"
+                className="inline-block w-full text-center font-medium text-primary-500 no-underline hover:underline hover:h-[1px] hover:underline-offset-2"
                 href={`/products/${product.slug}`}
               >
                 View full details

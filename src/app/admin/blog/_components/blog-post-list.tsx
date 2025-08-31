@@ -8,9 +8,13 @@ interface BlogPostListProps {
   onDelete: (slug: string) => void;
 }
 
-export const BlogPostList = memo(function BlogPostList({ blogPosts, onEdit, onDelete }: BlogPostListProps) {
+export const BlogPostList = memo(function BlogPostList({
+  blogPosts,
+  onEdit,
+  onDelete,
+}: BlogPostListProps) {
   return (
-    <div className="blog-post-list">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {blogPosts.map((post) => (
         <BlogPostCard
           key={post.id}

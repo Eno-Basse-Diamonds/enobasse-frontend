@@ -16,9 +16,10 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
   return (
     <Link
       href={`/collections/${collection.slug}`}
-      className="group collections-page__card"
+      className="group flex flex-col h-full"
     >
-      <div className="collections-page__card-image-container">
+      <div className="relative w-full h-40 sm:h-48 md:h-60 lg:h-80 overflow-hidden">
+        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all duration-300 z-10" />
         <Image
           src={
             imageError
@@ -29,7 +30,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
           title={collection.image.alt}
           width={500}
           height={500}
-          className="collections-page__card-image"
+          className="w-full h-full object-cover object-center transition-all duration-500 ease-in-out group-hover:scale-105"
           quality={100}
           priority={index < 3}
           loading={index < 3 ? "eager" : "lazy"}
@@ -38,9 +39,11 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
           decoding="async"
         />
       </div>
-      <div className="collections-page__card-content">
-        <h3 className="collections-page__card-title">{collection.name}</h3>
-        <p className="collections-page__card-count">
+      <div className="mt-4 flex flex-col flex-grow">
+        <h3 className="text-base md:text-lg font-medium text-gray-900">
+          {collection.name}
+        </h3>
+        <p className="mt-auto text-sm text-gray-500">
           {collection.productCount}{" "}
           {collection.productCount === 1 ? "item" : "items"}
         </p>

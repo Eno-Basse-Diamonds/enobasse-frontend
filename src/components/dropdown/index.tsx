@@ -11,7 +11,6 @@ import {
   LinkIcon,
   ShareIcon,
 } from "../icons";
-import "./styles.scss";
 
 interface ShareDropdownProps {
   url: string;
@@ -64,33 +63,29 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
   const shareLinks = [
     {
       name: "Facebook",
-      icon: (
-        <FacebookIcon className="share-dropdown__icon" aria-hidden="true" />
-      ),
+      icon: <FacebookIcon className="w-4 h-4" aria-hidden="true" />,
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
         url
       )}`,
     },
     {
       name: "X",
-      icon: <XIcon className="share-dropdown__icon" aria-hidden="true" />,
+      icon: <XIcon className="w-4 h-4" aria-hidden="true" />,
       url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
     },
     {
       name: "Instagram",
-      icon: (
-        <InstagramIcon className="share-dropdown__icon" aria-hidden="true" />
-      ),
+      icon: <InstagramIcon className="w-4 h-4" aria-hidden="true" />,
       url: `https://www.instagram.com/?url=${encodeURIComponent(url)}`,
     },
     {
       name: "TikTok",
-      icon: <TiktokIcon className="share-dropdown__icon" aria-hidden="true" />,
+      icon: <TiktokIcon className="w-4 h-4" aria-hidden="true" />,
       url: `https://www.tiktok.com/?link=${encodeURIComponent(url)}`,
     },
     {
       name: "Copy Link",
-      icon: <LinkIcon className="share-dropdown__icon" aria-hidden="true" />,
+      icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
       action: () => {
         navigator.clipboard.writeText(url);
         setIsOpen(false);
@@ -101,40 +96,40 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
   return (
     <div
       ref={dropdownRef}
-      className="share-dropdown"
+      className="relative inline-block"
       aria-label="Share options"
     >
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`share-dropdown__toggle ${
-          isOpen ? "share-dropdown__toggle--active" : ""
+        className={`flex items-center justify-center transition-colors focus:outline-none focus:ring-0 ${
+          isOpen ? "" : ""
         }`}
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label={label}
       >
-        <ShareIcon className="share-dropdown__toggle-icon" aria-hidden="true" />
-        <span className="share-dropdown__label">{label}</span>
+        <ShareIcon className="w-5 h-5 text-gray-700" aria-hidden="true" />
+        <span className="ml-2 text-[#502B3A]">{label}</span>
       </button>
 
       {isMounted && (
         <ul
           role="menu"
-          className={`share-dropdown__menu ${
+          className={`absolute right-0 mt-2 w-48 origin-top-right bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-2 px-1 ${
             isOpen
-              ? "share-dropdown__menu--open"
-              : "share-dropdown__menu--closed"
+              ? "transform opacity-100 scale-100 transition-all duration-200 ease-out"
+              : "transform opacity-0 hidden scale-95 transition-all duration-150 ease-in"
           }`}
           onAnimationEnd={handleAnimationEnd}
         >
           {shareLinks.map((item, index) => (
-            <li key={index} role="none" className="share-dropdown__item">
+            <li key={index} role="none" className="list-none">
               {item.action ? (
                 <button
                   role="menuitem"
                   onClick={item.action}
-                  className="share-dropdown__link"
+                  className="flex w-full items-center gap-4 px-4 py-2 text-sm text-[#502B3A] hover:bg-[#502B3A]/10 transition-colors duration-150"
                 >
                   {item.icon}
                   {item.name}
@@ -145,7 +140,7 @@ export const ShareDropdown: React.FC<ShareDropdownProps> = ({
                   role="menuitem"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="share-dropdown__link"
+                  className="flex w-full items-center gap-4 px-4 py-2 text-sm text-[#502B3A] hover:bg-[#502B3A]/10 transition-colors duration-150"
                 >
                   {item.icon}
                   {item.name}

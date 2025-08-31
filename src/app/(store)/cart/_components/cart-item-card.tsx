@@ -72,11 +72,11 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
   const isRing = item.productCategory === "Rings" ? true : false;
 
   return (
-    <li className="cart-page__item">
-      <div className="cart-page__item-content">
+    <li className="py-6 transition-colors">
+      <div className="flex gap-4">
         <Link
           href={`/products/${item.productSlug}`}
-          className="cart-page__image-container"
+          className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200"
         >
           <Image
             src={imageUrl}
@@ -87,7 +87,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
           />
         </Link>
 
-        <div className="cart-page__details">
+        <div className="flex flex-col flex-1 justify-between">
           <div className="flex flex-col h-full">
             <div className="flex justify-between gap-4">
               <div className="flex-1">
@@ -95,16 +95,16 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                   href={`/products/${item.productSlug}`}
                   className="hover:underline transition-all"
                 >
-                  <h3 className="cart-page__title">{title}</h3>
+                  <h3 className="font-medium text-[#502B3A]">{title}</h3>
                 </Link>
 
-                <p className="cart-page__specs">
+                <p className="text-sm text-[#502B3A]/70 mt-1 mb-2">
                   {gemstoneStr && metalStr
                     ? `${gemstoneStr} | ${metalStr}`
                     : metalStr || gemstoneStr}
                 </p>
 
-                <p className="cart-page__price">
+                <p className="font-medium text-[#502B3A]">
                   {getCurrencySymbol(preferredCurrency)}
                   {price.toLocaleString()}
                 </p>
@@ -128,7 +128,10 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 )}
               </div>
 
-              <button className="cart-page__remove-btn" onClick={handleRemove}>
+              <button
+                className="text-gray-500 hover:text-gray-600 h-5 w-5 self-start ml-6"
+                onClick={handleRemove}
+              >
                 <CloseIcon className="h-5 w-5" />
               </button>
             </div>
@@ -154,7 +157,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               </div>
 
               <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-4 w-full justify-between">
-                <div className="cart-page__total-price text-primary-500 text-base whitespace-nowrap">
+                <div className="text-[#502B3A] text-base whitespace-nowrap">
                   <span className="font-semibold">Total:</span>{" "}
                   {getCurrencySymbol(preferredCurrency)}
                   {(price * item.quantity).toLocaleString()}

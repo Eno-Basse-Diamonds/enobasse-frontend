@@ -13,10 +13,12 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, admin }) => {
   return (
-    <header className="admin-header">
-      <div className="admin-header__container">
-        <h2 className="admin-header__title">{title}</h2>
-        <div className="admin-header__actions">
+    <header className="bg-white shadow-sm border-b border-primary-500/10 px-8 py-5 sticky top-0 z-50">
+      <div className="flex items-center justify-between">
+        <h2 className="font-primary text-2xl font-semibold text-primary-500">
+          {title}
+        </h2>
+        <div className="flex items-center space-x-4">
           <Button
             variant="outline"
             leadingIcon={<ExternalLink />}
@@ -25,17 +27,15 @@ export const Header: React.FC<HeaderProps> = ({ title, admin }) => {
           >
             View Website
           </Button>
-          <Link href="/admin/account" className="admin-header__account-link">
+          <Link href="/admin/account" className="flex items-center space-x-3">
             <Image
               src={admin.avatar.src}
               alt={admin.avatar.alt}
               height={50}
               width={50}
-              className="admin-header__avatar"
+              className="w-8 h-8 rounded-full"
             />
-            <span className="admin-header__account-link-name">
-              {admin.name}
-            </span>
+            <span className="text-primary-500 font-medium">{admin.name}</span>
           </Link>
         </div>
       </div>
