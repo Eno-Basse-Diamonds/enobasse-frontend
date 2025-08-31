@@ -9,7 +9,7 @@ export const PrivacyConsent = () => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    const hasConsented = sessionStorage.getItem("privacyConsent");
+    const hasConsented = localStorage.getItem("privacyConsent");
 
     if (!hasConsented) {
       setTimeout(() => {
@@ -20,13 +20,13 @@ export const PrivacyConsent = () => {
   }, []);
 
   const handleAccept = () => {
-    sessionStorage.setItem("privacyConsent", "true");
+    localStorage.setItem("privacyConsent", "true");
     setIsAnimating(false);
     setTimeout(() => setIsVisible(false), 300);
   };
 
   const handleDecline = () => {
-    sessionStorage.setItem("privacyConsent", "false");
+    localStorage.setItem("privacyConsent", "false");
     setIsAnimating(false);
     setTimeout(() => setIsVisible(false), 300);
   };
