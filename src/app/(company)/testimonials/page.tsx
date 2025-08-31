@@ -95,8 +95,9 @@ export default function TestimonialsPage() {
                       className="h-10 w-10 rounded-full bg-gray-50"
                       src={testimonial.avatar}
                       alt={testimonial.name}
-                      width={100}
-                      height={100}
+                      width={40}
+                      height={40}
+                      loading="lazy"
                     />
                   ) : (
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">

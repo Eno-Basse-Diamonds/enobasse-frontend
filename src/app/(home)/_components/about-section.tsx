@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { blurDataURL } from "@/lib/utils/constants";
 
 interface AboutSectionProps {
   title: string;
@@ -44,11 +45,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         <Image
           src={image.src}
           alt={image.alt}
-          height={1000}
-          width={1000}
-          loading="lazy"
-          quality={100}
-          className="w-full"
+          height={600}
+          width={600}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
+          className="w-full h-auto"
+          placeholder="blur"
+          blurDataURL={blurDataURL}
         />
       </figure>
     </section>

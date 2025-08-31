@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import { blurDataURL } from "@/lib/utils/constants";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -34,10 +35,14 @@ export default function AboutUsPage() {
             <Image
               src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/package-box_faeatt.webp"
               alt="Eno Bassé packaging box"
-              height={800}
-              width={800}
+              width={1200}
+              height={600}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="w-full h-80 lg:h-96 object-cover bg-gray-100"
-              quality={100}
+              priority
+              loading="eager"
+              placeholder="blur"
+              blurDataURL={blurDataURL}
             />
           </div>
           <div className="max-w-4xl mx-auto text-primary-400 leading-relaxed space-y-4">
@@ -77,10 +82,12 @@ export default function AboutUsPage() {
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510664/founder_jcgqhh.webp"
                 alt="Eno Bassé founder profile picture"
-                height={1500}
-                width={1500}
-                quality={100}
+                width={800}
+                height={1000}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
+                placeholder="blur"
+                blurDataURL={blurDataURL}
               />
             </div>
 
@@ -129,13 +136,15 @@ export default function AboutUsPage() {
                   the zeal, talent and qualifications required to grow her brand
                   successfully
                 </p>
-                <div className="mx-auto md:mx-0 mt-8 max-w-[200px]">
+                <div className="mx-auto md:mx-0 mt-8 max-w-[200px] h-auto">
                   <Image
                     src="https://res.cloudinary.com/enobasse/image/upload/v1756510657/signature_vh5lg6.webp"
                     alt="Eno Bassé founder name signature"
-                    height={1500}
-                    width={1500}
-                    quality={100}
+                    width={200}
+                    height={80}
+                    sizes="(max-width: 768px) 50vw, 200px"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL}
                   />
                 </div>
               </div>
@@ -168,10 +177,12 @@ export default function AboutUsPage() {
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/sourcing-gemstone_iahzmq.webp"
                 alt="Eno Bassé gemstones collection"
-                height={1500}
-                width={1500}
-                quality={100}
+                width={800}
+                height={600}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
+                placeholder="blur"
+                blurDataURL={blurDataURL}
               />
             </div>
           </div>
@@ -184,10 +195,12 @@ export default function AboutUsPage() {
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/making-the-jewlery_qeun0d.webp"
                 alt="Eno Bassé jewellery making process"
-                height={1500}
-                width={1500}
-                quality={100}
+                width={800}
+                height={600}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
+                placeholder="blur"
+                blurDataURL={blurDataURL}
               />
             </div>
             <div className="space-y-6">
@@ -269,10 +282,12 @@ export default function AboutUsPage() {
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/dirt-to-wealth_bx89m5.webp"
                 alt="Eno Bassé Dirt to Wealth initiative"
-                height={1500}
-                width={1500}
-                quality={100}
+                width={800}
+                height={600}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
+                placeholder="blur"
+                blurDataURL={blurDataURL}
               />
             </div>
           </div>
