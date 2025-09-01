@@ -76,7 +76,7 @@ export const sendRingResizingMessage = async (data: RingResizingMessage) => {
 };
 
 export const sendMaintenanceRepairsMessage = async (
-  data: MaintenanceRepairsMessage
+  data: MaintenanceRepairsMessage,
 ) => {
   return api.post("/contact/maintenance-repairs", data);
 };

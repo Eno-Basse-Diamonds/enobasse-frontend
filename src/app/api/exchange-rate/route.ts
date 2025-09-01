@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
       response.headers.set(
         "Cache-Control",
-        "public, s-maxage=3600, stale-while-revalidate=7200"
+        "public, s-maxage=3600, stale-while-revalidate=7200",
       );
 
       return response;
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Only USD and NGN conversions are supported" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 
     response.headers.set(
       "Cache-Control",
-      "public, s-maxage=3600, stale-while-revalidate=7200"
+      "public, s-maxage=3600, stale-while-revalidate=7200",
     );
 
     return response;
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     console.error("Exchange rate fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch exchange rate" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -109,7 +109,7 @@ async function getCachedExchangeRate(): Promise<number> {
       {
         headers: { Accept: "application/json" },
         next: { revalidate: 3600 }, // Next.js fetch caching - 1 hour
-      }
+      },
     );
 
     if (!response.ok) {

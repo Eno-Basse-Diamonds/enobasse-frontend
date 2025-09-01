@@ -93,6 +93,6 @@ export const useMaintenanceRepairsStore = create<MaintenanceRepairsStore>()(
     }),
     {
       name: "maintenance-repairs-form",
-    }
-  )
+    },
+  ),
 );

@@ -32,7 +32,7 @@ interface CreateOrderDto {
 
 export const getOrders = async (
   accountEmail?: string,
-  status?: string
+  status?: string,
 ): Promise<Order[]> => {
   return api.get(`/orders`, {
     params: { accountEmail, status },
@@ -44,7 +44,7 @@ export const getOrder = async (orderId: string): Promise<Order> => {
 };
 
 export const createOrder = async (
-  createOrderDto: CreateOrderDto
+  createOrderDto: CreateOrderDto,
 ): Promise<Order> => {
   return api.post(`/orders`, createOrderDto);
 };

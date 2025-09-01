@@ -28,7 +28,7 @@ export function filterAndSortProducts({
       const matchesMetals =
         metalFilters.length === 0 ||
         metalFilters.some((metal) =>
-          productMetals.includes(metal as MetalName)
+          productMetals.includes(metal as MetalName),
         );
       const matchesGemstones =
         gemstoneFilters.length === 0 ||
@@ -42,18 +42,18 @@ export function filterAndSortProducts({
   switch (sortBy) {
     case "price-low-high":
       filtered.sort(
-        (a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0)
+        (a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0),
       );
       break;
     case "price-high-low":
       filtered.sort(
-        (a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0)
+        (a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0),
       );
       break;
     case "newest":
       filtered.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       break;
     case "in-store":

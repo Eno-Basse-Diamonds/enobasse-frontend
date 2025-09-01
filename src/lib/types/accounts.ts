@@ -1,3 +1,3 @@
 export interface UpdateAccount {
-  preferredCurrency: string
+  preferredCurrency: string;
 }
