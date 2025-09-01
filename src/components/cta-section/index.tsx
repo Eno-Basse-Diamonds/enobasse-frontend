@@ -52,3 +52,39 @@ export const CTASection: React.FC<CTASectionProps> = ({
     </section>
   );
 };
+
+export const RingCustomizationCTASection: React.FC = () => {
+  return (
+    <section className="flex items-center justify-center bg-[#502B3A] mt-8  -mb-10 md:-mb-16">
+      <section className="relative w-full overflow-hidden">
+        <div className="relative z-10 text-center px-6 py-16 md:py-24">
+          <h2 className="font-primary font-semibold text-3xl md:text-4xl text-white mb-6">
+            Customize Your Dream Ring in 3D
+          </h2>
+          <p className="font-light md:text-lg lg:text-xl text-white/90 mb-10 max-w-2xl mx-auto">
+            Our revolutionary 3D ring customization feature is coming soon. Be
+            the first to create a truly unique piece that reflects your style.
+          </p>
+          <button
+            className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors cursor-not-allowed"
+            disabled
+          >
+            Coming Soon
+          </button>
+        </div>
+
+        <div className="absolute w-full -bottom-[5rem] md:w-auto md:right-[8vw] h-64 md:h-80 lg:h-96 overflow-hidden">
+          <Image
+            src="https://res.cloudinary.com/enobasse/image/upload/v1756680507/3d-ring-customization-cta_pcu2wz.webp"
+            alt="3D Ring Customization Preview"
+            className="w-full h-full object-contain object-center"
+            height={300}
+            width={300}
+          />
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#502B3A] via-transparent to-transparent pointer-events-none"></div>
+      </section>
+    </section>
+  );
+};
