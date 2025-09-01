@@ -7,10 +7,21 @@ import { api, ApiError } from "../utils/api";
 
 export type PaginatedBlogResponse = {
   posts: BlogPost[];
+  total: number;
   page: number;
   perPage: number;
   totalPages: number;
 };
+
+export interface AdminBlogFilterOptions {
+  page?: number;
+  perPage?: number;
+  sortBy?: 'title' | 'createdAt' | 'updatedAt' | 'readingTime' | 'author';
+  sortOrder?: 'ASC' | 'DESC';
+  search?: string;
+  isPublished?: boolean;
+  authorId?: string;
+}
 
 export interface FormErrors {
   title?: string[];
@@ -22,7 +33,6 @@ export interface FormErrors {
   isPublished?: string[];
 }
 
-
 export interface FormState {
   errors: FormErrors;
   message: string;
@@ -31,10 +41,20 @@ export interface FormState {
 }
 
 export const getBlogPosts = async (
-  page = 1,
-  perPage = 9
+  options?: {
+    page?: number;
+    perPage?: number;
+    search?: string;
+  }
 ): Promise<PaginatedBlogResponse> => {
-  return api.get("/blog/posts", { params: { page, perPage } });
+  const { page = 1, perPage = 9, search } = options || {};
+  return api.get("/blog/posts", { params: { page, perPage, search } });
+};
+
+export const getBlogPostsForAdmin = async (
+  options?: AdminBlogFilterOptions
+): Promise<PaginatedBlogResponse> => {
+  return api.get("/blog/posts/admin", { params: options });
 };
 
 export const getPublishedBlogPosts = async (

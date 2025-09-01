@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getBlogPosts,
+  getBlogPostsForAdmin,
   getPublishedBlogPosts,
   getBlogPost,
   getRelatedBlogPosts,
@@ -8,15 +9,26 @@ import {
   updateBlogPost,
   deleteBlogPost,
   FormState,
+  AdminBlogFilterOptions,
 } from "../api/blog-posts";
 import { BlogPostFormData } from "../types/blog-post";
 import { useRouter } from "next/navigation";
 
-export function useBlogPosts(page: number = 1) {
+export function useBlogPosts(page: number = 1, search?: string) {
   return useQuery({
-    queryKey: ["blogPosts", page],
+    queryKey: ["blogPosts", page, search],
     queryFn: async () => {
-      const data = await getBlogPosts(page);
+      const data = await getBlogPosts({ page, perPage: 9, search });
+      return data;
+    },
+  });
+}
+
+export function useBlogPostsForAdmin(options?: AdminBlogFilterOptions) {
+  return useQuery({
+    queryKey: ["blogPostsForAdmin", options],
+    queryFn: async () => {
+      const data = await getBlogPostsForAdmin(options);
       return data;
     },
   });
@@ -75,6 +87,7 @@ export function useCreateBlogPost() {
     onSuccess: (data) => {
       if (data.success && data.post) {
         queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
+        queryClient.invalidateQueries({ queryKey: ["blogPostsForAdmin"] });
         router.push("/admin/blog?page=1");
       }
     },
@@ -91,7 +104,10 @@ export function useUpdateBlogPost() {
     onSuccess: (data) => {
       if (data.success && data.post) {
         queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
-        queryClient.invalidateQueries({ queryKey: ["blogPost", data.post.slug] });
+        queryClient.invalidateQueries({ queryKey: ["blogPostsForAdmin"] });
+        queryClient.invalidateQueries({
+          queryKey: ["blogPost", data.post.slug],
+        });
       }
     },
   });
@@ -105,6 +121,7 @@ export function useDeleteBlogPost(page: number) {
     mutationFn: (slug) => deleteBlogPost(slug),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["blogPosts"] });
+      queryClient.invalidateQueries({ queryKey: ["blogPostsForAdmin"] });
     },
   });
 }

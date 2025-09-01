@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface LoaderProps {
   count?: number;
 }
@@ -19,3 +21,43 @@ export const CollectionListLoader: React.FC<LoaderProps> = ({ count = 6 }) => {
     </div>
   );
 };
+
+export const AdminCollectionsSkeletonLoader = memo(
+  function AdminCollectionsSkeletonLoader() {
+    return (
+      <div className="flex-1 p-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="h-6 bg-gray-200 w-48 mb-2 animate-pulse"></div>
+            <div className="h-4 bg-gray-200 w-64 animate-pulse"></div>
+          </div>
+          <div className="h-10 bg-gray-200 w-32 animate-pulse"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-white shadow overflow-hidden border border-gray-200 flex flex-col h-full"
+            >
+              <div className="h-48 bg-gray-200 animate-pulse"></div>
+              <div className="p-6 flex flex-col flex-grow">
+                <div className="flex-grow">
+                  <div className="h-6 bg-gray-200 w-3/4 mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 w-full mb-1 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 w-2/3 mb-4 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 w-1/2 mb-1 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 w-1/3 mb-6 animate-pulse"></div>
+                </div>
+                <div className="flex space-x-3 w-full">
+                  <div className="h-10 bg-gray-200 flex-1 animate-pulse"></div>
+                  <div className="h-10 bg-gray-200 flex-1 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+);

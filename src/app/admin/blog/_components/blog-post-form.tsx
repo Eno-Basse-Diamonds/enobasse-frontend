@@ -53,19 +53,6 @@ Horizontal rule:
 ---
 `;
 
-const prepareFormData = (formData: BlogPostFormData) => {
-  const newFormData = new FormData();
-  newFormData.append("title", formData.title);
-  newFormData.append("slug", formData.slug);
-  newFormData.append("excerpt", formData.excerpt);
-  newFormData.append("content", formData.content);
-  newFormData.append("isPublished", formData.isPublished.toString());
-  newFormData.append("image.src", formData.image.src);
-  newFormData.append("image.alt", formData.image.alt);
-  formData.tags.forEach((tag: string) => newFormData.append("tags", tag));
-  return newFormData;
-};
-
 export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [tagInput, setTagInput] = useState("");
@@ -243,7 +230,12 @@ const FormHeader: React.FC<FormHeaderProps> = ({
       >
         {showPreview ? "Hide Preview" : "Show Preview"}
       </Button>
-      <Button size="sm" variant="ghost" onClick={onClose}>
+      <Button
+        size="sm"
+        variant="ghost"
+        className="rounded-full w-8 h-8"
+        onClick={onClose}
+      >
         <X className="w-6 h-6" />
       </Button>
     </div>

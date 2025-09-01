@@ -26,6 +26,7 @@ export const BlogPostCard = memo(function BlogPostCard({
             alt={post.image.alt || post.title}
             fill
             className="object-cover"
+            sizes="50vw"
             onError={() => setImageError(true)}
           />
         ) : (
@@ -56,7 +57,7 @@ export const BlogPostCard = memo(function BlogPostCard({
           <div className="flex items-center justify-between text-sm text-primary-300 mb-6">
             <span className="flex items-center">
               <User className="w-4 h-4 mr-1" />
-              {post.author.name}
+              {post.author.name  || "No author"}
             </span>
             <span className="flex items-center">
               <Calendar className="w-4 h-4 mr-1" />

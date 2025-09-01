@@ -6,6 +6,7 @@ export interface Collection {
   slug: string;
   description: string;
   image: { url: string; alt: string };
+  published: boolean;
   productCount?: number;
 }
 
@@ -21,6 +22,7 @@ export interface CollectionWithProducts {
     hasPreviousPage: boolean;
   };
 }
+
 export interface CollectionFilterOptions {
   sortBy?: string;
   sortOrder?: "ASC" | "DESC";
