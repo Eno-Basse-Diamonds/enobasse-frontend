@@ -11,6 +11,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith(route)
   );
   const isAuthRoute = authRoutes.includes(pathname);
+  const isAdminRoute = pathname.startsWith("/admin");
 
   if (isAuthRoute) {
     const token = await getToken({
@@ -34,6 +35,12 @@ export async function middleware(req: NextRequest) {
       const signInUrl = new URL("/sign-in", req.url);
       signInUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(signInUrl);
+    }
+
+    if (isAdminRoute) {
+      if (token.email !== "enobasse01@gmail.com") {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
     }
   }
 
