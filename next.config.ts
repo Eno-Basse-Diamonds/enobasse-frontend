@@ -11,6 +11,90 @@ const nextConfig: NextConfig = {
     formats: ["image/webp"],
     qualities: [75, 100],
   },
+  async redirects() {
+    return [
+      // CATEGORY PAGES (Old) to COLLECTIONS (New)
+      {
+        source: '/product-category/accessories',
+        destination: '/collections',
+        permanent: true,
+      },
+      {
+        source: '/Rings',
+        destination: '/collections/rings',
+        permanent: true,
+      },
+      {
+        source: '/Necklace',
+        destination: '/collections/necklaces',
+        permanent: true,
+      },
+      {
+        source: '/Earring',
+        destination: '/collections/earrings',
+        permanent: true,
+      },
+      {
+        source: '/Bracelet',
+        destination: '/collections/bracelets',
+        permanent: true,
+      },
+      {
+        source: '/Jewelry',
+        destination: '/collections',
+        permanent: true,
+      },
+      {
+        source: '/Pendants',
+        destination: '/collections/pendants',
+        permanent: true,
+      },
+      {
+        source: '/Bracelets',
+        destination: '/collections/bracelets',
+        permanent: true,
+      },
+      {
+        source: '/Earrings',
+        destination: '/collections/earrings',
+        permanent: true,
+      },
+
+      // OLD TAGS & SHOP PAGES
+      {
+        source: '/product-tag/necklaces',
+        destination: '/collections/necklaces',
+        permanent: true,
+      },
+      {
+        source: '/product-tag/diamond-earring',
+        destination: '/collections/earrings',
+        permanent: true,
+      },
+      {
+        source: '/shop',
+        destination: '/products',
+        permanent: true,
+      },
+
+      // OLD PAGES (No Direct Equivalent - Redirect to Homepage or Closest Page)
+      {
+        source: '/about-us-3',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/sample-page',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/author/admin',
+        destination: '/blog',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default bundleAnalyzer(nextConfig);

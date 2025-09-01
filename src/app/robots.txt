@@ -1,5 +1,7 @@
 User-Agent: *
 Allow: /
 Disallow: /private/
+Disallow: /admin
+Disallow: /admin/
 
 Sitemap: https://enobasse.com/sitemap.xml
