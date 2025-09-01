@@ -16,8 +16,8 @@ export type PaginatedBlogResponse = {
 export interface AdminBlogFilterOptions {
   page?: number;
   perPage?: number;
-  sortBy?: 'title' | 'createdAt' | 'updatedAt' | 'readingTime' | 'author';
-  sortOrder?: 'ASC' | 'DESC';
+  sortBy?: "title" | "createdAt" | "updatedAt" | "readingTime" | "author";
+  sortOrder?: "ASC" | "DESC";
   search?: string;
   isPublished?: boolean;
   authorId?: string;
@@ -40,26 +40,24 @@ export interface FormState {
   post?: BlogPost;
 }
 
-export const getBlogPosts = async (
-  options?: {
-    page?: number;
-    perPage?: number;
-    search?: string;
-  }
-): Promise<PaginatedBlogResponse> => {
+export const getBlogPosts = async (options?: {
+  page?: number;
+  perPage?: number;
+  search?: string;
+}): Promise<PaginatedBlogResponse> => {
   const { page = 1, perPage = 9, search } = options || {};
   return api.get("/blog/posts", { params: { page, perPage, search } });
 };
 
 export const getBlogPostsForAdmin = async (
-  options?: AdminBlogFilterOptions
+  options?: AdminBlogFilterOptions,
 ): Promise<PaginatedBlogResponse> => {
   return api.get("/blog/posts/admin", { params: options });
 };
 
 export const getPublishedBlogPosts = async (
   page = 1,
-  perPage = 9
+  perPage = 9,
 ): Promise<PaginatedBlogResponse> => {
   return api.get("/blog/posts/published", { params: { page, perPage } });
 };
@@ -69,14 +67,14 @@ export const getBlogPost = async (slug: string): Promise<BlogPost> => {
 };
 
 export const getRelatedBlogPosts = async (
-  slug: string
+  slug: string,
 ): Promise<BlogPost[]> => {
   return api.get(`/blog/posts/${slug}/related`);
 };
 
 export async function createBlogPost(
   formData: FormData | BlogPostFormData,
-  authorId: string
+  authorId: string,
 ): Promise<FormState> {
   const data = transformFormData(formData);
   const validatedData = BlogPostSchema.safeParse(data);
@@ -109,7 +107,7 @@ export async function createBlogPost(
 
 export async function updateBlogPost(
   slug: string,
-  formData: FormData | BlogPostFormData
+  formData: FormData | BlogPostFormData,
 ): Promise<FormState> {
   const data = transformFormData(formData);
   const validatedData = BlogPostSchema.partial().safeParse(data);
@@ -130,7 +128,10 @@ export async function updateBlogPost(
   };
 
   try {
-    const post = await api.patch<BlogPost>(`/blog/posts/${slug}`, updatedData.data);
+    const post = await api.patch<BlogPost>(
+      `/blog/posts/${slug}`,
+      updatedData.data,
+    );
 
     return {
       success: true,

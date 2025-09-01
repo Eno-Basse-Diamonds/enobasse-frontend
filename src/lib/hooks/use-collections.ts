@@ -26,7 +26,7 @@ export function useCollections() {
 export function useCollection(
   slug: string,
   options?: CollectionFilterOptions,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery<CollectionWithProducts>({
     queryKey: ["collection", slug, options],
@@ -54,7 +54,7 @@ export function useCreateCollection() {
         queryClient.invalidateQueries({ queryKey: ["collections"] });
         router.push("/admin/collections");
       },
-    }
+    },
   );
 }
 

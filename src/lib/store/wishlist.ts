@@ -22,16 +22,16 @@ interface WishlistState {
     productSlug: string,
     productCategory: string,
     accountEmail?: string,
-    currency?: string
+    currency?: string,
   ) => Promise<void>;
   removeItem: (
     productVariantId: string | number,
-    accountEmail?: string
+    accountEmail?: string,
   ) => Promise<void>;
   clear: (accountEmail?: string) => Promise<void>;
   refreshWithCurrency: (
     currency: string,
-    accountEmail?: string
+    accountEmail?: string,
   ) => Promise<void>;
 }
 
@@ -49,7 +49,7 @@ export const useWishlistStore = create<WishlistState>()(
         try {
           if (accountEmail) {
             const guestItems = get().items.filter((item) =>
-              item.id.startsWith("guest_")
+              item.id.startsWith("guest_"),
             );
             if (guestItems.length > 0) {
               try {
@@ -58,8 +58,8 @@ export const useWishlistStore = create<WishlistState>()(
                     accountEmail,
                     item.productVariant.id,
                     item.productSlug,
-                    item.productCategory
-                  )
+                    item.productCategory,
+                  ),
                 );
                 await Promise.all(addToWishlistPromises);
               } catch (e) {}
@@ -85,7 +85,7 @@ export const useWishlistStore = create<WishlistState>()(
                   })
                   .catch(() => {
                     const fallbackUsdPrice = Math.ceil(
-                      item.productVariant.price / exchangeRate
+                      item.productVariant.price / exchangeRate,
                     );
                     set((state) => ({
                       originalUsdPrices: {
@@ -128,7 +128,7 @@ export const useWishlistStore = create<WishlistState>()(
             const convertedItems = await convertWishlistItems(
               state.items,
               currency,
-              state.originalUsdPrices
+              state.originalUsdPrices,
             );
             set({ items: convertedItems });
           }
@@ -149,7 +149,7 @@ export const useWishlistStore = create<WishlistState>()(
         productSlug: string,
         productCategory: string,
         accountEmail?: string,
-        currency: string = "USD"
+        currency: string = "USD",
       ) => {
         set({ loading: true, error: null });
         try {
@@ -158,7 +158,7 @@ export const useWishlistStore = create<WishlistState>()(
               accountEmail,
               productVariant.id,
               productSlug,
-              productCategory
+              productCategory,
             );
             const response = await getWishlist(accountEmail, currency);
 
@@ -181,7 +181,7 @@ export const useWishlistStore = create<WishlistState>()(
                   })
                   .catch(() => {
                     const fallbackUsdPrice = Math.ceil(
-                      item.productVariant.price / exchangeRate
+                      item.productVariant.price / exchangeRate,
                     );
                     set((state) => ({
                       originalUsdPrices: {
@@ -201,7 +201,7 @@ export const useWishlistStore = create<WishlistState>()(
             set((state) => {
               if (
                 state.items.some(
-                  (item) => item.productVariant.id === productVariant.id
+                  (item) => item.productVariant.id === productVariant.id,
                 )
               ) {
                 return state;
@@ -232,7 +232,7 @@ export const useWishlistStore = create<WishlistState>()(
                   .catch(() => {
                     getExchangeRate().then((exchangeRate) => {
                       const fallbackUsdPrice = Math.ceil(
-                        productVariant.price / exchangeRate
+                        productVariant.price / exchangeRate,
                       );
                       set((currentState) => ({
                         originalUsdPrices: {
@@ -262,7 +262,7 @@ export const useWishlistStore = create<WishlistState>()(
 
       removeItem: async (
         productVariantId: string | number,
-        accountEmail?: string
+        accountEmail?: string,
       ) => {
         set({ loading: true, error: null });
         try {
@@ -270,23 +270,23 @@ export const useWishlistStore = create<WishlistState>()(
             await removeFromWishlist(accountEmail, productVariantId);
             set((state) => ({
               items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId
+                (item) => item.productVariant.id !== productVariantId,
               ),
               originalUsdPrices: Object.fromEntries(
                 Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString()
-                )
+                  ([id]) => id !== productVariantId.toString(),
+                ),
               ),
             }));
           } else {
             set((state) => ({
               items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId
+                (item) => item.productVariant.id !== productVariantId,
               ),
               originalUsdPrices: Object.fromEntries(
                 Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString()
-                )
+                  ([id]) => id !== productVariantId.toString(),
+                ),
               ),
             }));
           }
@@ -328,14 +328,14 @@ export const useWishlistStore = create<WishlistState>()(
       onRehydrateStorage: () => (state) => {
         state?.hydrate();
       },
-    }
-  )
+    },
+  ),
 );
 
 async function convertWishlistItems(
   items: WishlistItem[],
   targetCurrency: string,
-  originalUsdPrices: Record<string, number>
+  originalUsdPrices: Record<string, number>,
 ): Promise<WishlistItem[]> {
   const convertedItems: WishlistItem[] = [];
 
@@ -355,14 +355,14 @@ async function convertWishlistItems(
         convertedPrice = await convertCurrency(
           originalUsdPrices[item.productVariant.id],
           "USD",
-          "NGN"
+          "NGN",
         );
         originalPrice = originalUsdPrices[item.productVariant.id];
       } else if (currentCurrency === "USD") {
         convertedPrice = await convertCurrency(
           item.productVariant.price,
           "USD",
-          "NGN"
+          "NGN",
         );
         originalPrice = item.productVariant.price;
       } else {
@@ -375,7 +375,7 @@ async function convertWishlistItems(
         convertedPrice = await convertCurrency(
           item.productVariant.price,
           "NGN",
-          "USD"
+          "USD",
         );
       } else {
         convertedPrice = item.productVariant.price;

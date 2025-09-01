@@ -102,7 +102,7 @@ export const useOrdersStore = create<OrdersStore>()(
             const sortedOrders = orders.sort(
               (a, b) =>
                 new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
+                new Date(a.createdAt).getTime(),
             );
             set((state) => ({
               orders: state.orders
@@ -113,12 +113,12 @@ export const useOrdersStore = create<OrdersStore>()(
           } else {
             const guestOrders = get()
               .orders.filter(
-                (order) => !order.accountEmail || order.id.startsWith("GO")
+                (order) => !order.accountEmail || order.id.startsWith("GO"),
               )
               .sort(
                 (a, b) =>
                   new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime()
+                  new Date(a.createdAt).getTime(),
               );
             return guestOrders;
           }
@@ -173,8 +173,8 @@ export const useOrdersStore = create<OrdersStore>()(
       onRehydrateStorage: () => (state) => {
         state?.hydrateOrders();
       },
-    }
-  )
+    },
+  ),
 );
 
 export const useCheckout = (accountEmail?: string) => {
@@ -183,7 +183,7 @@ export const useCheckout = (accountEmail?: string) => {
 
   const checkout = async (
     billingAddress: BillingAddress,
-    customerInfo?: { email: string; phone: string }
+    customerInfo?: { email: string; phone: string },
   ) => {
     const orderItems: OrderItem[] = items.map((item) => ({
       id: item.id,
@@ -200,7 +200,7 @@ export const useCheckout = (accountEmail?: string) => {
 
     const total = orderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0
+      0,
     );
 
     const order = await createOrder({

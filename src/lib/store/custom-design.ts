@@ -73,6 +73,6 @@ export const useCustomDesignStore = create<CustomDesignStore>()(
     }),
     {
       name: "custom-design-form",
-    }
-  )
+    },
+  ),
 );

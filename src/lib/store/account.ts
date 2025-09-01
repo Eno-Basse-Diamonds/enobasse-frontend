@@ -80,6 +80,6 @@ export const useAccountStore = create<AccountState>()(
       onRehydrateStorage: () => (state) => {
         state?.setIsHydrated(true);
       },
-    }
-  )
+    },
+  ),
 );

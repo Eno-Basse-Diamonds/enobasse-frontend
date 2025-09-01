@@ -1,13 +1,13 @@
 export async function convertCurrency(
   amount: number,
   from: string,
-  to: string
+  to: string,
 ): Promise<number> {
   if (from === to) return amount;
 
   try {
     const response = await fetch(
-      `/api/exchange-rate?amount=${amount}&from=${from}&to=${to}`
+      `/api/exchange-rate?amount=${amount}&from=${from}&to=${to}`,
     );
     if (!response.ok) {
       throw new Error("Failed to fetch exchange rate");

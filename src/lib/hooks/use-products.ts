@@ -8,7 +8,7 @@ import { Product, ProductFilterOptions } from "@/lib/types/products";
 
 export function useProductsSearch(
   options?: ProductFilterOptions,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery({
     queryKey: ["productSearch", options],
@@ -19,7 +19,7 @@ export function useProductsSearch(
 
 export function useProducts(
   options?: ProductFilterOptions,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery({
     queryKey: ["products", options],
@@ -31,7 +31,7 @@ export function useProducts(
 export function useProduct(
   slug: string,
   currency: string,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery<Product>({
     queryKey: ["product", slug, currency],
@@ -44,7 +44,7 @@ export function useRelatedProducts(
   slug: string,
   limit = 4,
   currency: string,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery<Product[]>({
     queryKey: ["relatedProducts", slug, currency],

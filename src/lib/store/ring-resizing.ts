@@ -59,10 +59,11 @@ export const useRingResizingStore = create<RingResizingStore>()(
         })),
       setCurrentStep: (step) => set({ currentStep: step }),
       setIsSubmitted: (isSubmitted) => set({ isSubmitted }),
-      resetForm: () => set({ formData: initialFormData, currentStep: 1, isSubmitted: false }),
+      resetForm: () =>
+        set({ formData: initialFormData, currentStep: 1, isSubmitted: false }),
     }),
     {
       name: "ring-resizing-storage",
-    }
-  )
+    },
+  ),
 );

@@ -11,7 +11,7 @@ interface UserAccount {
 export const createAccount = async (
   name: string,
   email: string,
-  password?: string
+  password?: string,
 ) => {
   const validatedFields = SignupFormSchema.safeParse({
     name: name,
@@ -35,7 +35,7 @@ export const createAccount = async (
 
 export const validateAccount = async (
   email: string,
-  password: string
+  password: string,
 ): Promise<UserAccount> => {
   return api.post("/auth/validate-account", { email, password });
 };

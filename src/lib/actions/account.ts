@@ -7,7 +7,7 @@ import {
 } from "../api/account";
 
 export async function handleRequestResetPassword(
-  formData: Record<string, string>
+  formData: Record<string, string>,
 ) {
   const response = (await requestResetPassword(formData.email)) as any;
   return response;
@@ -21,7 +21,7 @@ export async function handleResetCode(formData: Record<string, string>) {
 export async function handleChangePassword(formData: Record<string, string>) {
   const response = (await changePassword(
     formData.email,
-    formData.newPassword
+    formData.newPassword,
   )) as any;
   return response;
 }

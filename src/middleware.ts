@@ -8,7 +8,7 @@ const authRoutes = ["/sign-in", "/sign-up"];
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathname.startsWith(route),
   );
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith("/admin");

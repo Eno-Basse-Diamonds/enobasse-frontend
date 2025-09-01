@@ -15,13 +15,13 @@ export const changePassword = async (email: string, newPassword: string) => {
 
 export const updateAccount = async (
   email: string,
-  accountDto: UpdateAccount
+  accountDto: UpdateAccount,
 ) => {
   return api.patch(`/accounts/${email}`, accountDto);
 };
 
 export const getPreferredCurrency = async (
-  email: string | null | undefined
+  email: string | null | undefined,
 ): Promise<string> => {
   return api.get(`/accounts/${email}/preferred-currency`);
 };

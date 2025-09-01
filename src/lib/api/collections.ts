@@ -1,4 +1,8 @@
-import { Collection, CollectionFilterOptions, CollectionWithProducts } from "../types/collections";
+import {
+  Collection,
+  CollectionFilterOptions,
+  CollectionWithProducts,
+} from "../types/collections";
 import { api } from "../utils/api";
 
 export interface AdminCollectionsResponse {
@@ -12,8 +16,8 @@ export interface AdminCollectionsResponse {
 export interface AdminCollectionsFilterOptions {
   page?: number;
   pageSize?: number;
-  sortBy?: 'name' | 'createdAt' | 'updatedAt' | 'productCount';
-  sortOrder?: 'ASC' | 'DESC';
+  sortBy?: "name" | "createdAt" | "updatedAt" | "productCount";
+  sortOrder?: "ASC" | "DESC";
   search?: string;
   published?: boolean;
 }
@@ -24,13 +28,15 @@ export const getCollections = async (): Promise<Collection[]> => {
 
 export const getCollectionWithProducts = async (
   slug: string,
-  options?: CollectionFilterOptions
+  options?: CollectionFilterOptions,
 ): Promise<CollectionWithProducts> => {
   return api.get(`/collections/${slug}`, { params: options });
 };
 
 // Admin endpoints
-export const getCollectionsForAdmin = async (options?: AdminCollectionsFilterOptions): Promise<AdminCollectionsResponse> => {
+export const getCollectionsForAdmin = async (
+  options?: AdminCollectionsFilterOptions,
+): Promise<AdminCollectionsResponse> => {
   return api.get("/collections/admin", { params: options });
 };
 
@@ -52,7 +58,7 @@ export const updateCollection = async (
     description: string;
     published: boolean;
     image: { url: string; alt: string };
-  }>
+  }>,
 ): Promise<Collection> => {
   return api.patch(`/collections/${id}`, collectionData);
 };

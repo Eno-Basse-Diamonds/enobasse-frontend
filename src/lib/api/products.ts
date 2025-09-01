@@ -6,12 +6,15 @@ import {
 import { api } from "@/lib/utils/api";
 
 export const getProducts = async (
-  options?: ProductFilterOptions
+  options?: ProductFilterOptions,
 ): Promise<ProductsResponse> => {
   return api.get("/products", { params: options });
 };
 
-export const getProduct = async (slug: string, currency: string,): Promise<Product> => {
+export const getProduct = async (
+  slug: string,
+  currency: string,
+): Promise<Product> => {
   return api.get(`/products/${slug}`, { params: { currency: currency } });
 };
 

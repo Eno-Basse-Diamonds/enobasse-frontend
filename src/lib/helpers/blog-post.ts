@@ -67,4 +67,4 @@ export const calculateReadingTime = (content: string): number => {
   const wordCount = content.split(/\s+/).length;
   const minutes = Math.ceil(wordCount / wordsPerMinute);
   return minutes;
-}
+};

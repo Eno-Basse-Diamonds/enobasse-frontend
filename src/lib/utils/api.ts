@@ -11,7 +11,7 @@ export class ApiError extends Error {
   constructor(
     message: string,
     public status: number,
-    public errors?: Record<string, string[]>
+    public errors?: Record<string, string[]>,
   ) {
     super(message);
     this.name = "ApiError";
@@ -41,7 +41,7 @@ class ApiClient {
           statusCheck: (status) => status >= 200 && status < 300,
         },
         cacheTakeover: false,
-      }
+      },
     );
 
     this.setupInterceptors();
@@ -71,18 +71,18 @@ class ApiClient {
               throw new ApiError(
                 errorData.message || "An unexpected error occurred",
                 error.response.status,
-                errorData.errors
+                errorData.errors,
               );
           }
         }
         throw error;
-      }
+      },
     );
   }
 
   private buildCacheConfig(
     cacheDuration?: number,
-    cacheOptions?: CacheOptions
+    cacheOptions?: CacheOptions,
   ): CacheRequestConfig {
     const cacheConfig: CacheRequestConfig = {};
 
@@ -100,13 +100,13 @@ class ApiClient {
 
   public async get<T>(
     url: string,
-    config?: ApiRequestConfig & { cacheDuration?: number }
+    config?: ApiRequestConfig & { cacheDuration?: number },
   ): Promise<T> {
     const { cacheDuration, ...axiosConfig } = config || {};
 
     const cacheConfig = this.buildCacheConfig(
       cacheDuration,
-      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined,
     );
 
     const finalConfig = { ...axiosConfig, ...cacheConfig };
@@ -118,13 +118,13 @@ class ApiClient {
   public async post<T, D = unknown>(
     url: string,
     data?: D,
-    config?: ApiRequestConfig & { cacheDuration?: number }
+    config?: ApiRequestConfig & { cacheDuration?: number },
   ): Promise<T> {
     const { cacheDuration, ...axiosConfig } = config || {};
 
     const cacheConfig = this.buildCacheConfig(
       cacheDuration,
-      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined,
     );
 
     const finalConfig = { ...axiosConfig, ...cacheConfig };
@@ -136,16 +136,16 @@ class ApiClient {
   public async put<T, D = unknown>(
     url: string,
     data?: D,
-    config?: ApiRequestConfig & { cacheDuration?: number }
+    config?: ApiRequestConfig & { cacheDuration?: number },
   ): Promise<T> {
     const { cacheDuration, ...axiosConfig } = config || {};
 
     const cacheConfig = this.buildCacheConfig(
       cacheDuration,
-      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined,
     );
 
-    const finalConfig = {...axiosConfig,  ...cacheConfig };
+    const finalConfig = { ...axiosConfig, ...cacheConfig };
 
     const response = await this.axiosInstance.put<T>(url, data, finalConfig);
     return response.data;
@@ -154,13 +154,13 @@ class ApiClient {
   public async patch<T, D = unknown>(
     url: string,
     data?: D,
-    config?: ApiRequestConfig & { cacheDuration?: number }
+    config?: ApiRequestConfig & { cacheDuration?: number },
   ): Promise<T> {
     const { cacheDuration, ...axiosConfig } = config || {};
 
     const cacheConfig = this.buildCacheConfig(
       cacheDuration,
-      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined,
     );
 
     const finalConfig = { ...axiosConfig, ...cacheConfig };
@@ -171,13 +171,13 @@ class ApiClient {
 
   public async delete<T>(
     url: string,
-    config?: ApiRequestConfig & { cacheDuration?: number }
+    config?: ApiRequestConfig & { cacheDuration?: number },
   ): Promise<T> {
     const { cacheDuration, ...axiosConfig } = config || {};
 
     const cacheConfig = this.buildCacheConfig(
       cacheDuration,
-      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined
+      typeof axiosConfig?.cache === "object" ? axiosConfig.cache : undefined,
     );
 
     const finalConfig = { ...axiosConfig, ...cacheConfig };
