@@ -11,6 +11,7 @@ import {
   HeroSection,
   SectionHeading,
   SectionContainer,
+  RingCustomizationCTASection,
 } from "@/components";
 import { AboutSection } from "./_components/about-section";
 import { BlogHeader } from "./_components/blog-header";
@@ -152,10 +153,12 @@ export default async function HomePage() {
         <BentoGrid items={bentoItems} />
       </SectionContainer>
 
+      <RingCustomizationCTASection />
+
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SectionContainer
           id="blog"
-          className="bg-[#D1A559] bg-opacity-20 px-4 lg:px-8 py-8 lg:py-16 mt-10 md:mt-20"
+          className="bg-[#D1A559] bg-opacity-20 px-4 lg:px-8 py-8 lg:py-16"
         >
           <BlogHeader />
           <BlogContent />

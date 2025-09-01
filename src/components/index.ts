@@ -28,6 +28,7 @@ import { Alert } from "./alert";
 import { SizeGuide } from "./size-guide";
 import { Engraving } from "./modal";
 import { CurrencyDropdown } from "./dropdown";
+import { RingCustomizationCTASection } from "./cta-section";
 
 export {
   Header,
@@ -63,4 +64,5 @@ export {
   SizeGuide,
   Engraving,
   CurrencyDropdown,
+  RingCustomizationCTASection,
 };
