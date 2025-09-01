@@ -2,25 +2,30 @@
 
 import * as React from "react";
 import { useState, useCallback } from "react";
-import { Plus, Search, X } from "lucide-react";
-import { Alert, Button, Pagination } from "@/components";
-import { AdminBlogSkeletonLoader } from "@/components/loaders";
-import { AdminHeader } from "../_components/admin-header";
-import { BlogPostForm } from "./_components/blog-post-form";
-import { BlogPostList } from "./_components/blog-post-list";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { BlogPost } from "@/lib/types/blog-post";
-import { useBlogPostsForAdmin, useDeleteBlogPost } from "@/lib/hooks/use-blog";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Plus, Search, X } from "lucide-react";
+import { Alert, Button, Pagination } from "@/components";
+import { AdminCollectionsSkeletonLoader } from "@/components/loaders";
+import { AdminHeader } from "../_components/admin-header";
+import { CollectionForm } from "./_components/collection-form";
+import { CollectionList } from "./_components/collection-list";
+import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
+import { Collection } from "@/lib/types/collections";
+import {
+  useDeleteCollection,
+  useAdminCollections,
+} from "@/lib/hooks/use-collections";
 
-export default function AdminBlogPage() {
+export default function AdminCollectionsPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
+  const [editingCollection, setEditingCollection] = useState<Collection | null>(
+    null
+  );
   const [inputValue, setInputValue] = useState("");
 
   const [alertState, setAlertState] = useState<{
@@ -34,24 +39,19 @@ export default function AdminBlogPage() {
   const currentSort = searchParams.get("sortBy") || "createdAt";
   const currentSortOrder =
     (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
-  const currentPublished = searchParams.get("isPublished");
+  const currentPublished = searchParams.get("published");
 
   const filterOptions = {
     page: currentPage,
-    perPage: 9,
-    sortBy: currentSort as
-      | "title"
-      | "createdAt"
-      | "updatedAt"
-      | "readingTime"
-      | "author",
+    pageSize: 12,
+    sortBy: currentSort as "name" | "createdAt" | "updatedAt" | "productCount",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
-    isPublished: currentPublished ? currentPublished === "true" : undefined,
+    published: currentPublished ? currentPublished === "true" : undefined,
   };
 
-  const { data, isLoading } = useBlogPostsForAdmin(filterOptions);
-  const deleteMutation = useDeleteBlogPost(currentPage);
+  const { data, isLoading } = useAdminCollections(filterOptions);
+  const deleteMutation = useDeleteCollection();
 
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {
@@ -65,31 +65,31 @@ export default function AdminBlogPage() {
         }
       });
 
-      router.push(`/admin/blog?${params.toString()}`);
+      router.push(`/admin/collections?${params.toString()}`);
     },
     [router, searchParams]
   );
 
-  const handleEdit = (blog: BlogPost) => {
-    setEditingBlog(blog);
+  const handleEdit = (collection: Collection) => {
+    setEditingCollection(collection);
     setIsModalOpen(true);
     document.body.style.overflow = "hidden";
   };
 
-  const handleDelete = (slug: string) => {
-    deleteMutation.mutate(slug, {
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id, {
       onSuccess: () => {
         setAlertState({
           visible: true,
           type: "success",
-          message: "Blog post deleted successfully!",
+          message: "Collection deleted successfully!",
         });
       },
       onError: () => {
         setAlertState({
           visible: true,
           type: "error",
-          message: "Failed to delete blog post. Please try again.",
+          message: "Failed to delete collection. Please try again.",
         });
       },
     });
@@ -97,7 +97,7 @@ export default function AdminBlogPage() {
 
   const handleFormClose = () => {
     setIsModalOpen(false);
-    setEditingBlog(null);
+    setEditingCollection(null);
     document.body.style.overflow = "auto";
   };
 
@@ -129,14 +129,13 @@ export default function AdminBlogPage() {
 
   const handleFilterChange = (filters: string[]) => {
     const publishedFilter = filters.includes("published");
-    updateURL({ isPublished: publishedFilter ? "true" : "", page: 1 });
+    updateURL({ published: publishedFilter ? "true" : "", page: 1 });
   };
 
   const sortOptions = [
     { value: "createdAt", label: "Date Created" },
     { value: "updatedAt", label: "Last Updated" },
-    { value: "title", label: "Title" },
-    { value: "author", label: "Author" },
+    { value: "name", label: "Name" },
   ];
 
   const filterOptionsList = [{ value: "published", label: "Published Only" }];
@@ -157,7 +156,7 @@ export default function AdminBlogPage() {
       )}
 
       <AdminHeader
-        title="Blog Management"
+        title="Collection Management"
         admin={{
           name: session?.user?.name || "Admin User",
           email: session?.user?.email || "admin@example.com",
@@ -165,16 +164,18 @@ export default function AdminBlogPage() {
       />
 
       {isLoading ? (
-        <AdminBlogSkeletonLoader />
+        <AdminCollectionsSkeletonLoader />
       ) : (
         <>
           <div className="flex-1 p-8">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-lg font-medium text-gray-900">
-                  Posts ({data?.total || 0})
+                  Collections ({data?.total || 0})
                 </h3>
-                <p className="text-sm text-gray-500">Manage your blog posts</p>
+                <p className="text-sm text-gray-500">
+                  Manage your jewelry collections
+                </p>
               </div>
               <Button
                 leadingIcon={<Plus />}
@@ -183,7 +184,7 @@ export default function AdminBlogPage() {
                   document.body.style.overflow = "hidden";
                 }}
               >
-                New Post
+                New Collection
               </Button>
             </div>
 
@@ -222,8 +223,8 @@ export default function AdminBlogPage() {
               </div>
             </div>
 
-            <BlogPostList
-              blogPosts={data?.posts || []}
+            <CollectionList
+              collections={data?.collections || []}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
@@ -237,7 +238,7 @@ export default function AdminBlogPage() {
                   hrefBuilder={(page) => {
                     const params = new URLSearchParams(searchParams.toString());
                     params.set("page", String(page));
-                    return `/admin/blog?${params.toString()}`;
+                    return `/admin/collections?${params.toString()}`;
                   }}
                 />
               </div>
@@ -245,7 +246,10 @@ export default function AdminBlogPage() {
           </div>
 
           {isModalOpen && (
-            <BlogPostForm blogPost={editingBlog} onClose={handleFormClose} />
+            <CollectionForm
+              collection={editingCollection}
+              onClose={handleFormClose}
+            />
           )}
         </>
       )}

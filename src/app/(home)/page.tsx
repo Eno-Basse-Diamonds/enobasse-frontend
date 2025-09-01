@@ -32,43 +32,50 @@ export default async function HomePage() {
 
   const carouselItems = [
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512330/rings_yahtc5.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512330/rings_yahtc5.webp",
       alt: "White gold diamond ring",
       title: "Rings",
       href: "/collections/rings",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512325/engagement-rings_fptggu.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512325/engagement-rings_fptggu.webp",
       alt: "White gold diamond engagement ring",
       title: "Engagement Rings",
       href: "/collections/engagement-rings",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
       alt: "White gold diamond earrings",
       title: "Earrings",
       href: "/collections/earrings",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
       alt: "White gold diamond cross pendant",
       title: "Pendants",
       href: "/collections/pendants",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
       alt: "White gold diamond necklace",
       title: "Necklace",
       href: "/collections/necklace",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512321/bangles_lka5bf.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512321/bangles_lka5bf.webp",
       alt: "White gold diamond bangle",
       title: "Bangles",
       href: "/collections/bangles",
     },
     {
-      image: "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
+      image:
+        "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
       alt: "White gold diamond bracelets",
       title: "Bracelets",
       href: "/collections/bracelets",
@@ -77,21 +84,21 @@ export default async function HomePage() {
 
   const bentoItems = [
     {
-      id: "best-sellers",
-      title: "Best Sellers",
-      href: "/collections/best-sellers",
+      id: "bamboo-collection",
+      title: "Bamboo Collection",
+      href: "/collections/bamboo-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512492/collection-01_anaytq.webp",
-        alt: "Butterfly shaped white gold diamond ring in a box",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745737/bamboo-collection_suocdq.webp",
+        alt: "Bamboo Collection",
       },
     },
     {
-      id: "valentine",
-      title: "Valentine's Day Gifts",
-      href: "/collection/valentine-gifts",
+      id: "amora-collection",
+      title: "Amora Collection",
+      href: "/collection/amora-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512494/collection-02_toaant.webp",
-        alt: "Hands with a butterfly shaped white gold diamond ring on one finger",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745735/amora-collection_sqjo2h.webp",
+        alt: "Amora Collection",
       },
     },
     {
@@ -100,16 +107,16 @@ export default async function HomePage() {
       href: "/collections/new-arrivals",
       image: {
         src: "https://res.cloudinary.com/enobasse/image/upload/v1756512496/collection-03_puyvz5.webp",
-        alt: "Hand with leaf-styled white gold diamond ring holding an Eno Bassé jewelry box",
+        alt: "New Arrivals",
       },
     },
     {
-      id: "trending-now",
-      title: "Trending Now",
-      href: "/collections/trending-now",
+      id: "pearls",
+      title: "Pearls",
+      href: "/collections/pearls-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512495/collection-04_elxnkm.webp",
-        alt: "Diamond cross yellow gold pendant",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745733/pearls-collection_brrv3h.webp",
+        alt: "Pearls Collection",
       },
     },
   ];
@@ -208,7 +215,7 @@ export default async function HomePage() {
           src: "https://res.cloudinary.com/enobasse/image/upload/v1756506782/call-to-action_ea4ylx.webp",
           alt: "Ruby ring with gold metal in a box.",
         }}
-        button={{ text: "Shop Now", href: "/collections" }}
+        button={{ text: "Contact Us", href: "/custom-design" }}
       />
     </main>
   );

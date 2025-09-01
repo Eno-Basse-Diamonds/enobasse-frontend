@@ -22,13 +22,30 @@ export const authOptions: NextAuthOptions = {
         const { email, password } = credentials;
         const account = await validateAccount(email, password);
         if (account && typeof (account as any).id === "string") {
-          return account as { id: string; name: string; email: string };
+          return account as unknown as {
+            id: string;
+            name: string;
+            email: string;
+            isAdmin: boolean;
+          };
         }
         return null;
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.isAdmin = (user as any).isAdmin;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.isAdmin = token.isAdmin;
+      }
+      return session;
+    },
     async signIn({
       user,
       account,

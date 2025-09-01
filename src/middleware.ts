@@ -38,7 +38,7 @@ export async function middleware(req: NextRequest) {
     }
 
     if (isAdminRoute) {
-      if (token.email !== "enobasse01@gmail.com") {
+      if (!token.isAdmin) {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }

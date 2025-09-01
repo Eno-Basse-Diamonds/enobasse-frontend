@@ -1,4 +1,4 @@
-import React, { cache } from "react";
+import React from "react";
 import type { Metadata } from "next";
 import {
   dehydrate,

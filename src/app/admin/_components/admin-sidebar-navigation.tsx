@@ -12,7 +12,7 @@ interface SidebarNavigationProps {
   sidebarItems: SidebarItem[];
 }
 
-export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
+export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
   sidebarItems,
 }) => {
   return (
@@ -34,10 +34,10 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
           <Link
             key={index}
             href={item.href}
-            className={`w-full flex items-center px-6 py-3 text-left text-primary-500 hover:bg-secondary-500/10 transition-colors ${
+            className={`w-full flex items-center px-6 py-3 text-left transition-colors ${
               item.active
                 ? "bg-secondary-500/10 border-r-2 border-secondary-500"
-                : ""
+                : "text-primary-500 hover:text-secondary-500"
             }`}
           >
             <item.icon className="w-5 h-5 mr-3 text-primary-200" />
