@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   User,
   Package,
@@ -9,10 +10,102 @@ import {
   Settings,
   LogOut,
   Edit3,
+  Save,
+  X,
 } from "lucide-react";
+import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
+import { Alert } from "@/components";
 
 export default function CustomerAccountPage() {
+  const { data: session, signOut } = useSession();
   const [activeTab, setActiveTab] = useState("profile");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    street: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+  });
+
+  const { data: account, isLoading } = useAccountByEmail(session?.user?.email);
+  const updateMutation = useUpdateAccount();
+
+  const [alertState, setAlertState] = useState<{
+    visible: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ visible: false, type: "success", message: "" });
+
+  useEffect(() => {
+    if (account) {
+      setEditForm({
+        name: account.name || "",
+        email: account.email || "",
+        phone: "",
+        street: account.billingAddress?.street || "",
+        city: account.billingAddress?.city || "",
+        state: account.billingAddress?.state || "",
+        postalCode: account.billingAddress?.postalCode || "",
+        country: account.billingAddress?.country || "",
+      });
+    }
+  }, [account]);
+
+  const handleSave = async () => {
+    try {
+      await updateMutation.mutateAsync({
+        email: session?.user?.email || "",
+        data: {
+          name: editForm.name,
+          billingAddress: {
+            street: editForm.street,
+            city: editForm.city,
+            state: editForm.state,
+            postalCode: editForm.postalCode,
+            country: editForm.country,
+          },
+        },
+      });
+
+      setAlertState({
+        visible: true,
+        type: "success",
+        message: "Account updated successfully!",
+      });
+
+      setIsEditing(false);
+    } catch (error) {
+      setAlertState({
+        visible: true,
+        type: "error",
+        message: "Failed to update account. Please try again.",
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    if (account) {
+      setEditForm({
+        name: account.name || "",
+        email: account.email || "",
+        phone: "",
+        street: account.billingAddress?.street || "",
+        city: account.billingAddress?.city || "",
+        state: account.billingAddress?.state || "",
+        postalCode: account.billingAddress?.postalCode || "",
+        country: account.billingAddress?.country || "",
+      });
+    }
+    setIsEditing(false);
+  };
+
+  const dismissAlert = () => {
+    setAlertState((prev) => ({ ...prev, visible: false }));
+  };
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
@@ -93,65 +186,174 @@ export default function CustomerAccountPage() {
               <h2 className="text-2xl font-light text-gray-900">
                 Personal Information
               </h2>
-              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                <Edit3 size={16} />
-                <span className="text-sm">Edit</span>
-              </button>
+              {!isEditing && (
+                <button
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <Edit3 size={16} />
+                  <span className="text-sm">Edit</span>
+                </button>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {isEditing ? (
               <div className="space-y-6">
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Full Name
-                  </label>
-                  <p className="text-gray-900 font-light">
-                    Isabella Marie Rodriguez
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.name}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={editForm.email}
+                      disabled
+                      className="w-full p-3 border border-gray-300 bg-gray-50 text-gray-500"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Email Address
-                  </label>
-                  <p className="text-gray-900 font-light">
-                    isabella.rodriguez@email.com
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Phone Number
-                  </label>
-                  <p className="text-gray-900 font-light">+1 (555) 123-4567</p>
-                </div>
-              </div>
 
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Member Since
-                  </label>
-                  <p className="text-gray-900 font-light">March 2023</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Street Address
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.street}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, street: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.city}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, city: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Preferred Language
-                  </label>
-                  <p className="text-gray-900 font-light">English</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      State
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.state}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, state: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Postal Code
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.postalCode}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, postalCode: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.country}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, country: e.target.value }))}
+                      className="w-full p-3 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
-                    Billing Address
-                  </label>
-                  <p className="text-gray-900 font-light leading-relaxed">
-                    123 Park Avenue
-                    <br />
-                    New York, NY 10001
-                    <br />
-                    United States
-                  </p>
+
+                <div className="flex gap-4 pt-4">
+                  <button
+                    onClick={handleSave}
+                    disabled={updateMutation.isPending}
+                    className="flex items-center gap-2 bg-black text-white px-6 py-3 hover:bg-gray-800 transition-colors disabled:opacity-50"
+                  >
+                    <Save size={16} />
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="flex items-center gap-2 border border-gray-300 px-6 py-3 hover:bg-gray-50 transition-colors"
+                  >
+                    <X size={16} />
+                    Cancel
+                  </button>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Full Name
+                    </label>
+                    <p className="text-gray-900 font-light">
+                      {account?.name || session?.user?.name || "Not provided"}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Email Address
+                    </label>
+                    <p className="text-gray-900 font-light">
+                      {account?.email || session?.user?.email || "Not provided"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Member Since
+                    </label>
+                    <p className="text-gray-900 font-light">
+                      {account?.memberSince ? new Date(account.memberSince).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : "Not available"}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-2">
+                      Billing Address
+                    </label>
+                    <p className="text-gray-900 font-light leading-relaxed">
+                      {account?.billingAddress?.street ? (
+                        <>
+                          {account.billingAddress.street}
+                          <br />
+                          {account.billingAddress.city}, {account.billingAddress.state} {account.billingAddress.postalCode}
+                          <br />
+                          {account.billingAddress.country}
+                        </>
+                      ) : (
+                        "No billing address provided"
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         );
 
@@ -382,14 +584,50 @@ export default function CustomerAccountPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-8">
+            <div className="h-8 bg-gray-200 w-48"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              <div className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="h-12 bg-gray-200"></div>
+                ))}
+              </div>
+              <div className="lg:col-span-3">
+                <div className="h-64 bg-gray-200"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
+      {alertState.visible && (
+        <Alert
+          type={alertState.type}
+          dismissible
+          onDismiss={dismissAlert}
+          duration={5000}
+        >
+          {alertState.message}
+        </Alert>
+      )}
+
       {/* Header */}
       <header className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-2xl font-light text-gray-900">My Account</h1>
-            <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <button
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+              onClick={() => signOut()}
+            >
               <LogOut size={18} />
               <span className="text-sm">Sign Out</span>
             </button>
