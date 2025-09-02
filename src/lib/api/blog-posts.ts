@@ -52,7 +52,7 @@ export const getBlogPosts = async (options?: {
 export const getBlogPostsForAdmin = async (
   options?: AdminBlogFilterOptions,
 ): Promise<PaginatedBlogResponse> => {
-  return api.get("/blog/posts/admin", { params: options });
+  return api.get("/blog/posts/admin", { params: options, cache: false });
 };
 
 export const getPublishedBlogPosts = async (

@@ -37,7 +37,7 @@ export const getCollectionWithProducts = async (
 export const getCollectionsForAdmin = async (
   options?: AdminCollectionsFilterOptions,
 ): Promise<AdminCollectionsResponse> => {
-  return api.get("/collections/admin", { params: options });
+  return api.get("/collections/admin", { params: options, cache: false });
 };
 
 export const createCollection = async (collectionData: {
