@@ -21,8 +21,8 @@ export interface CreateTestimonialData {
     url: string;
     alt: string;
   };
-  isActive?: boolean;
-  order?: number;
+  isActive: boolean;
+  order: number;
 }
 
 export interface UpdateTestimonialData extends Partial<CreateTestimonialData> {}

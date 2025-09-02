@@ -360,13 +360,9 @@ export default function ProductPage() {
                   <Button size="xl" onClick={handleAddToCart}>
                     Add to Cart
                   </Button>
-                  <Button variant="outline" size="xl">
-                    Buy Now
-                  </Button>
                 </div>
                 <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
                   <Button onClick={handleAddToCart}>Add to Cart</Button>
-                  <Button variant="outline">Buy Now</Button>
                 </div>
               </div>
             </div>

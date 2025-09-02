@@ -5,14 +5,20 @@ import { X, User, MessageSquare, Image as ImageIcon } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button, Alert } from "@/components";
 import { Testimonial, CreateTestimonialData } from "@/lib/types/testimonial";
-import { useCreateTestimonial, useUpdateTestimonial } from "@/lib/hooks/use-testimonials";
+import {
+  useCreateTestimonial,
+  useUpdateTestimonial,
+} from "@/lib/hooks/use-testimonials";
 
 interface TestimonialFormProps {
   testimonial: Testimonial | null;
   onClose: () => void;
 }
 
-export function TestimonialForm({ testimonial, onClose }: TestimonialFormProps) {
+export function TestimonialForm({
+  testimonial,
+  onClose,
+}: TestimonialFormProps) {
   const [formData, setFormData] = useState<CreateTestimonialData>({
     text: testimonial?.text || "",
     name: testimonial?.name || "",
@@ -27,14 +33,14 @@ export function TestimonialForm({ testimonial, onClose }: TestimonialFormProps) 
   const createMutation = useCreateTestimonial();
   const updateMutation = useUpdateTestimonial();
 
-  const handleInputChange = (field: keyof CreateTestimonialData, value: any) => {
+  const handleInputChange = (
+    field: keyof CreateTestimonialData,
+    value: any
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleImageChange = (
-    field: keyof typeof formData.avatar,
-    value: string
-  ) => {
+  const handleImageChange = (field: string, value: string) => {
     if (formData.avatar) {
       setFormData((prev) => ({
         ...prev,
@@ -126,12 +132,10 @@ export function TestimonialForm({ testimonial, onClose }: TestimonialFormProps) 
     <>
       {mutation.isSuccess && (
         <div className="fixed top-4 right-4 max-w-md w-full z-[9999]">
-          <Alert
-            type="success"
-            className="mb-6"
-            dismissible
-          >
-            {testimonial ? "Testimonial updated successfully!" : "Testimonial created successfully!"}
+          <Alert type="success" className="mb-6" dismissible>
+            {testimonial
+              ? "Testimonial updated successfully!"
+              : "Testimonial created successfully!"}
           </Alert>
         </div>
       )}
@@ -142,7 +146,9 @@ export function TestimonialForm({ testimonial, onClose }: TestimonialFormProps) 
           className="bg-white w-full max-w-2xl h-full flex flex-col shadow-2xl"
         >
           <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
-            <h3 className="text-2xl font-semibold text-primary-500">{formTitle}</h3>
+            <h3 className="text-2xl font-semibold text-primary-500">
+              {formTitle}
+            </h3>
             <Button
               size="sm"
               variant="ghost"
@@ -317,7 +323,7 @@ const ImageUploadField = ({
   onImageChange,
 }: {
   formData: CreateTestimonialData;
-  onImageChange: (field: keyof typeof formData.avatar, value: string) => void;
+  onImageChange: (field: string, value: string) => void;
 }) => (
   <div className="image-upload">
     <label className="block text-sm font-semibold text-primary-400 mb-2">
