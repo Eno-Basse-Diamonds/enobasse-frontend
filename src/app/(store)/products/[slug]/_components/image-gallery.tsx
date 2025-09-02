@@ -47,7 +47,6 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     height={800}
                     className="image-gallery__image"
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    quality={index === 0 ? 60 : 100}
                     priority={index === 0}
                     loading={index === 0 ? "eager" : "lazy"}
                   />

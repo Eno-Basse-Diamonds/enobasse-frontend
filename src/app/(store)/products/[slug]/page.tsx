@@ -8,6 +8,7 @@ import { getCurrencySymbol } from "@/lib/utils/money";
 
 import {
   Accordion,
+  Alert,
   Button,
   PageHeading,
   ProductList,
@@ -38,6 +39,12 @@ export default function ProductPage() {
   const router = useRouter();
   const { preferredCurrency, isHydrated } = useAccountStore();
 
+  const [alertState, setAlertState] = useState<{
+    visible: boolean;
+    type: "success" | "error";
+    message: string;
+  }>({ visible: false, type: "success", message: "" });
+
   const { slug } = useParams<{ slug: string }>();
   const { data: product, isLoading: productLoading } = useProduct(
     slug,
@@ -49,15 +56,19 @@ export default function ProductPage() {
     useRelatedProducts(slug, 4, preferredCurrency, isHydrated);
   const { data: session } = useSession();
 
+  const dismissAlert = () => {
+    setAlertState((prev) => ({ ...prev, visible: false }));
+  };
+
   const [selectedMetal, setSelectedMetal] = useState<Metal | undefined>(
     Array.isArray(product?.metals) && product.metals.length > 0
       ? product.metals[0]
       : Array.isArray(product?.variants) &&
-        product.variants.length > 0 &&
-        Array.isArray(product.variants[0].metals) &&
-        product.variants[0].metals.length > 0
-      ? product.variants[0].metals[0]
-      : undefined
+          product.variants.length > 0 &&
+          Array.isArray(product.variants[0].metals) &&
+          product.variants[0].metals.length > 0
+        ? product.variants[0].metals[0]
+        : undefined
   );
   const [selectedGemstone, setSelectedGemstone] = useState<
     Gemstone | undefined
@@ -65,11 +76,11 @@ export default function ProductPage() {
     Array.isArray(product?.gemstones) && product.gemstones.length > 0
       ? product.gemstones[0]
       : Array.isArray(product?.variants) &&
-        product.variants.length > 0 &&
-        Array.isArray(product.variants[0].gemstones) &&
-        product.variants[0].gemstones.length > 0
-      ? product.variants[0].gemstones[0]
-      : undefined
+          product.variants.length > 0 &&
+          Array.isArray(product.variants[0].gemstones) &&
+          product.variants[0].gemstones.length > 0
+        ? product.variants[0].gemstones[0]
+        : undefined
   );
 
   const initialVariant =
@@ -188,12 +199,12 @@ export default function ProductPage() {
     {
       label: `${
         Array.isArray(metals) && metals.length > 0
-          ? metals[0]?.type ?? "Metal"
+          ? (metals[0]?.type ?? "Metal")
           : "Metal"
       } Weight`,
       value:
         Array.isArray(metals) && metals.length > 0
-          ? metals[0]?.weightGrams ?? "N/A"
+          ? (metals[0]?.weightGrams ?? "N/A")
           : "N/A",
     },
     {
@@ -233,6 +244,16 @@ export default function ProductPage() {
 
   return (
     <div className="my-6 md:my-12">
+      {alertState.visible && (
+        <Alert
+          type={alertState.type}
+          dismissible
+          onDismiss={dismissAlert}
+          duration={5000}
+        >
+          {alertState.message}
+        </Alert>
+      )}
       <div className="-mb-6 md:mb-auto">
         <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       </div>
@@ -369,6 +390,9 @@ export default function ProductPage() {
             <Reviews
               reviews={product.reviews}
               ratingDistribution={product.ratingDistribution}
+              productId={product.id}
+              setAlertState={setAlertState}
+              dismissAlert={dismissAlert}
             />
           </div>
         </SectionContainer>
