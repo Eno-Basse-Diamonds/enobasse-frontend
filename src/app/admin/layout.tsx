@@ -10,6 +10,7 @@ import {
   Folder,
   TriangleAlert,
   MessageSquare,
+  Truck,
 } from "lucide-react";
 import { Button } from "@/components";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
@@ -34,6 +35,12 @@ export default function AdminLayout({
       href: "/admin/products",
       active: pathname === "/admin/products",
     },
+    {
+      icon: Truck,
+      label: "Orders",
+      href: "/admin/orders",
+      active: pathname === "/admin/orders",
+    },
     { icon: FileText, label: "Blog", href: "/admin/blog", active: pathname === "/admin/blog" },
     {
       icon: MessageSquare,
@@ -43,9 +50,9 @@ export default function AdminLayout({
     },
     {
       icon: Users,
-      label: "Customers",
-      href: "/admin/customers",
-      active: pathname === "/admin/customers",
+      label: "Accounts",
+      href: "/admin/accounts",
+      active: pathname === "/admin/accounts",
     },
     {
       icon: BarChart3,

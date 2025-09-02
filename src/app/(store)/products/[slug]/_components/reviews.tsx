@@ -10,23 +10,56 @@ import { calculateAverageRating } from "@/lib/utils/reviews";
 import { RatingDistribution } from "@/lib/types/reviews";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { User } from "lucide-react";
+import { useCreateReview } from "@/lib/hooks/use-reviews";
+import { useSession } from "next-auth/react";
 
 interface ReviewsProps {
   reviews: Review[];
   ratingDistribution: RatingDistribution[];
+  productId: string | number;
+  setAlertState: (state: { visible: boolean; type: "success" | "error"; message: string }) => void;
+  dismissAlert: () => void;
 }
 
 export const Reviews: React.FC<ReviewsProps> = ({
   reviews,
   ratingDistribution,
+  productId,
+  setAlertState,
+  dismissAlert,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: session } = useSession();
+  const createReviewMutation = useCreateReview();
 
-  const handleSubmitReview = (review: {
+  const handleSubmitReview = async (review: {
     rating: number;
-    title: string;
     content: string;
-  }) => {};
+    name: string;
+    email: string;
+  }) => {
+    try {
+      await createReviewMutation.mutateAsync({
+        productId,
+        reviewData: {
+          authorName: review.name,
+          authorEmail: review.email,
+          rating: review.rating,
+          content: review.content,
+          authorImage: {
+            url: "https://via.placeholder.com/40x40",
+            alt: review.name,
+          },
+        },
+      });
+
+      setIsModalOpen(false);
+      setAlertState({ visible: true, type: "success", message: "Review submitted successfully!" });
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+      setAlertState({ visible: true, type: "error", message: "Failed to submit review. Please try again." });
+    }
+  };
 
   // Animation variants
   const container = {
@@ -127,16 +160,18 @@ export const Reviews: React.FC<ReviewsProps> = ({
               Share your thoughts
             </h3>
             <p className="text-[#502B3A]/80 text-sm md:text-base mb-4">
-              If you&#39;ve used this product, share your thoughts with other
-              customers
+              {session ?
+                "If you've used this product, share your thoughts with other customers" :
+                "Sign in to share your thoughts about this product with other customers"
+              }
             </p>
             <Button
               variant="outline"
-              aria-label="Write a review"
-              onClick={() => setIsModalOpen(true)}
+              aria-label={session ? "Write a review" : "Sign in to write a review"}
+              onClick={() => session ? setIsModalOpen(true) : null}
               className="w-full sm:w-auto text-[#502B3A] text-sm md:text-base"
             >
-              Write a review
+              {session ? "Write a review" : "Sign in to write a review"}
             </Button>
           </motion.div>
         </motion.aside>
@@ -224,9 +259,11 @@ export const Reviews: React.FC<ReviewsProps> = ({
       </div>
 
       <ReviewFormModal
-        isOpen={isModalOpen}
+        isOpen={isModalOpen && !!session}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmitReview}
+        isLoading={createReviewMutation.isPending}
+        setAlertState={setAlertState}
       />
     </motion.section>
   );
@@ -268,9 +305,10 @@ interface ReviewFormModalProps {
     rating: number;
     name: string;
     email: string;
-    title: string;
     content: string;
   }) => void;
+  isLoading: boolean;
+  setAlertState: (state: { visible: boolean; type: "success" | "error"; message: string }) => void;
 }
 
 interface RatingLabel {
@@ -281,11 +319,12 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  isLoading,
+  setAlertState,
 }) => {
   const [rating, setRating] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -299,7 +338,21 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ rating, title, content, name, email });
+
+    // Basic validation
+    if (!rating || !name.trim() || !email.trim() || !content.trim()) {
+      setAlertState({ visible: true, type: "error", message: "Please fill in all required fields." });
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setAlertState({ visible: true, type: "error", message: "Please enter a valid email address." });
+      return;
+    }
+
+    onSubmit({ rating, content, name, email });
     onClose();
   };
 
@@ -475,24 +528,6 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
 
             <motion.div className="space-y-2" whileHover={{ x: 2 }}>
               <label
-                htmlFor="title"
-                className="block text-sm md:text-base font-medium text-[#502B3A]"
-              >
-                Title *
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
-                required
-                aria-required="true"
-              />
-            </motion.div>
-
-            <motion.div className="space-y-2" whileHover={{ x: 2 }}>
-              <label
                 htmlFor="content"
                 className="block text-sm md:text-base font-medium text-[#502B3A]"
               >
@@ -515,10 +550,10 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
               </Button>
               <Button
                 type="submit"
-                disabled={rating === 0}
-                aria-disabled={rating === 0}
+                disabled={rating === 0 || isLoading}
+                aria-disabled={rating === 0 || isLoading}
               >
-                Submit Review
+                {isLoading ? "Submitting..." : "Submit Review"}
               </Button>
             </div>
           </form>
