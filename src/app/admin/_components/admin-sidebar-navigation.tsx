@@ -16,7 +16,7 @@ export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
   sidebarItems,
 }) => {
   return (
-    <div className="w-72 bg-white border-r border-gray-200 fixed top-0 left-0 h-screen">
+    <div className="w-72 bg-white border-r border-gray-200 fixed top-0 left-0 h-screen z-50">
       <div className="p-6">
         <div className="flex items-center space-x-3">
           <Image

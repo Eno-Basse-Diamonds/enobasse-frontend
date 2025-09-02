@@ -30,6 +30,14 @@ interface CreateOrderDto {
   currency?: string;
 }
 
+export interface AdminOrdersResponse {
+  orders: Order[];
+  total: number;
+  totalPages: number;
+  page: number;
+  perPage: number;
+}
+
 export const getOrders = async (
   accountEmail?: string,
   status?: string,
@@ -47,4 +55,20 @@ export const createOrder = async (
   createOrderDto: CreateOrderDto,
 ): Promise<Order> => {
   return api.post(`/orders`, createOrderDto);
+};
+
+export const getAdminOrders = async (params: {
+  page?: number;
+  perPage?: number;
+  status?: string;
+  search?: string;
+}): Promise<AdminOrdersResponse> => {
+  return api.get(`/orders/admin`, { params });
+};
+
+export const updateOrder = async (
+  id: string,
+  data: Partial<Pick<Order, "status" | "billingAddress" | "customerInfo">>,
+): Promise<Order> => {
+  return api.patch(`/orders/${id}`, data);
 };
