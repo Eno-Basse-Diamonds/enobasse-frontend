@@ -20,43 +20,68 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/Rings',
+        source: '/product-category/rings',
         destination: '/collections/rings',
         permanent: true,
       },
       {
-        source: '/Necklace',
-        destination: '/collections/necklaces',
+        source: '/product/wedding-band',
+        destination: '/collections/rings',
         permanent: true,
       },
       {
-        source: '/Earring',
+        source: '/product/diamond-ring-14/',
+        destination: '/collections/rings',
+        permanent: true,
+      },
+      {
+        source: '/product/ruby-earring/',
         destination: '/collections/earrings',
         permanent: true,
       },
       {
-        source: '/Bracelet',
-        destination: '/collections/bracelets',
-        permanent: true,
-      },
-      {
-        source: '/Jewelry',
-        destination: '/collections',
-        permanent: true,
-      },
-      {
-        source: '/Pendants',
-        destination: '/collections/pendants',
-        permanent: true,
-      },
-      {
-        source: '/Bracelets',
-        destination: '/collections/bracelets',
-        permanent: true,
-      },
-      {
-        source: '/Earrings',
+        source: '/product/ruby-and-heart-ring/',
         destination: '/collections/earrings',
+        permanent: true,
+      },
+      {
+        source: '/product/gold-bracelet/',
+        destination: '/collections/bracelets',
+        permanent: true,
+      },
+      {
+        source: '/product/gold-bead-bangle/',
+        destination: '/collections/bangles',
+        permanent: true,
+      },
+      {
+        source: '/product/amora-single-collection/',
+        destination: '/collections/amora-collection',
+        permanent: true,
+      },
+      {
+        source: '/product/white-gold-bracelet-5/',
+        destination: '/collections/bracelets',
+        permanent: true,
+      },
+      {
+        source: '/product/diamond-earring-9/',
+        destination: '/collections/earrings',
+        permanent: true,
+      },
+      {
+        source: '/product/white-gold-bracelet/',
+        destination: '/collections/bracelets',
+        permanent: true,
+      },
+      {
+        source: '/product/diamond-cross-earring/',
+        destination: '/collections/earrings',
+        permanent: true,
+      },
+      {
+        source: '/product/square-and-pear-cut-diamond-bangle/',
+        destination: '/collections/bangles',
         permanent: true,
       },
 

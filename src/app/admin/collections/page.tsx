@@ -4,9 +4,10 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Search, X } from "lucide-react";
+import { Plus, Search, X, Folder } from "lucide-react";
 import { Alert, Button, Pagination } from "@/components";
 import { AdminCollectionsSkeletonLoader } from "@/components/loaders";
+import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { CollectionForm } from "./_components/collection-form";
 import { CollectionList } from "./_components/collection-list";
@@ -223,11 +224,19 @@ export default function AdminCollectionsPage() {
               </div>
             </div>
 
-            <CollectionList
-              collections={data?.collections || []}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            {!isLoading && data?.collections && data.collections.length > 0 ? (
+              <CollectionList
+                collections={data.collections}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ) : !isLoading && data?.collections && data.collections.length === 0 ? (
+              <EmptyState
+                title="No Collections Found"
+                description="Get started by creating your first jewelry collection to showcase your products."
+                icon={<Folder className="w-16 h-16 text-gray-400" />}
+              />
+            ) : null}
 
             {/* Pagination */}
             {data && data.totalPages > 1 && (

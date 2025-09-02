@@ -9,6 +9,7 @@ import {
   BarChart3,
   Folder,
   TriangleAlert,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
@@ -35,6 +36,12 @@ export default function AdminLayout({
     },
     { icon: FileText, label: "Blog", href: "/admin/blog", active: pathname === "/admin/blog" },
     {
+      icon: MessageSquare,
+      label: "Testimonials",
+      href: "/admin/testimonials",
+      active: pathname === "/admin/testimonials",
+    },
+    {
       icon: Users,
       label: "Customers",
       href: "/admin/customers",
@@ -58,7 +65,7 @@ export default function AdminLayout({
     <>
       <div className="hidden lg:flex h-full bg-gray-50">
         <AdminSidebarNavigation sidebarItems={sidebarItems} />
-        <div className="flex-1 ml-72 bg-gray-100">{children}</div>
+        <div className="flex-1 ml-72 bg-gray-100 min-h-screen">{children}</div>
       </div>
 
       <div className="lg:hidden flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 text-center">

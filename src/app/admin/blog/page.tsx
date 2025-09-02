@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { useState, useCallback } from "react";
-import { Plus, Search, X } from "lucide-react";
+import { Plus, Search, X, FileText } from "lucide-react";
 import { Alert, Button, Pagination } from "@/components";
 import { AdminBlogSkeletonLoader } from "@/components/loaders";
+import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { BlogPostForm } from "./_components/blog-post-form";
 import { BlogPostList } from "./_components/blog-post-list";
@@ -222,11 +223,19 @@ export default function AdminBlogPage() {
               </div>
             </div>
 
-            <BlogPostList
-              blogPosts={data?.posts || []}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            {!isLoading && data?.posts && data.posts.length > 0 ? (
+              <BlogPostList
+                blogPosts={data.posts}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ) : !isLoading && data?.posts && data.posts.length === 0 ? (
+              <EmptyState
+                title="No Blog Posts Found"
+                description="Start building your blog by creating your first post to engage with your audience."
+                icon={<FileText className="w-16 h-16 text-gray-400" />}
+              />
+            ) : null}
 
             {/* Pagination */}
             {data && data.totalPages > 1 && (
