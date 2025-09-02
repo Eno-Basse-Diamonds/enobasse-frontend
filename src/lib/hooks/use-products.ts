@@ -52,3 +52,55 @@ export function useRelatedProducts(
     enabled: enabled,
   });
 }
+
+// Admin hooks
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getProductsForAdmin,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  AdminProductsFilterOptions,
+} from "@/lib/api/products";
+
+export function useAdminProducts(options?: AdminProductsFilterOptions) {
+  return useQuery({
+    queryKey: ["adminProducts", options],
+    queryFn: () => getProductsForAdmin(options),
+    staleTime: 30_000,
+  });
+}
+
+export function useCreateProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+    },
+  });
+}
+
+export function useUpdateProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      updateProduct(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+    },
+  });
+}
+
+export function useDeleteProduct() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+    },
+  });
+}
