@@ -4,7 +4,7 @@ import {
   BlogPostDetailLoader,
 } from "./blog";
 import { CollectionListLoader } from "./collections";
-import { ProductListLoader, ProductsPageLoader, ProductDetailPageLoader } from "./products";
+import { ProductListLoader, ProductsPageLoader, ProductDetailPageLoader, AdminProductsSkeletonLoader } from "./products";
 import { WishlistLoader } from "./wishlist";
 import { CartLoader } from "./cart";
 import { OrderHistoryLoader } from "./orders";
@@ -21,5 +21,6 @@ export {
   CartLoader,
   ProductDetailPageLoader,
   OrderHistoryLoader,
-  AdminCollectionsSkeletonLoader
+  AdminCollectionsSkeletonLoader,
+  AdminProductsSkeletonLoader
 };

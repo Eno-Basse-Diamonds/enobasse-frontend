@@ -96,265 +96,174 @@ export const ProductDetailPageLoader: React.FC = () => {
           </div>
 
           <div className="hidden md:block mt-8">
-            <div className="h-6 w-32 bg-gray-200 animate-pulse-slow mb-3"></div>
-            <div className="h-4 bg-gray-200 animate-pulse-slow mb-2"></div>
-            <div className="h-4 bg-gray-200 animate-pulse-slow mb-2"></div>
-            <div className="h-4 w-3/4 bg-gray-200 animate-pulse-slow"></div>
+            <div className="h-6 w-32 bg-gray-200 mb-4 animate-pulse-slow"></div>
+            <div className="space-y-3">
+              <div className="h-4 w-full bg-gray-200 animate-pulse-slow"></div>
+              <div className="h-4 w-3/4 bg-gray-200 animate-pulse-slow"></div>
+              <div className="h-4 w-5/6 bg-gray-200 animate-pulse-slow"></div>
+            </div>
+          </div>
 
-            <div className="mt-6 space-y-3">
-              <div className="flex justify-between py-3 border-b border-gray-100">
+          <div className="hidden md:block mt-8">
+            <div className="h-6 w-24 bg-gray-200 mb-4 animate-pulse-slow"></div>
+            <div className="space-y-3">
+              <div className="flex justify-between">
                 <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
+                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
               </div>
-              <div className="flex justify-between py-3 border-b border-gray-100">
+              <div className="flex justify-between">
+                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
                 <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-4 w-24 bg-gray-300 animate-pulse-slow"></div>
               </div>
-              <div className="flex justify-between py-3 border-b border-gray-100">
-                <div className="h-4 w-32 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-4 w-16 bg-gray-300 animate-pulse-slow"></div>
-              </div>
-              <div className="flex justify-between py-3 border-b border-gray-100">
-                <div className="h-4 w-40 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
+              <div className="flex justify-between">
+                <div className="h-4 w-24 bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-2">
-          <div className="sticky top-4 space-y-6">
-            <div className="h-8 w-3/4 bg-gray-300 animate-pulse-slow"></div>
+        <div className="lg:col-span-2 mt-4 md:mt-0">
+          <div className="sticky top-4 md:top-32 h-auto md:h-[calc(100vh-6rem)] overflow-y-auto pb-8 md:pb-0">
+            <div className="space-y-6 md:space-y-7">
+              <div className="h-8 w-3/4 bg-gray-200 mb-3 md:mb-5 animate-pulse-slow"></div>
 
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <div className="h-5 w-24 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
+              <div className="mb-6 md:mb-10 flex justify-between items-center w-full">
+                <div className="flex items-center space-x-2">
+                  <div className="h-5 w-24 bg-gray-200 animate-pulse-slow"></div>
+                  <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
+                </div>
+                <div className="h-5 w-5 bg-gray-200 animate-pulse-slow"></div>
               </div>
-              <div className="h-6 w-6 bg-gray-200 rounded-full animate-pulse-slow"></div>
-            </div>
 
-            <div>
-              <div className="h-5 w-32 bg-gray-200 animate-pulse-slow mb-3"></div>
-              <div className="flex space-x-2">
-                <div className="h-10 w-20 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-10 w-20 bg-gray-300 animate-pulse-slow"></div>
-                <div className="h-10 w-20 bg-gray-200 animate-pulse-slow"></div>
+              <div className="space-y-4">
+                <div className="h-12 w-full bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-12 w-full bg-gray-200 animate-pulse-slow"></div>
               </div>
-            </div>
 
-            <div>
-              <div className="h-5 w-40 bg-gray-200 animate-pulse-slow mb-3"></div>
-              <div className="flex space-x-2">
-                <div className="h-10 w-24 bg-gray-200 animate-pulse-slow"></div>
-                <div className="h-10 w-24 bg-gray-300 animate-pulse-slow"></div>
+              <div className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]">
+                <div className="h-12 w-24 bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-12 w-24 bg-gray-200 animate-pulse-slow"></div>
               </div>
-            </div>
 
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <div className="h-5 w-20 bg-gray-200 animate-pulse-slow mb-3"></div>
-                <div className="h-10 bg-gray-200 animate-pulse-slow"></div>
+              <div className="h-6 w-32 bg-gray-200 animate-pulse-slow"></div>
+
+              <div className="hidden md:flex flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12">
+                <div className="h-12 w-full bg-gray-200 animate-pulse-slow"></div>
               </div>
-              <div className="flex-1">
-                <div className="h-5 w-24 bg-gray-200 animate-pulse-slow mb-3"></div>
-                <div className="h-10 bg-gray-200 animate-pulse-slow"></div>
+
+              <div className="flex flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 md:hidden">
+                <div className="h-10 w-full bg-gray-200 animate-pulse-slow"></div>
               </div>
-            </div>
-
-            <div className="h-7 w-40 bg-gray-300 animate-pulse-slow"></div>
-
-            <div className="flex flex-col space-y-3">
-              <div className="h-12 w-full bg-gray-300 animate-pulse-slow"></div>
-              <div className="h-12 w-full bg-gray-200 animate-pulse-slow"></div>
             </div>
           </div>
         </div>
 
         <div className="md:hidden">
-          <div className="h-6 w-32 bg-gray-200 animate-pulse-slow mb-3"></div>
-          <div className="h-4 bg-gray-200 animate-pulse-slow mb-2"></div>
-          <div className="h-4 bg-gray-200 animate-pulse-slow mb-2"></div>
-          <div className="h-4 w-3/4 bg-gray-200 animate-pulse-slow mb-6"></div>
-
-          <div className="space-y-3">
-            <div className="flex justify-between py-3 border-b border-gray-100">
-              <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-            </div>
-            <div className="flex justify-between py-3 border-b border-gray-100">
-              <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 w-24 bg-gray-300 animate-pulse-slow"></div>
-            </div>
-            <div className="flex justify-between py-3 border-b border-gray-100">
-              <div className="h-4 w-32 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 w-16 bg-gray-300 animate-pulse-slow"></div>
-            </div>
-            <div className="flex justify-between py-3 border-b border-gray-100">
-              <div className="h-4 w-40 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-16 pt-8 border-t border-gray-100">
-        <div className="h-7 w-40 bg-gray-300 animate-pulse-slow mx-auto mb-8"></div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2">
-            <div className="h-9 w-48 bg-gray-300 animate-pulse-slow mb-4"></div>
-            <div className="flex items-center mb-3">
-              <div className="h-6 w-32 bg-gray-200 animate-pulse-slow"></div>
-            </div>
-
+          <div className="my-4">
+            <div className="h-6 w-32 bg-gray-200 mb-3 animate-pulse-slow"></div>
             <div className="space-y-3">
-              <div className="flex items-center">
-                <div className="h-4 w-12 bg-gray-200 animate-pulse-slow"></div>
-                <div className="flex-1 mx-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gray-300 rounded-full w-[80%]"
-                  ></div>
-                </div>
-                <div className="h-4 w-8 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="flex items-center">
-                <div className="h-4 w-12 bg-gray-200 animate-pulse-slow"></div>
-                <div className="flex-1 mx-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gray-300 rounded-full w-[60%]"
-                  ></div>
-                </div>
-                <div className="h-4 w-8 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="flex items-center">
-                <div className="h-4 w-12 bg-gray-200 animate-pulse-slow"></div>
-                <div className="flex-1 mx-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gray-300 rounded-full w-[30%]"
-                  ></div>
-                </div>
-                <div className="h-4 w-8 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="flex items-center">
-                <div className="h-4 w-12 bg-gray-200 animate-pulse-slow"></div>
-                <div className="flex-1 mx-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gray-300 rounded-full w-[20%]"
-                  ></div>
-                </div>
-                <div className="h-4 w-8 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="flex items-center">
-                <div className="h-4 w-12 bg-gray-200 animate-pulse-slow"></div>
-                <div className="flex-1 mx-2 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gray-300 rounded-full w-[10%]"
-                  ></div>
-                </div>
-                <div className="h-4 w-8 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <div className="h-5 w-40 bg-gray-300 animate-pulse-slow mb-2"></div>
-              <div className="h-4 w-full bg-gray-200 animate-pulse-slow mb-4"></div>
-              <div className="h-10 w-32 bg-gray-300 animate-pulse-slow"></div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-3 space-y-6">
-            <div className="border-b border-gray-100 pb-6">
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse-slow"></div>
-                  <div>
-                    <div className="h-4 w-32 bg-gray-300 animate-pulse-slow mb-1"></div>
-                    <div className="h-3 w-24 bg-gray-200 animate-pulse-slow"></div>
-                  </div>
-                </div>
-                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="h-4 w-16 bg-gray-200 animate-pulse-slow mb-2"></div>
-              <div className="h-4 bg-gray-200 animate-pulse-slow mb-1"></div>
-              <div className="h-4 bg-gray-200 animate-pulse-slow mb-1"></div>
-              <div className="h-4 w-2/3 bg-gray-200 animate-pulse-slow"></div>
-            </div>
-
-            <div className="border-b border-gray-100 pb-6">
-              <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse-slow"></div>
-                  <div>
-                    <div className="h-4 w-28 bg-gray-300 animate-pulse-slow mb-1"></div>
-                    <div className="h-3 w-20 bg-gray-200 animate-pulse-slow"></div>
-                  </div>
-                </div>
-                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
-              </div>
-              <div className="h-4 w-20 bg-gray-200 animate-pulse-slow mb-2"></div>
-              <div className="h-4 bg-gray-200 animate-pulse-slow mb-1"></div>
+              <div className="h-4 w-full bg-gray-200 animate-pulse-slow"></div>
               <div className="h-4 w-3/4 bg-gray-200 animate-pulse-slow"></div>
+              <div className="h-4 w-5/6 bg-gray-200 animate-pulse-slow"></div>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <div className="h-6 w-24 bg-gray-200 mb-4 animate-pulse-slow"></div>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
+              </div>
+              <div className="flex justify-between">
+                <div className="h-4 w-20 bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
+              </div>
+              <div className="flex justify-between">
+                <div className="h-4 w-24 bg-gray-200 animate-pulse-slow"></div>
+                <div className="h-4 w-16 bg-gray-200 animate-pulse-slow"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      <div className="mt-16 pt-8 border-t border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <div className="flex justify-start">
-            <div className="aspect-square w-full max-w-md bg-gray-200 animate-pulse-slow"></div>
-          </div>
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div className="h-8 w-full bg-gray-300 animate-pulse-slow"></div>
-              <div className="h-4 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 bg-gray-200 animate-pulse-slow"></div>
-              <div className="h-4 w-2/3 bg-gray-200 animate-pulse-slow"></div>
-            </div>
+export const AdminProductsSkeletonLoader: React.FC<LoaderProps> = ({
+  count = 6,
+}) => {
+  return (
+    <div className="flex-1 p-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <div className="h-6 bg-gray-200 w-48 mb-2 animate-pulse"></div>
+          <div className="h-4 bg-gray-200 w-64 animate-pulse"></div>
+        </div>
+        <div className="h-10 bg-gray-200 w-32 animate-pulse"></div>
+      </div>
 
-            <div className="mt-8 space-y-4">
-              <div className="h-5 w-48 bg-gray-300 animate-pulse-slow"></div>
-              <div className="h-4 w-full bg-gray-200 animate-pulse-slow"></div>
-
-              <div className="h-5 w-56 bg-gray-300 animate-pulse-slow mt-6"></div>
-              <div className="h-4 w-full bg-gray-200 animate-pulse-slow"></div>
-
-              <div className="h-5 w-32 bg-gray-300 animate-pulse-slow mt-6"></div>
-              <div className="h-4 w-full bg-gray-200 animate-pulse-slow"></div>
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+        <div className="relative flex-1">
+          <div className="h-10 bg-gray-200 w-full animate-pulse"></div>
+        </div>
+        <div className="md:w-auto">
+          <div className="h-10 bg-gray-200 w-32 animate-pulse"></div>
         </div>
       </div>
 
-      <div className="mt-16 pt-8 border-t border-gray-100">
-        <div className="h-6 w-64 bg-gray-300 animate-pulse-slow mx-auto mb-8"></div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="group">
-            <div className="aspect-square bg-gray-200 animate-pulse-slow mb-4"></div>
-            <div className="h-5 w-3/4 bg-gray-300 animate-pulse-slow mb-2"></div>
-            <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-          </div>
-
-          <div className="group">
-            <div className="aspect-square bg-gray-200 animate-pulse-slow mb-4"></div>
-            <div className="h-5 w-2/3 bg-gray-300 animate-pulse-slow mb-2"></div>
-            <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-          </div>
-
-          <div className="group">
-            <div className="aspect-square bg-gray-200 animate-pulse-slow mb-4"></div>
-            <div className="h-5 w-4/5 bg-gray-300 animate-pulse-slow mb-2"></div>
-            <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-          </div>
-
-          <div className="group">
-            <div className="aspect-square bg-gray-200 animate-pulse-slow mb-4"></div>
-            <div className="h-5 w-3/4 bg-gray-300 animate-pulse-slow mb-2"></div>
-            <div className="h-4 w-20 bg-gray-300 animate-pulse-slow"></div>
-          </div>
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="h-8 w-20 bg-gray-200 animate-pulse"></div>
+          ))}
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {Array.from({ length: count }).map((_, index) => (
+          <div
+            key={index}
+            className="bg-white shadow overflow-hidden border border-gray-200 flex flex-col h-full"
+          >
+            <div className="h-48 bg-gray-200 animate-pulse relative">
+              <div className="absolute top-3 left-3">
+                <div className="h-6 w-16 bg-gray-300 animate-pulse"></div>
+              </div>
+              <div className="absolute top-3 right-3">
+                <div className="h-6 w-20 bg-gray-300 animate-pulse"></div>
+              </div>
+            </div>
+            <div className="p-6 flex flex-col flex-grow">
+              <div className="flex-grow">
+                <div className="h-6 bg-gray-200 w-3/4 mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 w-full mb-1 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 w-2/3 mb-4 animate-pulse"></div>
+
+                <div className="space-y-2 mb-6">
+                  <div className="flex items-center justify-between">
+                    <div className="h-4 w-12 bg-gray-200 animate-pulse"></div>
+                    <div className="h-4 w-16 bg-gray-200 animate-pulse"></div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-4 w-20 bg-gray-200 animate-pulse"></div>
+                    <div className="h-4 w-24 bg-gray-200 animate-pulse"></div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="h-4 w-16 bg-gray-200 animate-pulse"></div>
+                    <div className="h-4 w-12 bg-gray-200 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex space-x-3 w-full">
+                <div className="h-10 bg-gray-200 flex-1 animate-pulse"></div>
+                <div className="h-10 bg-gray-200 flex-1 animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
