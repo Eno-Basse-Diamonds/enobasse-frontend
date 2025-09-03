@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Shield, User } from "lucide-react";
+import { X, Shield } from "lucide-react";
 import { Button, Alert } from "@/components";
-import { Account, CreateAccountData, UpdateAccountData } from "@/lib/types/accounts";
+import {
+  Account,
+  CreateAccountData,
+  UpdateAccount,
+} from "@/lib/types/accounts";
 import { useCreateAccount, useUpdateAccount } from "@/lib/hooks/use-accounts";
 
 interface AccountFormProps {
@@ -47,7 +51,13 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
         isVerified: account.isVerified || false,
         isAdmin: account.isAdmin || false,
         preferredCurrency: account.preferredCurrency || "USD",
-        billingAddress: account.billingAddress || {
+        billingAddress: account.billingAddress ? {
+          street: account.billingAddress.street || "",
+          city: account.billingAddress.city || "",
+          state: account.billingAddress.state || "",
+          postalCode: account.billingAddress.postalCode || "",
+          country: account.billingAddress.country || "",
+        } : {
           street: "",
           city: "",
           state: "",
@@ -106,8 +116,7 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
 
     try {
       if (account) {
-        // Update existing account
-        const updateData: UpdateAccountData = { ...formData };
+        const updateData: UpdateAccount = { ...formData };
         if (!formData.password) {
           delete updateData.password;
         }
@@ -221,11 +230,21 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                     label="Password"
                     name="password"
                     type="password"
-                    value={formData.password}
-                    onChange={(e) => handleInputChange("password", e.target.value)}
-                    placeholder={account ? "Leave blank to keep current" : "Enter password..."}
+                    value={formData.password || ""}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
+                    placeholder={
+                      account
+                        ? "Leave blank to keep current"
+                        : "Enter password..."
+                    }
                     error={errors?.password}
-                    helpText={account ? "Leave blank to keep current password" : "Minimum 6 characters"}
+                    helpText={
+                      account
+                        ? "Leave blank to keep current password"
+                        : "Minimum 6 characters"
+                    }
                   />
 
                   <div>
@@ -234,7 +253,9 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                     </label>
                     <select
                       value={formData.preferredCurrency}
-                      onChange={(e) => handleInputChange("preferredCurrency", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("preferredCurrency", e.target.value)
+                      }
                       className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
                     >
                       <option value="USD">USD</option>
@@ -255,7 +276,9 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                       <input
                         type="checkbox"
                         checked={formData.isVerified}
-                        onChange={(e) => handleInputChange("isVerified", e.target.checked)}
+                        onChange={(e) =>
+                          handleInputChange("isVerified", e.target.checked)
+                        }
                         className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
                       />
                       <span className="ml-2">Email Verified</span>
@@ -267,21 +290,14 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                       <input
                         type="checkbox"
                         checked={formData.isAdmin}
-                        onChange={(e) => handleInputChange("isAdmin", e.target.checked)}
+                        onChange={(e) =>
+                          handleInputChange("isAdmin", e.target.checked)
+                        }
                         className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
                       />
                       <span className="ml-2 flex items-center">
-                        {formData.isAdmin ? (
-                          <>
-                            <Shield className="w-4 h-4 mr-2 text-red-500" />
-                            Admin Access
-                          </>
-                        ) : (
-                          <>
-                            <User className="w-4 h-4 mr-2 text-blue-500" />
-                            Customer Account
-                          </>
-                        )}
+                        <Shield className="w-4 h-4 mr-2 text-red-500" />
+                        Has Admin Access
                       </span>
                     </label>
                   </div>
@@ -297,32 +313,40 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                   <FormField
                     label="Street Address"
                     name="street"
-                    value={formData.billingAddress?.street || ""}
-                    onChange={(e) => handleBillingAddressChange("street", e.target.value)}
+                    value={formData.billingAddress?.street ?? ""}
+                    onChange={(e) =>
+                      handleBillingAddressChange("street", e.target.value)
+                    }
                     placeholder="Enter street address..."
                   />
 
                   <FormField
                     label="City"
                     name="city"
-                    value={formData.billingAddress?.city || ""}
-                    onChange={(e) => handleBillingAddressChange("city", e.target.value)}
+                    value={formData.billingAddress?.city ?? ""}
+                    onChange={(e) =>
+                      handleBillingAddressChange("city", e.target.value)
+                    }
                     placeholder="Enter city..."
                   />
 
                   <FormField
                     label="State/Province"
                     name="state"
-                    value={formData.billingAddress?.state || ""}
-                    onChange={(e) => handleBillingAddressChange("state", e.target.value)}
+                    value={formData.billingAddress?.state ?? ""}
+                    onChange={(e) =>
+                      handleBillingAddressChange("state", e.target.value)
+                    }
                     placeholder="Enter state..."
                   />
 
                   <FormField
                     label="Postal Code"
                     name="postalCode"
-                    value={formData.billingAddress?.postalCode || ""}
-                    onChange={(e) => handleBillingAddressChange("postalCode", e.target.value)}
+                    value={formData.billingAddress?.postalCode ?? ""}
+                    onChange={(e) =>
+                      handleBillingAddressChange("postalCode", e.target.value)
+                    }
                     placeholder="Enter postal code..."
                   />
 
@@ -330,8 +354,10 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
                     <FormField
                       label="Country"
                       name="country"
-                      value={formData.billingAddress?.country || ""}
-                      onChange={(e) => handleBillingAddressChange("country", e.target.value)}
+                      value={formData.billingAddress?.country ?? ""}
+                      onChange={(e) =>
+                        handleBillingAddressChange("country", e.target.value)
+                      }
                       placeholder="Enter country..."
                     />
                   </div>

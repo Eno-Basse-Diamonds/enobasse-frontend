@@ -45,7 +45,7 @@ export default function OrderHistoryPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="my-6 md:my-12">
+      <div className="my-6 md:my-12 min-h-screen">
         <div className="-mb-6 md:mb-auto">
           <PageHeading title="Order History" />
         </div>
@@ -60,7 +60,7 @@ export default function OrderHistoryPage() {
   }
 
   return (
-    <div className="my-6 md:my-12">
+    <div className="my-6 md:my-12 min-h-screen">
       <div className="-mb-6 md:mb-auto">
         <PageHeading title="Order History" />
       </div>

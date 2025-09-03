@@ -9,6 +9,8 @@ import { WishlistLoader } from "./wishlist";
 import { CartLoader } from "./cart";
 import { OrderHistoryLoader } from "./orders";
 import { AdminCollectionsSkeletonLoader } from "./collections";
+import { AccountLoadingSkeleton } from "./accounts";
+AccountLoadingSkeleton
 
 export {
   AdminBlogSkeletonLoader,
@@ -22,5 +24,6 @@ export {
   ProductDetailPageLoader,
   OrderHistoryLoader,
   AdminCollectionsSkeletonLoader,
-  AdminProductsSkeletonLoader
+  AdminProductsSkeletonLoader,
+  AccountLoadingSkeleton,
 };

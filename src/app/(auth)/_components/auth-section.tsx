@@ -4,7 +4,7 @@ import { ReactNode, FormEvent, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Input, PasswordInput } from "@/components";
 import {
   handleChangePassword,
@@ -21,11 +21,13 @@ interface AuthFormField {
   name: string;
   label: string;
   type: string;
+  value?: string;
   placeholder: string;
   required?: boolean;
   helpText?: string | ReactNode;
   isPassword?: boolean;
   showForgot?: boolean;
+  readOnly?: boolean;
 }
 
 interface FormErrors {
@@ -69,6 +71,7 @@ export default function AuthSection({
   const accountEmail = useAccountStore((state) => state.email);
   const setAccount = useAccountStore((state) => state.setAccount);
   const { setIsAuthenticated } = useAccountStore();
+  const { data: session } = useSession();
 
   const showAlert = (type: "success" | "error", message: string) => {
     addAlert({
@@ -109,8 +112,10 @@ export default function AuthSection({
       setAccount({ email: formData.email });
     },
     "forgot-password": async (formData) => {
-      setAccount({ email: formData.email });
-      const response = await handleRequestResetPassword(formData);
+      const response = await handleRequestResetPassword({
+        ...formData,
+        email: session?.user?.email || "",
+      });
       if (response?.errors) return response;
       router.push("/password-reset-code");
     },
@@ -128,7 +133,7 @@ export default function AuthSection({
       }
       const response = await handleChangePassword({
         ...formData,
-        email: accountEmail || "",
+        email: session?.user?.email || "",
       });
       if (response?.errors) return response;
       router.push("/sign-in");
@@ -250,9 +255,10 @@ export default function AuthSection({
                   placeholder={field.placeholder}
                   helpText={field.helpText}
                   required={field.required}
-                  value={formData[field.name] || ""}
+                  value={formData[field.name] || field.value || ""}
                   onChange={handleInputChange}
                   errors={errors[field.name]}
+                  readOnly={field.readOnly}
                 />
               )}
             </div>

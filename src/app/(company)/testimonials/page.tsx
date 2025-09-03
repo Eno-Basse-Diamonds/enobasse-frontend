@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useTestimonials } from "@/lib/hooks/use-testimonials";
+import { div } from "motion/react-client";
 
 export default function TestimonialsPage() {
   const { data, isLoading } = useTestimonials();

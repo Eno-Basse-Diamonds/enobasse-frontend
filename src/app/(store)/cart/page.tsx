@@ -59,7 +59,7 @@ export default function CartPage() {
   ]);
 
   return (
-    <div className="my-12">
+    <div className="my-12 min-h-screen">
       <PageHeading title="Shopping Cart" />
       {!hydrated || loading ? (
         <CartLoader />

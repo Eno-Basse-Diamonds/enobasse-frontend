@@ -51,7 +51,7 @@ export default function WishlistPage() {
   ]);
 
   return (
-    <div className="my-12">
+    <div className="my-12 min-h-screen">
       <PageHeading title="Wishlist" />
       {!hydrated || loading ? (
         <WishlistLoader />
