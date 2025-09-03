@@ -54,7 +54,8 @@ export function OrdersTable({
                     #{order.shortId}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {new Date(order.createdAt).toLocaleString()}
+                    {/* Use a consistent date format to avoid hydration mismatch */}
+                    {formatDate(order.createdAt)}
                   </div>
                 </div>
               </Td>
@@ -165,4 +166,18 @@ function Th({ children }: { children?: React.ReactNode }) {
 
 function Td({ children }: { children: React.ReactNode }) {
   return <td className="px-4 py-4 align-top">{children}</td>;
+}
+
+function formatDate(dateString: string | Date): string {
+  const date = new Date(dateString);
+
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 }
