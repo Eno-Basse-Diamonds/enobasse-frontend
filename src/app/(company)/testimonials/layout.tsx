@@ -49,7 +49,7 @@ export default async function TesimonialsLayout({
   });
 
   return (
-    <div className="pt-12 pb-24 sm:pb-32">
+    <div className="min-h-screen pt-12 pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         <div className="mx-auto max-w-xl text-center">
           <h1 className="text-lg font-semibold leading-8 tracking-tight text-secondary-500">

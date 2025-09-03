@@ -7,10 +7,16 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Search, X, Users, Shield, User } from "lucide-react";
 import { Alert, Button, Pagination } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
-import { useAdminAccounts, useCreateAccount, useUpdateAccount, useDeleteAccount } from "@/lib/hooks/use-accounts";
+import {
+  useAdminAccounts,
+  useCreateAccount,
+  useUpdateAccount,
+  useDeleteAccount,
+} from "@/lib/hooks/use-accounts";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Account, CreateAccountData, UpdateAccountData } from "@/lib/types/accounts";
+import { Account } from "@/lib/types/accounts";
 import { AccountForm } from "./_components/account-form";
+import { DeleteConfirmationModal } from "./_components/delete-confirmation-modal";
 import { EmptyState } from "@/components/empty-state";
 
 export default function AdminAccountsPage() {
@@ -21,6 +27,10 @@ export default function AdminAccountsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
   const [inputValue, setInputValue] = useState("");
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    accountId: string | null;
+  }>({ isOpen: false, accountId: null });
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -73,14 +83,19 @@ export default function AdminAccountsPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this account? This action cannot be undone.")) {
-      deleteMutation.mutate(id, {
+    setDeleteModalState({ isOpen: true, accountId: id });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteModalState.accountId) {
+      deleteMutation.mutate(deleteModalState.accountId, {
         onSuccess: () => {
           setAlertState({
             visible: true,
             type: "success",
             message: "Account deleted successfully!",
           });
+          setDeleteModalState({ isOpen: false, accountId: null });
         },
         onError: () => {
           setAlertState({
@@ -88,9 +103,14 @@ export default function AdminAccountsPage() {
             type: "error",
             message: "Failed to delete account. Please try again.",
           });
+          setDeleteModalState({ isOpen: false, accountId: null });
         },
       });
     }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalState({ isOpen: false, accountId: null });
   };
 
   const handleFormClose = () => {
@@ -259,7 +279,8 @@ export default function AdminAccountsPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <div className="h-10 w-10 rounded-full bg-primary-500 flex items-center justify-center">
                             <span className="text-sm font-medium text-white">
-                              {account.name?.charAt(0).toUpperCase() || account.email.charAt(0).toUpperCase()}
+                              {account.name?.charAt(0).toUpperCase() ||
+                                account.email.charAt(0).toUpperCase()}
                             </span>
                           </div>
                         </div>
@@ -267,7 +288,9 @@ export default function AdminAccountsPage() {
                           <div className="text-sm font-medium text-gray-900">
                             {account.name || "No name"}
                           </div>
-                          <div className="text-sm text-gray-500">{account.email}</div>
+                          <div className="text-sm text-gray-500">
+                            {account.email}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -276,19 +299,23 @@ export default function AdminAccountsPage() {
                         {account.isAdmin ? (
                           <>
                             <Shield className="w-4 h-4 text-red-500 mr-2" />
-                            <span className="text-sm text-red-600 font-medium">Admin</span>
+                            <span className="text-sm text-red-600 font-medium">
+                              Admin
+                            </span>
                           </>
                         ) : (
                           <>
                             <User className="w-4 h-4 text-blue-500 mr-2" />
-                            <span className="text-sm text-blue-600 font-medium">Customer</span>
+                            <span className="text-sm text-blue-600 font-medium">
+                              Customer
+                            </span>
                           </>
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        className={`inline-flex px-2 py-1 text-xs font-semibold ${
                           account.isVerified
                             ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-yellow-800"
@@ -343,7 +370,6 @@ export default function AdminAccountsPage() {
           </div>
         )}
 
-        {/* Pagination */}
         {data && data.totalPages > 1 && (
           <div className="mt-8 flex justify-center">
             <Pagination
@@ -361,6 +387,13 @@ export default function AdminAccountsPage() {
         {isModalOpen && (
           <AccountForm account={editingAccount} onClose={handleFormClose} />
         )}
+
+        <DeleteConfirmationModal
+          isOpen={deleteModalState.isOpen}
+          onClose={handleCloseDeleteModal}
+          onConfirm={handleConfirmDelete}
+          isDeleting={deleteMutation.isPending}
+        />
       </div>
     </>
   );

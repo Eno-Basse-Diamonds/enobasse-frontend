@@ -1,8 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { api } from "../utils/api";
-import { Account, CreateAccountData, UpdateAccountData } from "../types/accounts";
+import {
+  CreateAccountData,
+  UpdateAccount,
+  AccountsResponse,
+  Account,
+} from "../types/accounts";
 
-// Get all accounts for admin
 export const useAdminAccounts = (filters?: {
   page?: number;
   pageSize?: number;
@@ -11,78 +16,83 @@ export const useAdminAccounts = (filters?: {
   sortOrder?: "ASC" | "DESC";
   isAdmin?: boolean;
 }) => {
-  return useQuery({
+  return useQuery<AccountsResponse>({
     queryKey: ["adminAccounts", filters],
-    queryFn: async () => {
+    queryFn: async (): Promise<AccountsResponse> => {
       const params = new URLSearchParams();
       if (filters?.page) params.append("page", filters.page.toString());
-      if (filters?.pageSize) params.append("pageSize", filters.pageSize.toString());
+      if (filters?.pageSize)
+        params.append("pageSize", filters.pageSize.toString());
       if (filters?.search) params.append("search", filters.search);
       if (filters?.sortBy) params.append("sortBy", filters.sortBy);
       if (filters?.sortOrder) params.append("sortOrder", filters.sortOrder);
-      if (filters?.isAdmin !== undefined) params.append("isAdmin", filters.isAdmin.toString());
+      if (filters?.isAdmin !== undefined)
+        params.append("isAdmin", filters.isAdmin.toString());
 
-      const response = await api.get(`/accounts?${params.toString()}`);
-      return response.data;
+      const response = await api.get<AccountsResponse>(
+        `/accounts?${params.toString()}`,
+      );
+      return response;
     },
   });
 };
 
-// Get account by email
 export const useAccountByEmail = (email: string | null | undefined) => {
-  return useQuery({
+  return useQuery<Account | null>({
     queryKey: ["account", email],
-    queryFn: async () => {
+    queryFn: async (): Promise<Account | null> => {
       if (!email) return null;
-      const response = await api.get(`/accounts/email/${email}`);
-      return response.data;
+      const response = await api.get<Account>(`/accounts/email/${email}`);
+      return response;
     },
     enabled: !!email,
   });
 };
 
-// Create account
 export const useCreateAccount = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: CreateAccountData) => {
       const response = await api.post("/accounts", data);
-      return response.data;
+      return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminAccounts"] });
+      window.location.reload();
     },
   });
 };
 
-// Update account
 export const useUpdateAccount = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ email, data }: { email: string; data: UpdateAccountData }) => {
+    mutationFn: async ({
+      email,
+      data,
+    }: {
+      email: string;
+      data: UpdateAccount;
+    }) => {
       const response = await api.patch(`/accounts/${email}`, data);
-      return response.data;
+      return response;
     },
-    onSuccess: (_, { email }) => {
-      queryClient.invalidateQueries({ queryKey: ["adminAccounts"] });
-      queryClient.invalidateQueries({ queryKey: ["account", email] });
+    onSuccess: () => {
+      window.location.reload();
     },
   });
 };
 
-// Delete account
 export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
       const response = await api.delete(`/accounts/${id}`);
-      return response.data;
+      return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminAccounts"] });
+      window.location.reload();
     },
   });
 };

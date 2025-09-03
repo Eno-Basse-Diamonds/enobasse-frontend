@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import AuthSection from "../_components/auth-section";
+import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
@@ -29,7 +30,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  const session = await getServerSession();
+
   return (
     <AuthSection
       type="forgot-password"
@@ -42,8 +45,10 @@ export default function ForgotPasswordPage() {
           name: "email",
           label: "Email",
           type: "email",
+          value: session?.user?.email,
           placeholder: "Enter your email",
           required: true,
+          readOnly: true,
         },
       ]}
       messages={{

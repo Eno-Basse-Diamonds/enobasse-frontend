@@ -2,15 +2,15 @@ import { UpdateAccount, CreateAccountData } from "../types/accounts";
 import { api } from "../utils/api";
 
 export const requestResetPassword = async (email: string) => {
-  return api.post("/accounts/request-reset-password", { email });
+  return api.post("/auth/request-password-reset", { email });
 };
 
 export const resetCode = async (email: string, resetCode: string) => {
-  return api.post("/accounts/verify-reset-code", { email, resetCode });
+  return api.post("/auth/verify-reset-code", { email, resetCode });
 };
 
 export const changePassword = async (email: string, newPassword: string) => {
-  return api.put("/accounts/change-password", { email, newPassword });
+  return api.post("/auth/change-password", { email, newPassword });
 };
 
 export const updateAccount = async (
@@ -44,7 +44,8 @@ export const getAllAccounts = async (filters?: {
   if (filters?.search) params.append("search", filters.search);
   if (filters?.sortBy) params.append("sortBy", filters.sortBy);
   if (filters?.sortOrder) params.append("sortOrder", filters.sortOrder);
-  if (filters?.isAdmin !== undefined) params.append("isAdmin", filters.isAdmin.toString());
+  if (filters?.isAdmin !== undefined)
+    params.append("isAdmin", filters.isAdmin.toString());
 
   return api.get(`/accounts?${params.toString()}`);
 };

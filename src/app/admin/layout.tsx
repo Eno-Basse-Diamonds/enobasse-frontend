@@ -72,7 +72,7 @@ export default function AdminLayout({
     <>
       <div className="hidden lg:flex h-full bg-gray-50">
         <AdminSidebarNavigation sidebarItems={sidebarItems} />
-        <div className="flex-1 ml-72 bg-gray-100 min-h-screen">{children}</div>
+        <div className="flex-1 ml-72 bg-gray-100 min-h-screen overflow-x-auto">{children}</div>
       </div>
 
       <div className="lg:hidden flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 text-center">

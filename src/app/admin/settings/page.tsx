@@ -2,15 +2,32 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Save, User, Shield, Globe, MapPin } from "lucide-react";
-import { Button, Alert } from "@/components";
+import { Alert } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
 import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
+import { AdminSettingsForm } from "./_components/admin-setting-form";
+import { AdminLoadingSkeleton } from "./_components/admin-loading-skeleton";
+import { Account, BillingAddress } from "@/lib/types/accounts";
+
+type AdminEditFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  preferredCurrency: string;
+  billingAddress: BillingAddress;
+};
+
+export type AlertState = {
+  visible: boolean;
+  type: "success" | "error";
+  message: string;
+};
 
 export default function AdminSettingsPage() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState({
+  const [editForm, setEditForm] = useState<AdminEditFormData>({
     name: "",
     email: "",
     password: "",
@@ -25,14 +42,19 @@ export default function AdminSettingsPage() {
     },
   });
 
-  const { data: account, isLoading } = useAccountByEmail(session?.user?.email);
+  const { data: account, isLoading } = useAccountByEmail(
+    session?.user?.email
+  ) as {
+    data: Account | undefined;
+    isLoading: boolean;
+  };
   const updateMutation = useUpdateAccount();
 
-  const [alertState, setAlertState] = useState<{
-    visible: boolean;
-    type: "success" | "error";
-    message: string;
-  }>({ visible: false, type: "success", message: "" });
+  const [alertState, setAlertState] = useState<AlertState>({
+    visible: false,
+    type: "success",
+    message: "",
+  });
 
   useEffect(() => {
     if (account) {
@@ -86,12 +108,13 @@ export default function AdminSettingsPage() {
       });
 
       setIsEditing(false);
-      setEditForm(prev => ({ ...prev, password: "", confirmPassword: "" }));
+      setEditForm((prev) => ({ ...prev, password: "", confirmPassword: "" }));
     } catch (error: any) {
       setAlertState({
         visible: true,
         type: "error",
-        message: error.message || "Failed to update settings. Please try again.",
+        message:
+          error.message || "Failed to update settings. Please try again.",
       });
     }
   };
@@ -120,6 +143,23 @@ export default function AdminSettingsPage() {
     setAlertState((prev) => ({ ...prev, visible: false }));
   };
 
+  const handleFormChange = (field: keyof AdminEditFormData, value: string) => {
+    setEditForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleBillingAddressChange = (
+    field: keyof AdminEditFormData["billingAddress"],
+    value: string
+  ) => {
+    setEditForm((prev) => ({
+      ...prev,
+      billingAddress: {
+        ...prev.billingAddress,
+        [field]: value,
+      },
+    }));
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -130,16 +170,7 @@ export default function AdminSettingsPage() {
             email: session?.user?.email || "admin@example.com",
           }}
         />
-        <div className="flex-1 p-8">
-          <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-gray-200 w-48"></div>
-            <div className="space-y-6">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-32 bg-gray-200"></div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <AdminLoadingSkeleton />
       </div>
     );
   }
@@ -166,264 +197,18 @@ export default function AdminSettingsPage() {
       />
 
       <div className="flex-1 p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-900">
-                Account Settings
-              </h1>
-              <p className="text-sm text-gray-500">
-                Manage your admin account preferences and personal information
-              </p>
-            </div>
-            {!isEditing && (
-              <Button
-                onClick={() => setIsEditing(true)}
-                leadingIcon={<Save />}
-              >
-                Edit Settings
-              </Button>
-            )}
-          </div>
-
-          <div className="space-y-8">
-            {/* Profile Information */}
-            <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-white" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Profile Information
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.name}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.name || "Not provided"}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
-                  </label>
-                  <p className="text-gray-900">{account?.email || session?.user?.email}</p>
-                  <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p>
-                </div>
-
-                {isEditing && (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        value={editForm.password}
-                        onChange={(e) => setEditForm(prev => ({ ...prev, password: e.target.value }))}
-                        placeholder="Leave blank to keep current"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Confirm New Password
-                      </label>
-                      <input
-                        type="password"
-                        value={editForm.confirmPassword}
-                        onChange={(e) => setEditForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        placeholder="Confirm new password"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Account Preferences */}
-            <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-white" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Account Preferences
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Preferred Currency
-                  </label>
-                  {isEditing ? (
-                    <select
-                      value={editForm.preferredCurrency}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, preferredCurrency: e.target.value }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    >
-                      <option value="USD">USD</option>
-                      <option value="NGN">NGN</option>
-                    </select>
-                  ) : (
-                    <p className="text-gray-900">{account?.preferredCurrency || "USD"}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Account Type
-                  </label>
-                  <div className="flex items-center space-x-2">
-                    <Shield className="w-5 h-5 text-red-500" />
-                    <span className="text-red-600 font-medium">Administrator</span>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-1">Full system access</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Billing Address */}
-            <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-white" />
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Billing Address
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Street Address
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.billingAddress.street}
-                      onChange={(e) => setEditForm(prev => ({
-                        ...prev,
-                        billingAddress: { ...prev.billingAddress, street: e.target.value }
-                      }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.billingAddress?.street || "Not provided"}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.billingAddress.city}
-                      onChange={(e) => setEditForm(prev => ({
-                        ...prev,
-                        billingAddress: { ...prev.billingAddress, city: e.target.value }
-                      }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.billingAddress?.city || "Not provided"}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    State/Province
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.billingAddress.state}
-                      onChange={(e) => setEditForm(prev => ({
-                        ...prev,
-                        billingAddress: { ...prev.billingAddress, state: e.target.value }
-                      }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.billingAddress?.state || "Not provided"}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Postal Code
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.billingAddress.postalCode}
-                      onChange={(e) => setEditForm(prev => ({
-                        ...prev,
-                        billingAddress: { ...prev.billingAddress, postalCode: e.target.value }
-                      }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.billingAddress?.postalCode || "Not provided"}</p>
-                  )}
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Country
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.billingAddress.country}
-                      onChange={(e) => setEditForm(prev => ({
-                        ...prev,
-                        billingAddress: { ...prev.billingAddress, country: e.target.value }
-                      }))}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{account?.billingAddress?.country || "Not provided"}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            {isEditing && (
-              <div className="flex justify-end space-x-4 pt-6">
-                <Button variant="outline" onClick={handleCancel}>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSave}
-                  loading={updateMutation.isPending}
-                  leadingIcon={<Save />}
-                >
-                  Save Changes
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+        <AdminSettingsForm
+          account={account}
+          session={session}
+          isEditing={isEditing}
+          editForm={editForm}
+          onEditToggle={() => setIsEditing(!isEditing)}
+          onFormChange={handleFormChange}
+          onBillingAddressChange={handleBillingAddressChange}
+          onSave={handleSave}
+          onCancel={handleCancel}
+          isSaving={updateMutation.isPending}
+        />
       </div>
     </div>
   );
