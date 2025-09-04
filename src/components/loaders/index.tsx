@@ -10,7 +10,7 @@ import { CartLoader } from "./cart";
 import { OrderHistoryLoader } from "./orders";
 import { AdminCollectionsSkeletonLoader } from "./collections";
 import { AccountLoadingSkeleton } from "./accounts";
-AccountLoadingSkeleton
+import { AdminReviewsSkeletonLoader } from "./reviews";
 
 export {
   AdminBlogSkeletonLoader,
@@ -26,4 +26,5 @@ export {
   AdminCollectionsSkeletonLoader,
   AdminProductsSkeletonLoader,
   AccountLoadingSkeleton,
+  AdminReviewsSkeletonLoader,
 };

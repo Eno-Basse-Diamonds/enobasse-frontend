@@ -15,13 +15,13 @@ export interface FilterOption {
 }
 
 interface AdminFilterSortPanelProps {
-  sortOptions: SortOption[];
+  sortOptions?: SortOption[];
   filterOptions?: FilterOption[];
-  currentSort: string;
-  currentSortOrder: "ASC" | "DESC";
+  currentSort?: string;
+  currentSortOrder?: "ASC" | "DESC";
   currentFilters?: string[];
-  onSortChange: (sort: string) => void;
-  onSortOrderChange: (order: "ASC" | "DESC") => void;
+  onSortChange?: (sort: string) => void;
+  onSortOrderChange?: (order: "ASC" | "DESC") => void;
   onFilterChange?: (filters: string[]) => void;
   className?: string;
 }
@@ -30,7 +30,7 @@ export function AdminFilterSortPanel({
   sortOptions,
   filterOptions,
   currentSort,
-  currentSortOrder,
+  currentSortOrder = "ASC",
   currentFilters = [],
   onSortChange,
   onSortOrderChange,
@@ -62,6 +62,7 @@ export function AdminFilterSortPanel({
   }, []);
 
   const handleSortOrderToggle = () => {
+    if (!onSortOrderChange) return;
     onSortOrderChange(currentSortOrder === "ASC" ? "DESC" : "ASC");
   };
 
@@ -75,15 +76,19 @@ export function AdminFilterSortPanel({
     onFilterChange(newFilters);
   };
 
+  const hasSortFunctionality = sortOptions && onSortChange && currentSort;
+  const hasSortOrderFunctionality = onSortOrderChange;
+  const hasFilterFunctionality = filterOptions && onFilterChange;
+
   return (
     <div className={`flex flex-wrap gap-3 items-center ${className}`}>
-      {/* Filter Dropdown */}
-      {filterOptions && onFilterChange && (
+      {hasFilterFunctionality && (
         <div className="relative" ref={filterRef}>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="bg-white"
           >
             <span className="flex flex-row items-center gap-2 p-1">
               Filters
@@ -121,64 +126,66 @@ export function AdminFilterSortPanel({
         </div>
       )}
 
-      {/* Sort Dropdown */}
-      <div className="relative" ref={sortRef}>
+      {hasSortFunctionality && (
+        <div className="relative" ref={sortRef}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSortOpen(!isSortOpen)}
+            className="flex items-center gap-2 bg-white"
+          >
+            <span className="flex flex-row items-center gap-2 p-1">
+              Sort by:{" "}
+              {sortOptions.find((opt) => opt.value === currentSort)?.label ||
+                "Latest"}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${
+                  isSortOpen ? "rotate-180" : ""
+                }`}
+              />
+            </span>
+          </Button>
+
+          {isSortOpen && (
+            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10">
+              {sortOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    onSortChange(option.value);
+                    setIsSortOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                    currentSort === option.value
+                      ? "bg-primary-50 text-primary-600"
+                      : "text-gray-700"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {hasSortOrderFunctionality && (
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setIsSortOpen(!isSortOpen)}
-          className="flex items-center gap-2"
+          onClick={handleSortOrderToggle}
+          className="flex items-center gap-2 bg-white"
         >
           <span className="flex flex-row items-center gap-2 p-1">
-            Sort by:{" "}
-            {sortOptions.find((opt) => opt.value === currentSort)?.label ||
-              "Latest"}
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                isSortOpen ? "rotate-180" : ""
-              }`}
-            />
+            {currentSortOrder === "ASC" ? (
+              <SortAsc className="w-4 h-4" />
+            ) : (
+              <SortDesc className="w-4 h-4" />
+            )}
+            {currentSortOrder === "ASC" ? "Ascending" : "Descending"}
           </span>
         </Button>
-
-        {isSortOpen && (
-          <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10">
-            {sortOptions.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => {
-                  onSortChange(option.value);
-                  setIsSortOpen(false);
-                }}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                  currentSort === option.value
-                    ? "bg-primary-50 text-primary-600"
-                    : "text-gray-700"
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Sort Order Toggle */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleSortOrderToggle}
-        className="flex items-center gap-2"
-      >
-        <span className="flex flex-row items-center gap-2 p-1">
-          {currentSortOrder === "ASC" ? (
-            <SortAsc className="w-4 h-4" />
-          ) : (
-            <SortDesc className="w-4 h-4" />
-          )}
-          {currentSortOrder === "ASC" ? "Ascending" : "Descending"}
-        </span>
-      </Button>
+      )}
     </div>
   );
 }

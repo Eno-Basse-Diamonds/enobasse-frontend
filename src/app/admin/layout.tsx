@@ -11,6 +11,7 @@ import {
   TriangleAlert,
   MessageSquare,
   Truck,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
@@ -22,7 +23,12 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   const sidebarItems = [
-    { icon: Home, label: "Dashboard", href: "/admin/dashboard", active: pathname === "/admin/dashboard" },
+    {
+      icon: Home,
+      label: "Dashboard",
+      href: "/admin/dashboard",
+      active: pathname === "/admin/dashboard",
+    },
     {
       icon: Folder,
       label: "Collections",
@@ -41,12 +47,23 @@ export default function AdminLayout({
       href: "/admin/orders",
       active: pathname === "/admin/orders",
     },
-    { icon: FileText, label: "Blog", href: "/admin/blog", active: pathname === "/admin/blog" },
+    {
+      icon: FileText,
+      label: "Blog",
+      href: "/admin/blog",
+      active: pathname === "/admin/blog",
+    },
     {
       icon: MessageSquare,
       label: "Testimonials",
       href: "/admin/testimonials",
       active: pathname === "/admin/testimonials",
+    },
+    {
+      icon: Star,
+      label: "Reviews",
+      href: "/admin/reviews",
+      active: pathname === "/admin/reviews",
     },
     {
       icon: Users,
@@ -72,7 +89,9 @@ export default function AdminLayout({
     <>
       <div className="hidden lg:flex h-full bg-gray-50">
         <AdminSidebarNavigation sidebarItems={sidebarItems} />
-        <div className="flex-1 ml-72 bg-gray-100 min-h-screen overflow-x-auto">{children}</div>
+        <div className="flex-1 ml-72 bg-gray-100 min-h-screen overflow-x-auto">
+          {children}
+        </div>
       </div>
 
       <div className="lg:hidden flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 text-center">
