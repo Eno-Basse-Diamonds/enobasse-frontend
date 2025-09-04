@@ -45,12 +45,12 @@ export const ProductList = memo(function ProductList({
               </div>
             )}
             <div className="absolute top-3 left-3">
-              <div className="px-3 py-1 text-xs font-semibold bg-primary-500 text-white rounded-full">
+              <div className="px-3 py-1 text-xs font-semibold bg-primary-500 text-white">
                 {product.category}
               </div>
             </div>
             <div className="absolute top-3 right-3">
-              <div className="px-3 py-1 text-xs font-semibold bg-secondary-500 text-white rounded-full">
+              <div className="px-3 py-1 text-xs font-semibold bg-secondary-500 text-white">
                 {product.variants?.length || 0} Variants
               </div>
             </div>

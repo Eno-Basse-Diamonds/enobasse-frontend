@@ -14,18 +14,9 @@ import { ProductList } from "./_components/product-list";
 import { ProductForm } from "./_components/product-form";
 import { EmptyState } from "@/components/empty-state";
 import { AdminProductsSkeletonLoader } from "@/components/loaders";
+import { useAdminCollections } from "@/lib/hooks/use-collections";
 
-// Product categories based on the existing structure
-const PRODUCT_CATEGORIES = [
-  "Rings",
-  "Earrings",
-  "Necklaces",
-  "Pendants",
-  "Bracelets",
-  "Bangles",
-  "Wristwears",
-  "Neckpieces",
-];
+const PRODUCT_COLLECTIONS = ["Rings", "Earrings", "Wristwears", "Neckpieces"];
 
 export default function AdminProductsPage() {
   const { data: session } = useSession();
@@ -51,14 +42,24 @@ export default function AdminProductsPage() {
 
   const filterOptions = {
     page: currentPage,
-    pageSize: 12,
-    sortBy: currentSort as "name" | "createdAt" | "updatedAt" | "category" | "price",
+    pageSize: 21,
+    sortBy: currentSort as
+      | "name"
+      | "createdAt"
+      | "updatedAt"
+      | "category"
+      | "price",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
     category: currentCategory || undefined,
   };
 
   const { data, isLoading } = useAdminProducts(filterOptions);
+  const { data: collections, isLoading: isCollectionsLoading } =
+    useAdminCollections({
+      page: 1,
+      pageSize: 50,
+    });
   const deleteMutation = useDeleteProduct();
 
   const updateURL = useCallback(
@@ -172,7 +173,7 @@ export default function AdminProductsPage() {
         }}
       />
 
-      {isLoading ? (
+      {isLoading || isCollectionsLoading ? (
         <AdminProductsSkeletonLoader />
       ) : (
         <>
@@ -180,7 +181,7 @@ export default function AdminProductsPage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-lg font-medium text-gray-900">
-                  Products ({data?.total || 0})
+                  Products ({data?.meta.total || 0})
                 </h3>
                 <p className="text-sm text-gray-500">
                   Manage your jewelry products and variants
@@ -232,11 +233,11 @@ export default function AdminProductsPage() {
             {/* Category Filter Buttons */}
             <div className="mb-6">
               <div className="flex flex-wrap gap-2">
-                {PRODUCT_CATEGORIES.map((category) => (
+                {PRODUCT_COLLECTIONS.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryClick(category)}
-                    className={`px-4 py-2 text-sm font-medium rounded-full border transition-colors ${
+                    className={`px-4 py-2 text-sm font-medium border transition-colors ${
                       currentCategory === category
                         ? "bg-primary-500 text-white border-primary-500"
                         : "bg-white text-primary-500 border-primary-300 hover:bg-primary-50"
@@ -248,7 +249,7 @@ export default function AdminProductsPage() {
                 {currentCategory && (
                   <button
                     onClick={() => updateURL({ category: "", page: 1 })}
-                    className="px-4 py-2 text-xs font-medium rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50"
+                    className="px-4 py-2 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50"
                   >
                     Clear Filter
                   </button>
@@ -270,12 +271,11 @@ export default function AdminProductsPage() {
               />
             ) : null}
 
-            {/* Pagination */}
-            {data && data.totalPages > 1 && (
+            {data && data.meta.totalPages > 1 && (
               <div className="mt-8 flex justify-center">
                 <Pagination
                   currentPage={currentPage}
-                  totalPages={data.totalPages}
+                  totalPages={data.meta.totalPages}
                   hrefBuilder={(page) => {
                     const params = new URLSearchParams(searchParams.toString());
                     params.set("page", String(page));

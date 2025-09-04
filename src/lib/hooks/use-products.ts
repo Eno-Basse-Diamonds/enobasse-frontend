@@ -1,5 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  getProductsForAdmin,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  AdminProductsFilterOptions,
   getProduct,
   getProducts,
   getRelatedProducts,
@@ -53,21 +59,11 @@ export function useRelatedProducts(
   });
 }
 
-// Admin hooks
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  getProductsForAdmin,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  AdminProductsFilterOptions,
-} from "@/lib/api/products";
 
 export function useAdminProducts(options?: AdminProductsFilterOptions) {
   return useQuery({
     queryKey: ["adminProducts", options],
     queryFn: () => getProductsForAdmin(options),
-    staleTime: 30_000,
   });
 }
 

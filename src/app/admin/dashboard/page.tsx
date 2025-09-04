@@ -7,7 +7,7 @@ import {
   ShoppingCart,
   TrendingUp,
   DollarSign,
-  Eye,
+  Truck,
   Star,
   MessageSquare,
   FileText,
@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { AdminHeader } from "../_components/admin-header";
 
-// Mock data - in a real app, this would come from your API
 const mockStats = {
   totalProducts: 156,
   totalOrders: 1247,
@@ -77,13 +76,13 @@ export default function AdminDashboard() {
       <div className="p-8">
         {/* Overview Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                 <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
               </div>
-              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <div className="h-12 w-12 bg-green-100 flex items-center justify-center">
                 <DollarSign className="h-6 w-6 text-green-600" />
               </div>
             </div>
@@ -93,13 +92,13 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Orders</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.totalOrders.toLocaleString()}</p>
               </div>
-              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <div className="h-12 w-12 bg-blue-100 flex items-center justify-center">
                 <ShoppingCart className="h-6 w-6 text-blue-600" />
               </div>
             </div>
@@ -109,13 +108,13 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Products</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.totalProducts}</p>
               </div>
-              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <div className="h-12 w-12 bg-purple-100 flex items-center justify-center">
                 <Package className="h-6 w-6 text-purple-600" />
               </div>
             </div>
@@ -125,13 +124,13 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Customers</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.totalCustomers}</p>
               </div>
-              <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <div className="h-12 w-12 bg-orange-100 flex items-center justify-center">
                 <Users className="h-6 w-6 text-orange-600" />
               </div>
             </div>
@@ -144,7 +143,7 @@ export default function AdminDashboard() {
 
         {/* Content Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Collections</p>
@@ -154,7 +153,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Blog Posts</p>
@@ -164,7 +163,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Testimonials</p>
@@ -177,7 +176,7 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Orders */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
             </div>
@@ -207,7 +206,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Top Products */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Top Products</h3>
             </div>
@@ -241,7 +240,7 @@ export default function AdminDashboard() {
 
         {/* Recent Reviews */}
         <div className="mt-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">Recent Reviews</h3>
             </div>
@@ -286,7 +285,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <a
               href="/admin/products"
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+              className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
                 <Package className="h-8 w-8 text-purple-600 mr-3" />
@@ -299,7 +298,7 @@ export default function AdminDashboard() {
 
             <a
               href="/admin/collections"
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+              className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
                 <Folder className="h-8 w-8 text-indigo-600 mr-3" />
@@ -312,7 +311,7 @@ export default function AdminDashboard() {
 
             <a
               href="/admin/blog"
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+              className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
                 <FileText className="h-8 w-8 text-green-600 mr-3" />
@@ -325,10 +324,10 @@ export default function AdminDashboard() {
 
             <a
               href="/admin/orders"
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+              className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
-                <Eye className="h-8 w-8 text-blue-600 mr-3" />
+                <Truck className="h-8 w-8 text-blue-600 mr-3" />
                 <div>
                   <p className="font-medium text-gray-900">View Orders</p>
                   <p className="text-sm text-gray-600">Manage orders</p>
