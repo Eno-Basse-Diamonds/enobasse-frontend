@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { X, Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { X, Plus, Trash2 } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button, Alert } from "@/components";
 import { Product } from "@/lib/types/products";
@@ -13,23 +13,12 @@ interface ProductFormProps {
   onClose: () => void;
 }
 
-// Product categories
 const PRODUCT_CATEGORIES = [
   "Rings",
   "Earrings",
-  "Necklaces",
-  "Pendants",
-  "Bracelets",
-  "Bangles",
   "Wristwears",
   "Neckpieces",
 ];
-
-// Metal types
-const METAL_TYPES = ["White Gold", "Yellow Gold", "Rose Gold", "Platinum"];
-
-// Gemstone types
-const GEMSTONE_TYPES = ["Diamond", "Sapphire", "Ruby", "Emerald", "Pearl", "Amethyst"];
 
 interface ProductFormData {
   sku: string;
@@ -88,7 +77,6 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       images: [],
     }],
     isCustomDesign: product?.isCustomDesign || false,
-    customDesignDetails: product?.customDesignDetails || "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -597,7 +585,7 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
               gravity="auto"
               quality="auto"
               format="avif"
-              className="w-full h-32 object-cover border border-gray-200 rounded"
+              className="w-full h-32 object-cover border border-gray-200"
             />
             <button
               type="button"
@@ -633,7 +621,7 @@ const VariantForm: React.FC<VariantFormProps> = ({
   canRemove,
   errors,
 }) => (
-  <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+  <div className="border border-gray-200 p-6 bg-gray-50">
     <div className="flex items-center justify-between mb-4">
       <h5 className="text-md font-semibold text-primary-500">
         Variant {index + 1}
