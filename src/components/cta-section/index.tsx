@@ -59,11 +59,10 @@ export const RingCustomizationCTASection: React.FC = () => {
       <section className="relative w-full overflow-hidden">
         <div className="relative z-10 text-center px-6 py-16 md:py-24">
           <h2 className="font-primary font-semibold text-3xl md:text-4xl text-white mb-6">
-            Customize Your Dream Ring in 3D
+            Creative Studio
           </h2>
           <p className="font-light md:text-lg lg:text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-            Our revolutionary 3D ring customization feature is coming soon. Be
-            the first to create a truly unique piece that reflects your style.
+            Our Creative Studio allows you to design your ring exactly the way you want it—with control over every detail. Use our unique tools to create something exceptional.
           </p>
           <button
             className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors cursor-not-allowed"

@@ -6,14 +6,14 @@ import {
 import { api } from "@/lib/utils/api";
 
 export const getProducts = async (
-  options?: ProductFilterOptions
+  options?: ProductFilterOptions,
 ): Promise<ProductsResponse> => {
   return api.get("/products", { params: options });
 };
 
 export const getProduct = async (
   slug: string,
-  currency: string
+  currency: string,
 ): Promise<Product> => {
   return api.get(`/products/${slug}`, { params: { currency: currency } });
 };
@@ -21,7 +21,7 @@ export const getProduct = async (
 export const getRelatedProducts = async (
   slug: string,
   limit: number,
-  currency: string
+  currency: string,
 ): Promise<Product[]> => {
   return api.get(`/products/${slug}/related`, { params: { limit, currency } });
 };
@@ -48,7 +48,7 @@ export interface AdminProductsResponse {
 }
 
 export const getProductsForAdmin = async (
-  options?: AdminProductsFilterOptions
+  options?: AdminProductsFilterOptions,
 ): Promise<AdminProductsResponse> => {
   return api.get("/products", { params: options, cache: false });
 };
@@ -105,7 +105,7 @@ export const updateProduct = async (
     }>;
     isCustomDesign?: boolean;
     customDesignDetails: string;
-  }>
+  }>,
 ): Promise<Product> => {
   return api.patch(`/products/${id}`, productData);
 };

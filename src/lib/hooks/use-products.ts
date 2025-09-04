@@ -59,7 +59,6 @@ export function useRelatedProducts(
   });
 }
 
-
 export function useAdminProducts(options?: AdminProductsFilterOptions) {
   return useQuery({
     queryKey: ["adminProducts", options],
