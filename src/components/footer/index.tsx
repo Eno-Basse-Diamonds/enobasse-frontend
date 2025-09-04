@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { Logo } from "../logo";
 import {
@@ -170,7 +170,7 @@ const Newsletter: React.FC = () => {
     setError("");
 
     try {
-      await subscribeToNewsletter(email);
+      await axios.post("/api/subscribe", { email });
       setIsSuccess(true);
       setEmail("");
       setTimeout(() => setIsSuccess(false), 3000);

@@ -1,4 +1,4 @@
-import { Header, Footer } from "@/components";
+import { Header, Footer, NewsletterPopup } from "@/components";
 import { WhatsAppButton } from "@/components/button";
 import { PrivacyConsent } from "@/components/privacy-consent";
 
@@ -9,6 +9,7 @@ export default function Layout({
     <>
       <Header />
       {children}
+      <NewsletterPopup />
       <WhatsAppButton />
       <PrivacyConsent />
       <Footer />

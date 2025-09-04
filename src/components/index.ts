@@ -29,6 +29,7 @@ import { SizeGuide } from "./size-guide";
 import { Engraving } from "./modal";
 import { CurrencyDropdown } from "./dropdown";
 import { RingCustomizationCTASection } from "./cta-section";
+import { NewsletterPopup } from "./newsletter";
 
 export {
   Header,
@@ -65,4 +66,5 @@ export {
   Engraving,
   CurrencyDropdown,
   RingCustomizationCTASection,
+  NewsletterPopup,
 };

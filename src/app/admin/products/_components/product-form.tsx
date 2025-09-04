@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X, Plus, Trash2 } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button, Alert } from "@/components";
-import { Product } from "@/lib/types/products";
+import { Product, Gemstone, Metal, ProductVariant } from "@/lib/types/products";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";
 
@@ -50,20 +50,20 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
     category: product?.category || "Rings",
-    collections: product?.collections?.map(c => c.id as string) || [],
+  collections: [],
     slug: product?.slug || "",
     description: product?.description || "",
     priceRange: product?.priceRange || { min: 0, max: 0, currency: "USD" },
     images: product?.images || [],
-    gemstones: product?.gemstones || [],
-    metals: product?.metals || [],
-    variants: product?.variants?.map(v => ({
+    gemstones: product?.gemstones?.map((g: Gemstone) => ({ type: g.type, weightCarat: g.weightCarat })) || [],
+    metals: product?.metals?.map((m: Metal) => ({ type: m.type, purity: m.purity ?? undefined, weightGrams: m.weightGrams })) || [],
+    variants: product?.variants?.map((v: ProductVariant) => ({
       sku: v.sku,
       title: v.title,
       price: v.price,
       currency: v.currency,
-      gemstones: v.gemstones,
-      metals: v.metals,
+      gemstones: v.gemstones?.map((g: Gemstone) => ({ type: g.type, weightCarat: g.weightCarat })) || [],
+      metals: v.metals?.map((m: Metal) => ({ type: m.type, purity: m.purity ?? undefined, weightGrams: m.weightGrams })) || [],
       inventory: { quantity: 1, inStock: true },
       images: v.images,
     })) || [{
@@ -77,6 +77,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       images: [],
     }],
     isCustomDesign: product?.isCustomDesign || false,
+    customDesignDetails: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
