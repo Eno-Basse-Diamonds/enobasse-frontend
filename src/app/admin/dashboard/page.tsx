@@ -12,33 +12,67 @@ import {
   MessageSquare,
   FileText,
   Folder,
+  Heart,
+  ShoppingBag,
+  ChevronRight,
 } from "lucide-react";
 import { AdminHeader } from "../_components/admin-header";
+import Link from "next/link";
 
 const mockStats = {
   totalProducts: 156,
   totalOrders: 1247,
   totalCustomers: 892,
-  totalRevenue: 45678.90,
+  cartItems: 342,
+  wishlistItems: 189,
   recentOrders: [
     { id: "ORD-001", customer: "John Doe", amount: 299.99, status: "pending" },
-    { id: "ORD-002", customer: "Jane Smith", amount: 149.50, status: "confirmed" },
-    { id: "ORD-003", customer: "Mike Johnson", amount: 599.00, status: "shipped" },
-    { id: "ORD-004", customer: "Sarah Wilson", amount: 89.99, status: "delivered" },
-  ],
-  topProducts: [
-    { name: "Diamond Ring", sales: 45, revenue: 13500 },
-    { name: "Gold Necklace", sales: 32, revenue: 9600 },
-    { name: "Silver Bracelet", sales: 28, revenue: 4200 },
-    { name: "Pearl Earrings", sales: 24, revenue: 3600 },
+    {
+      id: "ORD-002",
+      customer: "Jane Smith",
+      amount: 149.5,
+      status: "confirmed",
+    },
+    {
+      id: "ORD-003",
+      customer: "Mike Johnson",
+      amount: 599.0,
+      status: "shipped",
+    },
+    {
+      id: "ORD-004",
+      customer: "Sarah Wilson",
+      amount: 89.99,
+      status: "delivered",
+    },
   ],
   recentReviews: [
-    { product: "Diamond Ring", rating: 5, customer: "Alice Brown", comment: "Absolutely beautiful!" },
-    { product: "Gold Necklace", rating: 4, customer: "Bob Davis", comment: "Great quality, fast shipping." },
-    { product: "Silver Bracelet", rating: 5, customer: "Carol White", comment: "Perfect gift for my wife." },
+    {
+      product: "Diamond Ring",
+      rating: 5,
+      customer: "Alice Brown",
+      comment: "Absolutely beautiful!",
+    },
+    {
+      product: "Gold Necklace",
+      rating: 4,
+      customer: "Bob Davis",
+      comment: "Great quality, fast shipping.",
+    },
+    {
+      product: "Silver Bracelet",
+      rating: 5,
+      customer: "Carol White",
+      comment: "Perfect gift for my wife.",
+    },
+    {
+      product: "Pearl Earrings",
+      rating: 4,
+      customer: "David Miller",
+      comment: "Lovely design, will buy again.",
+    },
   ],
   blogPosts: 24,
-  testimonials: 18,
   collections: 8,
 };
 
@@ -52,20 +86,27 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "bg-yellow-100 text-yellow-800";
-      case "confirmed": return "bg-blue-100 text-blue-800";
-      case "processing": return "bg-purple-100 text-purple-800";
-      case "shipped": return "bg-indigo-100 text-indigo-800";
-      case "delivered": return "bg-green-100 text-green-800";
-      case "cancelled": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmed":
+        return "bg-blue-100 text-blue-800";
+      case "processing":
+        return "bg-purple-100 text-purple-800";
+      case "shipped":
+        return "bg-indigo-100 text-indigo-800";
+      case "delivered":
+        return "bg-green-100 text-green-800";
+      case "cancelled":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
@@ -79,64 +120,58 @@ export default function AdminDashboard() {
           <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
-              </div>
-              <div className="h-12 w-12 bg-green-100 flex items-center justify-center">
-                <DollarSign className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+12.5% from last month</span>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Orders</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalOrders.toLocaleString()}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Orders
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.totalOrders.toLocaleString()}
+                </p>
               </div>
               <div className="h-12 w-12 bg-blue-100 flex items-center justify-center">
                 <ShoppingCart className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-            <div className="mt-4 flex items-center">
-              <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+8.2% from last month</span>
-            </div>
           </div>
 
           <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Products</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalProducts}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Products
+                </p>
+                <p className="text-2xl font-bold text-gray-900">500</p>
               </div>
               <div className="h-12 w-12 bg-purple-100 flex items-center justify-center">
                 <Package className="h-6 w-6 text-purple-600" />
               </div>
             </div>
-            <div className="mt-4 flex items-center">
-              <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+5 new this week</span>
+          </div>
+
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Cart Items</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.cartItems}
+                </p>
+              </div>
+              <div className="h-12 w-12 bg-orange-100 flex items-center justify-center">
+                <ShoppingBag className="h-6 w-6 text-orange-600" />
+              </div>
             </div>
           </div>
 
           <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Customers</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalCustomers}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Wishlist Items
+                </p>
+                <p className="text-2xl font-bold text-gray-900">300</p>
               </div>
-              <div className="h-12 w-12 bg-orange-100 flex items-center justify-center">
-                <Users className="h-6 w-6 text-orange-600" />
+              <div className="h-12 w-12 bg-pink-100 flex items-center justify-center">
+                <Heart className="h-6 w-6 text-pink-600" />
               </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+15 new this week</span>
             </div>
           </div>
         </div>
@@ -146,8 +181,24 @@ export default function AdminDashboard() {
           <div className="bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Customers
+                </p>
+                <p className="text-xl font-bold text-gray-900">
+                  {stats.totalCustomers}
+                </p>
+              </div>
+              <MessageSquare className="h-8 w-8 text-pink-600" />
+            </div>
+          </div>
+
+          <div className="bg-white shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-sm font-medium text-gray-600">Collections</p>
-                <p className="text-xl font-bold text-gray-900">{stats.collections}</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {stats.collections}
+                </p>
               </div>
               <Folder className="h-8 w-8 text-indigo-600" />
             </div>
@@ -157,40 +208,44 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Blog Posts</p>
-                <p className="text-xl font-bold text-gray-900">{stats.blogPosts}</p>
+                <p className="text-xl font-bold text-gray-900">
+                  {stats.blogPosts}
+                </p>
               </div>
               <FileText className="h-8 w-8 text-green-600" />
-            </div>
-          </div>
-
-          <div className="bg-white shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Testimonials</p>
-                <p className="text-xl font-bold text-gray-900">{stats.testimonials}</p>
-              </div>
-              <MessageSquare className="h-8 w-8 text-pink-600" />
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Recent Orders */}
-          <div className="bg-white shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Orders</h3>
+          <div className="bg-white shadow-sm border border-gray-200 flex flex-col">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Recent Orders
+              </h3>
+              <span className="text-sm text-gray-500">
+                Total: {stats.totalOrders.toLocaleString()}
+              </span>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
+            <div className="p-6 flex flex-col flex-grow">
+              <div className="space-y-4 flex-grow">
                 {stats.recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                  <div
+                    key={order.id}
+                    className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0"
+                  >
                     <div>
                       <p className="font-medium text-gray-900">{order.id}</p>
                       <p className="text-sm text-gray-600">{order.customer}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-gray-900">{formatCurrency(order.amount)}</p>
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
+                      <p className="font-medium text-gray-900">
+                        {formatCurrency(order.amount)}
+                      </p>
+                      <span
+                        className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}
+                      >
                         {order.status}
                       </span>
                     </div>
@@ -198,82 +253,71 @@ export default function AdminDashboard() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-gray-200">
-                <a href="/admin/orders" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  View all orders →
-                </a>
+                <Link
+                  href="/admin/orders"
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-x-2"
+                >
+                  <span>View all orders</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           </div>
 
-          {/* Top Products */}
-          <div className="bg-white shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Top Products</h3>
+          <div className="bg-white shadow-sm border border-gray-200 flex flex-col">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Recent Reviews
+              </h3>
+              <span className="text-sm text-gray-500">
+                Total: {stats.recentReviews.length.toLocaleString()}
+              </span>
             </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                {stats.topProducts.map((product, index) => (
-                  <div key={product.name} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium text-gray-600 mr-3">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900">{product.name}</p>
-                        <p className="text-sm text-gray-600">{product.sales} sales</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium text-gray-900">{formatCurrency(product.revenue)}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <a href="/admin/products" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  View all products →
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Reviews */}
-        <div className="mt-8">
-          <div className="bg-white shadow-sm border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Recent Reviews</h3>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
+            <div className="p-6 flex flex-col flex-grow">
+              <div className="space-y-4 flex-grow">
                 {stats.recentReviews.map((review, index) => (
-                  <div key={index} className="py-4 border-b border-gray-100 last:border-b-0">
+                  <div
+                    key={index}
+                    className="py-4 border-b border-gray-100 last:border-b-0"
+                  >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center mb-2">
-                          <p className="font-medium text-gray-900 mr-2">{review.product}</p>
+                          <p className="font-medium text-gray-900 mr-2">
+                            {review.product}
+                          </p>
                           <div className="flex items-center">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 className={`h-4 w-4 ${
-                                  i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                  i < review.rating
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-gray-300"
                                 }`}
                               />
                             ))}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600 mb-1">"{review.comment}"</p>
-                        <p className="text-xs text-gray-500">by {review.customer}</p>
+                        <p className="text-sm text-gray-600 mb-1">
+                          "{review.comment}"
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          by {review.customer}
+                        </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-gray-200">
-                <a href="/admin/reviews" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                  View all reviews →
-                </a>
+                <Link
+                  href="/admin/reviews"
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-x-2"
+                >
+                  <span>View all reviews</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           </div>
@@ -281,9 +325,11 @@ export default function AdminDashboard() {
 
         {/* Quick Actions */}
         <div className="mt-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Quick Actions
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a
+            <Link
               href="/admin/products"
               className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
@@ -294,9 +340,9 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600">Create new product</p>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/admin/collections"
               className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
@@ -307,9 +353,9 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600">Create collection</p>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/admin/blog"
               className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
@@ -320,9 +366,9 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600">Create blog post</p>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/admin/orders"
               className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
             >
@@ -333,7 +379,7 @@ export default function AdminDashboard() {
                   <p className="text-sm text-gray-600">Manage orders</p>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
