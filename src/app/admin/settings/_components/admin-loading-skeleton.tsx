@@ -5,7 +5,7 @@ export function AdminLoadingSkeleton() {
         <div className="animate-pulse space-y-8">
           <div className="h-8 bg-gray-200 w-48"></div>
           <div className="space-y-6">
-            {[...Array(4)].map((_, i) => (
+            {[...Array(2)].map((_, i) => (
               <div key={i} className="h-32 bg-gray-200"></div>
             ))}
           </div>

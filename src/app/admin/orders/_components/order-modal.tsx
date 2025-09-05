@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components";
 import { Order } from "@/lib/types/orders";
 import { useUpdateOrder } from "@/lib/hooks/use-orders";
@@ -42,7 +43,6 @@ export function OrderModal({
         onSubmit={handleSubmit}
         className="bg-white w-full max-w-4xl h-full flex flex-col shadow-2xl"
       >
-        {/* Fixed Header */}
         <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
           <h3 className="text-2xl font-semibold text-primary-500">
             Order #{order.shortId}
@@ -56,7 +56,6 @@ export function OrderModal({
           </Button>
         </div>
 
-        {/* Scrollable Content Area */}
         <div className="flex-1 p-6 overflow-y-auto">
           <div className="space-y-8">
             <section>
@@ -65,10 +64,20 @@ export function OrderModal({
               </h4>
               <div className="space-y-3">
                 {order.items.map((it) => (
-                  <div
-                    key={it.id}
-                    className="flex items-center justify-between text-sm"
-                  >
+                  <div key={it.id} className="flex items-center gap-4 text-sm">
+                    <div className="flex-shrink-0 w-16 h-16 relative border border-gray-200">
+                      <Image
+                        src={
+                          it.productVariant?.images[0].url ||
+                          "/placeholder-image.jpg"
+                        }
+                        alt={it.productVariant?.title || "Product image"}
+                        fill
+                        className="object-cover rounded-md"
+                        sizes="64px"
+                      />
+                    </div>
+
                     <div className="flex-1">
                       <div className="font-medium">
                         {it.productVariant?.title}
@@ -232,7 +241,6 @@ export function OrderModal({
           </div>
         </div>
 
-        {/* Fixed Footer */}
         <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
           <Button variant="outline" onClick={onClose}>
             Close

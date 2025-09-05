@@ -2,13 +2,7 @@
 
 import * as React from "react";
 import { useState, useCallback, useRef, useEffect } from "react";
-import {
-  Search,
-  X,
-  MessageSquare,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Search, X, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
 import { Alert, Pagination } from "@/components";
 import { AdminReviewsSkeletonLoader } from "@/components/loaders";
 import { EmptyState } from "@/components/empty-state";

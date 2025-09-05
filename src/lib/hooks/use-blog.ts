@@ -68,7 +68,7 @@ export function useRelatedBlogPosts(slug: string) {
 
 interface CreateBlogPostInput {
   formData: BlogPostFormData;
-  authorId: string;
+  author: { name: string; email: string };
 }
 
 interface UpdateBlogPostInput {
@@ -81,8 +81,8 @@ export function useCreateBlogPost() {
   const router = useRouter();
 
   return useMutation<FormState, Error, CreateBlogPostInput>({
-    mutationFn: ({ formData, authorId }) => {
-      return createBlogPost(formData, authorId);
+    mutationFn: ({ formData, author }) => {
+      return createBlogPost(formData, author);
     },
     onSuccess: (data) => {
       if (data.success && data.post) {

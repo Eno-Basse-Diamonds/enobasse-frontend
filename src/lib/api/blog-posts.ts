@@ -74,7 +74,7 @@ export const getRelatedBlogPosts = async (
 
 export async function createBlogPost(
   formData: FormData | BlogPostFormData,
-  authorId: string,
+  author: { name: string; email: string },
 ): Promise<FormState> {
   const data = transformFormData(formData);
   const validatedData = BlogPostSchema.safeParse(data);
@@ -90,7 +90,7 @@ export async function createBlogPost(
   try {
     const post = await api.post<BlogPost>("/blog/posts", {
       ...validatedData.data,
-      authorId,
+      author,
       readingTime: calculateReadingTime(validatedData.data.content),
     });
 

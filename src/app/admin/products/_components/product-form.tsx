@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { X, Plus, Trash2 } from "lucide-react";
-import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { X, Plus } from "lucide-react";
 import { Button, Alert } from "@/components";
 import { Product, Gemstone, Metal, ProductVariant } from "@/lib/types/products";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
 import { MetalsGemstonesSelector } from "./_elements/metals-gemstone-selector";
+import { FormField } from './_elements/form-field';
+import { FormTextareaField } from './_elements/form-textarea-field';
+import { ImageUploadField } from './_elements/image-upload-field';
+import { VariantForm } from './_elements/variant-form';
+import { CollectionsSelector } from './_elements/collections-selector';
 
 interface ProductFormProps {
   product: Product | null;
@@ -39,10 +43,10 @@ interface ProductFormData {
     images: Array<{ url: string; alt: string }>;
   }>;
   isCustomDesign: boolean;
-  customDesignDetails: string;
 }
 
 export function ProductForm({ product, onClose }: ProductFormProps) {
+  console.log(product);
   const [formData, setFormData] = useState<ProductFormData>({
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
@@ -94,7 +98,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       },
     ],
     isCustomDesign: product?.isCustomDesign || false,
-    customDesignDetails: "",
+
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -496,19 +500,6 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       </span>
                     </label>
                   </div>
-
-                  {formData.isCustomDesign && (
-                    <FormTextareaField
-                      label="Custom Design Details"
-                      name="customDesignDetails"
-                      value={formData.customDesignDetails}
-                      onChange={(e) =>
-                        handleInputChange("customDesignDetails", e.target.value)
-                      }
-                      rows={3}
-                      placeholder="Describe the custom design options..."
-                    />
-                  )}
                 </div>
               </section>
             </div>
@@ -531,365 +522,3 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     </>
   );
 }
-
-interface FormFieldProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  error?: string;
-}
-
-const FormField: React.FC<FormFieldProps> = ({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-  error,
-}) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
-      {label}
-    </label>
-    <input
-      type="text"
-      name={name}
-      value={value}
-      onChange={onChange}
-      className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-      placeholder={placeholder}
-    />
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-);
-
-interface FormTextareaFieldProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  placeholder: string;
-  rows: number;
-  error?: string;
-}
-
-const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-  rows,
-  error,
-}) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
-      {label}
-    </label>
-    <textarea
-      name={name}
-      value={value}
-      onChange={onChange}
-      rows={rows}
-      className="w-full p-4 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-      placeholder={placeholder}
-    />
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-);
-
-interface ImageUploadFieldProps {
-  images: Array<{ url: string; alt: string }>;
-  onImageChange: (images: Array<{ url: string; alt: string }>) => void;
-  error?: string;
-}
-
-const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
-  images,
-  onImageChange,
-  error,
-}) => (
-  <div className="space-y-4">
-    <CldUploadWidget
-      uploadPreset="products"
-      options={{
-        sources: ["local", "url", "camera"],
-        resourceType: "image",
-        multiple: true,
-        maxFiles: 10,
-      }}
-      onSuccess={(result: any) => {
-        if (result.info) {
-          const newImage = {
-            url: result.info.secure_url,
-            alt: result.info.original_filename || "Product image",
-          };
-          onImageChange([...images, newImage]);
-        }
-      }}
-    >
-      {({ open }) => (
-        <Button type="button" onClick={() => open()}>
-          Upload Images
-        </Button>
-      )}
-    </CldUploadWidget>
-
-    {images.length > 0 && (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {images.map((image, index) => (
-          <div key={index} className="relative">
-            <CldImage
-              src={image.url}
-              alt={image.alt}
-              width={200}
-              height={200}
-              crop="fill"
-              gravity="auto"
-              quality="auto"
-              format="avif"
-              className="w-full h-64 object-cover border border-gray-200"
-            />
-            <button
-              type="button"
-              onClick={() =>
-                onImageChange(images.filter((_, i) => i !== index))
-              }
-              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
-      </div>
-    )}
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-);
-
-interface VariantFormProps {
-  variant: any;
-  index: number;
-  onVariantChange: (index: number, field: string, value: any) => void;
-  onImageChange: (images: Array<{ url: string; alt: string }>) => void;
-  onRemove: () => void;
-  canRemove: boolean;
-  errors: Record<string, string>;
-}
-
-const VariantForm: React.FC<VariantFormProps> = ({
-  variant,
-  index,
-  onVariantChange,
-  onImageChange,
-  onRemove,
-  canRemove,
-  errors,
-}) => (
-  <div className="border border-gray-200 p-6 bg-gray-50">
-    <div className="flex items-center justify-between mb-4">
-      <h5 className="text-md font-semibold text-primary-500">
-        Variant {index + 1}
-      </h5>
-      {canRemove && (
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          leadingIcon={<Trash2 />}
-          onClick={onRemove}
-        >
-          Remove
-        </Button>
-      )}
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <FormField
-        label="Variant SKU *"
-        name={`variant-${index}-sku`}
-        value={variant.sku}
-        onChange={(e) => onVariantChange(index, "sku", e.target.value)}
-        placeholder="Enter variant SKU..."
-        error={errors[`variant-${index}-sku`]}
-      />
-
-      <FormField
-        label="Variant Title *"
-        name={`variant-${index}-title`}
-        value={variant.title}
-        onChange={(e) => onVariantChange(index, "title", e.target.value)}
-        placeholder="Enter variant title..."
-        error={errors[`variant-${index}-title`]}
-      />
-
-      <div>
-        <label className="block text-sm font-semibold text-primary-400 mb-2">
-          Price *
-        </label>
-        <input
-          type="number"
-          value={variant.price}
-          onChange={(e) =>
-            onVariantChange(index, "price", Number(e.target.value))
-          }
-          className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-          min="0"
-          step="0.01"
-        />
-        {errors[`variant-${index}-price`] && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors[`variant-${index}-price`]}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <label className="block text-sm font-semibold text-primary-400 mb-2">
-          Currency
-        </label>
-        <select
-          value={variant.currency}
-          onChange={(e) => onVariantChange(index, "currency", e.target.value)}
-          className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-        >
-          <option value="USD">USD</option>
-          <option value="NGN">NGN</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-semibold text-primary-400 mb-2">
-          Quantity
-        </label>
-        <input
-          type="number"
-          value={variant.inventory.quantity}
-          onChange={(e) =>
-            onVariantChange(index, "inventory", {
-              ...variant.inventory,
-              quantity: Number(e.target.value),
-            })
-          }
-          className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-          min="0"
-        />
-      </div>
-
-      <div className="flex items-center space-x-4">
-        <label className="inline-flex items-center">
-          <input
-            type="checkbox"
-            checked={variant.inventory.inStock}
-            onChange={(e) =>
-              onVariantChange(index, "inventory", {
-                ...variant.inventory,
-                inStock: e.target.checked,
-              })
-            }
-            className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
-          />
-          <span className="ml-2">In Stock</span>
-        </label>
-      </div>
-    </div>
-
-    <div className="mt-6">
-      <label className="block text-sm font-semibold text-primary-400 mb-2">
-        Variant Images *
-      </label>
-      <ImageUploadField
-        images={variant.images}
-        onImageChange={onImageChange}
-        error={errors[`variant-${index}-images`]}
-      />
-    </div>
-  </div>
-);
-
-interface CollectionsSelectorProps {
-  collections: any[];
-  selectedCollections: string[];
-  onCollectionsChange: (collections: string[]) => void;
-}
-
-const CollectionsSelector: React.FC<CollectionsSelectorProps> = ({
-  collections,
-  selectedCollections,
-  onCollectionsChange,
-}) => {
-  const handleCollectionToggle = (collectionId: string) => {
-    const newSelected = selectedCollections.includes(collectionId)
-      ? selectedCollections.filter((id) => id !== collectionId)
-      : [...selectedCollections, collectionId];
-
-    onCollectionsChange(newSelected);
-  };
-
-  const selectedCollectionsList = collections.filter((c) =>
-    selectedCollections.includes(c.id)
-  );
-  const unselectedCollections = collections.filter(
-    (c) => !selectedCollections.includes(c.id)
-  );
-
-  return (
-    <div className="space-y-4">
-      {selectedCollectionsList.length > 0 && (
-        <div>
-          <h5 className="text-sm font-medium text-green-700 mb-2">
-            Selected Collections ({selectedCollectionsList.length})
-          </h5>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {selectedCollectionsList.map((collection) => (
-              <label
-                key={collection.id}
-                className="flex items-center space-x-3 p-3 border border-green-200 bg-green-50 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={true}
-                  onChange={() => handleCollectionToggle(collection.id)}
-                  className="h-4 w-4 text-green-600 focus:ring-green-500"
-                />
-                <span className="text-sm font-medium text-green-800">
-                  {collection.name}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {unselectedCollections.length > 0 && (
-        <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-2">
-            Available Collections ({unselectedCollections.length})
-          </h5>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
-            {unselectedCollections.map((collection) => (
-              <label
-                key={collection.id}
-                className="flex items-center space-x-3 p-3 border border-gray-200 hover:bg-gray-50 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={false}
-                  onChange={() => handleCollectionToggle(collection.id)}
-                  className="h-4 w-4 text-primary-500 focus:ring-primary-300"
-                />
-                <span className="text-sm text-gray-700">{collection.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {collections.length === 0 && (
-        <p className="text-sm text-gray-500">No collections available</p>
-      )}
-    </div>
-  );
-};

@@ -47,7 +47,7 @@ export const getAllAccounts = async (filters?: {
   if (filters?.isAdmin !== undefined)
     params.append("isAdmin", filters.isAdmin.toString());
 
-  return api.get(`/accounts?${params.toString()}`);
+  return api.get(`/accounts?${params.toString()}`, { cache: false });
 };
 
 export const createAccount = async (data: CreateAccountData) => {

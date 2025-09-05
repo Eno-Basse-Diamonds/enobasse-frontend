@@ -28,7 +28,7 @@ export const useAdminOrders = (params: {
 };
 
 export const useUpdateOrder = () => {
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation<
     Order,
     Error,
@@ -39,8 +39,8 @@ export const useUpdateOrder = () => {
   >({
     mutationFn: ({ id, data }) => updateOrder(id, data),
     onSuccess: (order) => {
-      qc.invalidateQueries({ queryKey: ["adminOrders"] });
-      qc.invalidateQueries({ queryKey: ["order", order.id] });
+      queryClient.invalidateQueries({ queryKey: ["adminOrders"] });
+      queryClient.invalidateQueries({ queryKey: ["order", order.id] });
     },
   });
 };
