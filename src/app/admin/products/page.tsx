@@ -16,7 +16,16 @@ import { EmptyState } from "@/components/empty-state";
 import { AdminProductsSkeletonLoader } from "@/components/loaders";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
 
-const PRODUCT_COLLECTIONS = ["Rings", "Earrings", "Wristwears", "Neckpieces"];
+const PRODUCT_COLLECTIONS = [
+  "Rings",
+  "Earrings",
+  "Wristwears",
+  "Neckpieces",
+  "Bangles",
+  "Bracelets",
+  "Necklaces",
+  "Pendants",
+];
 
 export default function AdminProductsPage() {
   const { data: session } = useSession();
@@ -35,7 +44,7 @@ export default function AdminProductsPage() {
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
-  const currentCategory = searchParams.get("category") || "";
+  const currentCollection = searchParams.get("collection") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
   const currentSortOrder =
     (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
@@ -51,7 +60,7 @@ export default function AdminProductsPage() {
       | "price",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
-    category: currentCategory || undefined,
+    collection: currentCollection || undefined,
   };
 
   const { data, isLoading } = useAdminProducts(filterOptions);
@@ -128,11 +137,11 @@ export default function AdminProductsPage() {
     updateURL({ search: "", page: 1 });
   };
 
-  const handleCategoryClick = (category: string) => {
-    if (currentCategory === category) {
-      updateURL({ category: "", page: 1 });
+  const handleCollectionClick = (collection: string) => {
+    if (currentCollection === collection) {
+      updateURL({ collection: "", page: 1 });
     } else {
-      updateURL({ category, page: 1 });
+      updateURL({ collection, page: 1 });
     }
   };
 
@@ -230,25 +239,24 @@ export default function AdminProductsPage() {
               </div>
             </div>
 
-            {/* Category Filter Buttons */}
             <div className="mb-6">
               <div className="flex flex-wrap gap-2">
-                {PRODUCT_COLLECTIONS.map((category) => (
+                {PRODUCT_COLLECTIONS.map((collection) => (
                   <button
-                    key={category}
-                    onClick={() => handleCategoryClick(category)}
+                    key={collection}
+                    onClick={() => handleCollectionClick(collection)}
                     className={`px-4 py-2 text-sm font-medium border transition-colors ${
-                      currentCategory === category
+                      currentCollection === collection
                         ? "bg-primary-500 text-white border-primary-500"
                         : "bg-white text-primary-500 border-primary-300 hover:bg-primary-50"
                     }`}
                   >
-                    {category}
+                    {collection}
                   </button>
                 ))}
-                {currentCategory && (
+                {currentCollection && (
                   <button
-                    onClick={() => updateURL({ category: "", page: 1 })}
+                    onClick={() => updateURL({ collection: "", page: 1 })}
                     className="px-4 py-2 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50"
                   >
                     Clear Filter

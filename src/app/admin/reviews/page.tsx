@@ -56,7 +56,6 @@ export default function AdminReviewsPage() {
   };
 
   const { data, isLoading } = useReviewsForAdmin(filterOptions);
-  console.log(data);
 
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {

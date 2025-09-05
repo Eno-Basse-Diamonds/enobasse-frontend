@@ -208,7 +208,6 @@ const BillingSummary = ({ order }: { order: Order }) => {
 
   const shipping = "N/A";
   const tax = "N/A";
-  console.log(order)
 
   return (
     <div className="max-w-4xl mx-auto bg-white border-t border-gray-200 mt-4 pt-4">

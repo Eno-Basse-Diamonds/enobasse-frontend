@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
         );
       }
     } catch (error) {
+      console.log(error)
       if (axios.isAxiosError(error)) {
         if (error.response?.data.title === "Member Exists") {
           return NextResponse.json(
