@@ -11,6 +11,7 @@ import { OrderHistoryLoader } from "./orders";
 import { AdminCollectionsSkeletonLoader } from "./collections";
 import { AccountLoadingSkeleton } from "./accounts";
 import { AdminReviewsSkeletonLoader } from "./reviews";
+import { DashboardSkeleton } from "./dashboard";
 
 export {
   AdminBlogSkeletonLoader,
@@ -27,4 +28,5 @@ export {
   AdminProductsSkeletonLoader,
   AccountLoadingSkeleton,
   AdminReviewsSkeletonLoader,
+  DashboardSkeleton,
 };
