@@ -16,17 +16,6 @@ import { EmptyState } from "@/components/empty-state";
 import { AdminProductsSkeletonLoader } from "@/components/loaders";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
 
-const PRODUCT_COLLECTIONS = [
-  "Rings",
-  "Earrings",
-  "Wristwears",
-  "Neckpieces",
-  "Bangles",
-  "Bracelets",
-  "Necklaces",
-  "Pendants",
-];
-
 export default function AdminProductsPage() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -44,8 +33,8 @@ export default function AdminProductsPage() {
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
-  const currentCollection = searchParams.get("collection") || "";
-  const currentSort = searchParams.get("sortBy") || "createdAt";
+  const currentCollection = searchParams.get("collectionId") || "";
+  const currentSort = searchParams.get("sortBy") || "updatedAt";
   const currentSortOrder =
     (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
 
@@ -56,18 +45,17 @@ export default function AdminProductsPage() {
       | "name"
       | "createdAt"
       | "updatedAt"
-      | "category"
       | "price",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
-    collection: currentCollection || undefined,
+    collectionId: currentCollection || undefined,
   };
 
   const { data, isLoading } = useAdminProducts(filterOptions);
   const { data: collections, isLoading: isCollectionsLoading } =
     useAdminCollections({
       page: 1,
-      pageSize: 50,
+      pageSize: 100,
     });
   const deleteMutation = useDeleteProduct();
 
@@ -137,11 +125,11 @@ export default function AdminProductsPage() {
     updateURL({ search: "", page: 1 });
   };
 
-  const handleCollectionClick = (collection: string) => {
-    if (currentCollection === collection) {
-      updateURL({ collection: "", page: 1 });
+  const handleCollectionClick = (collectionId: string) => {
+    if (currentCollection === collectionId) {
+      updateURL({ collectionId: "", page: 1 });
     } else {
-      updateURL({ collection, page: 1 });
+      updateURL({ collectionId, page: 1 });
     }
   };
 
@@ -154,11 +142,9 @@ export default function AdminProductsPage() {
   };
 
   const sortOptions = [
-    { value: "createdAt", label: "Date Created" },
     { value: "updatedAt", label: "Last Updated" },
+    { value: "createdAt", label: "Date Created" },
     { value: "name", label: "Name" },
-    { value: "category", label: "Category" },
-    { value: "price", label: "Price" },
   ];
 
   return (
@@ -241,19 +227,20 @@ export default function AdminProductsPage() {
 
             <div className="mb-6">
               <div className="flex flex-wrap gap-2">
-                {PRODUCT_COLLECTIONS.map((collection) => (
-                  <button
-                    key={collection}
-                    onClick={() => handleCollectionClick(collection)}
-                    className={`px-4 py-2 text-sm font-medium border transition-colors ${
-                      currentCollection === collection
-                        ? "bg-primary-500 text-white border-primary-500"
-                        : "bg-white text-primary-500 border-primary-300 hover:bg-primary-50"
-                    }`}
-                  >
-                    {collection}
-                  </button>
-                ))}
+                {collections &&
+                  collections.collections.map((collection: any) => (
+                    <button
+                      key={collection.id}
+                      onClick={() => handleCollectionClick(collection.id)}
+                      className={`px-4 py-2 text-sm font-medium border transition-colors ${
+                        currentCollection === collection.id
+                          ? "bg-primary-500 text-white border-primary-500"
+                          : "bg-white text-primary-500 border-primary-300 hover:bg-primary-50"
+                      }`}
+                    >
+                      {collection.name}
+                    </button>
+                  ))}
                 {currentCollection && (
                   <button
                     onClick={() => updateURL({ collection: "", page: 1 })}

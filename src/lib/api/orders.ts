@@ -63,7 +63,7 @@ export const getAdminOrders = async (params: {
   status?: string;
   search?: string;
 }): Promise<AdminOrdersResponse> => {
-  return api.get(`/orders/admin`, { params });
+  return api.get(`/orders/admin`, { cache: false, params });
 };
 
 export const updateOrder = async (

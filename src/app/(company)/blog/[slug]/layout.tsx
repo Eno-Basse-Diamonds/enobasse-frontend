@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { Metadata } from "next";
 import {
   dehydrate,
@@ -6,11 +5,6 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getBlogPost, getRelatedBlogPosts } from "@/lib/api/blog-posts";
-import "./styles.scss";
-
-const cachedGetBlogPost = cache(async (slug: string) => {
-  return getBlogPost(slug);
-});
 
 interface BlogPostPageLayoutProps {
   params: Promise<{ slug: string }>;
@@ -21,7 +15,7 @@ export const generateMetadata = async ({
   params,
 }: BlogPostPageLayoutProps): Promise<Metadata> => {
   const { slug } = await params;
-  const post = await cachedGetBlogPost(slug);
+  const post = await getBlogPost(slug);
 
   return {
     title: post.title,
@@ -58,12 +52,10 @@ export default async function BlogPostPageLayout({
   const { slug } = await params;
   const queryClient = new QueryClient();
 
-  const post = await cachedGetBlogPost(slug);
-
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ["blogPost", slug],
-      queryFn: () => post,
+      queryFn: () => getBlogPost(slug),
     }),
     queryClient.prefetchQuery({
       queryKey: ["relatedBlogPosts", slug],

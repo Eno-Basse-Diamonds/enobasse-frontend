@@ -11,20 +11,12 @@ import { FormErrors, FormState } from "@/lib/api/blog-posts";
 import { createHeadingRenderer } from "@/lib/helpers/blog-post";
 import { textToSlug } from "@/lib/utils/string";
 import { useCreateBlogPost, useUpdateBlogPost } from "@/lib/hooks/use-blog";
+import { useSession } from "next-auth/react";
 
 interface BlogPostFormProps {
   blogPost: BlogPost | null;
   onClose: () => void;
 }
-
-const ADMIN = {
-  id: "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f67890",
-  name: "John Doe",
-  avatar: {
-    alt: "John Doe avatar",
-    url: "https://example.com/avatars/john.jpg",
-  },
-};
 
 const MARKDOWN_PLACEHOLDER = `
 # Your Blog Title (H1 Heading)
@@ -54,6 +46,7 @@ Horizontal rule:
 `;
 
 export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
+  const { data: session } = useSession();
   const [showPreview, setShowPreview] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [formData, setFormData] = useState<BlogPostFormData>({
@@ -111,7 +104,10 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     if (blogPost) {
       updatePostMutation.mutate({ slug: blogPost.slug, formData });
     } else {
-      createPostMutation.mutate({ formData, authorId: ADMIN.id });
+      createPostMutation.mutate({
+        formData,
+        author: session?.user || { name: "", email: "" },
+      });
     }
   };
 
@@ -175,7 +171,12 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
               onTagInputChange={setTagInput}
             />
 
-            {showPreview && <PreviewSection formData={formData} />}
+            {showPreview && (
+              <PreviewSection
+                adminName={session?.user?.name || ""}
+                formData={formData}
+              />
+            )}
           </div>
 
           <FormFooter
@@ -576,7 +577,13 @@ const StatusField: React.FC<StatusFieldProps> = ({
   </div>
 );
 
-const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
+const PreviewSection = ({
+  adminName,
+  formData,
+}: {
+  adminName: string;
+  formData: BlogPostFormData;
+}) => (
   <div className="w-1/2 bg-gray-50 p-6 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#D1A559]">
     <div className="bg-white p-8 shadow-sm max-w-none">
       <h1 className="font-primary text-3xl mb-4 font-semibold text-primary-500">
@@ -598,7 +605,7 @@ const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
       <div className="flex items-center space-x-6 text-sm text-primary-400 mb-6 pb-6 border-b border-primary-500/10">
         <span className="flex items-center">
           <User className="w-4 h-4 mr-2" />
-          {ADMIN.name}
+          {adminName}
         </span>
         <span className="flex items-center">
           <Calendar className="w-4 h-4 mr-2" />
@@ -616,7 +623,7 @@ const PreviewSection = ({ formData }: { formData: BlogPostFormData }) => (
       </div>
       <div className="max-w-none">
         {formData.content ? (
-          <article className="blog-detail__content-main text-neutral-300 font-light leading-relaxed">
+          <article className="blog-detail__content-main text-neutral-300 font-light leading-relaxed blog-post">
             <Markdown
               components={{
                 h1: createHeadingRenderer(1),

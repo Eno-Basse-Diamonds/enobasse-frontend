@@ -153,10 +153,7 @@ export default function AdminSettingsPage() {
   ) => {
     setEditForm((prev) => ({
       ...prev,
-      billingAddress: {
-        ...prev.billingAddress,
-        [field]: value,
-      },
+      billingAddress: { ...prev.billingAddress, [field]: value },
     }));
   };
 

@@ -7,12 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Search, X, Users, Shield, User } from "lucide-react";
 import { Alert, Button, Pagination } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
-import {
-  useAdminAccounts,
-  useCreateAccount,
-  useUpdateAccount,
-  useDeleteAccount,
-} from "@/lib/hooks/use-accounts";
+import { useAdminAccounts, useDeleteAccount } from "@/lib/hooks/use-accounts";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
 import { Account } from "@/lib/types/accounts";
 import { AccountForm } from "./_components/account-form";
@@ -55,8 +50,6 @@ export default function AdminAccountsPage() {
   };
 
   const { data, isLoading } = useAdminAccounts(filterOptions);
-  const createMutation = useCreateAccount();
-  const updateMutation = useUpdateAccount();
   const deleteMutation = useDeleteAccount();
 
   const updateURL = useCallback(

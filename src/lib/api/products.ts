@@ -26,14 +26,13 @@ export const getRelatedProducts = async (
   return api.get(`/products/${slug}/related`, { params: { limit, currency } });
 };
 
-// Admin endpoints
 export interface AdminProductsFilterOptions {
   page?: number;
   pageSize?: number;
-  sortBy?: "name" | "createdAt" | "updatedAt" | "category" | "price";
+  sortBy?: "name" | "createdAt" | "updatedAt" | "price";
   sortOrder?: "ASC" | "DESC";
   search?: string;
-  category?: string;
+  collectionId?: string;
   currency?: string;
 }
 
@@ -75,7 +74,6 @@ export const createProduct = async (productData: {
     images: Array<{ url: string; alt: string }>;
   }>;
   isCustomDesign?: boolean;
-  customDesignDetails: string;
 }): Promise<Product> => {
   return api.post("/products", productData);
 };
@@ -104,7 +102,6 @@ export const updateProduct = async (
       images: Array<{ url: string; alt: string }>;
     }>;
     isCustomDesign?: boolean;
-    customDesignDetails: string;
   }>,
 ): Promise<Product> => {
   return api.patch(`/products/${id}`, productData);

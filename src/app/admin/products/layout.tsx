@@ -23,20 +23,17 @@ export default async function AdminProductsLayout({
   const filterOptions = {
     page: 1,
     pageSize: 21,
-    sortBy: "createdAt" as
+    sortBy: "updatedAt" as
       | "name"
       | "createdAt"
       | "updatedAt"
-      | "category"
       | "price",
     sortOrder: "DESC" as "ASC" | "DESC",
-    search: undefined,
-    category: undefined,
   };
 
   await queryClient.prefetchQuery({
-    queryKey: ["adminCollections", { page: 1, pageSize: 50 }],
-    queryFn: () => getCollectionsForAdmin({ page: 1, pageSize: 50 }),
+    queryKey: ["adminCollections", { page: 1, pageSize: 100 }],
+    queryFn: () => getCollectionsForAdmin({ page: 1, pageSize: 100 }),
   });
 
   await queryClient.prefetchQuery({

@@ -11,6 +11,7 @@ import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
 import { Order } from "@/lib/types/orders";
 import { OrdersTable } from "./_components/orders-table";
 import { OrderModal } from "./_components/order-modal";
+import { useEffect } from "react";
 
 export default function AdminOrdersPage() {
   const { data: session } = useSession();
@@ -36,6 +37,16 @@ export default function AdminOrdersPage() {
     search: currentSearch || undefined,
     status: currentStatus || undefined,
   });
+
+  useEffect(() => {
+    if (selectedOrder) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedOrder]);
 
   const updateURL = React.useCallback(
     (newParams: Record<string, string | number>) => {
@@ -140,10 +151,8 @@ export default function AdminOrdersPage() {
               sortOptions={sortOptions}
               filterOptions={filterOptions}
               currentSort={"createdAt"}
-              currentSortOrder={"DESC"}
               currentFilters={currentFilters}
               onSortChange={() => {}}
-              onSortOrderChange={() => {}}
               onFilterChange={handleFilterChange}
             />
           </div>
