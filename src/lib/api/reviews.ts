@@ -40,6 +40,5 @@ export const createReview = async (
 export const getReviewsForAdmin = async (
   options?: AdminReviewFilterOptions,
 ): Promise<PaginatedReviewResponse> => {
-  console.log(options);
   return api.get("/reviews", { params: options, cache: false });
 };

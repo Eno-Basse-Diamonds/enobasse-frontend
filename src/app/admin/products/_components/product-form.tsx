@@ -7,18 +7,15 @@ import { Button, Alert } from "@/components";
 import { Product, Gemstone, Metal, ProductVariant } from "@/lib/types/products";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";
+import { useAdminCollections } from "@/lib/hooks/use-collections";
+import { MetalsGemstonesSelector } from "./_elements/metals-gemstone-selector";
 
 interface ProductFormProps {
   product: Product | null;
   onClose: () => void;
 }
 
-const PRODUCT_CATEGORIES = [
-  "Rings",
-  "Earrings",
-  "Wristwears",
-  "Neckpieces",
-];
+const PRODUCT_CATEGORIES = ["Rings", "Earrings", "Wristwears", "Neckpieces"];
 
 interface ProductFormData {
   sku: string;
@@ -50,32 +47,52 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
     category: product?.category || "Rings",
-  collections: [],
+    collections: product?.collections?.map((c: any) => c.id) || [],
     slug: product?.slug || "",
     description: product?.description || "",
     priceRange: product?.priceRange || { min: 0, max: 0, currency: "USD" },
     images: product?.images || [],
-    gemstones: product?.gemstones?.map((g: Gemstone) => ({ type: g.type, weightCarat: g.weightCarat })) || [],
-    metals: product?.metals?.map((m: Metal) => ({ type: m.type, purity: m.purity ?? undefined, weightGrams: m.weightGrams })) || [],
+    gemstones:
+      product?.gemstones?.map((g: Gemstone) => ({
+        type: g.type,
+        weightCarat: g.weightCarat,
+      })) || [],
+    metals:
+      product?.metals?.map((m: Metal) => ({
+        type: m.type,
+        purity: m.purity ?? undefined,
+        weightGrams: m.weightGrams,
+      })) || [],
     variants: product?.variants?.map((v: ProductVariant) => ({
       sku: v.sku,
       title: v.title,
       price: v.price,
       currency: v.currency,
-      gemstones: v.gemstones?.map((g: Gemstone) => ({ type: g.type, weightCarat: g.weightCarat })) || [],
-      metals: v.metals?.map((m: Metal) => ({ type: m.type, purity: m.purity ?? undefined, weightGrams: m.weightGrams })) || [],
+      gemstones:
+        v.gemstones?.map((g: Gemstone) => ({
+          type: g.type,
+          weightCarat: g.weightCarat,
+        })) || [],
+      metals:
+        v.metals?.map((m: Metal) => ({
+          type: m.type,
+          purity: m.purity ?? undefined,
+          weightGrams: m.weightGrams,
+        })) || [],
       inventory: { quantity: 1, inStock: true },
       images: v.images,
-    })) || [{
-      sku: "",
-      title: "",
-      price: 0,
-      currency: "USD",
-      gemstones: [],
-      metals: [],
-      inventory: { quantity: 1, inStock: true },
-      images: [],
-    }],
+    })) || [
+      {
+        sku: "",
+        title: "",
+        price: 0,
+        currency: "USD",
+        gemstones: [],
+        metals: [],
+        inventory: { quantity: 1, inStock: true },
+        images: [],
+      },
+    ],
     isCustomDesign: product?.isCustomDesign || false,
     customDesignDetails: "",
   });
@@ -86,6 +103,12 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     type: "success" | "error";
     message: string;
   }>({ visible: false, type: "success", message: "" });
+
+  const { data: collectionsResponse } = useAdminCollections({
+    page: 1,
+    pageSize: 100,
+  });
+  const collectionsData = collectionsResponse?.collections;
 
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
@@ -137,7 +160,11 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     }
   };
 
-  const handleImageChange = (field: "images" | "variants", index: number, value: any) => {
+  const handleImageChange = (
+    field: "images" | "variants",
+    index: number,
+    value: any
+  ) => {
     if (field === "images") {
       setFormData((prev) => ({
         ...prev,
@@ -176,6 +203,10 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       newErrors.variants = "At least one product variant is required";
     }
 
+    if (formData.collections.length === 0) {
+      newErrors.collections = "At least one collection is required";
+    }
+
     // Validate variants
     formData.variants.forEach((variant, index) => {
       if (!variant.sku.trim()) {
@@ -185,10 +216,12 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
         newErrors[`variant-${index}-title`] = "Variant title is required";
       }
       if (variant.price <= 0) {
-        newErrors[`variant-${index}-price`] = "Variant price must be greater than 0";
+        newErrors[`variant-${index}-price`] =
+          "Variant price must be greater than 0";
       }
       if (variant.images.length === 0) {
-        newErrors[`variant-${index}-images`] = "At least one variant image is required";
+        newErrors[`variant-${index}-images`] =
+          "At least one variant image is required";
       }
     });
 
@@ -204,7 +237,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     }
 
     // Calculate price range from variants
-    const prices = formData.variants.map(v => v.price).filter(p => p > 0);
+    const prices = formData.variants.map((v) => v.price).filter((p) => p > 0);
     const priceRange = {
       min: prices.length > 0 ? Math.min(...prices) : 0,
       max: prices.length > 0 ? Math.max(...prices) : 0,
@@ -348,7 +381,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                     </label>
                     <select
                       value={formData.category}
-                      onChange={(e) => handleInputChange("category", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("category", e.target.value)
+                      }
                       className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
                     >
                       {PRODUCT_CATEGORIES.map((category) => (
@@ -358,20 +393,39 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       ))}
                     </select>
                   </div>
-                </div>
 
-                <div className="mt-6">
+                  <section>
+                    <CollectionsSelector
+                      collections={collectionsData || []}
+                      selectedCollections={formData.collections}
+                      onCollectionsChange={(collections) =>
+                        handleInputChange("collections", collections)
+                      }
+                    />
+                  </section>
+
                   <FormTextareaField
                     label="Description *"
                     name="description"
                     value={formData.description}
-                    onChange={(e) => handleInputChange("description", e.target.value)}
-                    rows={4}
+                    onChange={(e) =>
+                      handleInputChange("description", e.target.value)
+                    }
+                    rows={13}
                     placeholder="Enter product description..."
                     error={errors?.description}
                   />
                 </div>
               </section>
+
+              <MetalsGemstonesSelector
+                selectedMetals={formData.metals || []}
+                selectedGemstones={formData.gemstones || []}
+                onMetalsChange={(metals) => handleInputChange("metals", metals)}
+                onGemstonesChange={(gemstones) =>
+                  handleInputChange("gemstones", gemstones)
+                }
+              />
 
               {/* Product Images */}
               <section>
@@ -380,7 +434,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                 </h4>
                 <ImageUploadField
                   images={formData.images}
-                  onImageChange={(images) => handleInputChange("images", images)}
+                  onImageChange={(images) =>
+                    handleInputChange("images", images)
+                  }
                   error={errors?.images}
                 />
               </section>
@@ -408,7 +464,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       variant={variant}
                       index={index}
                       onVariantChange={handleVariantChange}
-                      onImageChange={(images) => handleImageChange("variants", index, images)}
+                      onImageChange={(images) =>
+                        handleImageChange("variants", index, images)
+                      }
                       onRemove={() => removeVariant(index)}
                       canRemove={formData.variants.length > 1}
                       errors={errors}
@@ -428,10 +486,14 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       <input
                         type="checkbox"
                         checked={formData.isCustomDesign}
-                        onChange={(e) => handleInputChange("isCustomDesign", e.target.checked)}
+                        onChange={(e) =>
+                          handleInputChange("isCustomDesign", e.target.checked)
+                        }
                         className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
                       />
-                      <span className="ml-2">This is a custom design product</span>
+                      <span className="ml-2">
+                        This is a custom design product
+                      </span>
                     </label>
                   </div>
 
@@ -440,7 +502,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
                       label="Custom Design Details"
                       name="customDesignDetails"
                       value={formData.customDesignDetails}
-                      onChange={(e) => handleInputChange("customDesignDetails", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("customDesignDetails", e.target.value)
+                      }
                       rows={3}
                       placeholder="Describe the custom design options..."
                     />
@@ -586,11 +650,13 @@ const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
               gravity="auto"
               quality="auto"
               format="avif"
-              className="w-full h-32 object-cover border border-gray-200"
+              className="w-full h-64 object-cover border border-gray-200"
             />
             <button
               type="button"
-              onClick={() => onImageChange(images.filter((_, i) => i !== index))}
+              onClick={() =>
+                onImageChange(images.filter((_, i) => i !== index))
+              }
               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
             >
               <X className="w-4 h-4" />
@@ -666,13 +732,17 @@ const VariantForm: React.FC<VariantFormProps> = ({
         <input
           type="number"
           value={variant.price}
-          onChange={(e) => onVariantChange(index, "price", Number(e.target.value))}
+          onChange={(e) =>
+            onVariantChange(index, "price", Number(e.target.value))
+          }
           className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
           min="0"
           step="0.01"
         />
         {errors[`variant-${index}-price`] && (
-          <p className="text-red-500 text-sm mt-1">{errors[`variant-${index}-price`]}</p>
+          <p className="text-red-500 text-sm mt-1">
+            {errors[`variant-${index}-price`]}
+          </p>
         )}
       </div>
 
@@ -697,10 +767,12 @@ const VariantForm: React.FC<VariantFormProps> = ({
         <input
           type="number"
           value={variant.inventory.quantity}
-          onChange={(e) => onVariantChange(index, "inventory", {
-            ...variant.inventory,
-            quantity: Number(e.target.value)
-          })}
+          onChange={(e) =>
+            onVariantChange(index, "inventory", {
+              ...variant.inventory,
+              quantity: Number(e.target.value),
+            })
+          }
           className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
           min="0"
         />
@@ -711,10 +783,12 @@ const VariantForm: React.FC<VariantFormProps> = ({
           <input
             type="checkbox"
             checked={variant.inventory.inStock}
-            onChange={(e) => onVariantChange(index, "inventory", {
-              ...variant.inventory,
-              inStock: e.target.checked
-            })}
+            onChange={(e) =>
+              onVariantChange(index, "inventory", {
+                ...variant.inventory,
+                inStock: e.target.checked,
+              })
+            }
             className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
           />
           <span className="ml-2">In Stock</span>
@@ -734,3 +808,88 @@ const VariantForm: React.FC<VariantFormProps> = ({
     </div>
   </div>
 );
+
+interface CollectionsSelectorProps {
+  collections: any[];
+  selectedCollections: string[];
+  onCollectionsChange: (collections: string[]) => void;
+}
+
+const CollectionsSelector: React.FC<CollectionsSelectorProps> = ({
+  collections,
+  selectedCollections,
+  onCollectionsChange,
+}) => {
+  const handleCollectionToggle = (collectionId: string) => {
+    const newSelected = selectedCollections.includes(collectionId)
+      ? selectedCollections.filter((id) => id !== collectionId)
+      : [...selectedCollections, collectionId];
+
+    onCollectionsChange(newSelected);
+  };
+
+  const selectedCollectionsList = collections.filter((c) =>
+    selectedCollections.includes(c.id)
+  );
+  const unselectedCollections = collections.filter(
+    (c) => !selectedCollections.includes(c.id)
+  );
+
+  return (
+    <div className="space-y-4">
+      {selectedCollectionsList.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-green-700 mb-2">
+            Selected Collections ({selectedCollectionsList.length})
+          </h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {selectedCollectionsList.map((collection) => (
+              <label
+                key={collection.id}
+                className="flex items-center space-x-3 p-3 border border-green-200 bg-green-50 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={true}
+                  onChange={() => handleCollectionToggle(collection.id)}
+                  className="h-4 w-4 text-green-600 focus:ring-green-500"
+                />
+                <span className="text-sm font-medium text-green-800">
+                  {collection.name}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {unselectedCollections.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-gray-700 mb-2">
+            Available Collections ({unselectedCollections.length})
+          </h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2">
+            {unselectedCollections.map((collection) => (
+              <label
+                key={collection.id}
+                className="flex items-center space-x-3 p-3 border border-gray-200 hover:bg-gray-50 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={false}
+                  onChange={() => handleCollectionToggle(collection.id)}
+                  className="h-4 w-4 text-primary-500 focus:ring-primary-300"
+                />
+                <span className="text-sm text-gray-700">{collection.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {collections.length === 0 && (
+        <p className="text-sm text-gray-500">No collections available</p>
+      )}
+    </div>
+  );
+};

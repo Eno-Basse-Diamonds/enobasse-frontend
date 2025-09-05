@@ -1,3 +1,4 @@
+import { Collection } from "./collections";
 import { RatingDistribution, Review } from "./reviews";
 
 export type MetalName = "White Gold" | "Yellow Gold" | "Rose Gold" | "Platinum";
@@ -33,6 +34,7 @@ export interface Product {
   description: string;
   priceRange: { min: number; max: number; currency: string };
   category: string;
+  collections?: Collection[];
   images: Array<{ url: string; alt: string }>;
   variants: ProductVariant[];
   metals?: Metal[];

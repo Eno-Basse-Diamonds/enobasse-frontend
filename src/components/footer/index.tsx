@@ -178,6 +178,7 @@ const Newsletter: React.FC = () => {
       if (error instanceof AxiosError && error.response?.status === 409) {
         setError("You are already subscribed to our newsletter!");
       } else {
+        console.log(error)
         setError("Failed to subscribe. Please try again later.");
       }
     } finally {

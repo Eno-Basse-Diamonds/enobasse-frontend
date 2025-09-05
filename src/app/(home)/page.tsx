@@ -210,7 +210,7 @@ export default async function HomePage() {
       />
 
       <CTASection
-        heading="Want to design your own? Calm, we can do it!"
+        heading="Want to design your own? You are in the right place!"
         image={{
           src: "https://res.cloudinary.com/enobasse/image/upload/v1756506782/call-to-action_ea4ylx.webp",
           alt: "Ruby ring with gold metal in a box.",
