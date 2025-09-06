@@ -62,14 +62,16 @@ export const RingCustomizationCTASection: React.FC = () => {
             Creative Studio
           </h2>
           <p className="font-light md:text-lg lg:text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-            Our Creative Studio allows you to design your ring exactly the way you want it—with control over every detail. Use our unique tools to create something exceptional.
+            Our Creative Studio allows you to design your ring exactly the way
+            you want it—with control over every detail. Use our unique tools to
+            create something exceptional.
           </p>
-          <button
-            className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors cursor-not-allowed"
-            disabled
+          <Link
+            className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors"
+            href="/creative-studio"
           >
             Coming Soon
-          </button>
+          </Link>
         </div>
 
         <div className="absolute w-full -bottom-[5rem] md:w-auto md:right-[8vw] h-64 md:h-80 lg:h-96 overflow-hidden">
