@@ -6,6 +6,7 @@ interface UserAccount {
   name: string;
   email: string;
   preferredCurrency: string;
+  isAdmin: boolean;
 }
 
 export const createAccount = async (

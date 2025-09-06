@@ -159,23 +159,40 @@ interface UtilityNavProps {
   navItems: DropdownNavigation[];
 }
 
-const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => (
-  <nav className="header__utility-nav" aria-label="Utility navigation">
-    <ul className="header__utility-nav-list">
-      {navItems.map((item) => (
-        <li key={item.id} className="header__utility-nav-item">
-          <Link
-            href={item.href}
-            className="header__utility-nav-link"
-            aria-label={item.title}
-          >
-            {item.title}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </nav>
-);
+const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
+  const { data: session } = useSession();
+
+  return (
+    <nav className="header__utility-nav" aria-label="Utility navigation">
+      <ul className="header__utility-nav-list">
+        {navItems.map((item) => (
+          <li key={item.id} className="header__utility-nav-item">
+            <Link
+              href={item.href}
+              className="header__utility-nav-link"
+              aria-label={item.title}
+            >
+              {item.title}
+            </Link>
+          </li>
+        ))}
+        {session?.user?.isAdmin && (
+          <li className="header__utility-nav-item">
+            <Link
+              href="/admin/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="header__utility-nav-link"
+              aria-label="Admin Dashboard"
+            >
+              Admin
+            </Link>
+          </li>
+        )}
+      </ul>
+    </nav>
+  );
+};
 
 interface MobileMenuButtonProps {
   isMobileMenuOpen: boolean;

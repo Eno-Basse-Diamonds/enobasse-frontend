@@ -21,12 +21,13 @@ export const authOptions: NextAuthOptions = {
 
         const { email, password } = credentials;
         const account = await validateAccount(email, password);
-        if (account && typeof (account as any).id === "string") {
-          return account as unknown as {
-            id: string;
-            name: string;
-            email: string;
-            isAdmin: boolean;
+
+        if (account) {
+          return {
+            id: account.id,
+            name: account.name,
+            email: account.email,
+            isAdmin: account.isAdmin,
           };
         }
         return null;
