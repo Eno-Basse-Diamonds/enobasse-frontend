@@ -106,7 +106,10 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     } else {
       createPostMutation.mutate({
         formData,
-        author: session?.user || { name: "", email: "" },
+        author: {
+          name: session?.user?.name || "",
+          email: session?.user?.email || "",
+        },
       });
     }
   };

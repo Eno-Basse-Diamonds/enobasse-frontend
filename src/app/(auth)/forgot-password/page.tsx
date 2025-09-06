@@ -45,7 +45,7 @@ export default async function ForgotPasswordPage() {
           name: "email",
           label: "Email",
           type: "email",
-          value: session?.user?.email,
+          value: session?.user?.email || "",
           placeholder: "Enter your email",
           required: true,
           readOnly: true,
