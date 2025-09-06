@@ -161,7 +161,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
             <CloseIcon className="h-5 w-5 text-gray-800" />
           </motion.button>
 
-          <div className="relative flex-shrink-0 w-full h-[45vh] md:w-1/2 md:h-full">
+          <div className="relative flex-shrink-0 w-full h-[35vh] md:w-1/2 md:h-full">
             <motion.div
               key={currentImageIndex}
               initial="exit"
@@ -229,7 +229,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           </div>
 
           <motion.div
-            className="w-full p-6 overflow-y-auto bg-slate-50 md:w-1/2 md:p-8"
+            className="w-full p-6 overflow-y-auto bg-slate-50 md:w-1/2 md:p-8 h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
