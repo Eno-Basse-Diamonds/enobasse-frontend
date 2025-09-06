@@ -162,6 +162,16 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
     }
   }, [session, hydrate, preferredCurrency, hydrated, isHydrated, lastCurrency]);
 
+  useEffect(() => {
+    if (quickViewProduct) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [quickViewProduct]);
+
   const wishlistProductVariantIds = useMemo(() => {
     const set = new Set<string | number>();
     items.forEach((item) => {
