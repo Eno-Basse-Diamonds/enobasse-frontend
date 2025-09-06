@@ -123,19 +123,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <HeroSection
-        title="You Deserve The Most Unique Jewelry"
-        description="We create antique jewellery that can be passed down through
-            generations - timeless pieces designed to become family heirlooms."
-        image={{
-          src: "https://res.cloudinary.com/enobasse/image/upload/v1756506784/hero_iobwnd.webp",
-          alt: "Woman wearing a necklace, ring, and bracelet from Eno Bassé",
-        }}
-        buttons={[
-          { text: "See Collections", href: "/collections" },
-          { text: "See Products", href: "/products" },
-        ]}
-      />
+      <HeroSection />
 
       <SectionContainer id="categories">
         <SectionHeading
