@@ -46,7 +46,6 @@ interface ProductFormData {
 }
 
 export function ProductForm({ product, onClose }: ProductFormProps) {
-  console.log(product);
   const [formData, setFormData] = useState<ProductFormData>({
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
