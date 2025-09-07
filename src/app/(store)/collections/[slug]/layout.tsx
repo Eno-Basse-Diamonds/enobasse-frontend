@@ -1,4 +1,3 @@
-import { cache } from "react";
 import type { Metadata } from "next";
 import {
   dehydrate,
@@ -62,18 +61,8 @@ export const generateMetadata = async ({
 
 export default async function CollectionLayout({
   children,
-  params,
 }: CollectionLayoutProps) {
-  const { slug } = await params;
   const queryClient = new QueryClient();
-  const session = await getServerSession(authOptions);
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
-  const options = { currency: preferredCurrency };
-
-  await queryClient.prefetchQuery({
-    queryKey: ["collection", slug, options],
-    queryFn: () => getCollectionWithProducts(slug, options),
-  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

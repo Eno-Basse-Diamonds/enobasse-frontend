@@ -60,19 +60,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({
-  params,
-  children,
-}: ProductPageProps) {
-  const { slug } = await params;
-  const session = await getServerSession(authOptions);
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+export default async function ProductPage({ children }: ProductPageProps) {
   const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ["product", slug, preferredCurrency],
-    queryFn: () => getProduct(slug, preferredCurrency),
-  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

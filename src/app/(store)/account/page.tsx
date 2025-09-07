@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { User, Package, Heart, LogOut, ShoppingCart, Lock } from "lucide-react";
 import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
-import { Alert, PageHeading } from "@/components";
+import { Alert } from "@/components";
 import { AccountForm } from "./_components/account-form";
 import { DesktopNavigation, MobileNavigation } from "./_components/navigation";
 import { AccountLoadingSkeleton } from "@/components/loaders";
@@ -183,16 +183,11 @@ export default function CustomerAccountPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="my-12">
-        <PageHeading title="Account" />
-        <AccountLoadingSkeleton />
-      </div>
-    );
+    return <AccountLoadingSkeleton />;
   }
 
   return (
-    <div className="min-h-screen my-12">
+    <>
       {alertState.visible && (
         <Alert
           type={alertState.type}
@@ -203,8 +198,6 @@ export default function CustomerAccountPage() {
           {alertState.message}
         </Alert>
       )}
-
-      <PageHeading title="Account" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <MobileNavigation
@@ -230,6 +223,6 @@ export default function CustomerAccountPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

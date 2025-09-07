@@ -146,8 +146,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="bg-gray-50 py-12">
-      <PageHeading title="Checkout" />
+    <>
       <SectionContainer id="checkout">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-8">
@@ -347,6 +346,6 @@ export default function CheckoutPage() {
         email={formData.email}
         phone={formData.phone}
       />
-    </div>
+    </>
   );
 }
