@@ -3,8 +3,8 @@
 import * as React from "react";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Search, X, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
-import { Alert, Pagination } from "@/components";
-import { AdminReviewsSkeletonLoader } from "@/components/loaders";
+import { Alert } from "@/components/alert";
+import { Pagination } from "@/components/pagination";
 import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { ReviewList } from "./_components/review-list";
@@ -12,6 +12,7 @@ import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
 import { useReviewsForAdmin } from "@/lib/hooks/use-reviews";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { AdminReviewsSkeletonLoader } from "@/components/loaders/reviews";
 
 export default function AdminReviewsPage() {
   const { data: session } = useSession();

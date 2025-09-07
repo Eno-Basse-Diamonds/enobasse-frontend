@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
+import { Button } from "@/components/button";
 
 interface OrderSummaryProps {
   items: Array<{

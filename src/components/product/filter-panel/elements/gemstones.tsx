@@ -1,6 +1,6 @@
 import * as motion from "motion/react-client";
-import { DiamondIcon } from "@/components/icons";
 import { FilterOption } from "@/lib/types/products";
+import { DiamondIcon } from "@/components/icons/diamond";
 
 const hoverVariants = {
   hover: {

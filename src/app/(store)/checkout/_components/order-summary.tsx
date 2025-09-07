@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/components";
 import { CheckoutCartItem } from "./chekout-cart-item";
 import { CartItem } from "@/lib/types/carts";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { ringSizes } from "@/lib/utils/constants";
 import { useAccountStore } from "@/lib/store/account";
+import { Button } from "@/components/button";
 
 type OrderSummaryProps = {
   items: CartItem[];

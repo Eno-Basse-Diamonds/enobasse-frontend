@@ -1,7 +1,8 @@
 "use client";
 
-import { PageHeading, SectionContainer } from "@/components";
-import { CollectionListLoader } from "@/components/loaders";
+import { CollectionListLoader } from "@/components/loaders/collections";
+import { PageHeading } from "@/components/page-heading";
+import { SectionContainer } from "@/components/section-container";
 import { CollectionCard } from "./_components/collection-card";
 import { useCollections } from "@/lib/hooks/use-collections";
 

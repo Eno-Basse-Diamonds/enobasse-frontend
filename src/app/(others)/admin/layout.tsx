@@ -13,9 +13,9 @@ import {
   Truck,
   Star,
 } from "lucide-react";
-import { Button } from "@/components";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/button";
 
 export default function AdminLayout({
   children,

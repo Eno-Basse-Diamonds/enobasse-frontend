@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
+import { ChevronLeftIcon } from "../icons/chevron-left";
+import { ChevronRightIcon } from "../icons/chevron-right";
 
 interface PaginationProps {
   currentPage: number;

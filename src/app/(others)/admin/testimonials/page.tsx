@@ -4,7 +4,6 @@ import * as React from "react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Plus, MessageSquare } from "lucide-react";
-import { Alert, Button } from "@/components";
 import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { TestimonialForm } from "./_components/testimonial-form";
@@ -14,6 +13,8 @@ import {
   useTestimonialsForAdmin,
   useDeleteTestimonial,
 } from "@/lib/hooks/use-testimonials";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 
 export default function AdminTestimonialsPage() {
   const { data: session } = useSession();

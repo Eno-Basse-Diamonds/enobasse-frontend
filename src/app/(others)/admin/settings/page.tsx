@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Alert } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
 import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
 import { AdminSettingsForm } from "./_components/admin-setting-form";
 import { AdminLoadingSkeleton } from "./_components/admin-loading-skeleton";
 import { Account, BillingAddress } from "@/lib/types/accounts";
+import { Alert } from "@/components/alert";
 
 type AdminEditFormData = {
   name: string;

@@ -5,35 +5,31 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import { getCurrencySymbol } from "@/lib/utils/money";
-
-import {
-  Accordion,
-  Alert,
-  Button,
-  PageHeading,
-  ProductList,
-  Rating,
-  SectionContainer,
-  ShareDropdown,
-  RingSizeSelector,
-  MetalTypeSelector,
-  GemstoneSelector,
-  Divider,
-} from "@/components";
 import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
-import { Engraving } from "@/components";
 import { ImageGallery } from "./_components/image-gallery";
 import { ProductDetails } from "./_components/product-details";
 import { Reviews } from "./_components/reviews";
 import { Heart } from "lucide-react";
-import { WishlistIcon } from "@/components/icons";
 import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { calculateAverageRating } from "@/lib/utils/reviews";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
-import { ProductDetailPageLoader } from "@/components/loaders";
+import { Accordion } from "@/components/accordion/index.";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
+import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
+import { Divider } from "@/components/divider";
+import { ShareDropdown } from "@/components/dropdown";
+import { WishlistIcon } from "@/components/icons/wishlist";
+import { ProductDetailPageLoader } from "@/components/loaders/products";
+import { Engraving } from "@/components/modal";
+import { PageHeading } from "@/components/page-heading";
+import { ProductList } from "@/components/product/list";
+import { Rating } from "@/components/rating";
+import { SectionContainer } from "@/components/section-container";
+import { RingSizeSelector } from "@/components/select-menu";
 
 export default function ProductPage() {
   const router = useRouter();

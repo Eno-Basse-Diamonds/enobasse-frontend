@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { X, Plus, Minus } from "lucide-react";
-import { Button } from "@/components";
 import { metalOptions, gemstones } from "@/lib/utils/constants";
 
 interface Metal {

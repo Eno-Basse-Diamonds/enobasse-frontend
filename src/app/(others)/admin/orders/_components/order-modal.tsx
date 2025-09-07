@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components";
+
 import { Order } from "@/lib/types/orders";
 import { useUpdateOrder } from "@/lib/hooks/use-orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { X } from "lucide-react";
+import { Button } from "@/components/button";
 
 export function OrderModal({
   order,

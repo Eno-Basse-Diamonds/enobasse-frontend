@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { SectionContainer, EmptyState } from "@/components";
-import { CartLoader } from "@/components/loaders";
 import { CartItemCard } from "./_components/cart-item-card";
 import { OrderSummary } from "./_components/order-summary";
 import { EmptyStateIcon } from "./_components/empty-state-icon";
@@ -12,6 +10,9 @@ import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { ringSizes } from "@/lib/utils/constants";
+import { EmptyState } from "@/components/empty-state";
+import { CartLoader } from "@/components/loaders/cart";
+import { SectionContainer } from "@/components/section-container";
 
 export default function CartPage() {
   const { items, hydrated, hydrate, loading, refreshWithCurrency } =

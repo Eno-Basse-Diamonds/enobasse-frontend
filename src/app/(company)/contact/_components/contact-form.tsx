@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { CircleCheck } from "lucide-react";
-import { Button, Alert } from "@/components";
 import { sendMessage } from "@/lib/api/contact";
 import { logger } from "@/lib/utils/logger";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 
 interface ContactFormState {
   firstName: string;

@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components";
-import { CheckIcon, CloseIcon } from "@/components/icons";
 import { useOrdersStore } from "@/lib/store/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/button";
+import { CloseIcon } from "@/components/icons/close";
+import { CheckIcon } from "lucide-react";
 
 interface PaymentConfirmationModalProps {
   isOpen: boolean;

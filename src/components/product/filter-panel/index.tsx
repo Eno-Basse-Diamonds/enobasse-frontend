@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { CloseIcon, FilterIcon } from "@/components/icons";
 import { MetalOptions } from "./elements/metal-options";
 import { Gemstones } from "./elements/gemstones";
+import { FilterIcon } from "@/components/icons/filter";
+import { CloseIcon } from "@/components/icons/close";
 
 interface FilterOption {
   name: string;

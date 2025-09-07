@@ -3,14 +3,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  FacebookIcon,
-  XIcon,
-  InstagramIcon,
-  TiktokIcon,
-} from "@/components/icons";
 import { Image as ImageIcon } from "lucide-react";
 import { blurDataURL } from "@/lib/utils/constants";
+import { FacebookIcon } from "@/components/icons/facebook";
+import { InstagramIcon } from "@/components/icons/instagram";
+import { XIcon } from "@/components/icons/x";
+import { TiktokIcon } from "@/components/icons/tiktok";
 
 interface BlogHeroImageProps {
   src: string;

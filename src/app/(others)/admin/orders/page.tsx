@@ -4,7 +4,6 @@ import * as React from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { Alert, Pagination } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
 import { useAdminOrders } from "@/lib/hooks/use-orders";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
@@ -12,6 +11,8 @@ import { Order } from "@/lib/types/orders";
 import { OrdersTable } from "./_components/orders-table";
 import { OrderModal } from "./_components/order-modal";
 import { useEffect } from "react";
+import { Alert } from "@/components/alert";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminOrdersPage() {
   const { data: session } = useSession();

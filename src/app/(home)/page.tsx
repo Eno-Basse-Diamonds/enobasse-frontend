@@ -4,21 +4,18 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import {
-  BentoGrid,
-  Carousel,
-  CTASection,
-  HeroSection,
-  SectionHeading,
-  SectionContainer,
-  RingCustomizationCTASection,
-} from "@/components";
 import { AboutSection } from "./_components/about-section";
 import { BlogHeader } from "./_components/blog-header";
 import { BlogContent } from "./_components/blog-content";
 import { HelpSection } from "./_components/help-section";
 import { ServicesSection } from "./_components/services-section";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
+import { HeroSection } from "@/components/hero-section";
+import { SectionContainer } from "@/components/section-container";
+import { SectionHeading } from "@/components/section-heading";
+import { Carousel } from "@/components/carousel";
+import { BentoGrid } from "@/components/bento-grid";
+import { CTASection, RingCustomizationCTASection } from "@/components/cta-section";
 
 export default async function HomePage() {
   const queryClient = new QueryClient();

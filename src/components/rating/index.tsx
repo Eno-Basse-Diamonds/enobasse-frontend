@@ -1,6 +1,6 @@
 import React from "react";
-import { StarIcon } from "../icons";
 import Link from "next/link";
+import { StarIcon } from "../icons/star";
 
 interface RatingProps {
   rating: number;

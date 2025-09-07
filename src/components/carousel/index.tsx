@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
+import { ChevronLeftIcon } from "../icons/chevron-left";
+import { ChevronRightIcon } from "../icons/chevron-right";
 
 interface CarouselItem {
   href: string;

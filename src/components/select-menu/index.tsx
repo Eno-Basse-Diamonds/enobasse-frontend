@@ -3,9 +3,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { X, Maximize2 } from "lucide-react";
-import { ChevronDownIcon } from "@/components/icons";
 import { SizeGuide } from "../size-guide";
 import { ringSizes } from "@/lib/utils/constants";
+import { ChevronDownIcon } from "../icons/chevron-down";
 
 interface RingSizeSelectorProps {
   selectedSize: number | undefined;
@@ -74,7 +74,7 @@ export const RingSizeSelector: React.FC<RingSizeSelectorProps> = ({
       <div className="relative" ref={dropdownRef}>
         <button
           type="button"
-          className="w-full flex justify-between font-light items-center px-4 py-2 border border-[#502B3A]/40 gap-x-2 text-sm text-[#502B3A] border-primary-500/20"
+          className="w-full flex justify-between font-light items-center px-4 py-2 border gap-x-2 text-sm text-[#502B3A] border-primary-500/20"
           onClick={toggleDropdown}
         >
           {selectedSize ? `Size ${selectedSize}` : "Ring Size"}

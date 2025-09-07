@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { PlusIcon, MinusIcon } from "../icons";
+import { MinusIcon } from "../icons/minus";
+import { PlusIcon } from "../icons/plus";
 
 interface AccordionItem {
   id: string;

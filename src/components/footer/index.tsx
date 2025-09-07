@@ -5,15 +5,12 @@ import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { Logo } from "../logo";
-import {
-  ArrowRightIcon,
-  FacebookIcon,
-  XIcon,
-  TiktokIcon,
-  InstagramIcon,
-  LinkedInIcon,
-} from "@/components/icons";
-import { subscribeToNewsletter } from "@/lib/api/contact";
+import { FacebookIcon } from "../icons/facebook";
+import { InstagramIcon } from "../icons/instagram";
+import { XIcon } from "../icons/x";
+import { LinkedInIcon } from "../icons/linkedin";
+import { TiktokIcon } from "../icons/tiktok";
+import { ArrowRightIcon } from "../icons/arrow-right";
 
 interface NavItem {
   label: string;

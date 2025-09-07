@@ -1,6 +1,7 @@
 "use client";
 
-import { MinusIcon, PlusIcon } from "@/components/icons";
+import { MinusIcon } from "@/components/icons/minus";
+import { PlusIcon } from "@/components/icons/plus";
 
 interface QuantityControlProps {
   quantity: number;

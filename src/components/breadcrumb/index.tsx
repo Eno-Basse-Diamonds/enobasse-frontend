@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { HomeIcon, ChevronRightIcon } from "../icons";
+import { HomeIcon } from "../icons/home";
+import { ChevronRightIcon } from "../icons/chevron-right";
 
 interface BreadcrumbItem {
   label: string;

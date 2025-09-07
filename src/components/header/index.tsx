@@ -3,27 +3,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Logo } from "../logo";
-import {
-  AccountIcon,
-  CartIcon,
-  SearchIcon,
-  WishlistIcon,
-  ChevronDownIcon,
-  CloseIcon,
-  MenuIcon,
-} from "../icons";
 import { ProductList } from "@/components/product/list";
 import { CurrencyDropdown } from "../dropdown";
 import { useProductsSearch } from "@/lib/hooks/use-products";
 import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
 import { SearchSlashIcon } from "lucide-react";
-import { ProductListLoader } from "../loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import "./styles.scss";
+import { CloseIcon } from "../icons/close";
+import { MenuIcon } from "../icons/menu";
+import { SearchIcon } from "../icons/search";
+import { WishlistIcon } from "../icons/wishlist";
+import { AccountIcon } from "../icons/account";
+import { CartIcon } from "../icons/cart";
+import { ChevronDownIcon } from "../icons/chevron-down";
+import { ProductListLoader } from "../loaders/products";
 
 interface NavigationItem {
   label: string;

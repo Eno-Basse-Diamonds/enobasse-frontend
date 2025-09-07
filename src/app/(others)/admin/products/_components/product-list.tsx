@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { Edit, Trash2, Image as ImageIcon, Package } from "lucide-react";
-import { Button } from "@/components";
+
 import { Product } from "@/lib/types/products";
 import { useState, memo } from "react";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { Button } from "@/components/button";
 
 interface ProductListProps {
   products: Product[];

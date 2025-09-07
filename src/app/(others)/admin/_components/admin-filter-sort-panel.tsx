@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, SortAsc, SortDesc } from "lucide-react";
-import { Button } from "@/components";
+import { Button } from "@/components/button";
+
 
 export interface SortOption {
   value: string;

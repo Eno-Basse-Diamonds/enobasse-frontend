@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { SectionContainer, EmptyState } from "@/components";
-import { HeartIcon } from "@/components/icons";
 import { WishlistHeader } from "./_components/wishlist-header";
 import { WishlistItem } from "./_components/wishlist-item";
-import { WishlistLoader } from "@/components/loaders";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useAccountStore } from "@/lib/store/account";
+import { EmptyState } from "@/components/empty-state";
+import { SectionContainer } from "@/components/section-container";
+import { HeartIcon } from "@/components/icons/heart";
+import { WishlistLoader } from "@/components/loaders/wishlist";
 
 export default function WishlistPage() {
   const { data: session } = useSession();

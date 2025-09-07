@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
-import { Button, Alert } from "@/components";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 import { Product, Gemstone, Metal, ProductVariant } from "@/lib/types/products";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";

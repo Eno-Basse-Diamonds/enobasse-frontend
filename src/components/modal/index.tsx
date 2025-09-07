@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { PlusIcon, CloseIcon } from "@/components/icons";
 import * as motion from "motion/react-client";
 import { useAnimation, AnimatePresence } from "motion/react";
 import { useAccountStore } from "@/lib/store/account";
+import { CloseIcon } from "../icons/close";
+import { PlusIcon } from "../icons/plus";
 
 export const Engraving: React.FC<{
   engraving: { text: string; fontStyle: string } | undefined;

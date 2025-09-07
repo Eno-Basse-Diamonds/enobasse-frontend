@@ -6,13 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
 import { Button } from "@/components/button";
-import {
-  CloseIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PlusIcon,
-  MinusIcon,
-} from "@/components/icons";
 import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
 import { RingSizeSelector } from "@/components/select-menu";
 import { Product, ProductVariant, Metal, Gemstone } from "@/lib/types/products";
@@ -20,6 +13,11 @@ import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { CloseIcon } from "@/components/icons/close";
+import { ChevronRightIcon } from "@/components/icons/chevron-right";
+import { ChevronLeftIcon } from "@/components/icons/chevron-left";
+import { MinusIcon } from "@/components/icons/minus";
+import { PlusIcon } from "@/components/icons/plus";
 
 interface ProductQuickViewProps {
   product: Product;

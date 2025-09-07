@@ -1,9 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { BlogSection, SectionContainer, Pagination } from "@/components";
-import { BlogSectionSkeletonLoader } from "@/components/loaders";
 import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
+import { BlogSection } from "@/components/blog-section";
+import { Pagination } from "@/components/pagination";
+import { SectionContainer } from "@/components/section-container";
+import { BlogSectionSkeletonLoader } from "@/components/loaders/blog";
 
 export default function BlogPage() {
   const searchParams = useSearchParams();

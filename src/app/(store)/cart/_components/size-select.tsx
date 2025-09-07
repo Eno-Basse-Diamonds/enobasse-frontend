@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon } from "@/components/icons";
+import { ChevronDownIcon } from "@/components/icons/chevron-down";
 
 interface SizeSelectProps {
   id: string | number;

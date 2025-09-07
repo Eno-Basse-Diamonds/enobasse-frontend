@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { User, Package, Heart, LogOut, ShoppingCart, Lock } from "lucide-react";
 import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
-import { Alert } from "@/components";
 import { AccountForm } from "./_components/account-form";
 import { DesktopNavigation, MobileNavigation } from "./_components/navigation";
-import { AccountLoadingSkeleton } from "@/components/loaders";
 import type { Account } from "@/lib/types/accounts";
+import { Alert } from "@/components/alert";
+import { AccountLoadingSkeleton } from "@/components/loaders/accounts";
 
 export type NavigationItem = {
   id: string;

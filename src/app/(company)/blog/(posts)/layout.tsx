@@ -5,9 +5,9 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
-import { PageHeading } from "@/components";
 import { ReactNode, Suspense } from "react";
-import { BlogSectionSkeletonLoader } from "@/components/loaders";
+import { PageHeading } from "@/components/page-heading";
+import { BlogSectionSkeletonLoader } from "@/components/loaders/blog";
 
 export const metadata: Metadata = {
   title: "Our Blog",
