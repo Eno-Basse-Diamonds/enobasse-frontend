@@ -3,14 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAccountStore } from "@/lib/store/account";
-import {
-  FacebookIcon,
-  XIcon,
-  InstagramIcon,
-  TiktokIcon,
-  LinkIcon,
-  ShareIcon,
-} from "../icons";
+import { FacebookIcon } from "../icons/facebook";
+import { XIcon } from "../icons/x";
+import { InstagramIcon } from "../icons/instagram";
+import { LinkIcon } from "../icons/link";
+import { TiktokIcon } from "../icons/tiktok";
+import { ShareIcon } from "../icons/share";
 
 interface ShareDropdownProps {
   url: string;

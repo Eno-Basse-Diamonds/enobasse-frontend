@@ -2,8 +2,9 @@
 
 import { useSession } from "next-auth/react";
 import { ExternalLink, BarChart3, Eye, Lock } from "lucide-react";
-import { Button } from "@/components";
+
 import { AdminHeader } from "../_components/admin-header";
+import { Button } from "@/components/button";
 
 export default function AdminAnalyticsPage() {
   const { data: session } = useSession();

@@ -5,7 +5,6 @@ import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Search, X, Package } from "lucide-react";
-import { Alert, Button, Pagination } from "@/components";
 import { AdminHeader } from "../_components/admin-header";
 import { useAdminProducts, useDeleteProduct } from "@/lib/hooks/use-products";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
@@ -13,8 +12,11 @@ import { Product } from "@/lib/types/products";
 import { ProductList } from "./_components/product-list";
 import { ProductForm } from "./_components/product-form";
 import { EmptyState } from "@/components/empty-state";
-import { AdminProductsSkeletonLoader } from "@/components/loaders";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
+import { AdminProductsSkeletonLoader } from "@/components/loaders/products";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminProductsPage() {
   const { data: session } = useSession();

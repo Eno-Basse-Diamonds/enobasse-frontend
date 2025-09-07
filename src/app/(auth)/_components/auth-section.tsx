@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import { Input, PasswordInput, BackButton } from "@/components";
 import {
   handleChangePassword,
   handleRequestResetPassword,
@@ -15,6 +14,8 @@ import { handleSignUp } from "@/lib/actions/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
 import { blurDataURL } from "@/lib/utils/constants";
+import { BackButton } from "@/components/button";
+import { PasswordInput, Input } from "@/components/input";
 
 interface AuthFormField {
   id: string;

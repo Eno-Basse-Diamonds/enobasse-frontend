@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { Edit, Trash2, Image as ImageIcon, Eye, EyeOff, MessageSquare } from "lucide-react";
-import { Button } from "@/components";
+import { Edit, Trash2, Eye, EyeOff, MessageSquare } from "lucide-react";
 import { Testimonial } from "@/lib/types/testimonial";
 import { memo } from "react";
+import { Button } from "@/components/button";
 
 interface TestimonialListProps {
   testimonials: Testimonial[];

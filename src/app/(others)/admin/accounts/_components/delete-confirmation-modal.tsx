@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef } from "react";
 import { X, AlertTriangle } from "lucide-react";
-import { Button } from "@/components";
+
 import * as motion from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import { Button } from "@/components/button";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;

@@ -11,12 +11,12 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useDashboardStats } from "@/lib/hooks/use-dashboard";
-import { DashboardSkeleton } from "@/components/loaders";
 import { AdminHeader } from "../_components/admin-header";
 import { StatsCard } from "./_components/stats-card";
 import { QuickActionsSection } from "./_components/quick-actions-section";
 import { RecentOrdersSection } from "./_components/recent-orders";
 import { RecentReviewsSection } from "./_components/recent-reviews-section";
+import { DashboardSkeleton } from "@/components/loaders/dashboard";
 
 export default function AdminDashboardPage() {
   const { data: session } = useSession();

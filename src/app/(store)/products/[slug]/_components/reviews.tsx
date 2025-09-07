@@ -3,8 +3,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import * as motion from "motion/react-client";
-import { Rating, Button, EmptyState } from "@/components";
-import { StarIcon, CloseIcon } from "@/components/icons";
 import { Review } from "@/lib/types/reviews";
 import { calculateAverageRating } from "@/lib/utils/reviews";
 import { RatingDistribution } from "@/lib/types/reviews";
@@ -12,6 +10,11 @@ import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { User } from "lucide-react";
 import { useCreateReview } from "@/lib/hooks/use-reviews";
 import { useSession } from "next-auth/react";
+import { Rating } from "@/components/rating";
+import { StarIcon } from "@/components/icons/star";
+import { Button } from "@/components/button";
+import { EmptyState } from "@/components/empty-state";
+import { CloseIcon } from "@/components/icons/close";
 
 interface ReviewsProps {
   reviews: Review[];

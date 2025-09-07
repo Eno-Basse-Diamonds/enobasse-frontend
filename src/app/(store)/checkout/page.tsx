@@ -3,8 +3,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { SectionContainer, PageHeading } from "@/components";
-import { ChevronDownIcon } from "@/components/icons";
 import { CheckoutFormSection } from "./_components/checkout-form-section";
 import { OrderSummary } from "./_components/order-summary";
 import { FormInput } from "./_components/form-input";
@@ -14,6 +12,8 @@ import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { countries } from "@/lib/utils/constants";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { SectionContainer } from "@/components/section-container";
+import { ChevronDownIcon } from "lucide-react";
 
 interface FormData {
   email: string;

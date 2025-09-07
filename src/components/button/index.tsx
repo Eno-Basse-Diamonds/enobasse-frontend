@@ -3,7 +3,7 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon } from "../icons";
+import { ArrowLeftIcon } from "../icons/arrow-left";
 
 type IconProps = {
   size?: number;

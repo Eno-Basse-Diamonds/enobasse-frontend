@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { User, Calendar, Edit, Trash2, Image as ImageIcon } from "lucide-react";
-import { Button } from "@/components";
+
 import { BlogPost } from "@/lib/types/blog-post";
 import { useState, memo } from "react";
+import { Button } from "@/components/button";
 
 interface BlogPostCardProps {
   post: BlogPost;

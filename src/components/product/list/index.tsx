@@ -6,13 +6,14 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import * as motion from "motion/react-client";
 import { Heart } from "lucide-react";
-import { HeartIcon, EyeOpenIcon } from "@/components/icons";
 import { ProductQuickView } from "../quickview";
 import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
 import { blurDataURL } from "@/lib/utils/constants";
+import { EyeOpenIcon } from "@/components/icons/eye-open";
+import { HeartIcon } from "@/components/icons/heart";
 
 interface ProductListProps {
   products: Product[];

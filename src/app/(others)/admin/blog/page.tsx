@@ -3,8 +3,6 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
 import { Plus, Search, X, FileText } from "lucide-react";
-import { Alert, Button, Pagination } from "@/components";
-import { AdminBlogSkeletonLoader } from "@/components/loaders";
 import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { BlogPostForm } from "./_components/blog-post-form";
@@ -14,6 +12,10 @@ import { BlogPost } from "@/lib/types/blog-post";
 import { useBlogPostsForAdmin, useDeleteBlogPost } from "@/lib/hooks/use-blog";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
+import { AdminBlogSkeletonLoader } from "@/components/loaders/blog";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();

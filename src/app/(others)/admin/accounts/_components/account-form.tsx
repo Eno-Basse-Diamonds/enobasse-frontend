@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { X, Shield } from "lucide-react";
-import { Button, Alert } from "@/components";
 import {
   Account,
   CreateAccountData,
   UpdateAccount,
 } from "@/lib/types/accounts";
 import { useCreateAccount, useUpdateAccount } from "@/lib/hooks/use-accounts";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 
 interface AccountFormProps {
   account: Account | null;

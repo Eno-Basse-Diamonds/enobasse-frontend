@@ -1,4 +1,4 @@
-import { ChevronDown, Upload } from "lucide-react";
+import { ChevronDown  } from "lucide-react";
 
 interface ServiceDetailsFormProps {
   formData: {

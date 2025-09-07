@@ -4,22 +4,18 @@ import React, { useCallback, useState, useMemo } from "react";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import * as motion from "motion/react-client";
-import { SearchSlashIcon } from "lucide-react";
-import {
-  PageHeading,
-  SectionContainer,
-  ProductList,
-  FilterPanelMobile,
-  FilterPanelDesktop,
-  EmptyState,
-} from "@/components";
-import { ChevronDownIcon } from "@/components/icons";
-import { ProductsPageLoader } from "@/components/loaders";
+import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { FilterOption } from "@/lib/types/products";
 import { useCollection } from "@/lib/hooks/use-collections";
 import { useAccountStore } from "@/lib/store/account";
 import { filterAndSortProducts } from "@/lib/utils/products";
 import { metalOptions } from "@/lib/utils/constants";
+import { EmptyState } from "@/components/empty-state";
+import { ProductsPageLoader } from "@/components/loaders/products";
+import { PageHeading } from "@/components/page-heading";
+import { FilterPanelDesktop, FilterPanelMobile } from "@/components/product/filter-panel";
+import { ProductList } from "@/components/product/list";
+import { SectionContainer } from "@/components/section-container";
 
 const containerVariants = {
   hidden: { opacity: 0 },

@@ -1,5 +1,5 @@
+import { PageHeading } from "@/components/page-heading";
 import { Metadata } from "next";
-import { PageHeading } from "@/components";
 
 export const metadata: Metadata = {
   title: "Checkout",

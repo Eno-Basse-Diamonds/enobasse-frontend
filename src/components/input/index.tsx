@@ -2,7 +2,8 @@
 
 import { FC, useState } from "react";
 import Link from "next/link";
-import { EyeCloseIcon, EyeOpenIcon } from "@/components/icons";
+import { EyeOpenIcon } from "../icons/eye-open";
+import { EyeCloseIcon } from "../icons/eye-close";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

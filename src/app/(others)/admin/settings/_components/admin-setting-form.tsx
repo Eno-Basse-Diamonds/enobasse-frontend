@@ -1,6 +1,6 @@
 import { User, Globe, Shield, Save } from "lucide-react";
-import { Button } from "@/components";
 import type { Account, BillingAddress } from "@/lib/types/accounts";
+import { Button } from "@/components/button";
 
 type AdminEditFormData = {
   name: string;

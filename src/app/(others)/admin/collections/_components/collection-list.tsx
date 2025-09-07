@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { Edit, Trash2, Image as ImageIcon, Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components";
+
 import { Collection } from "@/lib/types/collections";
 import { useState, memo } from "react";
+import { Button } from "@/components/button";
 
 interface CollectionListProps {
   collections: Collection[];

@@ -5,12 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useOrdersStore } from "@/lib/store/orders";
-import { PageHeading, EmptyState } from "@/components";
-import { OrderHistoryLoader } from "@/components/loaders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { ShoppingBagIcon } from "lucide-react";
 import { useAccountStore } from "@/lib/store/account";
 import { Order } from "@/lib/types/orders";
+import { EmptyState } from "@/components/empty-state";
+import { OrderHistoryLoader } from "@/components/loaders/orders";
 
 export default function OrderHistoryPage() {
   const { data: session } = useSession();

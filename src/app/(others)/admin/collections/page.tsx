@@ -5,8 +5,6 @@ import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Search, X, Folder } from "lucide-react";
-import { Alert, Button, Pagination } from "@/components";
-import { AdminCollectionsSkeletonLoader } from "@/components/loaders";
 import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { CollectionForm } from "./_components/collection-form";
@@ -17,6 +15,10 @@ import {
   useDeleteCollection,
   useAdminCollections,
 } from "@/lib/hooks/use-collections";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
+import { AdminCollectionsSkeletonLoader } from "@/components/loaders/collections";
+import { Pagination } from "@/components/pagination";
 
 export default function AdminCollectionsPage() {
   const { data: session } = useSession();

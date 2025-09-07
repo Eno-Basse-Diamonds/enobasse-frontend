@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { Button } from "@/components";
+
 import { Order } from "@/lib/types/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { Button } from "@/components/button";
 
 export function OrdersTable({
   orders,

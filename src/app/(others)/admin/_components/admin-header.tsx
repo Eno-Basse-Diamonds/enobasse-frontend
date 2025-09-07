@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import { Button } from "@/components";
+
 import { getUserInitials } from "@/lib/utils/string";
+import { Button } from "@/components/button";
 
 interface HeaderProps {
   title: string;

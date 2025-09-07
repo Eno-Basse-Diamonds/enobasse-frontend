@@ -1,7 +1,7 @@
 "use client";
 
-import { BlogSection } from "@/components";
-import { BlogSectionSkeletonLoader } from "@/components/loaders";
+import { BlogSection } from "@/components/blog-section";
+import { BlogSectionSkeletonLoader } from "@/components/loaders/blog";
 import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
 
 export function BlogContent() {

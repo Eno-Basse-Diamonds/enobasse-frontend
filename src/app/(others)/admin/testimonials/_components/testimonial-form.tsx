@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, User, MessageSquare, Image as ImageIcon } from "lucide-react";
+import { X, User, MessageSquare } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
-import { Button, Alert } from "@/components";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 import { Testimonial, CreateTestimonialData } from "@/lib/types/testimonial";
 import {
   useCreateTestimonial,

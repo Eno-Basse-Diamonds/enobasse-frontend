@@ -2,8 +2,6 @@
 
 import { useParams } from "next/navigation";
 import Markdown from "react-markdown";
-import { SectionContainer, PageHeading } from "@/components";
-import { BlogPostDetailLoader } from "@/components/loaders";
 import { BlogHeroImage } from "./_components/blog-hero-image";
 import { TableOfContents } from "./_components/table-of-content";
 import { RelatedPosts } from "./_components/related-posts";
@@ -14,6 +12,9 @@ import {
   generateTableOfContents,
 } from "@/lib/helpers/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
+import { PageHeading } from "@/components/page-heading";
+import { SectionContainer } from "@/components/section-container";
+import { BlogPostDetailLoader } from "@/components/loaders/blog";
 
 export default function BlogPostContent() {
   const params = useParams();

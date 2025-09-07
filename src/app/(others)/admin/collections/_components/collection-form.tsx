@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { X, Eye, EyeOff } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
-import { Button, Alert } from "@/components";
+import { Alert } from "@/components/alert";
+import { Button } from "@/components/button";
 import { Collection } from "@/lib/types/collections";
 import {
   useCreateCollection,
