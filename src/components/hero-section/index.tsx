@@ -221,7 +221,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       case "text-left-image-right":
         return (
           <>
-            <div className="lg:hidden relative h-full w-full">
+            <div className="lg:hidden relative h-full w-full bg-gray-100">
               <div className="absolute inset-0 z-0">
                 <Image
                   src={slide.image || ""}
@@ -300,7 +300,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   )}
                 </div>
               </div>
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative">
+              <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-gray-100">
                 <Image
                   src={slide.image || ""}
                   alt={slide.title}
@@ -316,7 +316,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       case "dual-background":
         return (
           <>
-            <div className="lg:hidden relative h-full w-full">
+            <div className="lg:hidden relative h-full w-full bg-gray-100">
               <div className="absolute inset-0 z-0">
                 <Image
                   src={slide.leftImage || ""}
@@ -351,7 +351,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             <div className="hidden lg:flex flex-col md:flex-row h-full w-full">
-              <div className="w-full md:w-1/2 relative flex items-end p-8 md:p-12 md:pb-28">
+              <div className="w-full md:w-1/2 relative flex items-end p-8 md:p-12 md:pb-28 bg-gray-100">
                 <Image
                   src={slide.leftImage || ""}
                   alt={slide.title}
@@ -381,7 +381,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </Link>
                 </div>
               </div>
-              <div className="w-full md:w-1/2 relative flex items-end p-8 md:p-12 md:pb-28">
+              <div className="w-full md:w-1/2 relative flex items-end p-8 md:p-12 md:pb-28 bg-gray-100">
                 <Image
                   src={slide.rightImage || ""}
                   alt={slide.title}
@@ -419,7 +419,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         return (
           <>
             <div className="lg:hidden relative h-full w-full">
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 z-0 bg-gray-100">
                 <Image
                   src={slide.leftImage || ""}
                   alt={slide.title}
@@ -453,7 +453,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             <div className="hidden lg:flex flex-col md:flex-row h-full w-full">
-              <div className="w-full md:w-1/3 h-48 md:h-auto relative">
+              <div className="w-full md:w-1/3 h-48 md:h-auto relative bg-gray-100">
                 <Image
                   src={slide.leftImage || ""}
                   alt="Left decoration"
@@ -482,7 +482,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   {slide.buttonText}
                 </Link>
               </div>
-              <div className="w-full md:w-1/3 h-48 md:h-auto relative">
+              <div className="w-full md:w-1/3 h-48 md:h-auto relative bg-gray-100">
                 <Image
                   src={slide.rightImage || ""}
                   alt="Right decoration"
@@ -500,7 +500,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <div ref={heroRef} className="relative h-[88vh] overflow-hidden">
+    <div ref={heroRef} className="relative h-[93dvh] lg:h-[88dvh] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={slide.id}

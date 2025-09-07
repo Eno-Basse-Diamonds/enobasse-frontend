@@ -141,7 +141,6 @@ export const Header: React.FC<HeaderProps> = ({
 
       <MainNavigation navItems={mainNavItems} />
 
-      <MobileSearchBar />
       <SearchOverlay isVisible={isSearchVisible} onClose={toggleSearch} />
 
       <MobileMenu
@@ -446,47 +445,6 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
         ))}
       </div>
     </li>
-  );
-};
-
-const MobileSearchBar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
-  const handleFocus = () => {
-    setIsSearchVisible(true);
-  };
-
-  useEffect(() => {
-    document.body.classList.toggle("overflow-hidden", isSearchVisible);
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [isSearchVisible]);
-
-  return (
-    <>
-      <div className="header__mobile-search">
-        <form onSubmit={handleSubmit} className="header__mobile-search-form">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={handleFocus}
-            className="header__mobile-search-input"
-          />
-          <SearchIcon />
-        </form>
-      </div>
-      <SearchOverlay
-        isVisible={isSearchVisible}
-        onClose={() => setIsSearchVisible(false)}
-        initialQuery={searchQuery}
-      />
-    </>
   );
 };
 

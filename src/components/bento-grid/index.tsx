@@ -38,7 +38,7 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
       {items.slice(0, 4).map((item, index) => (
         <div
           key={item.id}
-          className={`h-full relative overflow-hidden ${getGridLayout(index)}`}
+          className={`bg-gray-100 h-full relative overflow-hidden ${getGridLayout(index)}`}
         >
           <Link href={item.href} className="block h-full">
             <figure className="relative h-64 w-full md:h-[447px]">
