@@ -49,25 +49,3 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     throw new Error("Failed to fetch dashboard statistics");
   }
 }
-
-export async function getRecentOrders(): Promise<RecentOrder[]> {
-  try {
-    return await api.get("/dashboard/recent-orders");
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw new Error(error.message);
-    }
-    throw new Error("Failed to fetch recent orders");
-  }
-}
-
-export async function getRecentReviews(): Promise<RecentReview[]> {
-  try {
-    return await api.get("/dashboard/recent-reviews");
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw new Error(error.message);
-    }
-    throw new Error("Failed to fetch recent reviews");
-  }
-}

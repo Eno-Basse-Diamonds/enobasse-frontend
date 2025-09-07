@@ -7,7 +7,6 @@ import {
 import { getServerSession } from "next-auth";
 import { getCollectionWithProducts } from "@/lib/api/collections";
 import { getPreferredCurrency } from "@/lib/api/account";
-import { authOptions } from "@/lib/config/auth";
 
 interface CollectionLayoutProps {
   children: React.ReactNode;
@@ -20,7 +19,7 @@ export const generateMetadata = async ({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> => {
   const { slug } = await params;
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const { collection } = await getCollectionWithProducts(slug, {
     currency: preferredCurrency,
@@ -60,9 +59,19 @@ export const generateMetadata = async ({
 };
 
 export default async function CollectionLayout({
+  params,
   children,
 }: CollectionLayoutProps) {
+  const { slug } = await params;
   const queryClient = new QueryClient();
+  const session = await getServerSession();
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const options = { currency: preferredCurrency };
+
+  await queryClient.prefetchQuery({
+    queryKey: ["collection", slug, options],
+    queryFn: () => getCollectionWithProducts(slug, options),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

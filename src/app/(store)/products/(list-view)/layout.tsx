@@ -5,6 +5,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getServerSession } from "next-auth";
+import { getPreferredCurrency } from "@/lib/api/account";
+import { ProductFilterOptions } from "@/lib/types/products";
+import { getProducts } from "@/lib/api/products";
 
 export const metadata: Metadata = {
   title: "Products - Eno Bassé Diamonds",
@@ -33,7 +37,23 @@ interface ProductListLayoutProps {
 export default async function ProductListLayout({
   children,
 }: ProductListLayoutProps) {
+  const session = await getServerSession();
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const queryClient = new QueryClient();
+
+  const filterOptions: ProductFilterOptions = {
+    page: 1,
+    pageSize: 36,
+    sortBy: "featured",
+    metals: [],
+    gemstones: [],
+    currency: preferredCurrency,
+  };
+
+  await queryClient.prefetchQuery({
+    queryKey: ["products", filterOptions],
+    queryFn: () => getProducts(filterOptions),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

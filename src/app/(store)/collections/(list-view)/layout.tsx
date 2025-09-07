@@ -4,6 +4,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { getCollections } from "@/lib/api/collections";
 
 export const metadata: Metadata = {
   title: "Collections",
@@ -40,6 +41,11 @@ export default async function CollectionsLayout({
   children,
 }: CollectionsLayoutProps) {
   const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["collections"],
+    queryFn: () => getCollections(),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

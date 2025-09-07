@@ -5,13 +5,13 @@ export const metadata: Metadata = {
   title: "Wishlist",
 };
 
-export default function WishlistLayout({
+export default async function WishlistLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="my-12 min-h-screen">
+    <div className="my-12 min-h-[88dvh] lg:min-h-screen">
       <PageHeading title="Wishlist" />
       {children}
     </div>

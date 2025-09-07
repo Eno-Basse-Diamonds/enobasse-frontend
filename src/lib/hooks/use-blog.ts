@@ -36,7 +36,7 @@ export function useBlogPostsForAdmin(options?: AdminBlogFilterOptions) {
 
 export function usePublishedBlogPosts(page: number = 1, perPage: number = 9) {
   return useQuery({
-    queryKey: ["publishedBlogPosts", page],
+    queryKey: ["publishedBlogPosts", page, perPage],
     queryFn: async () => {
       const data = await getPublishedBlogPosts(page, perPage);
       return data;
