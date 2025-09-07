@@ -7,23 +7,3 @@ export function useDashboardStats() {
     queryFn: getDashboardStats,
   });
 }
-
-export function useRecentOrders() {
-  return useQuery({
-    queryKey: ["recentOrders"],
-    queryFn: async () => {
-      const response = await fetch("/api/orders/recent?limit=4");
-      return response.json();
-    },
-  });
-}
-
-export function useRecentReviews() {
-  return useQuery({
-    queryKey: ["recentReviews"],
-    queryFn: async () => {
-      const response = await fetch("/api/reviews/recent?limit=4");
-      return response.json();
-    },
-  });
-}

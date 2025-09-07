@@ -40,7 +40,6 @@ interface TestimonialLayoutProps {
 export default async function TesimonialsLayout({
   children,
 }: TestimonialLayoutProps) {
-  const page = 1;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

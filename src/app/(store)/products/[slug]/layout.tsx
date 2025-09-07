@@ -7,7 +7,6 @@ import {
 import { getProduct } from "@/lib/api/products";
 import { getPreferredCurrency } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/config/auth";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -18,7 +17,7 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
   const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const product = await getProduct(slug, preferredCurrency);
 
@@ -60,8 +59,19 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({ children }: ProductPageProps) {
+export default async function ProductPage({
+  params,
+  children,
+}: ProductPageProps) {
+  const { slug } = await params;
+  const session = await getServerSession();
+  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
   const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["product", slug, preferredCurrency],
+    queryFn: () => getProduct(slug, preferredCurrency),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

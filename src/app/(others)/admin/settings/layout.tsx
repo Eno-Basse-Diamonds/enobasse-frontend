@@ -4,27 +4,26 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getBlogPostsForAdmin } from "@/lib/api/blog-posts";
+import { getServerSession } from "next-auth";
+import { useAccountByEmail } from "@/lib/hooks/use-accounts";
 
 export const metadata: Metadata = {
-  title: "Admin Blog Management",
+  title: "Admin Settings",
 };
 
-interface AdminBlogLayoutProps {
+interface AdminReviewsLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function AdminBlogLayout({
+export default async function AdminSettingsLayout({
   children,
-}: AdminBlogLayoutProps) {
+}: AdminReviewsLayoutProps) {
   const queryClient = new QueryClient();
+  const session = await getServerSession();
 
   await queryClient.prefetchQuery({
-    queryKey: [
-      "blogPostsForAdmin",
-      { page: 1, perPage: 9, sortBy: "createdAt", sortOrder: "DESC" },
-    ],
-    queryFn: () => getBlogPostsForAdmin({ page: 1, perPage: 9 }),
+    queryKey: ["account"],
+    queryFn: () => useAccountByEmail(session?.user?.email),
   });
 
   return (

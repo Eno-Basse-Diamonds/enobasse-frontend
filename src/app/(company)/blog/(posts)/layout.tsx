@@ -44,10 +44,11 @@ export default async function BlogPageLayout({
   children,
 }: BlogPageLayoutProps) {
   const page = 1;
+  const perPage = 9;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["publishedBlogPosts", page],
+    queryKey: ["publishedBlogPosts", page, perPage],
     queryFn: () => getPublishedBlogPosts(page),
   });
 

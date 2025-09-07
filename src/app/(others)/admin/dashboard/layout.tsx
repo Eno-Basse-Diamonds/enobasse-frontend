@@ -4,27 +4,24 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getBlogPostsForAdmin } from "@/lib/api/blog-posts";
+import { getDashboardStats } from "@/lib/api/dashboard";
 
 export const metadata: Metadata = {
-  title: "Admin Blog Management",
+  title: "Admin Dashboard",
 };
 
-interface AdminBlogLayoutProps {
+interface AdminCollectionsLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function AdminBlogLayout({
+export default async function AdminDashboardLayout({
   children,
-}: AdminBlogLayoutProps) {
+}: AdminCollectionsLayoutProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [
-      "blogPostsForAdmin",
-      { page: 1, perPage: 9, sortBy: "createdAt", sortOrder: "DESC" },
-    ],
-    queryFn: () => getBlogPostsForAdmin({ page: 1, perPage: 9 }),
+    queryKey: ["dashboardStats"],
+    queryFn: () => getDashboardStats(),
   });
 
   return (

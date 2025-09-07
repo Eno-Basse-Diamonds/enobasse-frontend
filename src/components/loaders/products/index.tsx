@@ -31,7 +31,7 @@ export const ProductListLoader: React.FC<LoaderProps> = ({ count = 8 }) => {
 
 export const ProductsPageLoader: React.FC<LoaderProps> = ({ count = 8 }) => {
   return (
-    <div>
+    <div className="animate-pulse">
       <div className="h-8 bg-gray-100 mb-8 w-full"></div>
 
       <div className="mb-12">
