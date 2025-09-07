@@ -1,5 +1,5 @@
 .header {
-  @apply sticky top-0 z-20 w-full bg-white pb-4 lg:pb-0 shadow-sm;
+  @apply sticky top-0 z-20 w-full bg-white shadow-sm;
 
   &__top {
     @apply flex items-center p-4 lg:px-8 lg:pb-2.5;
@@ -40,7 +40,7 @@
   }
 
   &__logo {
-    @apply flex-1 md:flex-none -mb-3;
+    @apply flex-1 md:flex-none mt-1;
 
     a {
       @apply inline-block overflow-hidden;
@@ -119,7 +119,7 @@
 
     &-menu {
       @apply lg:hidden fixed inset-x-0 bottom-0 z-50 w-full bg-white shadow-lg transform transition-all duration-300 ease-in-out translate-x-full;
-      height: calc(100vh - 7rem);
+      height: calc(100vh - 4rem);
 
       &--open {
         @apply translate-x-0;
