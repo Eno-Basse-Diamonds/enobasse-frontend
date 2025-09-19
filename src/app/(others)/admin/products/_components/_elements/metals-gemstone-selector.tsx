@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { metalOptions, gemstones } from "@/lib/utils/constants";
+import { gemstones } from "@/lib/utils/constants/gemstones";
+import { metalOptions } from "@/lib/utils/constants/metal-options";
 
 interface Metal {
   type: string;

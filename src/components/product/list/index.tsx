@@ -11,7 +11,7 @@ import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 import { EyeOpenIcon } from "@/components/icons/eye-open";
 import { HeartIcon } from "@/components/icons/heart";
 

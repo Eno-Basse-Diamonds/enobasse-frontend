@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CheckoutCartItem } from "./chekout-cart-item";
 import { CartItem } from "@/lib/types/carts";
 import { getCurrencySymbol } from "@/lib/utils/money";
-import { ringSizes } from "@/lib/utils/constants";
+import { ringSizes } from "@/lib/utils/constants/ring-sizes";
 import { useAccountStore } from "@/lib/store/account";
 import { Button } from "@/components/button";
 

@@ -9,7 +9,7 @@ import { EmptyStateIcon } from "./_components/empty-state-icon";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
-import { ringSizes } from "@/lib/utils/constants";
+import { ringSizes } from "@/lib/utils/constants/ring-sizes";
 import { EmptyState } from "@/components/empty-state";
 import { CartLoader } from "@/components/loaders/cart";
 import { SectionContainer } from "@/components/section-container";

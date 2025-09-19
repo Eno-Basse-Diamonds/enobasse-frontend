@@ -5,7 +5,7 @@ import {
   type CacheRequestConfig,
 } from "axios-cache-interceptor";
 import { notFound, redirect } from "next/navigation";
-import { API_URL } from "./constants";
+import { API_URL } from "./constants/api-url";
 
 export class ApiError extends Error {
   constructor(

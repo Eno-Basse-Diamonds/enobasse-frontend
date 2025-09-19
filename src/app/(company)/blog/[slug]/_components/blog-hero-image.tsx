@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Image as ImageIcon } from "lucide-react";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 import { FacebookIcon } from "@/components/icons/facebook";
 import { InstagramIcon } from "@/components/icons/instagram";
 import { XIcon } from "@/components/icons/x";

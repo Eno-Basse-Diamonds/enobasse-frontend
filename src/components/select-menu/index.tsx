@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { X, Maximize2 } from "lucide-react";
 import { SizeGuide } from "../size-guide";
-import { ringSizes } from "@/lib/utils/constants";
+import { ringSizes } from "@/lib/utils/constants/ring-sizes";
 import { ChevronDownIcon } from "../icons/chevron-down";
 
 interface RingSizeSelectorProps {

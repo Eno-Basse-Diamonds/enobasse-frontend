@@ -6,7 +6,7 @@ import Image from "next/image";
 import { BlogPost } from "@/lib/types/blog-post";
 import { ImageIcon } from "lucide-react";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 interface RelatedPostsProps {
   posts: BlogPost[];

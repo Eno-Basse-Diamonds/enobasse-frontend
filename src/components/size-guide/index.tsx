@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ringSizeGuide } from "@/lib/utils/constants";
+import { ringSizeGuide } from "@/lib/utils/constants/ring-size-guide";
 
 export const SizeGuide: React.FC = () => {
   return (

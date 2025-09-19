@@ -10,7 +10,7 @@ import { PaymentConfirmationModal } from "./_components/payment-confirmation.mod
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
-import { countries } from "@/lib/utils/constants";
+import { countries } from "@/lib/utils/constants/countries";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { SectionContainer } from "@/components/section-container";
 import { ChevronDownIcon } from "lucide-react";
