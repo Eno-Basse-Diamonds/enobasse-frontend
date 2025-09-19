@@ -6,7 +6,7 @@ import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { useProducts } from "@/lib/hooks/use-products";
 import { ProductsResponse, FilterOption } from "@/lib/types/products";
 import { filterAndSortProducts } from "@/lib/utils/products";
-import { metalOptions } from "@/lib/utils/constants";
+import { metalOptions } from "@/lib/utils/constants/metal-options";
 import { useAccountStore } from "@/lib/store/account";
 import { EmptyState } from "@/components/empty-state";
 import { ProductListLoader } from "@/components/loaders/products";

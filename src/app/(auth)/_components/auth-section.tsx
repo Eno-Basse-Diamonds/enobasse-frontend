@@ -13,7 +13,7 @@ import {
 import { handleSignUp } from "@/lib/actions/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 import { BackButton } from "@/components/button";
 import { PasswordInput, Input } from "@/components/input";
 
@@ -198,7 +198,7 @@ export default function AuthSection({
   };
 
   return (
-    <main className="h-screen flex flex-col lg:flex-row justify-center">
+    <main className="h-[100dvh] flex flex-col lg:flex-row justify-center">
       <section className="hidden lg:block lg:w-[60%] lg:h-full relative overflow-hidden bg-gray-100">
         <Image
           src={heroImage}

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 export const metadata: Metadata = {
   title: "About Us",

@@ -9,7 +9,7 @@ import { FilterOption } from "@/lib/types/products";
 import { useCollection } from "@/lib/hooks/use-collections";
 import { useAccountStore } from "@/lib/store/account";
 import { filterAndSortProducts } from "@/lib/utils/products";
-import { metalOptions } from "@/lib/utils/constants";
+import { metalOptions } from "@/lib/utils/constants/metal-options";
 import { EmptyState } from "@/components/empty-state";
 import { ProductsPageLoader } from "@/components/loaders/products";
 import { PageHeading } from "@/components/page-heading";

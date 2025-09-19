@@ -7,7 +7,7 @@ import * as motion from "motion/react-client";
 import { BlogPost } from "@/lib/types/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { Image as ImageIcon } from "lucide-react";
-import { blurDataURL } from "@/lib/utils/constants";
+import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 interface BlogSectionProps {
   posts: BlogPost[];
