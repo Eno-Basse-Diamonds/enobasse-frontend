@@ -1,0 +1,32 @@
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.bg-white-gold {
+  background-color: #dadada;
+}
+
+.bg-yellow-gold {
+  background-color: #e9d9ab;
+}
+
+.bg-rose-gold {
+  background-color: #fce3d4;
+}
+
+.bg-platinum {
+  background-color: #e5e5e5;
+}

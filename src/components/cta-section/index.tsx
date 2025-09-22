@@ -70,7 +70,7 @@ export const RingCustomizationCTASection: React.FC = () => {
             className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors"
             href="/creative-studio"
           >
-            Coming Soon
+            Design Your Ring
           </Link>
         </div>
 
