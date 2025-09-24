@@ -29,7 +29,7 @@ export const Input: FC<InputProps> = ({
       </label>
       <input
         id={id}
-        className={`mt-1 sm:mt-2 block w-full py-3 px-3 sm:px-4 bg-[#D1A55933]/20 focus:ring-1 focus:ring-[#D1A559] text-sm sm:text-base ${
+        className={`rounded-sm mt-1 sm:mt-2 block w-full py-3 px-3 sm:px-4 bg-[#D1A55933]/20 focus:ring-1 focus:ring-[#D1A559] text-sm sm:text-base ${
           errors ? "border border-red-500" : ""
         }`}
         {...props}
@@ -73,7 +73,7 @@ export const PasswordInput: FC<PasswordInputProps> = ({
         <input
           id={id}
           type={showPassword ? "text" : "password"}
-          className={`block w-full py-3 px-3 sm:px-4 bg-[#D1A55933]/20 focus:ring-1 focus:ring-[#D1A559] text-sm sm:text-base pr-20 ${
+          className={`rounded-sm block w-full py-3 px-3 sm:px-4 bg-[#D1A55933]/20 focus:ring-1 focus:ring-[#D1A559] text-sm sm:text-base pr-20 ${
             errors ? "border border-red-500" : ""
           }`}
           {...props}

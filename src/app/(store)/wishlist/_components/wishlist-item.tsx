@@ -87,14 +87,14 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
             <div className="flex gap-3">
               <button
                 type="button"
-                className="font-medium text-sm text-[#D1A559] border-[#D1A559] hover:underline"
+                className="font-medium text-sm rounded-sm text-[#D1A559] border-[#D1A559] hover:underline"
                 onClick={handleAddToCart}
               >
                 ADD TO CART
               </button>
               <button
                 type="button"
-                className="font-medium text-sm text-red-500 hover:underline"
+                className="font-medium rounded-sm text-sm text-red-500 hover:underline"
                 onClick={async () => {
                   await removeItem(
                     variant.id,

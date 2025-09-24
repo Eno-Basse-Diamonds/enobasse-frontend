@@ -95,7 +95,7 @@ export const AdditionalInfoForm = ({
                 <button
                   type="button"
                   onClick={() => open()}
-                  className="inline-block bg-primary-100 text-primary-700 px-6 py-2 hover:bg-primary-200 cursor-pointer transition-colors"
+                  className="inline-block bg-primary-100 text-primary-700 px-6 py-2 hover:bg-primary-200 cursor-pointer transition-colors rounded-sm"
                 >
                   Choose Files
                 </button>

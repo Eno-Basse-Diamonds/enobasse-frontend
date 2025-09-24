@@ -156,7 +156,7 @@ export function AdminFilterSortPanel({
                     onSortChange(option.value);
                     setIsSortOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
+                  className={`w-full rounded-sm text-left px-4 py-2 text-sm hover:bg-gray-50 ${
                     currentSort === option.value
                       ? "bg-primary-50 text-primary-600"
                       : "text-gray-700"

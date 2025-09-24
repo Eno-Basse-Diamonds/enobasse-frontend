@@ -73,7 +73,7 @@ export const FinalDetailsForm = ({
                 <button
                   type="button"
                   onClick={() => open()}
-                  className="inline-block px-4 py-2 bg-secondary-500 text-white cursor-pointer hover:bg-secondary-400 transition-colors"
+                  className="rounded-sm inline-block px-4 py-2 bg-secondary-500 text-white cursor-pointer hover:bg-secondary-400 transition-colors"
                 >
                   Choose Files
                 </button>

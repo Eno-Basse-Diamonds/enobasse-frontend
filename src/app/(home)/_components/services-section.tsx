@@ -21,7 +21,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           autoPlay={true}
           muted
           loop
-          className="w-full h-full object-cover"
+          className="rounded-sm w-full h-full object-cover"
         >
           <source src={videoSrc} type="video/mp4" />
           Your browser does not support the video tag.
@@ -44,7 +44,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <div className="text-left">
           <Link
             href={button.href}
-            className="inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90 justify-center"
+            className="rounded-sm inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90 justify-center"
           >
             {button.text}
           </Link>

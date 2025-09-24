@@ -328,7 +328,7 @@ export default function AuthSection({
 
           <button
             type="submit"
-            className={`w-full flex justify-center items-center py-3 px-4 border border-transparent font-primary text-base sm:text-lg font-medium text-white bg-[#502B3A] hover:bg-[#502B3A]/80 transition-colors duration-200 ${
+            className={`rounded-sm w-full flex justify-center items-center py-3 px-4 border border-transparent font-primary text-base sm:text-lg font-medium text-white bg-[#502B3A] hover:bg-[#502B3A]/80 transition-colors duration-200 ${
               isSubmitting ? "bg-[#502B3A]/80 cursor-not-allowed" : ""
             }`}
             disabled={isSubmitting}

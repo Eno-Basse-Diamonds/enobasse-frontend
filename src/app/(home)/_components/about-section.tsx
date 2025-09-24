@@ -35,7 +35,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         <div className="text-left">
           <Link
             href={button.href}
-            className="inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90 justify-center"
+            className="rounded-sm inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90 justify-center"
           >
             {button.text}{" "}
           </Link>
@@ -48,7 +48,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           height={600}
           width={600}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
-          className="w-full h-auto"
+          className="rounded-sm w-full h-auto"
           placeholder="blur"
           blurDataURL={blurDataURL}
         />

@@ -68,7 +68,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   >
                     <button
                       onClick={() => setSelectedImageIndex(i)}
-                      className={`image-gallery__thumbnail-button ${
+                      className={`image-gallery__thumbnail-button rounded-sm ${
                         selectedImageIndex === i
                           ? "image-gallery__thumbnail-button--selected"
                           : ""

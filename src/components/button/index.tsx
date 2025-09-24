@@ -68,7 +68,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   const getButtonClasses = () => {
     const baseClass =
-      "inline-flex items-center justify-center border font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200";
+      "rounded-sm inline-flex items-center justify-center border font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none transition-all duration-200";
 
     const sizeClasses = {
       xs: "px-2 py-1 text-xs gap-1",

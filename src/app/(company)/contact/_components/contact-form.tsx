@@ -77,7 +77,7 @@ export const ContactForm: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="bg-white border border-primary-100 shadow-sm py-6 px-4 sm:px-6 md:p-8">
+        <div className="rounded-sm bg-white border border-primary-100 shadow-sm py-6 px-4 sm:px-6 md:p-8">
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
@@ -138,7 +138,7 @@ export const ContactForm: React.FC = () => {
 
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[99999] backdrop-blur-sm">
-          <div className="bg-white p-6 max-w-md w-full">
+          <div className="rounded-sm bg-white p-6 max-w-md w-full">
             <div className="text-center">
               <CircleCheck
                 strokeWidth={1.5}
@@ -205,7 +205,7 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full px-3 py-2 border border-primary-100 focus:ring-0"
+          className="rounded-sm w-full px-3 py-2 border border-primary-100 focus:ring-0"
         />
       ) : (
         <input
@@ -215,7 +215,7 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full px-3 py-2 border border-primary-100 focus:ring-0"
+          className="rounded-sm w-full px-3 py-2 border border-primary-100 focus:ring-0"
         />
       )}
     </div>

@@ -139,7 +139,7 @@ export const RingSizeSelector: React.FC<RingSizeSelectorProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={toggleFullView}
-                  className="p-2 hover:bg-gray-200 transition-colors flex items-center gap-1 text-sm text-gray-600"
+                  className="p-2 hover:bg-gray-200 transition-colors flex items-center gap-1 text-sm text-gray-600 rounded-sm"
                 >
                   <Maximize2 size={16} />
                   {isFullView ? "Exit Full View" : "Full View"}

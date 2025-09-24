@@ -111,7 +111,7 @@ export const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
-      className={`fixed top-4 right-4 max-w-md w-full z-[9999] border p-4 ${
+      className={`rounded-sm fixed top-4 right-4 max-w-md w-full z-[9999] border p-4 ${
         variant.bgColor
       } ${variant.borderColor} ${variant.textColor} ${className} ${
         isExiting ? "opacity-0 transition-opacity duration-300 ease-out" : ""

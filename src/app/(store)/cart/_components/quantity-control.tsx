@@ -20,7 +20,7 @@ export const QuantityControl: React.FC<QuantityControlProps> = ({
     <div className="flex items-center h-8">
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center border border-gray-300 bg-gray-100 hover:bg-gray-200"
+        className="rounded-sm inline-flex h-8 w-8 items-center justify-center border border-gray-300 bg-gray-100 hover:bg-gray-200"
         onClick={onDecrement}
       >
         <MinusIcon className="h-3 w-3 text-[#502B3A]" />
@@ -36,7 +36,7 @@ export const QuantityControl: React.FC<QuantityControlProps> = ({
       />
       <button
         type="button"
-        className="inline-flex h-8 w-8 items-center justify-center border border-gray-300 bg-gray-100 hover:bg-gray-200"
+        className="rounded-sm inline-flex h-8 w-8 items-center justify-center border border-gray-300 bg-gray-100 hover:bg-gray-200"
         onClick={onIncrement}
       >
         <PlusIcon className="h-3 w-3 text-[#502B3A]" />

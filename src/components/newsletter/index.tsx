@@ -169,7 +169,7 @@ export const NewsletterPopup: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-primary-500 text-white py-3 px-6 hover:bg-primary-400 disabled:bg-primary-300 transition-colors font-medium flex items-center justify-center text-sm md:text-base"
+                    className="rounded-sm w-full bg-primary-500 text-white py-3 px-6 hover:bg-primary-400 disabled:bg-primary-300 transition-colors font-medium flex items-center justify-center text-sm md:text-base"
                     disabled={isSubmitting || !email}
                   >
                     {isSubmitting ? (

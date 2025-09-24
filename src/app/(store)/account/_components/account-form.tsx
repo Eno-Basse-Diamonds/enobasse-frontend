@@ -47,7 +47,7 @@ export function AccountForm({
         </h2>
         {!isEditing && (
           <button
-            className="flex items-center gap-2 text-primary-400 hover:text-primary-500 transition-colors"
+            className="flex items-center gap-2 text-primary-400 hover:text-primary-500 transition-colors rounded-sm"
             onClick={onEditToggle}
           >
             <Edit3 size={16} />
@@ -165,14 +165,14 @@ export function AccountForm({
             <button
               onClick={onSave}
               disabled={isSaving}
-              className="flex items-center gap-2 bg-primary-500 text-white px-6 py-3 hover:bg-primary-400 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 bg-primary-500 text-white px-6 py-3 hover:bg-primary-400 transition-colors disabled:opacity-50 rounded-sm"
             >
               <Save size={16} />
               Save Changes
             </button>
             <button
               onClick={onCancel}
-              className="flex items-center gap-2 border border-primary-200 px-6 py-3 hover:bg-primary-500/10 transition-colors"
+              className="flex items-center gap-2 border border-primary-200 px-6 py-3 hover:bg-primary-500/10 transition-colors rounded-sm"
             >
               <X size={16} />
               Cancel

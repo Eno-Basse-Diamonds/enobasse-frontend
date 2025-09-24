@@ -249,7 +249,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="flex flex-col items-center gap-y-4 w-full max-w-md">
                   <Link
                     href={slide.buttonLink || "#"}
-                    className={`slide-up-element bg-white w-full text-primary-500 px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                    className={`rounded-sm slide-up-element bg-white w-full text-primary-500 px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                     style={{ animationDelay: "0.4s" }}
                   >
                     {slide.buttonText}
@@ -257,7 +257,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   {slide.buttonText2 && (
                     <Link
                       href={slide.buttonLink2 || "#"}
-                      className={`slide-up-element bg-white  w-full text-primary-500 px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                      className={`rounded-sm slide-up-element bg-white  w-full text-primary-500 px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                       style={{ animationDelay: "0.5s" }}
                     >
                       {slide.buttonText2}
@@ -284,7 +284,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="flex items-center gap-x-4">
                   <Link
                     href={slide.buttonLink || "#"}
-                    className={`slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                    className={`rounded-sm slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                     style={{ animationDelay: "0.4s" }}
                   >
                     {slide.buttonText}
@@ -292,7 +292,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   {slide.buttonText2 && (
                     <Link
                       href={slide.buttonLink2 || "#"}
-                      className={`slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                      className={`rounded-sm slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                       style={{ animationDelay: "0.4s" }}
                     >
                       {slide.buttonText2}
@@ -342,7 +342,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </h2>
                 <Link
                   href={slide.buttonLink || "#"}
-                  className={`slide-up-element bg-white w-full md:w-auto max-w-sm text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
+                  className={`rounded-sm slide-up-element bg-white w-full md:w-auto max-w-sm text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
                   style={{ animationDelay: "0.3s" }}
                 >
                   {slide.buttonText}
@@ -374,7 +374,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </h2>
                   <Link
                     href={slide.buttonLink || "#"}
-                    className={`slide-up-element bg-white text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
+                    className={`rounded-sm slide-up-element bg-white text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
                     style={{ animationDelay: "0.3s" }}
                   >
                     {slide.buttonText}
@@ -404,7 +404,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </h2>
                   <Link
                     href={slide.buttonLink2 || "#"}
-                    className={`slide-up-element bg-white text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
+                    className={`rounded-sm slide-up-element bg-white text-primary-500 px-6 py-2 font-medium hover:bg-opacity-90 transition ${isVisible ? "animate-slide-up" : ""}`}
                     style={{ animationDelay: "0.3s" }}
                   >
                     {slide.buttonText2}
@@ -444,7 +444,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </p>
                 <Link
                   href={slide.buttonLink || "#"}
-                  className={`slide-up-element bg-white text-primary-500 px-8 py-3 w-full md:w-auto hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                  className={`rounded-sm slide-up-element bg-white text-primary-500 px-8 py-3 w-full md:w-auto hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                   style={{ animationDelay: "0.4s" }}
                 >
                   {slide.buttonText}
@@ -476,7 +476,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </p>
                 <Link
                   href={slide.buttonLink || "#"}
-                  className={`slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
+                  className={`rounded-sm slide-up-element bg-primary-500 text-white px-8 py-3 hover:bg-opacity-90 transition transform ${isVisible ? "animate-slide-up" : ""}`}
                   style={{ animationDelay: "0.4s" }}
                 >
                   {slide.buttonText}

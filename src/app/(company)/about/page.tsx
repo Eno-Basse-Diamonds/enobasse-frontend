@@ -38,7 +38,7 @@ export default function AboutUsPage() {
               width={1200}
               height={600}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-              className="w-full h-80 lg:h-96 object-cover bg-gray-100"
+              className="w-full md:rounded-sm h-80 lg:h-96 object-cover bg-gray-100"
               priority
               loading="eager"
               placeholder="blur"
@@ -78,7 +78,7 @@ export default function AboutUsPage() {
         {/* Founder Section */}
         <div className="py-6 lg:py-16">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 rounded-sm">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510664/founder_jcgqhh.webp"
                 alt="Eno Bassé founder profile picture"
@@ -136,13 +136,14 @@ export default function AboutUsPage() {
                   the zeal, talent and qualifications required to grow her brand
                   successfully
                 </p>
-                <div className="mx-auto md:mx-0 mt-8 max-w-[200px] h-auto">
+                <div className="mx-auto md:mx-0 mt-8 max-w-[200px] h-auto rounded-sm">
                   <Image
                     src="https://res.cloudinary.com/enobasse/image/upload/v1756510657/signature_vh5lg6.webp"
                     alt="Eno Bassé founder name signature"
                     width={200}
                     height={80}
                     sizes="(max-width: 768px) 50vw, 200px"
+                    className="rounded-sm"
                     placeholder="blur"
                     blurDataURL={blurDataURL}
                   />
@@ -173,14 +174,14 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
-            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2 rounded-sm">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/sourcing-gemstone_iahzmq.webp"
                 alt="Eno Bassé gemstones collection"
                 width={800}
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="w-full h-auto"
+                className="w-full h-auto rounded-sm"
                 placeholder="blur"
                 blurDataURL={blurDataURL}
               />
@@ -191,14 +192,14 @@ export default function AboutUsPage() {
         {/* Making Jewellery Section */}
         <div className="py-6 lg:py-16">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 rounded-sm">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/making-the-jewlery_qeun0d.webp"
                 alt="Eno Bassé jewellery making process"
                 width={800}
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="w-full h-auto"
+                className="w-full h-auto rounded-sm"
                 placeholder="blur"
                 blurDataURL={blurDataURL}
               />
@@ -278,14 +279,14 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
-            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 md:order-2 rounded-sm">
               <Image
                 src="https://res.cloudinary.com/enobasse/image/upload/v1756510665/dirt-to-wealth_bx89m5.webp"
                 alt="Eno Bassé Dirt to Wealth initiative"
                 width={800}
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="w-full h-auto"
+                className="w-full h-auto rounded-sm"
                 placeholder="blur"
                 blurDataURL={blurDataURL}
               />

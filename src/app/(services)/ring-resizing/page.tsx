@@ -236,7 +236,7 @@ export default function RingResizingPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-stone-100">
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="max-w-2xl mx-auto bg-white rounded-sm shadow-xl p-8 text-center">
             <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg
                 className="w-10 h-10 text-primary-500"
@@ -260,7 +260,7 @@ export default function RingResizingPage() {
               submission and contact you within 24 hours with a detailed quote
               and timeline.
             </p>
-            <div className="bg-slate-50 rounded-xl p-6 mb-6">
+            <div className="bg-slate-50 rounded-sm p-6 mb-6">
               <p className="text-sm text-slate-600 mb-2">Reference Number</p>
               <p className="text-lg font-mono text-primary-500">
                 RR-{Date.now().toString().slice(-6)}
@@ -268,7 +268,7 @@ export default function RingResizingPage() {
             </div>
             <button
               onClick={() => setIsSubmitted(false)}
-              className="bg-primary-500 text-white px-8 py-3 rounded-xl hover:bg-primary-600 transition-colors"
+              className="bg-primary-500 text-white px-8 py-3 rounded-sm hover:bg-primary-600 transition-colors"
             >
               Submit Another Request
             </button>

@@ -127,7 +127,7 @@ const PaginationButton: React.FC<PaginationButtonProps> = ({
   onPageChange,
 }) => {
   const baseClasses =
-    "flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 transition-colors duration-200 border text-[#502B3A] border-[#502B3A]/20 hover:bg-[#D1A559]/10 hover:border-[#D1A559]/40";
+    "rounded-sm flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 transition-colors duration-200 border text-[#502B3A] border-[#502B3A]/20 hover:bg-[#D1A559]/10 hover:border-[#D1A559]/40";
   const activeClasses = active
     ? "bg-[#502B3A] text-white hover:bg-[#502B3A] border-[#502B3A]"
     : "";
