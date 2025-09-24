@@ -64,7 +64,7 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
       }}
       whileHover={{ scale: 1.02 }}
     >
-      <Link href={`/blog/${post.slug}`} className="h-full flex flex-col">
+      <Link href={`/blog/${post.slug}`} className="rounded-sm h-full flex flex-col">
         <figure className="h-60 lg:h-72 flex-shrink-0 relative">
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center bg-gray-100">

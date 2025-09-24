@@ -9,7 +9,7 @@ export const BlogHeader: React.FC = () => {
       </h2>
       <Link
         href="/blog"
-        className="inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90"
+        className="rounded-sm inline-flex items-center gap-x-2 bg-[#502B3A] py-3 px-8 text-white text-center hover:bg-opacity-90"
       >
         View All Posts
       </Link>

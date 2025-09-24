@@ -57,7 +57,7 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
     <div className="w-full flex flex-col gap-y-4 items-center mb-6">
       <button
         onClick={() => setIsOpen(true)}
-        className="border border-primary-300 w-full flex flex-row gap-x-4 items-center justify-center mx-auto text-primary-500 px-5 py-3 lg:hidden"
+        className="rounded-sm border border-primary-300 w-full flex flex-row gap-x-4 items-center justify-center mx-auto text-primary-500 px-5 py-3 lg:hidden"
       >
         <FilterIcon />
         Filters
@@ -112,13 +112,13 @@ export const FilterPanelMobile: React.FC<FilterPanelProps> = ({
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex gap-4">
           <button
             onClick={resetFilters}
-            className="flex-1 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="rounded-sm flex-1 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             Reset Filters
           </button>
           <button
             onClick={applyFilters}
-            className="flex-1 py-3 bg-[#502B3A] text-white hover:bg-[#502B3A]/90"
+            className="rounded-sm flex-1 py-3 bg-[#502B3A] text-white hover:bg-[#502B3A]/90"
           >
             Apply Filters
           </button>

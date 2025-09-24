@@ -31,7 +31,7 @@ export const CTASection: React.FC<CTASectionProps> = ({
         <div className="mx-auto lg:mx-0">
           <Link
             href={button.href}
-            className="inline-flex items-center gap-x-2 bg-white text-[#502B3A] py-3 px-8 font-medium hover:bg-opacity-90 transition-colors"
+            className="rounded-sm inline-flex items-center gap-x-2 bg-white text-[#502B3A] py-3 px-8 font-medium hover:bg-opacity-90 transition-colors"
           >
             {button.text}
           </Link>
@@ -67,7 +67,7 @@ export const RingCustomizationCTASection: React.FC = () => {
             create something exceptional.
           </p>
           <Link
-            className="bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors"
+            className="rounded-sm bg-white text-[#502B3A] font-semibold py-3 px-8 hover:bg-gray-100 transition-colors"
             href="/creative-studio"
           >
             Design Your Ring

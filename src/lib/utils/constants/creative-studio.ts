@@ -61,7 +61,27 @@ export const previewShapes = [
   },
 ];
 
-export const previewSizes = ["1 ct", "1.5 ct", "2 ct", "2.5 ct"];
+export const previewSizes = [
+  "1 ct",
+  "1.5 ct",
+  "2 ct",
+  "2.5 ct",
+  "3 ct",
+  "3.5 ct",
+  "4 ct",
+  "4.5 ct",
+  "5 ct",
+  "5.5 ct",
+  "6 ct",
+  "6.5 ct",
+  "7 ct",
+  "7.5 ct",
+  "8 ct",
+  "8.5 ct",
+  "9 ct",
+  "9.5 ct",
+  "10 ct",
+];
 
 export const oldHeadStyles = [
   {

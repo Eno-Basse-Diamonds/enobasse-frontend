@@ -39,7 +39,7 @@ export const CollectionsSelector: React.FC<CollectionsSelectorProps> = ({
                 key={collection.id}
                 type="button"
                 onClick={() => handleCollectionToggle(collection.id)}
-                className="flex items-center justify-between p-2 bg-green-50 hover:bg-green-100 text-green-700 text-sm"
+                className="flex items-center justify-between p-2 bg-green-50 hover:bg-green-100 text-green-700 text-sm rounded-sm"
               >
                 <span>{collection.name}</span>
                 <input
@@ -65,7 +65,7 @@ export const CollectionsSelector: React.FC<CollectionsSelectorProps> = ({
                 key={collection.id}
                 type="button"
                 onClick={() => handleCollectionToggle(collection.id)}
-                className="flex items-center justify-between p-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm"
+                className="flex items-center justify-between p-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm rounded-sm"
               >
                 <span>{collection.name}</span>
                 <input

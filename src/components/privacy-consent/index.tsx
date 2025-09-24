@@ -85,7 +85,7 @@ export const PrivacyConsent = () => {
               <button
                 onClick={handleAccept}
                 className="
-                  flex-1 bg-white text-primary-500 px-4 py-2
+                  rounded-sm flex-1 bg-white text-primary-500 px-4 py-2
                   font-medium text-sm tracking-wide
                   hover:bg-gray-100 transition-all duration-200
                   transform
@@ -96,7 +96,7 @@ export const PrivacyConsent = () => {
 
               <button
                 onClick={handleDecline}
-                className=" px-4 py-2 border border-white text-white font-medium text-sm tracking-wide"
+                className="rounded-sm px-4 py-2 border border-white text-white font-medium text-sm tracking-wide"
               >
                 DECLINE
               </button>

@@ -60,7 +60,7 @@ export function DiamondPreview({
 
       {/* Size Selection */}
       <p className="text-sm text-gray-600 mb-3">Preview Size</p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {previewSizes.map((size) => (
           <button
             key={size}

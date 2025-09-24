@@ -43,7 +43,7 @@ export function DesktopNavigation({
             <button
               key={item.id}
               onClick={item.action}
-              className="w-full flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200"
+              className="w-full flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200  rounded-sm"
             >
               <Icon size={18} />
               <span className="font-light">{item.label}</span>
@@ -55,7 +55,7 @@ export function DesktopNavigation({
           <button
             key={item.id}
             onClick={() => onTabChange(item.id)}
-            className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
+            className={`rounded-sm w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
               activeTab === item.id
                 ? "bg-gray-50 text-gray-900 border-r-2 border-secondary-500"
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -93,7 +93,7 @@ export function MobileNavigation({
     <div className="lg:hidden mb-6">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-4 border border-gray-300 bg-white text-gray-900"
+        className="rounded-sm w-full flex items-center justify-between p-4 border border-gray-300 bg-white text-gray-900"
       >
         <span className="font-light">{activeItem?.label || "Menu"}</span>
         <ChevronDown
@@ -115,7 +115,7 @@ export function MobileNavigation({
                       item.action?.();
                       onItemClick();
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200"
+                    className="rounded-sm w-full flex items-center gap-3 px-4 py-3 text-left text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200"
                   >
                     <Icon size={18} />
                     <span className="font-light">{item.label}</span>
@@ -144,7 +144,7 @@ export function MobileNavigation({
                     onTabChange(item.id);
                     onItemClick();
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
+                  className={`rounded-sm w-full flex items-center gap-3 px-4 py-3 text-left transition-all duration-200 ${
                     activeTab === item.id
                       ? "bg-gray-50 text-gray-900"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
