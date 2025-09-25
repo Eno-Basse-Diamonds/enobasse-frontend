@@ -11,10 +11,14 @@ import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 interface BlogSectionProps {
   posts: BlogPost[];
+  /** Layout style for the blog section */
+  layout?: "grid" | "horizontal-scroll";
+  /** Custom class name for the container */
+  className?: string;
 }
 
 export const BlogSection: React.FC<BlogSectionProps> = React.memo(
-  ({ posts }) => {
+  ({ posts, layout = "grid", className = "" }) => {
     const sortedPosts = useMemo(() => {
       return [...posts].sort(
         (a, b) =>
@@ -22,15 +26,55 @@ export const BlogSection: React.FC<BlogSectionProps> = React.memo(
       );
     }, [posts]);
 
+    // Grid layout (original behavior)
+    if (layout === "grid") {
+      return (
+        <ul
+          className={`mt-8 md:mt-10 lg:mt-12 grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 ${className}`}
+          role="list"
+        >
+          {sortedPosts.map((post, index) => (
+            <BlogCard key={post.id} post={post} index={index} />
+          ))}
+        </ul>
+      );
+    }
+
+    // Horizontal scroll layout (new behavior)
     return (
-      <ul
-        className="mt-8 md:mt-10 lg:mt-12 grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        role="list"
-      >
-        {sortedPosts.map((post, index) => (
-          <BlogCard key={post.id} post={post} index={index} />
-        ))}
-      </ul>
+      <div className={`mt-8 md:mt-10 lg:mt-12 ${className}`}>
+        {/* Mobile: Horizontal scrollable row */}
+        <div className="sm:hidden overflow-x-auto pb-4 -mx-4 px-4">
+          <ul
+            className="flex gap-4 sm:gap-5 md:gap-6 w-max min-w-full"
+            role="list"
+          >
+            {sortedPosts.map((post, index) => (
+              <BlogCard 
+                key={post.id} 
+                post={post} 
+                index={index} 
+                isMobile={true}
+              />
+            ))}
+          </ul>
+        </div>
+        
+        {/* Desktop: Grid layout */}
+        <ul
+          className="hidden sm:grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          role="list"
+        >
+          {sortedPosts.map((post, index) => (
+            <BlogCard 
+              key={post.id} 
+              post={post} 
+              index={index} 
+              isMobile={false}
+            />
+          ))}
+        </ul>
+      </div>
     );
   }
 );
@@ -40,9 +84,10 @@ BlogSection.displayName = "BlogSection";
 interface BlogCardProps {
   post: BlogPost;
   index: number;
+  isMobile?: boolean;
 }
 
-const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
+const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index, isMobile = false }) => {
   const [imageError, setImageError] = useState(false);
 
   const formattedDate = useMemo(
@@ -53,7 +98,9 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index }) => {
   return (
     <motion.li
       role="listitem"
-      className="hover:shadow-md transition-shadow duration-300 border border-secondary-200 overflow-hidden"
+      className={`hover:shadow-md transition-shadow duration-300 border border-secondary-200 overflow-hidden rounded-sm ${
+        isMobile ? "w-72 flex-shrink-0" : ""
+      }`}
       style={{ transformOrigin: "center" }}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
