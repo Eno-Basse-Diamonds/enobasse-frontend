@@ -22,6 +22,8 @@ export default function TestimonialsPage() {
           <div key={i} className="bg-white shadow animate-pulse p-6">
             <div className="h-4 bg-gray-200 mb-4"></div>
             <div className="h-4 bg-gray-200 mb-2"></div>
+            <div className="h-4 bg-gray-200 mb-2"></div>
+            <div className="h-4 bg-gray-200 mb-2"></div>
             <div className="h-4 bg-gray-200 w-3/4"></div>
           </div>
         ))}
@@ -35,7 +37,7 @@ export default function TestimonialsPage() {
         {testimonials.map((testimonial) => (
           <div
             key={testimonial.id}
-            className="bg-gray-50 p-8 text-sm leading-6 flex flex-col h-full"
+            className="bg-gray-50 p-8 text-sm leading-6 flex flex-col h-full rounded-sm"
           >
             <blockquote className="text-primary-500 flex-grow">
               <p>"{testimonial.text}"</p>

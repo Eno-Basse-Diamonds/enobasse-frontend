@@ -210,7 +210,7 @@ const Newsletter: React.FC = () => {
             type="email"
             id="email"
             name="email"
-            className="block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none pr-12"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none pr-12 rounded-l-sm"
             placeholder="Enter email address"
             required
             aria-required="true"
@@ -220,7 +220,7 @@ const Newsletter: React.FC = () => {
           />
           <button
             type="submit"
-            className="absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80"
+            className="absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80 rounded-r-sm"
             aria-label="Subscribe"
             disabled={isSubmitting || !email}
           >
