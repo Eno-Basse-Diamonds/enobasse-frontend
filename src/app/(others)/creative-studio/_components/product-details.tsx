@@ -1,22 +1,38 @@
 interface ProductDetailsProps {
   metalName: string;
+  engravingText?: string;
+  engravingFont?: string;
   isModal?: boolean;
   onClose?: () => void;
 }
 
 export function ProductDetails({
   metalName,
+  engravingText = "",
+  engravingFont = "Arial, sans-serif",
   isModal = false,
   onClose,
 }: ProductDetailsProps) {
   const details = [
-    { label: "Stock Number", value: "BR4377M-14K-WG", bg: false },
     { label: "Metal", value: metalName, bg: true },
     { label: "Width", value: "1.5mm", bg: false },
     { label: "Length", value: "1.5-1.8mm", bg: true },
     { label: "Head Type", value: metalName, bg: false },
     { label: "Shank Type", value: metalName, bg: true },
   ];
+
+  if (engravingText) {
+    details.push({
+      label: "Engraving",
+      value: engravingText,
+      bg: false,
+    });
+    details.push({
+      label: "Font Style",
+      value: engravingFont.split(",")[0].replace(/['"]/g, ""),
+      bg: true,
+    });
+  }
 
   const content = (
     <div className="text-sm">
@@ -26,7 +42,14 @@ export function ProductDetails({
           className={`flex justify-between ${detail.bg ? "bg-gray-50" : ""} p-3 rounded-sm`}
         >
           <span className="text-gray-600">{detail.label}</span>
-          <span className="text-primary-500 font-medium">{detail.value}</span>
+          <span
+            className="text-primary-500 font-medium"
+            style={
+              detail.label === "Engraving" ? { fontFamily: engravingFont } : {}
+            }
+          >
+            {detail.value}
+          </span>
         </div>
       ))}
     </div>
