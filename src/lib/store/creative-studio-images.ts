@@ -117,15 +117,15 @@ export const useCreativeStudioImageCache =
       }),
       {
         name: "creative-studio-image-cache",
-      }
-    )
+      },
+    ),
   );
 
 export const createConfigKey = (
   gemstoneShape: string,
   headStyle: string,
   shankStyle: string,
-  metalType: string
+  metalType: string,
 ): string => {
   const shape = gemstoneShape || "default";
   const head = headStyle || "default";
@@ -137,7 +137,7 @@ export const createConfigKey = (
 
 export const createGeneratedImage = (
   src: string,
-  alt: string
+  alt: string,
 ): GeneratedImage => {
   return {
     src,

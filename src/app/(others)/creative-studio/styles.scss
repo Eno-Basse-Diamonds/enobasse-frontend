@@ -1,4 +1,4 @@
-@keyframes slide-up {
+@keyframes creative-studio-slide-up {
   from {
     transform: translateY(100%);
   }
@@ -7,8 +7,8 @@
   }
 }
 
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
+.creative-studio-animate-slide-up {
+  animation: creative-studio-slide-up 0.3s ease-out;
 }
 
 .backdrop {

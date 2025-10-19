@@ -18,5 +18,5 @@ export function BlogContent() {
     );
   }
 
-  return <BlogSection layout="horizonatal" posts={posts} />;
+  return <BlogSection layout="horizontal-scroll" posts={posts} />;
 }
