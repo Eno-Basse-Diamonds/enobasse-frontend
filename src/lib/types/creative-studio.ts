@@ -25,6 +25,9 @@ export interface RingConfiguration {
   shankStyle: string;
   metalType: string;
   karat: string;
+  ringSize: number;
+  /** Type of diamond: natural, lab-grown, or moissanite */
+  diamondType: DiamondType;
   engravingText: string;
   engravingFont: string;
 }
@@ -95,3 +98,5 @@ export type ShankStyle =
 export type MetalType = "white-gold" | "yellow-gold" | "rose-gold" | "platinum";
 export type Karat = "14k" | "18k";
 export type TabType = "diamond" | "head" | "shank" | "metal" | "engraving";
+
+export type DiamondType = "natural" | "lab" | "moissanite";

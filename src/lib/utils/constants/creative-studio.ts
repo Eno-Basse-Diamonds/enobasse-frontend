@@ -255,6 +255,8 @@ export const DEFAULT_CONFIGURATION: RingConfiguration = {
   shankStyle: "solitaire",
   metalType: "white-gold",
   karat: "14k",
+  ringSize: 6.5,
+  diamondType: "lab",
   engravingText: "",
   engravingFont: "Arial, sans-serif",
 };
