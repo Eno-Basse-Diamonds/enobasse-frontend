@@ -500,7 +500,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   return (
-    <div ref={heroRef} className="relative h-[96dvh] lg:h-[88dvh] overflow-hidden">
+    <div ref={heroRef} className="relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
