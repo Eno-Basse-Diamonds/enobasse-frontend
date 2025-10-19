@@ -30,7 +30,7 @@ export function FormInput({
       <input
         type={type}
         id={id}
-        className="w-full px-4 py-2 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559]"
+        className="w-full px-4 py-2 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559] rounded-sm"
         placeholder={placeholder}
         required={required}
         value={value}

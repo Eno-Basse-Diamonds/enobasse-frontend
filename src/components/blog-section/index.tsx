@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
+import { easeOut } from "motion/react";
 import { BlogPost } from "@/lib/types/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { Image as ImageIcon } from "lucide-react";
@@ -11,9 +12,7 @@ import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 interface BlogSectionProps {
   posts: BlogPost[];
-  /** Layout style for the blog section */
   layout?: "grid" | "horizontal-scroll";
-  /** Custom class name for the container */
   className?: string;
 }
 
@@ -50,26 +49,26 @@ export const BlogSection: React.FC<BlogSectionProps> = React.memo(
             role="list"
           >
             {sortedPosts.map((post, index) => (
-              <BlogCard 
-                key={post.id} 
-                post={post} 
-                index={index} 
+              <BlogCard
+                key={post.id}
+                post={post}
+                index={index}
                 isMobile={true}
               />
             ))}
           </ul>
         </div>
-        
+
         {/* Desktop: Grid layout */}
         <ul
           className="hidden sm:grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3"
           role="list"
         >
           {sortedPosts.map((post, index) => (
-            <BlogCard 
-              key={post.id} 
-              post={post} 
-              index={index} 
+            <BlogCard
+              key={post.id}
+              post={post}
+              index={index}
               isMobile={false}
             />
           ))}
@@ -107,7 +106,7 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index, isMobile = 
       transition={{
         duration: 0.4,
         delay: index * 0.1,
-        ease: "easeOut",
+        ease: easeOut,
       }}
       whileHover={{ scale: 1.02 }}
     >

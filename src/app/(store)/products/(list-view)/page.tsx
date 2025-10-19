@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useMemo } from "react";
 import * as motion from "motion/react-client";
+import { easeOut } from "motion/react";
 import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { useProducts } from "@/lib/hooks/use-products";
 import { ProductsResponse, FilterOption } from "@/lib/types/products";
@@ -26,7 +27,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: easeOut } },
 };
 
 export default function ProductsPage() {

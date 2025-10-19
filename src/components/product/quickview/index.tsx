@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import * as motion from "motion/react-client";
+import { easeOut } from "motion/react";
 import { Button } from "@/components/button";
 import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
 import { RingSizeSelector } from "@/components/select-menu";
@@ -112,7 +113,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.3, ease: easeOut },
     },
   };
 
@@ -292,7 +293,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   <h3 className="text-sm font-medium text-gray-800 mb-2">
                     Quantity
                   </h3>
-                  <div className="flex items-center gap-2 p-1 border border-primary-500/20 w-fit">
+                  <div className="flex items-center gap-2 p-1 border border-primary-500/20 w-fit rounded-sm">
                     <motion.button
                       onClick={() =>
                         setQuantity((prev) => Math.max(1, prev - 1))

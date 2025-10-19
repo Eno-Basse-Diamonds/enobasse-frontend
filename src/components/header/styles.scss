@@ -237,7 +237,7 @@
     }
 
     &-input {
-      @apply flex-1 py-3 pl-4 pr-12 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500;
+      @apply flex-1 py-3 pl-4 pr-12 text-sm md:text-base border border-primary-100 focus:outline-none focus:border-primary-500 rounded-sm;
     }
 
     &-form button {

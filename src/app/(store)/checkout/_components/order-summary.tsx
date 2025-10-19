@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { CheckoutCartItem } from "./chekout-cart-item";
+import { CheckoutCartItem } from "./checkout-cart-item";
 import { CartItem } from "@/lib/types/carts";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { ringSizes } from "@/lib/utils/constants/ring-sizes";
@@ -47,7 +47,7 @@ export function OrderSummary({
   }, [isProcessing]);
 
   return (
-    <div className="bg-white shadow p-6">
+    <div className="bg-white shadow p-6 rounded-sm">
       <h2 className="text-xl font-semibold text-[#502B3A] mb-6">
         Order Summary
       </h2>

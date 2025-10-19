@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import * as motion from "motion/react-client";
+import { easeInOut, easeOut } from "motion/react";
 import { Review } from "@/lib/types/reviews";
 import { calculateAverageRating } from "@/lib/utils/reviews";
 import { RatingDistribution } from "@/lib/types/reviews";
@@ -400,7 +401,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.3, ease: easeOut },
     },
   };
 
@@ -571,7 +572,7 @@ function progressAnimation({ width }: { width: number }) {
     hidden: { width: 0 },
     show: {
       width: `${width}%`,
-      transition: { duration: 1, ease: "easeInOut" },
+      transition: { duration: 1, ease: easeInOut },
     },
   };
 }

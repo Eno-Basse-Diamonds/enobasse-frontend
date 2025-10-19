@@ -82,7 +82,7 @@ export const PaymentConfirmationModal: React.FC<
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white max-w-5xl w-full p-6 md:p-8 relative overflow-y-auto">
+      <div className="bg-white max-w-5xl w-full p-6 md:p-8 relative overflow-y-auto rounded-sm">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -122,7 +122,9 @@ export const PaymentConfirmationModal: React.FC<
                 />
               </div>
             </div>
-            <p className="text-lg font-mono bg-gray-50 p-2">0638724267</p>
+            <p className="text-lg font-mono bg-gray-50 p-2 rounded-sm">
+              0638724267
+            </p>
             <p className="text-sm text-gray-600 mt-1">Eno Bassé Jewellery</p>
           </div>
 
@@ -147,7 +149,9 @@ export const PaymentConfirmationModal: React.FC<
                 />
               </div>
             </div>
-            <p className="text-lg font-mono bg-gray-50 p-2">0670021982</p>
+            <p className="text-lg font-mono bg-gray-50 p-2 rounded-sm">
+              0670021982
+            </p>
             <p className="text-sm text-gray-600 mt-1">Eno Bassé Jewellery</p>
           </div>
 
@@ -166,7 +170,7 @@ export const PaymentConfirmationModal: React.FC<
                 Zelle (International Account)
               </span>
             </div>
-            <p className="text-lg font-mono bg-gray-50 p-2">
+            <p className="text-lg font-mono bg-gray-50 p-2 rounded-sm">
               bob.eyakeno@yahoo.com
             </p>
             <p className="text-sm text-gray-600 mt-1">Eno Bassé Jewellery</p>
@@ -190,7 +194,7 @@ export const PaymentConfirmationModal: React.FC<
             </Button>
           </div>
         ) : (
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200/60 p-6 flex flex-row w-fit mx-auto gap-x-4">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200/60 p-6 flex flex-row w-fit mx-auto gap-x-4 rounded-sm">
             <div className="flex justify-center items-center bg-gradient-to-br from-green-200 to-emerald-200 rounded-full p-1 w-6 h-6 md:p-auto md:w-8 md:h-8">
               <CheckIcon className="h-4 w-4 text-green-600" />
             </div>
