@@ -58,7 +58,7 @@ export function ProductDetails({
   if (isModal) {
     return (
       <div className="fixed inset-0 z-50 backdrop">
-        <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-sm shadow-xl h-[70vh] overflow-y-auto animate-slide-up">
+        <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-sm shadow-xl h-[70vh] overflow-y-auto creative-studio-animate-slide-up">
           <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b">
             <h2 className="text-xl font-semibold">Product Details</h2>
             <button className="p-2" onClick={onClose}>
