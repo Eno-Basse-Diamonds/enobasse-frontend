@@ -116,22 +116,6 @@ export function ProductGallery({
     );
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 50) {
-      handleNextImage();
-    } else if (touchEnd - touchStart > 50) {
-      handlePrevImage();
-    }
-  };
-
   const renderLoadingState = () => (
     <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-sm -mt-10">
       <LoadingSpinner size="md" text="Generating image..." />
@@ -206,9 +190,6 @@ export function ProductGallery({
       <div className="lg:hidden">
         <div
           className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden mb-4"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
         >
           <div
             className={`w-full h-full ${isInitialLoad && currentImageIndex === 0 && !imagesReady ? "filter blur-md" : ""}`}
@@ -245,7 +226,7 @@ export function ProductGallery({
           )}
 
           <button
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-20"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10"
             onClick={handlePrevImage}
           >
             <svg
@@ -264,7 +245,7 @@ export function ProductGallery({
             </svg>
           </button>
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-20"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10"
             onClick={handleNextImage}
           >
             <svg
