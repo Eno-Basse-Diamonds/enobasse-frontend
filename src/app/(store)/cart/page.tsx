@@ -78,7 +78,7 @@ export default function CartPage() {
         ) : (
           <>
             {!session && (
-              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 text-center">
+              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 text-center rounded-sm">
                 To save your Shopping Cart,{" "}
                 <Link href="/sign-up" className="font-semibold">
                   Sign Up

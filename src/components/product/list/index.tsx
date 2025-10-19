@@ -11,7 +11,7 @@ import { Product } from "@/lib/types/products";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { useAccountStore } from "@/lib/store/account";
-import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
+import { easeOut } from "motion/react";
 import { EyeOpenIcon } from "@/components/icons/eye-open";
 import { HeartIcon } from "@/components/icons/heart";
 
@@ -36,7 +36,7 @@ const item = {
 
 const hoverScale = {
   scale: 1.03,
-  transition: { duration: 0.3, ease: "easeOut" },
+  transition: { duration: 0.3, ease: easeOut },
 };
 
 const buttonHover = {

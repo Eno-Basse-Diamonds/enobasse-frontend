@@ -1,11 +1,12 @@
 import Image from "next/image";
 import * as motion from "motion/react-client";
+import { easeOut } from "motion/react";
 
 const metalHoverVariants = {
   hover: {
     y: -5,
     scale: 1.02,
-    transition: { duration: 0.2, ease: "easeOut" },
+    transition: { duration: 0.2, ease: easeOut },
   },
 };
 

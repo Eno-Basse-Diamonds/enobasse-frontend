@@ -18,7 +18,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
       href={`/collections/${collection.slug}`}
       className="group flex flex-col h-full"
     >
-      <div className="relative w-full h-40 sm:h-48 md:h-60 lg:h-80 overflow-hidden">
+      <div className="relative w-full h-40 sm:h-48 md:h-60 lg:h-80 overflow-hidden rounded-sm">
         <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all duration-300 z-10" />
         <Image
           src={

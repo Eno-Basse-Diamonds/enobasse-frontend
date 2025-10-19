@@ -4,6 +4,7 @@ import React, { useCallback, useState, useMemo } from "react";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import * as motion from "motion/react-client";
+import { easeOut } from "motion/react";
 import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { FilterOption } from "@/lib/types/products";
 import { useCollection } from "@/lib/hooks/use-collections";
@@ -27,11 +28,11 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: easeOut } },
 };
 
 const imageHoverVariants = {
-  hover: { scale: 1.05, transition: { duration: 0.3, ease: "easeOut" } },
+  hover: { scale: 1.05, transition: { duration: 0.3, ease: easeOut } },
 };
 
 export default function CollectionPage() {
@@ -95,7 +96,7 @@ export default function CollectionPage() {
       <SectionContainer id="collection-products">
         <motion.header variants={itemVariants} className="mb-6 lg:mb-12">
           <div className="lg:hidden">
-            <div className="h-48 w-full relative overflow-hidden">
+            <div className="h-48 w-full relative overflow-hidden rounded-sm">
               <Image
                 src={collection.image.url}
                 alt={collection.image.alt}
@@ -110,7 +111,7 @@ export default function CollectionPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-[#502B3A] p-6 text-white mt-2"
+              className="bg-[#502B3A] p-6 text-white mt-2 rounded-sm"
             >
               <h1 className="text-2xl font-primary font-medium mb-3">
                 {collection.name}
@@ -118,7 +119,7 @@ export default function CollectionPage() {
               <p className="text-sm font-light">{collection.description}</p>
             </motion.div>
           </div>
-          <div className="hidden lg:block relative h-80 overflow-hidden">
+          <div className="hidden lg:block relative h-80 overflow-hidden rounded-sm">
             <motion.div
               whileHover="hover"
               variants={imageHoverVariants}
@@ -138,7 +139,7 @@ export default function CollectionPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-white max-w-2xl bg-[#502B3A] p-8"
+                className="text-white max-w-2xl bg-[#502B3A] p-8 rounded-sm"
               >
                 <h1 className="text-3xl font-primary font-medium mb-4">
                   {collection.name}

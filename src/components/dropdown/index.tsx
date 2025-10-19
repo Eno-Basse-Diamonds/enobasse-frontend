@@ -263,6 +263,7 @@ export const CurrencyDropdown: React.FC = () => {
                 height={50}
                 width={100}
                 className="h-4 w-auto mr-2"
+                loading="eager"
               />
               {currency.label}
             </button>

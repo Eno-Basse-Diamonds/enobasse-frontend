@@ -29,7 +29,7 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   }, 0);
 
   return (
-    <div className="bg-gray-50 p-6 sm:p-8 mx-auto flex-1 space-y-6 lg:mt-0 lg:w-full mt-6 sm:mt-8">
+    <div className="bg-gray-50 p-6 sm:p-8 mx-auto flex-1 space-y-6 lg:mt-0 lg:w-full mt-6 sm:mt-8 rounded-sm">
       <h2 className="text-xl font-semibold text-[#502B3A] mb-4">
         Order Summary
       </h2>
