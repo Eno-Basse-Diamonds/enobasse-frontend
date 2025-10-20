@@ -62,7 +62,7 @@ export function AdminSettingsForm({
       </div>
 
       {/* Profile Information */}
-      <div className="bg-white shadow-sm border border-gray-200 p-6">
+      <div className="bg-white shadow-sm border border-gray-200 p-6 rounded-sm">
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
             <User className="w-5 h-5 text-white" />
@@ -138,7 +138,7 @@ export function AdminSettingsForm({
       </div>
 
       {/* Account Preferences */}
-      <div className="bg-white shadow-sm border border-gray-200 p-6">
+      <div className="bg-white shadow-sm border border-gray-200 p-6 rounded-sm">
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
             <Globe className="w-5 h-5 text-white" />

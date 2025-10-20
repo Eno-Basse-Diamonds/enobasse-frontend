@@ -25,7 +25,7 @@ export function DiamondPreview({
     .map(shape => shape.id);
 
   return (
-    <SectionContainer activeTab={activeTab} tabType="diamond" title="Diamond Preview">
+    <SectionContainer activeTab={activeTab} tabType="diamond" title="Diamond">
       <div className="space-y-6">
         <div>
           <p className="text-sm text-gray-600 mb-4">Preview Shape</p>
@@ -40,7 +40,7 @@ export function DiamondPreview({
         </div>
 
         <div>
-          <p className="text-sm text-gray-600 mb-3">Preview Size</p>
+          <p className="text-sm text-gray-600 mb-3">Size</p>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {PREVIEW_SIZES.map((size) => (
               <button

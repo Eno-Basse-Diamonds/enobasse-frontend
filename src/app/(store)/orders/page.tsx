@@ -106,7 +106,7 @@ export default function OrderHistoryPage() {
                   >
                     <div className="flex flex-col md:flex-row gap-6">
                       <div className="flex-shrink-0">
-                        <div className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200">
+                        <div className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200 rounded-sm">
                           <Image
                             src={item.productVariant.images[0].url}
                             alt={item.productVariant.images[0].alt}

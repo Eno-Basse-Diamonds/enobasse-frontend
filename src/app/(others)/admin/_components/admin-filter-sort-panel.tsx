@@ -107,7 +107,7 @@ export function AdminFilterSortPanel({
           </Button>
 
           {isFilterOpen && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10">
+            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10 rounded-sm">
               {filterOptions.map((option) => (
                 <label
                   key={option.value}
@@ -148,7 +148,7 @@ export function AdminFilterSortPanel({
           </Button>
 
           {isSortOpen && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10">
+            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 shadow-lg z-10 rounded-sm">
               {sortOptions.map((option) => (
                 <button
                   key={option.value}

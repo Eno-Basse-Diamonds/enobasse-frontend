@@ -20,7 +20,7 @@ export const TestimonialList = memo(function TestimonialList({
       {testimonials.map((testimonial) => (
         <div
           key={testimonial.id}
-          className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full"
+          className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full rounded-sm"
         >
           <div className="p-6 flex flex-col flex-grow">
             <div className="flex items-center justify-between mb-4">

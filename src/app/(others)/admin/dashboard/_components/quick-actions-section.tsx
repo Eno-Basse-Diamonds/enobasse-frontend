@@ -49,7 +49,7 @@ const QuickActionLink = ({
 }) => (
   <Link
     href={href}
-    className="bg-white shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+    className="bg-white rounded-sm shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
   >
     <div className="flex items-center">
       {icon}

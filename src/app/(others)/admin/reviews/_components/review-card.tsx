@@ -25,7 +25,7 @@ export const ReviewCard = memo(function ReviewCard({
   };
 
   return (
-    <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full">
+    <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full">
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex-grow">
           <div className="flex items-center mb-4">
@@ -63,7 +63,7 @@ export const ReviewCard = memo(function ReviewCard({
           </p>
 
           {review.product && (
-            <div className="mb-4 p-3 bg-gray-50 border">
+            <div className="mb-4 p-3 bg-gray-50 border rounded-sm">
               <p className="text-xs font-medium text-gray-700 mb-2">Product:</p>
 
               <div className="flex items-start gap-3">

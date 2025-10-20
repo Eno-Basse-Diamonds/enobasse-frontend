@@ -124,7 +124,7 @@ export default function ProductsPage() {
               </p>
               <div className="relative">
                 <select
-                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50"
+                  className="appearance-none bg-white border border-gray-300 py-2 pl-3 pr-8 text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50"
                   value={sortBy}
                   onChange={(e) => handleSortChange(e.target.value)}
                 >

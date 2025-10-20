@@ -103,8 +103,8 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
               key={`desktop-${index}`}
               onClick={() => handleImageClick(index)}
               className={`image-gallery__desktop-item cursor-zoom-in ${
-                isSingleImage ? "no-border" : ""
-              }`}
+                  isSingleImage ? "no-border" : ""
+                } rounded-sm overflow-hidden`}
               aria-label={`Image ${index + 1}: ${img.alt}`}
               role="gridcell"
             >
@@ -141,7 +141,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={closeZoom}
             >
-              <div className="relative w-full max-w-4xl aspect-square">
+              <div className="relative w-full max-w-4xl aspect-square rounded-sm overflow-hidden">
                 <Image
                   src={images[zoomedIndex].url}
                   alt={images[zoomedIndex].alt}

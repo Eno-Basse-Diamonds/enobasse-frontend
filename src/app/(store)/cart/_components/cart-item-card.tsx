@@ -76,7 +76,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
       <div className="flex gap-4">
         <Link
           href={`/products/${item.productSlug}`}
-          className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200"
+          className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200 rounded-sm"
         >
           <Image
             src={imageUrl}

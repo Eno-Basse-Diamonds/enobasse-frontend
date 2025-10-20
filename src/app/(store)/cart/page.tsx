@@ -90,7 +90,7 @@ export default function CartPage() {
               </div>
             )}
             <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-12">
-              <div className="bg-white overflow-hidden mx-auto w-full flex-none lg:max-w-xl xl:max-w-2xl">
+              <div className="bg-white overflow-hidden mx-auto w-full flex-none lg:max-w-xl xl:max-w-2xl rounded-sm">
                 <ul className="divide-y divide-gray-100">
                   {items.map((item) => (
                     <CartItemCard

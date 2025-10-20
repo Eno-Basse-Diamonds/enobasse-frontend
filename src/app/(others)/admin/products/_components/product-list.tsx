@@ -32,7 +32,7 @@ export const ProductList = memo(function ProductList({
         return (
           <div
             key={product.id}
-            className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full"
+            className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full"
           >
             <div className="h-48 bg-primary-500/10 relative overflow-hidden">
               {product.images?.[0]?.url && !imageErrors[product.id] ? (
@@ -50,12 +50,12 @@ export const ProductList = memo(function ProductList({
                 </div>
               )}
               <div className="absolute top-3 left-3">
-                <div className="px-3 py-1 text-xs font-semibold bg-primary-500 text-white">
+                <div className="px-3 py-1 text-xs font-semibold bg-primary-500 rounded-sm text-white">
                   {product.category}
                 </div>
               </div>
               <div className="absolute top-3 right-3">
-                <div className="px-3 py-1 text-xs font-semibold bg-secondary-500 text-white">
+                <div className="px-3 py-1 text-xs font-semibold bg-secondary-500 rounded-sm text-white">
                   {product.variants?.length || 0} Variants
                 </div>
               </div>

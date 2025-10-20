@@ -236,7 +236,7 @@ export default function CheckoutPage() {
                       <div className="relative">
                         <select
                           id="country"
-                          className="block w-full px-4 py-2 pr-8 border border-gray-300 focus:ring-[#D1A559] focus:border-[#D1A559] appearance-none bg-white"
+                          className="block w-full px-4 py-2 pr-8 border border-gray-300 rounded-sm focus:ring-[#D1A559] focus:border-[#D1A559] appearance-none bg-white"
                           required
                           value={formData.country}
                           onChange={(e) =>

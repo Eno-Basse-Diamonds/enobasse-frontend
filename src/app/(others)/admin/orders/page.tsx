@@ -134,7 +134,7 @@ export default function AdminOrdersPage() {
               placeholder="Search by ID..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="pl-10 pr-20 w-full p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
+              className="pl-10 pr-20 w-full p-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
             />
             {(currentSearch || inputValue) && (
               <button

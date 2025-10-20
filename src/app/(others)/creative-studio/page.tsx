@@ -16,6 +16,7 @@ export default function RingConfiguratorPage() {
   const [configuration, setConfiguration] = useState<RingConfiguration>(DEFAULT_CONFIGURATION);
   const [activeTab, setActiveTab] = useState<TabType>("diamond");
   const [showProductDetails, setShowProductDetails] = useState(false);
+  const [generatedImages, setGeneratedImages] = useState<Array<{ src: string; alt?: string }>>([]);
 
   return (
     <div className="min-h-screen my-12">
@@ -29,6 +30,7 @@ export default function RingConfiguratorPage() {
               headStyle={configuration.headStyle}
               shankStyle={configuration.shankStyle}
               metalType={configuration.metalType}
+              onImagesUpdate={(imgs) => setGeneratedImages(imgs)}
             />
             <ProductDetails
               metalName={getFullMetalName(configuration.metalType, configuration.karat)}
@@ -37,7 +39,7 @@ export default function RingConfiguratorPage() {
             />
           </div>
 
-          <div className="space-y-6">
+          <div className="flex flex-col gap-y-5">
             <ProductInfo configuration={configuration} />
 
             <ConfigurationForm
@@ -45,6 +47,7 @@ export default function RingConfiguratorPage() {
               onConfigurationChange={setConfiguration}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              generatedImages={generatedImages}
             />
           </div>
         </div>
