@@ -251,6 +251,7 @@ export const GEMSTONES_BY_HEAD_STYLE: Record<string, string[]> = {
 
 export const DEFAULT_CONFIGURATION: RingConfiguration = {
   gemstoneShape: "round",
+  previewSize: "1 ct",
   headStyle: "4-prong-nouveau",
   shankStyle: "solitaire",
   metalType: "white-gold",

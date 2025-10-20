@@ -27,7 +27,7 @@ export const CollectionList = memo(function CollectionList({
       {collections.map((collection) => (
         <div
           key={collection.id}
-          className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full"
+          className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full rounded-sm"
         >
           <div className="h-48 bg-primary-500/10 relative overflow-hidden">
             {collection.image?.url && !imageErrors[collection.id] ? (
@@ -46,7 +46,7 @@ export const CollectionList = memo(function CollectionList({
             )}
             <div className="absolute top-3 right-3 flex gap-2">
               <div
-                className={`px-3 py-1 text-xs font-semibold ${
+                className={`px-3 py-1 text-xs font-semibold rounded-sm ${
                   collection.published
                     ? "bg-green-100 text-green-800 border border-green-200"
                     : "bg-yellow-100 text-yellow-800 border border-yellow-200"

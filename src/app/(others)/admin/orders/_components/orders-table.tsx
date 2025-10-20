@@ -34,7 +34,7 @@ export function OrdersTable({
   }
 
   return (
-    <div className="bg-white border border-primary-500/10 relative overflow-x-auto">
+    <div className="bg-white rounded-sm border border-primary-500/10 relative overflow-x-auto">
       <table className="w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -124,7 +124,7 @@ export function OrdersTable({
                 </div>
               </Td>
               <Td>
-                <span className="text-xs px-2 py-1 border capitalize">
+                <span className="text-xs px-2 py-1 border capitalize rounded-sm">
                   {order.status}
                 </span>
               </Td>

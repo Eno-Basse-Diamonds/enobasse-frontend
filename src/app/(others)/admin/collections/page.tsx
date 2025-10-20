@@ -199,7 +199,7 @@ export default function AdminCollectionsPage() {
                   placeholder="Search collections..."
                   value={inputValue}
                   onChange={handleInputChange}
-                  className="pl-10 pr-20 w-full p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
+                  className="pl-10 pr-20 w-full p-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
                 />
                 {(currentSearch || inputValue) && (
                   <button

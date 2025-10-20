@@ -27,6 +27,7 @@ interface ProductGalleryProps {
   headStyle: string;
   shankStyle: string;
   metalType: string;
+  onImagesUpdate?: (images: { src: string; alt: string }[]) => void;
 }
 
 export function ProductGallery({
@@ -34,6 +35,7 @@ export function ProductGallery({
   headStyle,
   shankStyle,
   metalType,
+  onImagesUpdate,
 }: ProductGalleryProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -90,6 +92,7 @@ export function ProductGallery({
     setGeneratedImages(images);
     setIsGenerating(false);
     setImagesReady(true);
+    if (onImagesUpdate) onImagesUpdate(images);
   };
 
   const handleImageGenerationStart = () => {
@@ -136,7 +139,7 @@ export function ProductGallery({
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-gray-100 rounded-sm flex items-center justify-center aspect-square pt-10 relative overflow-hidden">
             <div
-              className={`w-full h-full ${isInitialLoad && !imagesReady ? "filter blur-md" : ""}`}
+              className={`w-full h-full ${(isInitialLoad && !imagesReady) || isGenerating ? "filter blur-md" : ""}`}
             >
               <ThreeDRing
                 gemstoneShape={gemstoneShape}
@@ -149,7 +152,7 @@ export function ProductGallery({
               />
             </div>
 
-            {isInitialLoad && !imagesReady && (
+            {((isInitialLoad && !imagesReady) || isGenerating) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
                 <LoadingSpinner size="lg" text="Generating product views..." />
               </div>
@@ -188,11 +191,11 @@ export function ProductGallery({
 
       {/* Mobile/Tablet View */}
       <div className="lg:hidden">
-        <div
-          className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden mb-4"
-        >
           <div
-            className={`w-full h-full ${isInitialLoad && currentImageIndex === 0 && !imagesReady ? "filter blur-md" : ""}`}
+            className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden mb-4"
+          >
+          <div
+            className={`w-full h-full ${((isInitialLoad && currentImageIndex === 0 && !imagesReady) || (isGenerating && currentImageIndex === 0)) ? "filter blur-md" : ""}`}
           >
             {currentImageIndex === 0 ? (
               <div className="w-full h-full flex items-center justify-center mt-6">
@@ -219,7 +222,7 @@ export function ProductGallery({
             )}
           </div>
 
-          {isInitialLoad && currentImageIndex === 0 && !imagesReady && (
+          {((isInitialLoad && currentImageIndex === 0 && !imagesReady) || (isGenerating && currentImageIndex === 0)) && (
             <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
               <LoadingSpinner size="lg" text="Generating product views..." />
             </div>

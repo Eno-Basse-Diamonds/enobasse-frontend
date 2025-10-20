@@ -29,7 +29,7 @@ class ApiClient {
   private constructor() {
     this.axiosInstance = setupCache(
       axios.create({
-        baseURL: "https://enobasse.onrender.com",
+        baseURL: API_URL,
         headers: {
           "Content-Type": "application/json",
         },

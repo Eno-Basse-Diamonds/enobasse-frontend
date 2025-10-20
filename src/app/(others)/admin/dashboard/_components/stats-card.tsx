@@ -9,7 +9,7 @@ export const StatsCard = ({
   compact?: boolean;
 }) => (
   <div
-    className={`bg-white shadow-sm border border-gray-200 ${compact ? "p-4" : "p-6"}`}
+    className={`bg-white shadow-sm rounded-sm border border-gray-200 ${compact ? "p-4" : "p-6"}`}
   >
     <div className="flex items-center justify-between">
       <div>
@@ -20,7 +20,7 @@ export const StatsCard = ({
           {value.toLocaleString()}
         </p>
       </div>
-      <div className={`h-12 w-12 ${bgColor} flex items-center justify-center`}>
+      <div className={`h-12 w-12 ${bgColor} rounded-sm flex items-center justify-center`}>
         {icon}
       </div>
     </div>

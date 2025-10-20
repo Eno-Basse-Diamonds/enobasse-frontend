@@ -214,7 +214,7 @@ export default function AdminAccountsPage() {
               placeholder="Search accounts by name or email..."
               value={inputValue}
               onChange={handleInputChange}
-              className="pl-10 pr-20 w-full p-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
+              className="pl-10 pr-20 w-full p-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
             />
             {(currentSearch || inputValue) && (
               <button
@@ -242,7 +242,7 @@ export default function AdminAccountsPage() {
         </div>
 
         {!isLoading && data?.accounts && data.accounts.length > 0 ? (
-          <div className="bg-white border border-primary-500/10 relative overflow-x-auto">
+          <div className="bg-white rounded-sm border border-primary-500/10 relative overflow-x-auto rounded-sm">
             <table className="w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -356,7 +356,7 @@ export default function AdminAccountsPage() {
             icon={<Users className="w-16 h-16 text-gray-400" />}
           />
         ) : (
-          <div className="bg-white border border-primary-500/10 p-6">
+          <div className="bg-white border border-primary-500/10 p-6 rounded-sm">
             <div className="animate-pulse space-y-3">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="h-12 bg-gray-100" />

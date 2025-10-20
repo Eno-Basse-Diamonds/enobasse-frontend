@@ -144,7 +144,7 @@ export function TestimonialForm({
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
         <form
           onSubmit={handleSubmit}
-          className="bg-white w-full max-w-2xl h-full flex flex-col shadow-2xl"
+          className="bg-white w-full max-w-2xl h-full flex flex-col shadow-2xl rounded-sm"
         >
           <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
             <h3 className="text-2xl font-semibold text-primary-500">
@@ -265,7 +265,7 @@ const FormField: React.FC<FormFieldProps> = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300 ${
+        className={`w-full p-2 border border-primary-100 text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300 ${
           icon ? "pl-10" : ""
         }`}
         placeholder={placeholder}
@@ -307,7 +307,7 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
       value={value}
       onChange={onChange}
       rows={rows}
-      className="w-full p-4 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+      className="w-full p-4 border border-primary-100 text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
       placeholder={placeholder}
     />
     {characterCount !== undefined && maxCharacters !== undefined && (
@@ -358,7 +358,7 @@ const ImageUploadField = ({
         name="avatar.alt"
         value={formData.avatar?.alt || ""}
         onChange={(e) => onImageChange("alt", e.target.value)}
-        className="h-10 px-3 py-2 border text-sm border-primary-100 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+        className="h-10 px-3 py-2 border text-sm border-primary-100 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
         placeholder="Image alt text"
       />
     </div>

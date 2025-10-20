@@ -31,10 +31,10 @@ export default function AdminAnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-white shadow-sm border border-primary-500/10 p-8 mb-8">
+          <div className="bg-white shadow-sm rounded-sm border border-primary-500/10 p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-primary-500/10 flex items-center justify-center">
+                <div className="w-12 h-12 bg-primary-500/10 rounded-sm flex items-center justify-center">
                   <BarChart3 className="w-6 h-6 text-primary-500" />
                 </div>
                 <div>
@@ -56,7 +56,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 p-6">
+              <div className="bg-gray-50 rounded-sm p-6 rounded-sm">
                 <div className="flex items-center space-x-2 mb-4">
                   <Lock className="w-5 h-5 text-primary-500" />
                   <h3 className="font-semibold text-primary-500">
@@ -68,7 +68,7 @@ export default function AdminAnalyticsPage() {
                     <label className="block text-sm font-medium text-primary-400 mb-1">
                       Email
                     </label>
-                    <div className="bg-white border border-gray-200 rounded px-3 py-2 text-sm font-mono">
+                    <div className="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-mono">
                       enobasse01@gmail.com
                     </div>
                   </div>
@@ -76,14 +76,14 @@ export default function AdminAnalyticsPage() {
                     <label className="block text-sm font-medium text-primary-400 mb-1">
                       Password
                     </label>
-                    <div className="bg-white border border-gray-200 rounded px-3 py-2 text-sm font-mono">
+                    <div className="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-mono">
                       qC7!HLUEGDVJtt
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 p-6">
+              <div className="bg-gray-50 rounded-sm p-6 rounded-sm">
                 <div className="flex items-center space-x-2 mb-4">
                   <Eye className="w-5 h-5 text-primary-500" />
                   <h3 className="font-semibold text-primary-500">
@@ -110,7 +110,7 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
 
-          <div className="bg-secondary-500/10 border border-secondary-200 p-6">
+          <div className="bg-secondary-500/10 border border-secondary-200 rounded-sm p-6">
             <h3 className="font-semibold text-secondary-500 mb-3 text-lg">
               Accessing the Dashboard
             </h3>

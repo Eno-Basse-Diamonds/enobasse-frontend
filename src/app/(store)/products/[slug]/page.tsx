@@ -429,10 +429,10 @@ export default function ProductPage() {
 
       {relatedProducts && (
         <SectionContainer id="related-products">
-          <div className="mb-8 max-w-7xl mx-auto">
+            <div className="mb-8 max-w-7xl mx-auto">
             <Divider
               label="Might as well interest you"
-              className="px-4 bg-white md:text-xl text-[#502B3A] font-primary"
+              className="px-4 bg-white md:text-xl text-[#502B3A] font-primary rounded-sm"
             />
           </div>
           <div>

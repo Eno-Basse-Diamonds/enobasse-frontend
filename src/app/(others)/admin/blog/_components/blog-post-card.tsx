@@ -19,7 +19,7 @@ export const BlogPostCard = memo(function BlogPostCard({
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 border border-primary-500/10 flex flex-col h-full">
+    <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full">
       <div className="h-48 bg-primary-500/10 relative overflow-hidden">
         {post.image?.src && !imageError ? (
           <Image

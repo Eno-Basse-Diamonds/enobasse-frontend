@@ -427,7 +427,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
     >
       <motion.div
         ref={modalRef}
-        className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl relative"
+        className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl relative rounded-sm"
         variants={modal}
       >
         <motion.button
@@ -461,7 +461,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
                   required
                   aria-required="true"
                 />
@@ -478,7 +478,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200"
                   required
                   aria-required="true"
                 />
@@ -541,7 +541,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
                 id="content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200 h-24 md:h-32 resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#502B3A]/50 focus:border-[#502B3A]/50 transition-colors duration-200 h-24 md:h-32 resize-none"
                 rows={5}
                 required
                 aria-required="true"

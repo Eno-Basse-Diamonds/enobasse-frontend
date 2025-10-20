@@ -21,12 +21,12 @@ export interface FontOption {
 
 export interface RingConfiguration {
   gemstoneShape: string;
+  previewSize: string;
   headStyle: string;
   shankStyle: string;
   metalType: string;
   karat: string;
   ringSize: number;
-  /** Type of diamond: natural, lab-grown, or moissanite */
   diamondType: DiamondType;
   engravingText: string;
   engravingFont: string;

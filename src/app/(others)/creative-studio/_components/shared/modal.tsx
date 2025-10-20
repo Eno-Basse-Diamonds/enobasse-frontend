@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,29 +8,45 @@ interface ModalProps {
   className?: string;
 }
 
-export function Modal({ isOpen, onClose, title, children, className = '' }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  className = "",
+}: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 backdrop">
+    <div
+      className="fixed inset-0 z-50 bg-black/40 flex sm:items-center sm:justify-center"
+      onClick={onClose}
+    >
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-white rounded-t-sm shadow-xl h-[70vh] overflow-y-auto creative-studio-animate-slide-up ${className}`}
+        onClick={(e) => e.stopPropagation()}
+        className={`
+          bg-white shadow-xl overflow-y-auto
+          fixed bottom-0 left-0 right-0 rounded-t-sm h-[70vh]
+          sm:static sm:max-w-lg sm:w-full sm:h-auto sm:max-h-[90vh]
+          sm:animate-none creative-studio-animate-slide-up
+          ${className}
+        `}
       >
         <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-semibold">{title}</h2>
