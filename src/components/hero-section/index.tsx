@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -82,17 +82,55 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   slideDuration = 5000,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+
+    const startAutoPlay = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, slideDuration);
+    };
+
+    startAutoPlay();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [autoPlay, slideDuration, slides.length]);
 
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
+    resetAutoPlay();
   };
 
   const goToPrevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    resetAutoPlay();
   };
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
+    resetAutoPlay();
+  };
+
+  const resetAutoPlay = () => {
+    if (!autoPlay) return;
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, slideDuration);
   };
 
   const renderSlide = (slide: HeroSlide) => {
@@ -113,14 +151,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center p-8">
-                <h2
-                  className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-white"
-                >
+                <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-white">
                   {slide.title}
                 </h2>
-                <h3
-                  className="font-light md:text-xl mb-8 text-white"
-                >
+                <h3 className="font-light md:text-xl mb-8 text-white">
                   {slide.description}
                 </h3>
                 <div className="flex flex-col items-center gap-y-4 w-full max-w-md">
@@ -144,14 +178,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <div className="hidden lg:flex flex-col md:flex-row h-full w-full">
               <div className="w-full md:w-1/2 flex flex-col justify-center items-start p-8 md:p-16 bg-gradient-to-tl from-[#EEDEC3] via-[#EEDEC3]/40 via-[50%] to-[#EEDEC3]/10">
-                <h2
-                  className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-primary-500"
-                >
+                <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-primary-500">
                   {slide.title}
                 </h2>
-                <h3
-                  className="font-light md:text-xl mb-8 text-primary-500"
-                >
+                <h3 className="font-light md:text-xl mb-8 text-primary-500">
                   {slide.description}
                 </h3>
                 <div className="flex items-center gap-x-4">
@@ -199,14 +229,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center p-8">
-                <p
-                  className="text-sm mb-1 uppercase tracking-wider text-white"
-                >
+                <p className="text-sm mb-1 uppercase tracking-wider text-white">
                   {slide.eyebrow}
                 </p>
-                <h2
-                  className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-white text-shadow"
-                >
+                <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-white text-shadow">
                   {slide.title}
                 </h2>
                 <Link
@@ -228,14 +254,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 />
                 <div className="bg-gradient-to-t from-primary-500 via-primary-500/90 via-[40%] to-transparent absolute inset-0"></div>
                 <div className="relative z-10 text-white flex flex-col items-center text-center w-full">
-                  <p
-                    className="text-sm mb-1 uppercase tracking-wider"
-                  >
+                  <p className="text-sm mb-1 uppercase tracking-wider">
                     {slide.eyebrow}
                   </p>
-                  <h2
-                    className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-shadow"
-                  >
+                  <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-shadow">
                     {slide.title}
                   </h2>
                   <Link
@@ -255,14 +277,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 />
                 <div className="bg-gradient-to-t from-black via-black/80 via-[40%] to-transparent absolute inset-0"></div>
                 <div className="relative z-10 text-white flex flex-col items-center text-center w-full">
-                  <p
-                    className="text-sm mb-1 uppercase tracking-wider"
-                  >
+                  <p className="text-sm mb-1 uppercase tracking-wider">
                     {slide.eyebrow2}
                   </p>
-                  <h2
-                    className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-shadow"
-                  >
+                  <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-8 text-shadow">
                     {slide.title2}
                   </h2>
                   <Link
@@ -292,14 +310,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-center p-8">
-                <h2
-                  className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-white"
-                >
+                <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-white">
                   {slide.title}
                 </h2>
-                <p
-                  className="font-light mb-8 text-white max-w-md"
-                >
+                <p className="font-light mb-8 text-white max-w-md">
                   {slide.description}
                 </p>
                 <Link
@@ -321,14 +335,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 />
               </div>
               <div className="w-full md:w-1/3 flex flex-col justify-center items-center p-8 text-center bg-gradient-to-tl from-[#EEDEC3] via-[#EEDEC3]/40 via-[50%] to-[#EEDEC3]/10">
-                <h2
-                  className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-primary-500"
-                >
+                <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-primary-500">
                   {slide.title}
                 </h2>
-                <p
-                  className="font-light mb-8 text-primary-500 max-w-md"
-                >
+                <p className="font-light mb-8 text-primary-500 max-w-md">
                   {slide.description}
                 </p>
                 <Link
