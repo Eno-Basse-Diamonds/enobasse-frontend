@@ -13,16 +13,19 @@ import "./globals.scss";
 const lora = Lora({
   variable: "--font-lora",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const gantari = Gantari({
   variable: "--font-gantari",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const dancingScript = Dancing_Script({
   variable: "--font-dancing-script",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
