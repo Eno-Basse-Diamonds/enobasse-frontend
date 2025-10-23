@@ -191,7 +191,9 @@ export default async function HomePage() {
           text: "Contact Us",
           href: "/maintenance-repairs",
         }}
-        videoSrc="https://res.cloudinary.com/enobasse/video/upload/v1756511716/maintenance_gfxt92.mp4"
+        videoSrcMP4="/videos/maintenance.mp4"
+        videoSrcMOV="/videos/maintenance.mov"
+        videoSrcWEBM="/videos/maintenance.webm"
       />
 
       <CTASection
