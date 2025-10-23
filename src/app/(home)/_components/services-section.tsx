@@ -5,14 +5,18 @@ interface ServicesSectionProps {
   title: string;
   description: string[];
   button: { text: string; href: string };
-  videoSrc: string;
+  videoSrcMP4: string;
+  videoSrcMOV: string;
+  videoSrcWEBM: string;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
   title,
   description,
   button,
-  videoSrc,
+  videoSrcMP4,
+  videoSrcMOV,
+  videoSrcWEBM,
 }) => {
   return (
     <section className="mt-10 md:mt-20 md:px-4 lg:px-8 flex flex-col lg:flex-row gap-y-8 lg:gap-x-8 items-center">
@@ -21,9 +25,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           autoPlay={true}
           muted
           loop
+          preload="none"
+          playsInline
           className="rounded-sm w-full h-full object-cover"
         >
-          <source src={videoSrc} type="video/mp4" />
+          <source src={videoSrcMP4} type="video/mp4" />
+          <source src={videoSrcMOV} type="video/quicktime" />
+          <source src={videoSrcWEBM} type="video/webm" />
           Your browser does not support the video tag.
         </video>
       </div>
