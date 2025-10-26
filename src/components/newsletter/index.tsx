@@ -34,8 +34,6 @@ export const NewsletterPopup: React.FC = () => {
 
       if (scrollPercentage >= 40 && !hasShown) {
         setIsVisible(true);
-        setHasShown(true);
-        localStorage.setItem("newsletterPopupShown", "true");
         document.body.style.overflow = "hidden";
       }
     };
@@ -49,6 +47,8 @@ export const NewsletterPopup: React.FC = () => {
 
   const closePopup = () => {
     setIsVisible(false);
+    setHasShown(true);
+    localStorage.setItem("newsletterPopupShown", "true");
     document.body.style.overflow = "unset";
   };
 
@@ -78,13 +78,13 @@ export const NewsletterPopup: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
         onClick={closePopup}
       />
 
-      <div className="relative bg-white shadow-2xl max-w-4xl w-full mx-4 overflow-hidden transform transition-all duration-300 scale-95 animate-in fade-in-90 zoom-in-90">
+      <div className="relative bg-white shadow-2xl max-w-4xl w-full mx-2 overflow-hidden transform transition-all duration-300 scale-95 animate-in fade-in-90 zoom-in-90 rounded-sm">
         <button
           onClick={closePopup}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
@@ -106,7 +106,7 @@ export const NewsletterPopup: React.FC = () => {
         </button>
 
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/2 relative h-64 md:h-auto bg-gray-50">
+          <div className="w-full md:w-1/2 relative h-64 md:h-[60dvh] bg-gray-50">
             <Image
               src="https://res.cloudinary.com/enobasse/image/upload/v1752330904/women-wedding-ring_co47p3.webp"
               alt="Newsletter"
@@ -117,7 +117,7 @@ export const NewsletterPopup: React.FC = () => {
             />
           </div>
 
-          <div className="w-full md:w-1/2 p-6 md:p-8">
+          <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
             {isSuccess ? (
               <div className="text-center py-6 md:py-8">
                 <div className="text-green-500 mb-4">
@@ -159,7 +159,7 @@ export const NewsletterPopup: React.FC = () => {
                     <input
                       type="email"
                       placeholder="Enter your email address"
-                      className="w-full px-4 py-3 border border-primary-300 focus:ring-1 focus:ring-primary-400 focus:border-transparent outline-none transition-all text-sm md:text-base"
+                      className="w-full px-4 py-3 border border-primary-300 focus:ring-1 focus:ring-primary-400 focus:border-transparent outline-none transition-all text-sm md:text-base rounded-sm"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -170,7 +170,7 @@ export const NewsletterPopup: React.FC = () => {
                   <button
                     type="submit"
                     className="rounded-sm w-full bg-primary-500 text-white py-3 px-6 hover:bg-primary-400 disabled:bg-primary-300 transition-colors font-medium flex items-center justify-center text-sm md:text-base"
-                    disabled={isSubmitting || !email}
+                    disabled={isSubmitting}
                   >
                     {isSubmitting ? (
                       <>

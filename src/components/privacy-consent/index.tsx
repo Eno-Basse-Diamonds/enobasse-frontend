@@ -37,7 +37,7 @@ export const PrivacyConsent = () => {
       <div className="relative">
         <div
           className={`
-            bg-primary-500 p-6 md:p-8 shadow-2xl max-w-xl sm:ml-6 sm:mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
+            bg-primary-500 p-6 md:p-8 rounded-none md:rounded-sm shadow-2xl max-w-xl sm:ml-6 sm:mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
           `}
         >
           <div>
