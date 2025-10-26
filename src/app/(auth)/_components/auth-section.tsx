@@ -268,6 +268,7 @@ export default function AuthSection({
                   id={field.id}
                   name={field.name}
                   label={field.label}
+                  autoComplete="password"
                   placeholder={field.placeholder}
                   helpText={field.helpText}
                   required={field.required}
@@ -280,6 +281,7 @@ export default function AuthSection({
                 <Input
                   id={field.id}
                   name={field.name}
+                  autoComplete={field.name}
                   label={field.label}
                   type={field.type}
                   placeholder={field.placeholder}
