@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { X } from "lucide-react";
 
 export const PrivacyConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,13 +24,8 @@ export const PrivacyConsent = () => {
     setTimeout(() => setIsVisible(false), 300);
   };
 
-  const handleDecline = () => {
-    localStorage.setItem("privacyConsent", "false");
-    setIsAnimating(false);
-    setTimeout(() => setIsVisible(false), 300);
-  };
-
-  const handleClose = () => {
+  const handleNecessaryOnly = () => {
+    localStorage.setItem("privacyConsent", "true");
     setIsAnimating(false);
     setTimeout(() => setIsVisible(false), 300);
   };
@@ -43,18 +37,10 @@ export const PrivacyConsent = () => {
       <div className="relative">
         <div
           className={`
-            bg-primary-500 p-6 shadow-2xl max-w-xl sm:ml-6 sm:mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
+            bg-primary-500 p-6 md:p-8 shadow-2xl max-w-xl sm:ml-6 sm:mb-6 transition-all duration-300 ease-out pointer-events-auto  ${isAnimating ? "transform translate-y-0 opacity-100" : "transform translate-y-full opacity-0"}
           `}
         >
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 text-white transition-colors duration-200"
-            aria-label="Close"
-          >
-            <X size={18} />
-          </button>
-
-          <div className="pr-8">
+          <div>
             <h3 className="text-lg font-primary font-light mb-3 text-white tracking-wide">
               Privacy & Cookies
             </h3>
@@ -66,39 +52,33 @@ export const PrivacyConsent = () => {
             </p>
 
             <div className="text-xs text-gray-100 mb-4">
-              <Link
-                href="/privacy-policy"
-                className="underline"
-              >
+              <Link href="/privacy-policy" className="underline">
                 Privacy Policy
               </Link>
               {" • "}
-              <Link
-                href="/terms-and-conditions"
-                className="underline"
-              >
+              <Link href="/terms-and-conditions" className="underline">
                 Cookie Policy
               </Link>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleAccept}
                 className="
-                  rounded-sm flex-1 bg-white text-primary-500 px-4 py-2
+                  rounded-sm bg-white text-primary-500 px-4 py-2
                   font-medium text-sm tracking-wide
                   hover:bg-gray-100 transition-all duration-200
-                  transform
+                  transform sm:flex-1
                 "
               >
-                ACCEPT
+                ACCEPT ALL
               </button>
 
               <button
-                onClick={handleDecline}
-                className="rounded-sm px-4 py-2 border border-white text-white font-medium text-sm tracking-wide"
+                onClick={handleNecessaryOnly}
+                className="rounded-sm px-4 py-2 border border-white text-white font-medium text-sm tracking-wide sm:flex-1 hover:bg-white hover:bg-opacity-10 transition-all duration-200"
               >
-                DECLINE
+                NECESSARY COOKIES ONLY
               </button>
             </div>
           </div>
