@@ -209,10 +209,10 @@ export default function MaintenanceRepairsForm() {
           {alertMessage.message}
         </Alert>
       )}
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto md:px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-6 px-4">
             <h1 className="font-primary text-3xl md:text-4xl font-semibold text-primary-500 items-center text-center mb-4">
               Professional Jewelry Care
             </h1>

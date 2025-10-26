@@ -72,7 +72,7 @@ export const DesignSpecsForm = ({
   ];
 
   return (
-    <div className="bg-white border border-primary-100 shadow-md p-4 py-8 md:p-8 mb-8">
+    <div className="bg-white border border-primary-100 shadow-md p-4 py-8 md:p-8 mb-8 rounded-sm">
       <div className="flex items-center justify-center space-x-3 mb-6">
         <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
           Design Specifications
@@ -88,7 +88,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.jewelryType}
               onChange={(e) => onInputChange("jewelryType", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.jewelryType ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
               required
@@ -115,7 +115,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.metalType}
               onChange={(e) => onInputChange("metalType", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.metalType ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
               required
@@ -142,7 +142,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.metalPurity}
               onChange={(e) => onInputChange("metalPurity", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.metalPurity ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
               required
@@ -169,7 +169,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.gemstone}
               onChange={(e) => onInputChange("gemstone", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.gemstone ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
             >
@@ -196,7 +196,7 @@ export const DesignSpecsForm = ({
             value={designSpecs.size}
             onChange={(e) => onInputChange("size", e.target.value)}
             placeholder="e.g., Ring size 7, 18 inches"
-            className="w-full px-4 py-3 border border-slate-300"
+            className="w-full px-4 py-3 border rounded-sm border-slate-300"
           />
         </div>
 
@@ -208,7 +208,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.budget}
               onChange={(e) => onInputChange("budget", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.budget ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
               required
@@ -235,7 +235,7 @@ export const DesignSpecsForm = ({
             <select
               value={designSpecs.occasion}
               onChange={(e) => onInputChange("occasion", e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.occasion ? "border-red-500" : "border-slate-300"
               } appearance-none bg-white`}
               required
@@ -263,7 +263,7 @@ export const DesignSpecsForm = ({
             value={designSpecs.engraving}
             onChange={(e) => onInputChange("engraving", e.target.value)}
             placeholder="Custom text or symbols"
-            className="w-full px-4 py-3 border border-slate-300"
+            className="w-full px-4 py-3 border rounded-sm border-slate-300"
           />
         </div>
       </div>

@@ -22,7 +22,7 @@ export const CustomerDetailsForm = ({
   onInputChange,
 }: CustomerDetailsFormProps) => {
   return (
-    <div className="bg-white border border-primary-100 shadow-md p-4 py-8 md:p-8 mb-8">
+    <div className="bg-white border border-primary-100 shadow-md rounded-sm p-4 py-8 md:p-8 mb-8">
       <div className="flex items-center justify-center space-x-3 mb-6">
         <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
           Personal Information
@@ -41,7 +41,7 @@ export const CustomerDetailsForm = ({
             onChange={(e) =>
               onInputChange("personalInfo", "firstName", e.target.value)
             }
-            className={`w-full px-4 py-3 border ${
+            className={`w-full px-4 py-3 border rounded-sm ${
               errors.firstName ? "border-red-500" : "border-slate-300"
             }`}
             required
@@ -62,7 +62,7 @@ export const CustomerDetailsForm = ({
             onChange={(e) =>
               onInputChange("personalInfo", "lastName", e.target.value)
             }
-            className={`w-full px-4 py-3 border ${
+            className={`w-full px-4 py-3 border rounded-sm ${
               errors.lastName ? "border-red-500" : "border-slate-300"
             }`}
             required
@@ -83,7 +83,7 @@ export const CustomerDetailsForm = ({
             onChange={(e) =>
               onInputChange("personalInfo", "email", e.target.value)
             }
-            className={`w-full px-4 py-3 border ${
+            className={`w-full px-4 py-3 border rounded-sm ${
               errors.email ? "border-red-500" : "border-slate-300"
             }`}
             required
@@ -104,7 +104,7 @@ export const CustomerDetailsForm = ({
             onChange={(e) =>
               onInputChange("personalInfo", "phone", e.target.value)
             }
-            className={`w-full px-4 py-3 border ${
+            className={`w-full px-4 py-3 border rounded-sm ${
               errors.phone ? "border-red-500" : "border-slate-300"
             }`}
             required

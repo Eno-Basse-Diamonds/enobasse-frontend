@@ -22,7 +22,7 @@ export const AdditionalInfoForm = ({
   return (
     <div className="space-y-8">
       {/* Inscription Details */}
-      <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+      <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
         <div className="flex items-center justify-center space-x-3 my-6">
           <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
             Inscription Details
@@ -53,7 +53,7 @@ export const AdditionalInfoForm = ({
                   name="inscriptionText"
                   value={formData.inscriptionText}
                   onChange={onInputChange}
-                  className="w-full px-4 py-3 border border-slate-300"
+                  className="w-full px-4 py-3 border rounded-sm border-slate-300"
                   placeholder="Enter the exact inscription text"
                 />
               </div>
@@ -63,7 +63,7 @@ export const AdditionalInfoForm = ({
       </div>
 
       {/* Images */}
-      <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+      <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
         <div className="flex flex-col items-center justify-center space-x-3 my-6">
           <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
             Ring Photos
@@ -116,7 +116,7 @@ export const AdditionalInfoForm = ({
       </div>
 
       {/* Additional Notes */}
-      <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+      <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
         <div className="flex items-center justify-center space-x-3 my-6">
           <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
             Additional Information
@@ -132,7 +132,7 @@ export const AdditionalInfoForm = ({
               value={formData.notes}
               onChange={onInputChange}
               rows={4}
-              className="w-full px-4 py-3 border border-slate-300"
+              className="w-full px-4 py-3 border rounded-sm border-slate-300"
               placeholder="Any special requests, concerns, or additional information about your ring..."
             />
           </div>

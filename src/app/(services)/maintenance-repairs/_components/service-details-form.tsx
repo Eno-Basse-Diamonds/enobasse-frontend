@@ -24,13 +24,13 @@ export const ServiceDetailsForm = ({
   return (
     <div className="space-y-8">
       {/* Service Information */}
-      <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+      <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
         <div className="flex items-center justify-center space-x-3 my-6">
           <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
             Service Requirements
           </h2>
         </div>
-        <div className="p-8">
+        <div className="p-4 py-8 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -41,7 +41,7 @@ export const ServiceDetailsForm = ({
                   required
                   value={formData.serviceType}
                   onChange={(e) => onInputChange("serviceType", e.target.value)}
-                  className={`w-full px-4 py-3 border border-slate-300 appearance-none ${
+                  className={`w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none ${
                     errors?.serviceType ? "border-red-300" : "border-slate-300"
                   }`}
                 >
@@ -74,7 +74,7 @@ export const ServiceDetailsForm = ({
                   required
                   value={formData.urgency}
                   onChange={(e) => onInputChange("urgency", e.target.value)}
-                  className={`w-full px-4 py-3 border border-slate-300 appearance-none ${
+                  className={`w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none ${
                     errors?.urgency ? "border-red-300" : "border-slate-300"
                   }`}
                 >
@@ -100,7 +100,7 @@ export const ServiceDetailsForm = ({
                   onChange={(e) =>
                     onInputChange("preferredContact", e.target.value)
                   }
-                  className="w-full px-4 py-3 border border-slate-300 appearance-none"
+                  className="w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none"
                 >
                   <option value="">Select contact method</option>
                   <option value="email">Email</option>
@@ -121,7 +121,7 @@ export const ServiceDetailsForm = ({
                   onChange={(e) =>
                     onInputChange("pickupDelivery", e.target.value)
                   }
-                  className="w-full px-4 py-3 border border-slate-300 appearance-none"
+                  className="w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none"
                 >
                   <option value="">Select delivery method</option>
                   <option value="drop-off">Drop-off at Store</option>
@@ -141,7 +141,7 @@ export const ServiceDetailsForm = ({
                 value={formData.description}
                 onChange={(e) => onInputChange("description", e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-slate-300"
+                className="w-full px-4 py-3 border rounded-sm border-slate-300"
                 placeholder="Please describe the issue or service needed in detail..."
               />
             </div>
