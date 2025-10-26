@@ -29,7 +29,7 @@ export const FinalDetailsForm = ({
   onFileUpload,
 }: FinalDetailsFormProps) => {
   return (
-    <div className="bg-white shadow-md border border-primary-100 p-4 py-8 md:p-8 mb-8">
+    <div className="bg-white shadow-md border border-primary-100 p-4 py-8 md:p-8 mb-8 rounded-sm">
       <div className="flex items-center justify-center space-x-3 mb-6">
         <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
           Final Details
@@ -46,7 +46,7 @@ export const FinalDetailsForm = ({
             onChange={(e) => onDescriptionChange(e.target.value)}
             placeholder="Describe your vision in detail. Include any specific elements, inspirations, or requirements..."
             rows={5}
-            className="w-full px-4 py-3 border border-slate-30 resize-none"
+            className="w-full px-4 py-3 border rounded-sm border-slate-30 resize-none"
           />
         </div>
 
@@ -100,7 +100,7 @@ export const FinalDetailsForm = ({
             <select
               value={timeline}
               onChange={(e) => onTimelineChange(e.target.value)}
-              className={`w-full px-4 py-3 border ${
+              className={`w-full px-4 py-3 border rounded-sm ${
                 errors.timeline ? "border-red-500" : "border-slate-300"
               } focus:border-transparent appearance-none bg-white`}
               required

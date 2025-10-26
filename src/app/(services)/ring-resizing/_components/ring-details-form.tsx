@@ -25,7 +25,7 @@ export const RingDetailsForm = ({
   ringSizes,
 }: RingDetailsFormProps) => {
   return (
-    <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+    <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
       <div className="flex items-center justify-center space-x-3 my-6">
         <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
           Ring Details
@@ -42,7 +42,7 @@ export const RingDetailsForm = ({
               <select
                 value={formData.ringType}
                 onChange={(e) => onInputChange("ringType", "", e.target.value)}
-                className={`w-full px-4 py-3 border appearance-none ${
+                className={`w-full px-4 py-3 border rounded-sm appearance-none ${
                   errors.ringType ? "border-red-500" : "border-slate-300"
                 }`}
                 required
@@ -69,7 +69,7 @@ export const RingDetailsForm = ({
               <select
                 value={formData.currentSize}
                 onChange={(e) => onInputChange("currentSize", "", e.target.value)}
-                className={`w-full px-4 py-3 border appearance-none ${
+                className={`w-full px-4 py-3 border rounded-sm appearance-none ${
                   errors.currentSize ? "border-red-500" : "border-slate-300"
                 }`}
                 required
@@ -96,7 +96,7 @@ export const RingDetailsForm = ({
               <select
                 value={formData.desiredSize}
                 onChange={(e) => onInputChange("desiredSize", "", e.target.value)}
-                className={`w-full px-4 py-3 border appearance-none ${
+                className={`w-full px-4 py-3 border rounded-sm appearance-none ${
                   errors.desiredSize ? "border-red-500" : "border-slate-300"
                 }`}
                 required
@@ -123,7 +123,7 @@ export const RingDetailsForm = ({
               <select
                 value={formData.urgency}
                 onChange={(e) => onInputChange("urgency", "", e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 appearance-none"
+                className="w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none"
               >
                 <option value="standard">Standard (7-10 days)</option>
                 <option value="expedited">Expedited (3-5 days) +$50</option>

@@ -40,14 +40,14 @@ export const ItemDetailsForm = ({
 
   return (
     <div className="space-y-8">
-      <div className="bg-white border border-primary-100 shadow-md overflow-hidden">
+      <div className="bg-white border border-primary-100 shadow-md rounded-sm overflow-hidden">
         <div className="flex items-center justify-center space-x-3 my-6">
           <h2 className="font-primary font-semibold text-center text-2xl text-primary-500">
             Item Information
           </h2>
         </div>
 
-        <div className="p-8">
+        <div className="p-4 py-8 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -58,7 +58,7 @@ export const ItemDetailsForm = ({
                   required
                   value={formData.itemType}
                   onChange={(e) => onInputChange("itemType", e.target.value)}
-                  className={`w-full px-4 py-3 border border-slate-300 appearance-none ${
+                  className={`w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none ${
                     errors?.itemType ? "border-red-300" : "border-slate-300"
                   }`}
                 >
@@ -87,7 +87,7 @@ export const ItemDetailsForm = ({
                   required
                   value={formData.metalType}
                   onChange={(e) => onInputChange("metalType", e.target.value)}
-                  className={`w-full px-4 py-3 border border-slate-300 appearance-none ${
+                  className={`w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none ${
                     errors?.metalType ? "border-red-300" : "border-slate-300"
                   }`}
                 >
@@ -113,7 +113,7 @@ export const ItemDetailsForm = ({
                   required
                   value={formData.karat}
                   onChange={(e) => onInputChange("karat", e.target.value)}
-                  className={`w-full px-4 py-3 border border-slate-300 appearance-none ${
+                  className={`w-full px-4 py-3 border rounded-sm border-slate-300 appearance-none ${
                     errors?.karat ? "border-red-300" : "border-slate-300"
                   }`}
                 >
