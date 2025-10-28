@@ -30,7 +30,7 @@ export async function GET() {
         server: "Next.js Frontend Server",
         error: "Server health check failed",
       },
-      { status: 503 }
+      { status: 503 },
     );
   }
 }
