@@ -8,7 +8,7 @@ import { CurrencyDropdown } from "../dropdown";
 import { useProductsSearch } from "@/lib/hooks/use-products";
 import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
-import { SearchSlashIcon } from "lucide-react";
+import { ChevronRightIcon, SearchSlashIcon } from "lucide-react";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
@@ -22,6 +22,12 @@ import { AccountIcon } from "../icons/account";
 import { CartIcon } from "../icons/cart";
 import { ChevronDownIcon } from "../icons/chevron-down";
 import { ProductListLoader } from "../loaders/products";
+import { InstagramIcon } from "../icons/instagram";
+import { FacebookIcon } from "../icons/facebook";
+import { XIcon } from "../icons/x";
+import { LinkedInIcon } from "../icons/linkedin";
+import { TiktokIcon } from "../icons/tiktok";
+import { ArrowLeftIcon } from "../icons/arrow-left";
 
 interface NavigationItem {
   label: string;
@@ -31,7 +37,7 @@ interface NavigationItem {
 interface DropdownNavigation {
   id: string;
   title: string;
-  href: string;
+  href?: string;
   dropdownItems?: NavigationItem[];
 }
 
@@ -48,7 +54,6 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Rings",
     href: "/collections/rings",
     dropdownItems: [
-      { label: "All", href: "/collections/rings" },
       { label: "Engagement Rings", href: "/collections/engagement-rings" },
       { label: "Men's Wedding Rings", href: "/collections/men-wedding-rings" },
       {
@@ -67,7 +72,6 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Wristwears",
     href: "/collections/wristwears",
     dropdownItems: [
-      { label: "All", href: "/collections/wristwears" },
       { label: "Bangles", href: "/collections/bangles" },
       { label: "Bracelets", href: "/collections/bracelets" },
     ],
@@ -77,7 +81,6 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     title: "Neckpieces",
     href: "/collections/neckpieces",
     dropdownItems: [
-      { label: "All", href: "/collections/neckpieces" },
       { label: "Necklaces", href: "/collections/necklaces" },
       { label: "Pendants", href: "/collections/pendants" },
     ],
@@ -99,10 +102,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen((prev) => {
-      if (prev) setOpenDropdown(null);
-      return !prev;
-    });
+    setIsMobileMenuOpen((prev) => !prev);
   }, []);
 
   const toggleDropdown = useCallback((dropdownName: string) => {
@@ -165,7 +165,7 @@ const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
         {navItems.map((item) => (
           <li key={item.id} className="header__utility-nav-item">
             <Link
-              href={item.href}
+              href={item.href || "#"}
               className="header__utility-nav-link"
               aria-label={item.title}
             >
@@ -321,7 +321,7 @@ const NavItem: React.FC<DropdownNavigation> = ({
 }) => (
   <li className="relative list-none group py-3">
     <Link
-      href={href}
+      href={href || "#"}
       className="header__main-nav-link"
       aria-haspopup={!!dropdownItems}
       aria-expanded="false"
@@ -343,6 +343,12 @@ const NavItem: React.FC<DropdownNavigation> = ({
     )}
   </li>
 );
+interface DropdownNavigation {
+  id: string;
+  title: string;
+  href?: string;
+  dropdownItems?: Array<{ href: string; label: string }>;
+}
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -352,55 +358,107 @@ interface MobileMenuProps {
   navItems: DropdownNavigation[];
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({
-  isOpen,
-  onClose,
-  openDropdown,
-  onToggleDropdown,
-  navItems,
-}) => (
-  <div
-    className={`header__mobile-menu ${
-      isOpen ? "header__mobile-menu--open" : ""
-    }`}
-  >
-    <div className="header__mobile-menu-container">
-      <div className="mt-3 flex justify-end px-4">
-        <CurrencyDropdown />
-      </div>
-      <nav className="header__mobile-nav" aria-label="Mobile menu">
-        <ul className="header__mobile-nav-list">
-          {navItems.map((item) => (
-            <MobileNavItem
-              key={item.id}
-              item={item}
-              isOpen={openDropdown === item.id}
-              onToggle={onToggleDropdown}
-              onCloseMenu={onClose}
-            />
-          ))}
-        </ul>
-      </nav>
-    </div>
-  </div>
-);
-
 interface MobileNavItemProps {
   item: DropdownNavigation;
-  isOpen: boolean;
-  onToggle: (id: string) => void;
+  onOpenSubMenu: (item: DropdownNavigation) => void;
   onCloseMenu: () => void;
+  isLastItem?: boolean;
 }
+
+interface SubMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+  item: DropdownNavigation;
+  onCloseMainMenu: () => void;
+}
+
+const SubMenu: React.FC<SubMenuProps> = ({
+  isOpen,
+  onClose,
+  item,
+  onCloseMainMenu,
+}) => {
+  return (
+    <div
+      className={`header__mobile-submenu ${
+        isOpen ? "header__mobile-submenu--open" : ""
+      }`}
+    >
+      <div className="header__mobile-submenu-content">
+        <div className="header__mobile-submenu-header">
+          <button
+            onClick={onClose}
+            aria-label="Go back"
+          >
+            <ArrowLeftIcon />
+          </button>
+        </div>
+        <h2 className="header__mobile-submenu-title">{item.title}</h2>
+        <nav className="header__mobile-submenu-nav">
+          <ul className="header__mobile-submenu-list">
+            {item.dropdownItems?.map((subItem) => (
+              <li key={subItem.href} className="header__mobile-submenu-item">
+                <Link
+                  href={subItem.href}
+                  className="header__mobile-submenu-link"
+                  onClick={onCloseMainMenu}
+                >
+                  {subItem.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  );
+};
 
 const MobileNavItem: React.FC<MobileNavItemProps> = ({
   item,
-  isOpen,
-  onToggle,
+  onOpenSubMenu,
   onCloseMenu,
+  isLastItem = false,
 }) => {
-  if (!item.dropdownItems) {
+  const hasDropdown = item.dropdownItems && item.dropdownItems.length > 0;
+
+  const itemClass = `header__mobile-nav-item ${
+    isLastItem ? "header__last-nav-item" : ""
+  }`;
+
+  if (!item.href && hasDropdown) {
     return (
-      <li className="header__mobile-nav-item">
+      <li className={itemClass}>
+        <div className="header__mobile-nav-item-wrapper">
+          <button
+            className="header__mobile-nav-link"
+            onClick={() => onOpenSubMenu(item)}
+          >
+            {item.title}
+          </button>
+          <button
+            className="header__mobile-nav-chevron"
+            onClick={() => onOpenSubMenu(item)}
+            aria-label={`Open ${item.title} submenu`}
+          >
+            <ChevronRightIcon className="w-5 h-5" />
+          </button>
+        </div>
+      </li>
+    );
+  }
+
+  if (!item.href && !hasDropdown) {
+    return (
+      <li className={itemClass}>
+        <span className="header__mobile-nav-title">{item.title}</span>
+      </li>
+    );
+  }
+
+  if (item.href && !hasDropdown) {
+    return (
+      <li className={itemClass}>
         <Link
           href={item.href}
           className="header__mobile-nav-link"
@@ -413,36 +471,172 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
   }
 
   return (
-    <li className="header__mobile-dropdown">
-      <button
-        className="header__mobile-dropdown-button"
-        onClick={() => onToggle(item.id)}
-        aria-expanded={isOpen}
-      >
-        <span>{item.title}</span>
-        <ChevronDownIcon
-          className={`header__mobile-dropdown-icon ${
-            isOpen ? "header__mobile-dropdown-icon--rotated" : ""
-          }`}
-        />
-      </button>
-      <div
-        className={`header__mobile-dropdown-content ${
-          isOpen ? "header__mobile-dropdown-content--open" : ""
-        }`}
-      >
-        {item.dropdownItems.map((subItem) => (
-          <Link
-            key={subItem.href}
-            href={subItem.href}
-            className="header__mobile-dropdown-link"
-            onClick={onCloseMenu}
-          >
-            {subItem.label}
-          </Link>
-        ))}
+    <li className={itemClass}>
+      <div className="header__mobile-nav-item-wrapper">
+        <Link
+          href={item.href!}
+          className="header__mobile-nav-link"
+          onClick={onCloseMenu}
+        >
+          {item.title}
+        </Link>
+        <button
+          className="header__mobile-nav-chevron"
+          onClick={() => onOpenSubMenu(item)}
+          aria-label={`Open ${item.title} submenu`}
+        >
+          <ChevronRightIcon className="w-5 h-5" />
+        </button>
       </div>
     </li>
+  );
+};
+
+const MobileMenu: React.FC<MobileMenuProps> = ({
+  isOpen,
+  onClose,
+  navItems,
+}) => {
+  const otherNavItems = [
+    {
+      id: "our-services",
+      title: "Our Services",
+      dropdownItems: [
+        { label: "Custom Design", href: "/custom-design" },
+        { label: "Ring Resizing", href: "/ring-resizing" },
+        { label: "Maintenance & Repairs", href: "/maintenance-repairs" },
+      ],
+    },
+    {
+      id: "creative-studio",
+      title: "Creative Studio",
+      href: "/creative-studio",
+    },
+    { id: "faqs", title: "FAQs", href: "/faqs" },
+    {
+      id: "testimonials",
+      title: "Testimonials",
+      href: "/testimonials",
+      isLastItem: true,
+    },
+  ];
+
+  const [subMenuState, setSubMenuState] = useState<{
+    isOpen: boolean;
+    item: DropdownNavigation | null;
+  }>({ isOpen: false, item: null });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSubMenuState({ isOpen: false, item: null });
+    }
+  }, [isOpen]);
+
+  const handleOpenSubMenu = (item: DropdownNavigation) => {
+    setSubMenuState({ isOpen: false, item });
+    requestAnimationFrame(() => {
+      setSubMenuState({ isOpen: true, item });
+    });
+  };
+
+  const handleCloseSubMenu = () => {
+    setSubMenuState((prev) => ({ ...prev, isOpen: false }));
+    setTimeout(() => setSubMenuState({ isOpen: false, item: null }), 300);
+  };
+
+  const allNavItems = [...navItems, ...otherNavItems];
+
+  return (
+    <>
+      <div
+        className={`header__mobile-menu ${
+          isOpen ? "header__mobile-menu--open" : ""
+        }`}
+      >
+        <div className="header__mobile-menu-container">
+          <nav className="header__mobile-nav" aria-label="Mobile menu">
+            <ul className="header__mobile-nav-list">
+              {allNavItems.map((item, index) => (
+                <MobileNavItem
+                  key={item.id}
+                  item={item}
+                  onOpenSubMenu={handleOpenSubMenu}
+                  onCloseMenu={onClose}
+                  isLastItem={index === allNavItems.length - 1}
+                />
+              ))}
+            </ul>
+          </nav>
+          <div className="header__mobile-menu-footer">
+            <Socials />
+          </div>
+        </div>
+      </div>
+
+      {subMenuState.item && (
+        <SubMenu
+          isOpen={isOpen && subMenuState.isOpen}
+          onClose={handleCloseSubMenu}
+          item={subMenuState.item}
+          onCloseMainMenu={onClose}
+        />
+      )}
+    </>
+  );
+};
+
+interface SocialLink {
+  icon: React.ReactNode;
+  href: string;
+  ariaLabel: string;
+}
+
+const Socials: React.FC = () => {
+  const socialLinks: SocialLink[] = [
+    {
+      icon: <FacebookIcon />,
+      href: "https://www.facebook.com/eno.basse",
+      ariaLabel: "Link to Enobasse Facebook account",
+    },
+    {
+      icon: <InstagramIcon />,
+      href: "https://www.instagram.com/eno.basse",
+      ariaLabel: "Link to Enobasse Instagram account",
+    },
+    {
+      icon: <XIcon />,
+      href: "https://x.com/EnoBasseDiamond",
+      ariaLabel: "Link to Enobasse X account",
+    },
+    {
+      icon: <LinkedInIcon />,
+      href: "https://www.linkedin.com/in/eno-bass%C3%A9-diamonds-650b60299/",
+      ariaLabel: "Link to Enobasse LinkedIn account",
+    },
+    {
+      icon: <TiktokIcon />,
+      href: "https://www.tiktok.com/@eno.basse.diamonds",
+      ariaLabel: "Link to Enobasse TikTok account",
+    },
+  ];
+
+  return (
+    <nav aria-label="Social media links" className="order-2 lg:order-1">
+      <div className="flex flex-row items-center justify-center gap-x-8">
+        {socialLinks.map((link, index) => (
+          <a
+            key={`social-${index}`}
+            href={link.href}
+            aria-label={link.ariaLabel}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            {link.icon}
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 };
 
