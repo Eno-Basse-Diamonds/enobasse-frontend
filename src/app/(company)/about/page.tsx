@@ -293,6 +293,40 @@ export default function AboutUsPage() {
             </div>
           </div>
         </div>
+
+        {/* Our Services Section */}
+        <div className="py-6 lg:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="-mx-4 md:mx-auto flex justify-center lg:justify-start bg-gray-100 rounded-sm">
+              <Image
+                src="https://res.cloudinary.com/enobasse/image/upload/v1762270013/our-services_r0mmqn.webp"
+                alt="Eno Bassé services visual"
+                width={800}
+                height={600}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="w-full h-auto rounded-sm"
+                placeholder="blur"
+                blurDataURL={blurDataURL}
+              />
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="font-primary text-2xl md:text-3xl font-semibold text-primary-500 mb-8">
+                Our Services
+              </h2>
+              <div className="text-primary-400 leading-relaxed">
+                <ul className="list-disc list-outside space-y-2 px-4">
+                  <li>GIA Diamonds Specialists</li>
+                  <li>Bespoke Diamond Jewellery Consultants</li>
+                  <li>Diamonds and Gemstones Authentication</li>
+                  <li>Jewellery Appraisal Services</li>
+                  <li>Gold Jewellery Repairs</li>
+                  <li>In-store Diamond Jewellery</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
