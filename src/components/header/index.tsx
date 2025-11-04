@@ -60,6 +60,10 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
         label: "Women's Wedding Rings",
         href: "/collections/women-wedding-rings",
       },
+      {
+        label: "Fashion Rings",
+        href: "/collections/fashion-rings",
+      },
     ],
   },
   {
@@ -69,21 +73,13 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
   },
   {
     id: "wristwears",
-    title: "Wristwears",
+    title: "Bracelets",
     href: "/collections/wristwears",
-    dropdownItems: [
-      { label: "Bangles", href: "/collections/bangles" },
-      { label: "Bracelets", href: "/collections/bracelets" },
-    ],
   },
   {
     id: "neckpieces",
-    title: "Neckpieces",
+    title: "Necklaces",
     href: "/collections/neckpieces",
-    dropdownItems: [
-      { label: "Necklaces", href: "/collections/necklaces" },
-      { label: "Pendants", href: "/collections/pendants" },
-    ],
   },
 ];
 
@@ -146,7 +142,8 @@ export const Header: React.FC<HeaderProps> = ({
         onClose={toggleMobileMenu}
         openDropdown={openDropdown}
         onToggleDropdown={toggleDropdown}
-        navItems={[...mainNavItems, ...utilityNavItems]}
+        mainNavItems={mainNavItems}
+        utilityNavItems={utilityNavItems}
       />
     </header>
   );
@@ -355,7 +352,8 @@ interface MobileMenuProps {
   onClose: () => void;
   openDropdown: string | null;
   onToggleDropdown: (id: string) => void;
-  navItems: DropdownNavigation[];
+  mainNavItems?: DropdownNavigation[];
+  utilityNavItems?: DropdownNavigation[];
 }
 
 interface MobileNavItemProps {
@@ -386,10 +384,7 @@ const SubMenu: React.FC<SubMenuProps> = ({
     >
       <div className="header__mobile-submenu-content">
         <div className="header__mobile-submenu-header">
-          <button
-            onClick={onClose}
-            aria-label="Go back"
-          >
+          <button onClick={onClose} aria-label="Go back">
             <ArrowLeftIcon />
           </button>
         </div>
@@ -495,29 +490,34 @@ const MobileNavItem: React.FC<MobileNavItemProps> = ({
 const MobileMenu: React.FC<MobileMenuProps> = ({
   isOpen,
   onClose,
-  navItems,
+  mainNavItems,
+  utilityNavItems,
 }) => {
   const otherNavItems = [
     {
-      id: "our-services",
-      title: "Our Services",
+      id: "create-your-custom-jewelry",
+      title: "Create Your Custom Jewelry",
       dropdownItems: [
-        { label: "Custom Design", href: "/custom-design" },
+        { label: "Design Your Ring", href: "/creative-studio" },
+        { label: "Custom Jewelry Design", href: "/custom-design" },
+        { label: "Book a Consultation", href: "https://wa.me/2349164886579" },
+      ],
+    },
+    {
+      id: "jewelry-repair",
+      title: "Jewelry Repair",
+      dropdownItems: [
         { label: "Ring Resizing", href: "/ring-resizing" },
         { label: "Maintenance & Repairs", href: "/maintenance-repairs" },
       ],
     },
     {
-      id: "creative-studio",
-      title: "Design Your Ring",
-      href: "/creative-studio",
-    },
-    { id: "faqs", title: "FAQs", href: "/faqs" },
-    {
-      id: "testimonials",
-      title: "Testimonials",
-      href: "/testimonials",
-      isLastItem: true,
+      id: "faqs-and-tesimonials",
+      title: "FAQs and Testimonials",
+      dropdownItems: [
+        { label: "FAQs", href: "/faqs" },
+        { label: "Testimonials", href: "/testimonials" },
+      ],
     },
   ];
 
@@ -544,7 +544,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     setTimeout(() => setSubMenuState({ isOpen: false, item: null }), 300);
   };
 
-  const allNavItems = [...navItems, ...otherNavItems];
+  const allNavItems = [
+    ...(mainNavItems ?? []),
+    ...otherNavItems,
+    ...(utilityNavItems ?? []),
+  ];
 
   return (
     <>
