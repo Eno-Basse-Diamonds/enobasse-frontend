@@ -59,7 +59,7 @@ export const RingCustomizationCTASection: React.FC = () => {
       <section className="relative w-full overflow-hidden">
         <div className="relative z-10 text-center px-6 py-16 md:py-24">
           <h2 className="font-primary font-semibold text-3xl md:text-4xl text-white mb-6">
-            Creative Studio
+            Design Your Engagement Ring
           </h2>
           <p className="font-light md:text-lg lg:text-xl text-white/90 mb-10 max-w-2xl mx-auto">
             Our Creative Studio allows you to design your ring exactly the way
