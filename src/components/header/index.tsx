@@ -509,7 +509,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
     },
     {
       id: "creative-studio",
-      title: "Creative Studio",
+      title: "Design Your Ring",
       href: "/creative-studio",
     },
     { id: "faqs", title: "FAQs", href: "/faqs" },
