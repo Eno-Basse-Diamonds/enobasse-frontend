@@ -30,7 +30,7 @@ export default async function HomePage() {
   const carouselItems = [
     {
       image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512330/rings_yahtc5.webp",
+        "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
       alt: "White gold diamond ring",
       title: "Rings",
       href: "/collections/rings",
