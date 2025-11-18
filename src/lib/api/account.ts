@@ -54,6 +54,13 @@ export const createAccount = async (data: CreateAccountData) => {
   return api.post("/accounts", data);
 };
 
+export const getCurrentUser = async () => {
+  const response = await fetch("/api/auth/session");
+  if (!response.ok) return null;
+  const data = await response.json();
+  return data?.user || null;
+};
+
 export const deleteAccount = async (id: string) => {
   return api.delete(`/accounts/${id}`);
 };

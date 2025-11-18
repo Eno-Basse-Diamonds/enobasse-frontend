@@ -22,14 +22,7 @@ export const authOptions: NextAuthOptions = {
         const { email, password } = credentials;
         const account = await validateAccount(email, password);
 
-        if (account) {
-          return {
-            id: account.id,
-            name: account.name,
-            email: account.email,
-            isAdmin: account.isAdmin,
-          };
-        }
+        if (account) return account;
         return null;
       },
     }),
@@ -76,4 +69,5 @@ export const authOptions: NextAuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+  session: { strategy: "jwt" },
 };
