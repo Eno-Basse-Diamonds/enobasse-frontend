@@ -1,11 +1,34 @@
 import { api } from "../utils/api";
 import { CartItem } from "../types/carts";
+import { API_URL } from "../utils/constants/api-url";
 
 export const getCart = async (
   accountEmail: string,
   currency: string = "USD",
 ): Promise<{ items: CartItem[] }> => {
   return api.get(`/cart`, { params: { accountEmail, currency }, cache: false });
+};
+
+export const sendAbandonedCartReminders = async () => {
+  try {
+    const apiUrl = `${API_URL}/cart/abandoned/remind`;
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.count;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const addToCart = async (
