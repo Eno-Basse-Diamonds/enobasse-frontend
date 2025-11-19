@@ -80,7 +80,3 @@ export const sendMaintenanceRepairsMessage = async (
 ) => {
   return api.post("/contact/maintenance-repairs", data);
 };
-
-export const subscribeToNewsletter = async (email: string) => {
-  return api.post("/contact/newsletter", { email });
-};
