@@ -9,9 +9,17 @@ export const HeroSection: React.FC = () => {
   return (
     <div className="hero-section relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
       <img
+        src="/images/hero-mobile.webp"
+        alt="Hero Background"
+        className={`md:hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          isVideoLoaded ? "opacity-0" : "opacity-100"
+        }`}
+      />
+
+      <img
         src="/images/hero.webp"
         alt="Hero Background"
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+        className={`hidden md:block absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
           isVideoLoaded ? "opacity-0" : "opacity-100"
         }`}
       />
