@@ -15,7 +15,10 @@ import { SectionContainer } from "@/components/section-container";
 import { SectionHeading } from "@/components/section-heading";
 import { Carousel } from "@/components/carousel";
 import { BentoGrid } from "@/components/bento-grid";
-import { CTASection, RingCustomizationCTASection } from "@/components/cta-section";
+import {
+  CTASection,
+  RingCustomizationCTASection,
+} from "@/components/cta-section";
 
 export default async function HomePage() {
   const queryClient = new QueryClient();
