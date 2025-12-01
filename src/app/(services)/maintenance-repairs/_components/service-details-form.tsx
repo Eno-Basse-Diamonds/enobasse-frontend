@@ -1,4 +1,4 @@
-import { ChevronDown  } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface ServiceDetailsFormProps {
   formData: {
@@ -53,7 +53,7 @@ export const ServiceDetailsForm = ({
                   <option value="stone-replacement">Stone Replacement</option>
                   <option value="chain-repair">Chain Repair</option>
                   <option value="prong-repair">Prong Repair</option>
-                  <option value="appraisal">Appraisal/Authentication</option>
+                  <option value="appraisal">Diamond Authentication</option>
                   <option value="other">Other</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />

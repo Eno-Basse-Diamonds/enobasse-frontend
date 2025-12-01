@@ -319,7 +319,7 @@ export default function AboutUsPage() {
                   <li>GIA Diamonds Specialists</li>
                   <li>Bespoke Diamond Jewellery Consultants</li>
                   <li>Diamonds and Gemstones Authentication</li>
-                  <li>Jewellery Appraisal Services</li>
+                  <li>Diamond Authentication Services</li>
                   <li>Gold Jewellery Repairs</li>
                   <li>In-store Diamond Jewellery</li>
                 </ul>
