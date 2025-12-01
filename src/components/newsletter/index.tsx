@@ -15,10 +15,17 @@ export const NewsletterPopup: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    const storedHasShown = localStorage.getItem("newsletterPopupShown");
-    if (storedHasShown === "true") {
-      setHasShown(true);
-      return;
+    const closedAtString = localStorage.getItem("newsletterPopupClosedAt");
+
+    if (closedAtString) {
+      const closedAt = parseInt(closedAtString, 10);
+      const currentTime = new Date().getTime();
+      const thirtyMinutesInMs = 30 * 60 * 1000; // 30 minutes
+
+      if (currentTime - closedAt < thirtyMinutesInMs) {
+        setHasShown(true);
+        return;
+      }
     }
 
     const handleScroll = () => {
@@ -48,7 +55,9 @@ export const NewsletterPopup: React.FC = () => {
   const closePopup = () => {
     setIsVisible(false);
     setHasShown(true);
-    localStorage.setItem("newsletterPopupShown", "true");
+    // Store timestamp of when user closed the popup
+    const currentTime = new Date().getTime();
+    localStorage.setItem("newsletterPopupClosedAt", currentTime.toString());
     document.body.style.overflow = "unset";
   };
 
