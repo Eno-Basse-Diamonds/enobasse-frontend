@@ -56,6 +56,11 @@ const ProductListItem = React.memo(
     onWishlistToggle: (e: React.MouseEvent) => void;
     onQuickView: (e: React.MouseEvent) => void;
   }) => {
+    const [isFirstImageLoading, setIsFirstImageLoading] = useState(true);
+    const [isSecondImageLoading, setIsSecondImageLoading] = useState(
+      !!product.images[1]
+    );
+
     return (
       <motion.div
         className="group relative flex flex-col overflow-hidden bg-white"
@@ -67,6 +72,32 @@ const ProductListItem = React.memo(
           className="flex h-full flex-col"
         >
           <div className="relative aspect-square overflow-hidden border border-gray-200">
+            {isFirstImageLoading && (
+              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                <svg
+                  className="animate-spin h-8 w-8 text-primary-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    className="opacity-75"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M12 2a10 10 0 0 1 10 10"
+                  />
+                </svg>
+              </div>
+            )}
             <Image
               src={product.images[0].url}
               alt={product.images[0].alt}
@@ -75,15 +106,45 @@ const ProductListItem = React.memo(
               className={`object-cover bg-gray-100 transition-opacity duration-500 ${
                 product.images[1] ? "group-hover:opacity-0" : ""
               }`}
+              onLoad={() => setIsFirstImageLoading(false)}
             />
             {product.images[1] && (
-              <Image
-                src={product.images[1].url}
-                alt={product.images[1].alt}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              />
+              <>
+                {isSecondImageLoading && (
+                  <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100">
+                    <svg
+                      className="animate-spin h-8 w-8 text-primary-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        className="opacity-75"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        d="M12 2a10 10 0 0 1 10 10"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <Image
+                  src={product.images[1].url}
+                  alt={product.images[1].alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  onLoad={() => setIsSecondImageLoading(false)}
+                />
+              </>
             )}
             {!product.isCustomDesign && (
               <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-xs font-semibold text-white">

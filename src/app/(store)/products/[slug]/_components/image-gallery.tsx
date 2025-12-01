@@ -11,10 +11,18 @@ interface ImageGalleryProps {
 export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
+  const [loadingImages, setLoadingImages] = useState<Set<number>>(
+    new Set(images.map((_, index) => index))
+  );
+  const [loadingThumbnails, setLoadingThumbnails] = useState<Set<number>>(
+    new Set(images.map((_, index) => index))
+  );
+  const [loadingZoomed, setLoadingZoomed] = useState(false);
   const isSingleImage = images.length === 1;
 
   const handleImageClick = (index: number) => {
     setZoomedIndex(index);
+    setLoadingZoomed(true);
     document.body.style.overflow = "hidden";
   };
 
@@ -40,6 +48,32 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   className="image-gallery__slide"
                   aria-hidden={selectedImageIndex !== index}
                 >
+                  {loadingImages.has(index) && (
+                    <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                      <svg
+                        className="animate-spin h-8 w-8 text-primary-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          className="opacity-75"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          d="M12 2a10 10 0 0 1 10 10"
+                        />
+                      </svg>
+                    </div>
+                  )}
                   <Image
                     src={img.url}
                     alt={img.alt}
@@ -49,6 +83,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     sizes="(max-width: 768px) 100vw, 50vw"
                     priority={index === 0}
                     loading={index === 0 ? "eager" : "lazy"}
+                    onLoad={() => {
+                      setLoadingImages((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(index);
+                        return newSet;
+                      });
+                    }}
                   />
                 </div>
               ))}
@@ -76,6 +117,32 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                       aria-label={`View image ${i + 1}: ${img.alt}`}
                       aria-current={selectedImageIndex === i}
                     >
+                      {loadingThumbnails.has(i) && (
+                        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                          <svg
+                            className="animate-spin h-3 w-3 text-primary-500"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            />
+                            <path
+                              className="opacity-75"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              d="M12 2a10 10 0 0 1 10 10"
+                            />
+                          </svg>
+                        </div>
+                      )}
                       <Image
                         src={img.url}
                         alt=""
@@ -83,6 +150,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                         className="image-gallery__thumbnail-image"
                         sizes="80px"
                         aria-hidden="true"
+                        onLoad={() => {
+                          setLoadingThumbnails((prev) => {
+                            const newSet = new Set(prev);
+                            newSet.delete(i);
+                            return newSet;
+                          });
+                        }}
                       />
                     </button>
                   </li>
@@ -103,11 +177,37 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
               key={`desktop-${index}`}
               onClick={() => handleImageClick(index)}
               className={`image-gallery__desktop-item cursor-zoom-in ${
-                  isSingleImage ? "no-border" : ""
-                } rounded-sm overflow-hidden`}
+                isSingleImage ? "no-border" : ""
+              } rounded-sm overflow-hidden`}
               aria-label={`Image ${index + 1}: ${img.alt}`}
               role="gridcell"
             >
+              {loadingImages.has(index) && (
+                <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                  <svg
+                    className="animate-spin h-8 w-8 text-primary-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    />
+                    <path
+                      className="opacity-75"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      d="M12 2a10 10 0 0 1 10 10"
+                    />
+                  </svg>
+                </div>
+              )}
               <Image
                 src={img.url}
                 alt={img.alt}
@@ -115,6 +215,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                 className="image-gallery__desktop-image"
                 sizes="(max-width: 1024px) 50vw, 25vw"
                 quality={100}
+                onLoad={() => {
+                  setLoadingImages((prev) => {
+                    const newSet = new Set(prev);
+                    newSet.delete(index);
+                    return newSet;
+                  });
+                }}
               />
               <figcaption className="image-gallery__caption">
                 {img.alt}
@@ -142,12 +249,39 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
               onClick={closeZoom}
             >
               <div className="relative w-full max-w-4xl aspect-square rounded-sm overflow-hidden">
+                {loadingZoomed && (
+                  <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                    <svg
+                      className="animate-spin h-12 w-12 text-primary-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        className="opacity-75"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        d="M12 2a10 10 0 0 1 10 10"
+                      />
+                    </svg>
+                  </div>
+                )}
                 <Image
                   src={images[zoomedIndex].url}
                   alt={images[zoomedIndex].alt}
                   fill
                   className="object-contain"
                   quality={100}
+                  onLoad={() => setLoadingZoomed(false)}
                 />
               </div>
             </motion.div>

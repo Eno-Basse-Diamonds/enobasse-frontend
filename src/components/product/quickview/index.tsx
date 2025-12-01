@@ -49,6 +49,10 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
     Gemstone | undefined
   >(product.gemstones?.[0]);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isMainImageLoading, setIsMainImageLoading] = useState(true);
+  const [loadingThumbnails, setLoadingThumbnails] = useState<Set<number>>(
+    new Set(selectedVariant.images.map((_, index) => index))
+  );
 
   const hasMultipleVariants = product.variants.length > 1;
   const isRing = product.category === "Rings";
@@ -88,6 +92,10 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
     if (matchingVariant) {
       setSelectedVariant(matchingVariant);
       setCurrentImageIndex(0);
+      setIsMainImageLoading(true);
+      setLoadingThumbnails(
+        new Set(matchingVariant.images.map((_, index) => index))
+      );
     }
   }, [selectedMetal?.type, selectedGemstone?.type, product.variants]);
 
@@ -95,12 +103,14 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
     setCurrentImageIndex((prev) =>
       prev === 0 ? selectedVariant.images.length - 1 : prev - 1
     );
+    setIsMainImageLoading(true);
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prev) =>
       prev === selectedVariant.images.length - 1 ? 0 : prev + 1
     );
+    setIsMainImageLoading(true);
   };
 
   // Animation variants
@@ -163,6 +173,32 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           </motion.button>
 
           <div className="relative flex-shrink-0 w-full h-[35vh] md:w-1/2 md:h-full">
+            {isMainImageLoading && (
+              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                <svg
+                  className="animate-spin h-8 w-8 text-primary-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    className="opacity-75"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M12 2a10 10 0 0 1 10 10"
+                  />
+                </svg>
+              </div>
+            )}
             <motion.div
               key={currentImageIndex}
               initial="exit"
@@ -179,6 +215,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                 className="object-contain"
                 priority={currentImageIndex === 0}
                 loading="eager"
+                onLoad={() => setIsMainImageLoading(false)}
               />
             </motion.div>
 
@@ -208,7 +245,10 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               {selectedVariant.images.map((image, index) => (
                 <motion.button
                   key={index}
-                  onClick={() => setCurrentImageIndex(index)}
+                  onClick={() => {
+                    setCurrentImageIndex(index);
+                    setIsMainImageLoading(true);
+                  }}
                   className={`relative w-12 h-12 overflow-hidden ${
                     currentImageIndex === index
                       ? "border-2 border-primary-500"
@@ -217,12 +257,45 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
+                  {loadingThumbnails.has(index) && (
+                    <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
+                      <svg
+                        className="animate-spin h-3 w-3 text-primary-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          className="opacity-75"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          d="M12 2a10 10 0 0 1 10 10"
+                        />
+                      </svg>
+                    </div>
+                  )}
                   <Image
                     src={image.url}
                     alt={image.alt}
                     width={48}
                     height={48}
                     className="object-cover w-full h-full"
+                    onLoad={() => {
+                      setLoadingThumbnails((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(index);
+                        return newSet;
+                      });
+                    }}
                   />
                 </motion.button>
               ))}
