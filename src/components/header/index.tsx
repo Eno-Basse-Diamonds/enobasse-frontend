@@ -600,6 +600,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
         }`}
       >
         <div className="header__mobile-menu-container">
+          <div className="mt-3 flex justify-center px-4">
+            <CurrencyDropdown />
+          </div>
           <nav className="header__mobile-nav" aria-label="Mobile menu">
             <ul className="header__mobile-nav-list">
               {allNavItems.map((item, index) => (
@@ -613,6 +616,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               ))}
             </ul>
           </nav>
+
           <div className="header__mobile-menu-footer">
             <Socials />
           </div>
