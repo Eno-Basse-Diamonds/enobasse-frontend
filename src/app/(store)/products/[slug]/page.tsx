@@ -30,6 +30,7 @@ import { ProductList } from "@/components/product/list";
 import { Rating } from "@/components/rating";
 import { SectionContainer } from "@/components/section-container";
 import { RingSizeSelector } from "@/components/select-menu";
+import { RequestQuoteModal } from "./_components/request-quote-modal";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function ProductPage() {
     type: "success" | "error";
     message: string;
   }>({ visible: false, type: "success", message: "" });
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   const { slug } = useParams<{ slug: string }>();
   const { data: product, isLoading: productLoading } = useProduct(
@@ -144,6 +146,10 @@ export default function ProductPage() {
       engraving
     );
     router.push("/cart");
+  };
+
+  const handleRequestQuote = () => {
+    setIsQuoteModalOpen(true);
   };
 
   useEffect(() => {
@@ -343,23 +349,46 @@ export default function ProductPage() {
                     />
                   )}
                 </div>
-                <p className="text-[#502B3A]/60 text-base md:text-lg">
-                  Price:{" "}
-                  <span className="font-semibold text-[#502B3A] text-xl md:text-2xl">
-                    {getCurrencySymbol(product.priceRange.currency)}
-                    {selectedVariant?.price != null
-                      ? selectedVariant.price.toLocaleString(undefined)
-                      : "N/A"}
-                  </span>
-                </p>
-                <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
-                  <Button size="xl" onClick={handleAddToCart}>
-                    Add to Cart
-                  </Button>
-                </div>
-                <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
-                  <Button onClick={handleAddToCart}>Add to Cart</Button>
-                </div>
+                {product.isCustomDesign && selectedVariant?.price === 0 ? (
+                  <div>
+                    <p className="text-[#502B3A] text-xl font-semibold">
+                      Price available upon request
+                    </p>
+                    <p className="text-[#502B3A]/60 text-base">
+                      You can request a quote using the link below or by calling
+                      by phone.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-[#502B3A]/60 text-base md:text-lg">
+                    Price:{" "}
+                    <span className="font-semibold text-[#502B3A] text-xl md:text-2xl">
+                      {getCurrencySymbol(product.priceRange.currency)}
+                      {selectedVariant?.price != null
+                        ? selectedVariant.price.toLocaleString(undefined)
+                        : "N/A"}
+                    </span>
+                  </p>
+                )}
+                {(!product.isCustomDesign || selectedVariant?.price !== 0) && (
+                  <>
+                    <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
+                      <Button size="xl" onClick={handleAddToCart}>
+                        Add to Cart
+                      </Button>
+                    </div>
+                    <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
+                      <Button onClick={handleAddToCart}>Add to Cart</Button>
+                    </div>
+                  </>
+                )}
+                {product.isCustomDesign && selectedVariant?.price === 0 && (
+                  <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
+                    <Button size="xl" onClick={handleRequestQuote}>
+                      Request a Quote
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -429,7 +458,7 @@ export default function ProductPage() {
 
       {relatedProducts && (
         <SectionContainer id="related-products">
-            <div className="mb-8 max-w-7xl mx-auto">
+          <div className="mb-8 max-w-7xl mx-auto">
             <Divider
               label="Might as well interest you"
               className="px-4 bg-white md:text-xl text-[#502B3A] font-primary rounded-sm"
@@ -439,6 +468,15 @@ export default function ProductPage() {
             <ProductList products={relatedProducts} />
           </div>
         </SectionContainer>
+      )}
+
+      {product && (
+        <RequestQuoteModal
+          isOpen={isQuoteModalOpen}
+          onClose={() => setIsQuoteModalOpen(false)}
+          product={product}
+          variantImage={selectedVariant?.images?.[0]?.url}
+        />
       )}
     </div>
   );

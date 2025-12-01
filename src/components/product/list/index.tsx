@@ -95,15 +95,17 @@ const ProductListItem = React.memo(
           <motion.div className="mt-4 flex flex-grow flex-col">
             <h3 className="mb-1 flex-grow text-gray-700">{product.name}</h3>
             <p className="mt-auto font-medium text-gray-900">
-              {product.priceRange.min === product.priceRange.max
-                ? `${getCurrencySymbol(
-                    product.priceRange.currency
-                  )}${product.priceRange.min.toLocaleString()}`
-                : `${getCurrencySymbol(
-                    product.priceRange.currency
-                  )}${product.priceRange.min.toLocaleString()} - ${getCurrencySymbol(
-                    product.priceRange.currency
-                  )}${product.priceRange.max.toLocaleString()}`}
+              {product.isCustomDesign && product.priceRange.min === 0
+                ? "Contact us for pricing"
+                : product.priceRange.min === product.priceRange.max
+                  ? `${getCurrencySymbol(
+                      product.priceRange.currency
+                    )}${product.priceRange.min.toLocaleString()}`
+                  : `${getCurrencySymbol(
+                      product.priceRange.currency
+                    )}${product.priceRange.min.toLocaleString()} - ${getCurrencySymbol(
+                      product.priceRange.currency
+                    )}${product.priceRange.max.toLocaleString()}`}
             </p>
           </motion.div>
         </Link>
