@@ -19,6 +19,7 @@ import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
 import { MinusIcon } from "@/components/icons/minus";
 import { PlusIcon } from "@/components/icons/plus";
+import { RequestQuoteModal } from "@/app/(store)/products/[slug]/_components/request-quote-modal";
 
 interface ProductQuickViewProps {
   product: Product;
@@ -47,6 +48,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   const [selectedGemstone, setSelectedGemstone] = useState<
     Gemstone | undefined
   >(product.gemstones?.[0]);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   const hasMultipleVariants = product.variants.length > 1;
   const isRing = product.category === "Rings";
@@ -242,10 +244,18 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               <h2 className="text-lg font-semibold md:text-2xl font-primary text-primary-500">
                 {selectedVariant.title}
               </h2>
-              <p className="md:text-xl font-medium text-primary-500 mt-2">
-                {getCurrencySymbol(product.priceRange.currency)}
-                {selectedVariant.price.toLocaleString(undefined)}
-              </p>
+              {product.isCustomDesign && selectedVariant?.price === 0 ? (
+                <div>
+                  <p className="text-primary-500 text-lg font-semibold">
+                    Price available upon request
+                  </p>
+                </div>
+              ) : (
+                <p className="md:text-xl font-medium text-primary-500 mt-2">
+                  {getCurrencySymbol(product.priceRange.currency)}
+                  {selectedVariant.price.toLocaleString(undefined)}
+                </p>
+              )}
             </motion.div>
 
             {hasMultipleVariants &&
@@ -340,39 +350,61 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
             >
-              <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
-                <Button size="lg" onClick={onAddToCart}>
-                  Add to Cart
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => onWishlistToggle(product)}
-                  aria-label={
-                    isInWishlist ? "Remove from wishlist" : "Add to wishlist"
-                  }
-                >
-                  <span className="ml-2">
-                    {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-                  </span>
-                </Button>
-              </div>
-              <div className="grid-cols-2 gap-4 mb-4 grid md:hidden">
-                <Button variant="outline" onClick={onAddToCart}>
-                  Add to Cart
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => onWishlistToggle(product)}
-                  aria-label={
-                    isInWishlist ? "Remove from wishlist" : "Add to wishlist"
-                  }
-                >
-                  <span className="ml-2">
-                    {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
-                  </span>
-                </Button>
-              </div>
+              {!product.isCustomDesign || selectedVariant?.price !== 0 ? (
+                <>
+                  <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
+                    <Button size="lg" onClick={onAddToCart}>
+                      Add to Cart
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => onWishlistToggle(product)}
+                      aria-label={
+                        isInWishlist
+                          ? "Remove from wishlist"
+                          : "Add to wishlist"
+                      }
+                    >
+                      <span className="ml-2">
+                        {isInWishlist
+                          ? "Remove from Wishlist"
+                          : "Add to Wishlist"}
+                      </span>
+                    </Button>
+                  </div>
+                  <div className="grid-cols-2 gap-4 mb-4 grid md:hidden">
+                    <Button variant="outline" onClick={onAddToCart}>
+                      Add to Cart
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => onWishlistToggle(product)}
+                      aria-label={
+                        isInWishlist
+                          ? "Remove from wishlist"
+                          : "Add to wishlist"
+                      }
+                    >
+                      <span className="ml-2">
+                        {isInWishlist
+                          ? "Remove from Wishlist"
+                          : "Add to Wishlist"}
+                      </span>
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="mb-4">
+                  <Button
+                    size="lg"
+                    onClick={() => setIsQuoteModalOpen(true)}
+                    className="w-full"
+                  >
+                    Request a Quote
+                  </Button>
+                </div>
+              )}
               <Link
                 className="inline-block w-full text-center font-medium text-primary-500 no-underline hover:underline hover:h-[1px] hover:underline-offset-2"
                 href={`/products/${product.slug}`}
@@ -383,6 +415,13 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           </motion.div>
         </motion.div>
       </div>
+
+      <RequestQuoteModal
+        isOpen={isQuoteModalOpen}
+        onClose={() => setIsQuoteModalOpen(false)}
+        product={product}
+        variantImage={selectedVariant?.images?.[0]?.url}
+      />
     </motion.div>
   );
 };
