@@ -1,17 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
 export const HeroSection: React.FC = () => {
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   return (
     <div className="hero-section relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
-      {/* Video Background */}
+      <img
+        src="/images/hero.webp"
+        alt="Hero Background"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          isVideoLoaded ? "opacity-0" : "opacity-100"
+        }`}
+      />
+
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        onCanPlay={() => setIsVideoLoaded(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          isVideoLoaded ? "opacity-100" : "opacity-0"
+        }`}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
         <source src="/videos/hero.mov" type="video/quicktime" />
@@ -19,10 +31,8 @@ export const HeroSection: React.FC = () => {
         Your browser does not support the video tag.
       </video>
 
-      {/* Dark Overlay */}
       <div className="absolute inset-0 bg-primary-500 bg-opacity-30"></div>
 
-      {/* Hero Text */}
       <div className="absolute top-1/2 -translate-y-1/2 left-8 right-8 md:left-16 md:right-16 lg:left-24 lg:right-24 z-10 max-w-2xl text-center md:text-left">
         <div>
           <h2 className="font-primary font-semibold text-3xl md:text-4xl mb-6 text-white drop-shadow-lg">
