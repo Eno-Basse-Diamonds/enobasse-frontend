@@ -293,23 +293,27 @@ export default function ProductPage() {
                     count={product.reviews?.length || 0}
                     showCount={true}
                   />
-                  <button
-                    onClick={handleWishlistToggle}
-                    aria-label={
-                      isInWishlist(selectedVariant?.id ?? "")
-                        ? "Remove from wishlist"
-                        : "Add to wishlist"
-                    }
-                  >
-                    {isInWishlist(selectedVariant?.id ?? "") ? (
-                      <Heart
-                        fill="#D1A559"
-                        className="text-secondary-500 h-5 w-5"
-                      />
-                    ) : (
-                      <WishlistIcon className="h-5 w-5" />
-                    )}
-                  </button>
+                  {!(
+                    product.isCustomDesign && selectedVariant?.price === 0
+                  ) && (
+                    <button
+                      onClick={handleWishlistToggle}
+                      aria-label={
+                        isInWishlist(selectedVariant?.id ?? "")
+                          ? "Remove from wishlist"
+                          : "Add to wishlist"
+                      }
+                    >
+                      {isInWishlist(selectedVariant?.id ?? "") ? (
+                        <Heart
+                          fill="#D1A559"
+                          className="text-secondary-500 h-5 w-5"
+                        />
+                      ) : (
+                        <WishlistIcon className="h-5 w-5" />
+                      )}
+                    </button>
+                  )}
                 </div>
 
                 {hasMultipleVariants &&
@@ -383,11 +387,18 @@ export default function ProductPage() {
                   </>
                 )}
                 {product.isCustomDesign && selectedVariant?.price === 0 && (
-                  <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
-                    <Button size="xl" onClick={handleRequestQuote}>
-                      Request a Quote
-                    </Button>
-                  </div>
+                  <>
+                    <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
+                      <Button size="xl" onClick={handleRequestQuote}>
+                        Request a Quote
+                      </Button>
+                    </div>
+                    <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
+                      <Button onClick={handleRequestQuote}>
+                        Request a Quote
+                      </Button>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
