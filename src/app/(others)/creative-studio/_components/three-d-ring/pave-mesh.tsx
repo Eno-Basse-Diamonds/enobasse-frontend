@@ -1,5 +1,5 @@
-import React from 'react';
-import { RingMesh } from './ring-mesh';
+import React from "react";
+import { RingMesh } from "./ring-mesh";
 
 interface PaveMeshProps {
   gemstoneGeometry: any;
@@ -20,15 +20,8 @@ export function PaveMesh({
 }: PaveMeshProps) {
   return (
     <group position={position} scale={scale}>
-      <RingMesh
-        geometry={gemstoneGeometry}
-        isGemstone
-        texture={texture}
-      />
-      <RingMesh
-        geometry={metalGeometry}
-        material={metalMaterial}
-      />
+      <RingMesh geometry={gemstoneGeometry} isGemstone texture={texture} />
+      <RingMesh geometry={metalGeometry} material={metalMaterial} />
     </group>
   );
 }

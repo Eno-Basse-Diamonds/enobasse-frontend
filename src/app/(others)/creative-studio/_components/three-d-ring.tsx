@@ -1,37 +1,20 @@
 "use client";
 
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import {
-  Canvas,
-  ObjectMap,
-  useFrame,
-  useLoader,
-  useThree,
-} from "@react-three/fiber";
-import {
-  OrbitControls,
-  useGLTF,
-  Environment,
-  MeshRefractionMaterial,
-} from "@react-three/drei";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
+import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
 import { Group, Mesh, MeshStandardMaterial } from "three";
 import { RGBELoader } from "three-stdlib";
 import {
   GEMSTONE_3D_PROPERTIES,
-  HEAD_3D_PROPERTIES,
-  SHANK_3D_PROPERTIES,
   METAL_MATERIALS,
 } from "../../../../lib/utils/constants/creative-studio";
-import { getModelPath, getShankProperties } from "@/lib/utils/creative-studio";
+import { getModelPath } from "@/lib/utils/creative-studio";
 import { RingMesh } from "./three-d-ring/ring-mesh";
-import { HaloMesh, HiddenHaloMesh } from "./three-d-ring/halo-mesh";
-import { ThreeStoneMesh } from "./three-d-ring/three-stone-mesh";
-import { PaveMesh } from "./three-d-ring/pave-mesh";
-import {
-  useCreativeStudioImageCache,
-  createConfigKey,
-  createGeneratedImage,
-} from "@/lib/store/creative-studio-images";
+import { HeadRenderer } from "./three-d-ring/head-renderer";
+import { ShankRenderer } from "./three-d-ring/shank-renderer";
+import { useRingCapture } from "./three-d-ring/use-ring-capture";
+import { GLTFResult } from "./three-d-ring/types";
 
 interface ThreeDRingProps {
   gemstoneShape: string;
@@ -62,21 +45,21 @@ export function ThreeDRing({
   const environment = "/texture/metal3.hdr";
 
   const gemstonePath = getModelPath("gemstone", gemstoneShape);
-  const gemstoneData = useGLTF(gemstonePath);
+  const gemstoneData = useGLTF(gemstonePath) as GLTFResult;
 
   const headPath = getModelPath("head", headStyle, gemstoneShape);
-  const headData = useGLTF(headPath);
+  const headData = useGLTF(headPath) as GLTFResult;
 
   const shankPath = getModelPath("shank", shankStyle);
-  const shankData = useGLTF(shankPath);
+  const shankData = useGLTF(shankPath) as GLTFResult;
 
   const texture = useLoader(RGBELoader, environment);
 
-  let threeStoneSideData: ObjectMap | undefined = undefined;
+  let threeStoneSideData: GLTFResult | undefined = undefined;
 
   if (headStyle === "three-stone") {
     const sideHeadPath = `/3d-models/Head/${gemstoneShape.toUpperCase()}/${headStyle.toUpperCase()}.SIDE.glb`;
-    threeStoneSideData = useGLTF(sideHeadPath);
+    threeStoneSideData = useGLTF(sideHeadPath) as GLTFResult;
   }
 
   useEffect(() => {
@@ -149,11 +132,11 @@ interface RotatingRingProps {
   metalType: string;
   headStyle: string;
   shankStyle: string;
-  headData: any;
-  gemstoneData: any;
-  shankData: any;
+  headData: GLTFResult;
+  gemstoneData: GLTFResult;
+  shankData: GLTFResult;
   rotationSpeed?: number;
-  threeStoneSideData?: any;
+  threeStoneSideData?: GLTFResult;
   texture: any;
   sceneReady: boolean;
   onImagesGenerated?: (images: { src: string; alt: string }[]) => void;
@@ -180,144 +163,16 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   isUserInteracting,
 }) => {
   const groupRef = useRef<Group>(null);
-  const { camera, gl, scene } = useThree();
-  const [imagesGenerated, setImagesGenerated] = useState(false);
-  const [prevConfig, setPrevConfig] = useState("");
 
-  // Image cache store - simplified interface
-  const { getCachedImages, setCachedImages } = useCreativeStudioImageCache();
-
-  // Create a unique key for this product configuration
-  const productConfig = `${gemstoneShape}-${headStyle}-${shankStyle}-${metalType}`;
-
-  // Reset imagesGenerated when configuration changes
-  useEffect(() => {
-    if (productConfig !== prevConfig) {
-      setImagesGenerated(false);
-      setPrevConfig(productConfig);
-    }
-  }, [productConfig, prevConfig]);
-
-  // Generate images when scene is ready and configuration is new
-  useEffect(() => {
-    if (sceneReady && !imagesGenerated && onImagesGenerated) {
-      const configKey = createConfigKey(
-        gemstoneShape,
-        headStyle,
-        shankStyle,
-        metalType
-      );
-
-      // Check if images are already cached
-      const cachedImages = getCachedImages(configKey);
-      if (cachedImages) {
-        // Use cached images
-        onImagesGenerated(cachedImages);
-        setImagesGenerated(true);
-        return;
-      }
-
-      // Small delay to ensure everything is rendered
-      const timeoutId = setTimeout(() => {
-        generateImages();
-      }, 2000);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [
-    sceneReady,
-    imagesGenerated,
-    onImagesGenerated,
-    productConfig,
+  useRingCapture({
     gemstoneShape,
     headStyle,
     shankStyle,
     metalType,
-    getCachedImages,
-  ]);
-
-  const generateImages = async () => {
-    if (imagesGenerated) return;
-
-    const configKey = createConfigKey(
-      gemstoneShape,
-      headStyle,
-      shankStyle,
-      metalType
-    );
-
-    const images: { src: string; alt: string }[] = [];
-
-    // Store original camera position and rotation
-    const originalPosition = camera.position.clone();
-    const originalRotation = camera.rotation.clone();
-    const originalQuaternion = camera.quaternion.clone();
-
-    // Temporarily disable orbit controls to prevent user interference
-    if (controlsRef.current) {
-      controlsRef.current.enabled = false;
-    }
-
-    try {
-      // Side view
-      camera.position.set(20, 25, 30);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const sideImage = captureImage("side");
-      images.push(sideImage);
-
-      // Top view
-      camera.position.set(0, 40, 0);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const topImage = captureImage("top");
-      images.push(topImage);
-
-      // Front view
-      camera.position.set(0, 25, -40);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const frontImage = captureImage("front");
-      images.push(frontImage);
-
-      // Convert to GeneratedImage format and cache
-      const generatedImages = images.map((img) =>
-        createGeneratedImage(img.src, img.alt)
-      );
-      setCachedImages(configKey, generatedImages);
-
-      // Call the callback with generated images
-      if (onImagesGenerated) {
-        onImagesGenerated(images);
-      }
-
-      setImagesGenerated(true);
-    } finally {
-      // Always restore original camera position and controls
-      camera.position.copy(originalPosition);
-      camera.rotation.copy(originalRotation);
-      camera.quaternion.copy(originalQuaternion);
-
-      if (controlsRef.current) {
-        controlsRef.current.enabled = true;
-      }
-    }
-  };
-
-  const captureImage = (
-    angle: "front" | "top" | "side"
-  ): { src: string; alt: string } => {
-    // Render the scene with current camera position
-    gl.render(scene, camera);
-
-    // Capture as data URL
-    const dataURL = gl.domElement.toDataURL("image/png");
-
-    return {
-      src: dataURL,
-      alt: `${angle} view of ${gemstoneShape} ring with ${headStyle} head, ${shankStyle} shank in ${metalType}`,
-    };
-  };
+    sceneReady,
+    controlsRef,
+    onImagesGenerated,
+  });
 
   const metalMaterial = new MeshStandardMaterial(
     METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
@@ -326,12 +181,6 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
 
   const gemstone = gemstoneShape.toUpperCase();
   const gemstoneProperties = GEMSTONE_3D_PROPERTIES[gemstone];
-
-  const shank = shankStyle.toUpperCase();
-  const shankProperties = getShankProperties(shankStyle, headStyle);
-
-  const head = headStyle.toUpperCase();
-  const headProperties = HEAD_3D_PROPERTIES[head]?.[gemstone];
 
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
@@ -354,215 +203,23 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
       />
 
       {/* Head */}
-      {head !== "HIDDEN-HALO" && (
-        <RingMesh
-          geometry={(headData.nodes[head] as Mesh)?.geometry}
-          material={metalMaterial}
-          position={headProperties?.position as [number, number, number]}
-          rotation={headProperties?.rotation as [number, number, number]}
-          scale={headProperties?.scale}
-        />
-      )}
-
-      {head === "HIDDEN-HALO" && (
-        <>
-          <HiddenHaloMesh
-            gemstoneGeometry={
-              (headData.nodes["HIDDEN-HALOGEMSTONES"] as Mesh)?.geometry
-            }
-            metalGeometry={(headData.nodes["HIDDEN-HALO"] as Mesh)?.geometry}
-            haloMetalGeometry={
-              (headData.nodes["HIDDEN-HALOMETAL"] as Mesh)?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-            position={[0, 0.2, 0]}
-            scale={1}
-          />
-        </>
-      )}
-
-      {head === "CLASSIC-HALO" && (
-        <group scale={0.95} position={[0, 0.6, 0]}>
-          <HaloMesh
-            gemstoneGeometry={
-              (headData.nodes["CLASSIC-HALOGEMSTONES"] as Mesh)?.geometry
-            }
-            metalGeometry={
-              (headData.nodes["CLASSIC-HALOMETAL"] as Mesh)?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-          />
-        </group>
-      )}
-
-      {head === "DUAL-HALO" && (
-        <group scale={0.75} position={[0, 2.7, 0]}>
-          <HaloMesh
-            gemstoneGeometry={
-              (headData.nodes["DUAL-HALOGEMSTONES01"] as Mesh)?.geometry
-            }
-            metalGeometry={
-              (headData.nodes["DUAL-HALOMETAL01"] as Mesh)?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-          />
-          <HaloMesh
-            gemstoneGeometry={
-              (headData.nodes["DUAL-HALOGEMSTONES02"] as Mesh)?.geometry
-            }
-            metalGeometry={
-              (headData.nodes["DUAL-HALOMETAL02"] as Mesh)?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-            position={[0, -0.612, 0]}
-          />
-        </group>
-      )}
-
-      {head === "THREE-STONE" &&
-        gemstoneShape === "round" &&
-        threeStoneSideData && (
-          <ThreeStoneMesh
-            gemstoneGeometry={
-              (threeStoneSideData.nodes["THREE-STONESIDE002"] as Mesh)?.geometry
-            }
-            metalGeometry={
-              (threeStoneSideData.nodes["THREE-STONESIDE002_1"] as Mesh)
-                ?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-            position={[-2.395, 8.264, -0.025]}
-            rotation={[0.018, 0, -0.098]}
-            scale={2.961}
-          />
-        )}
-
-      {head === "THREE-STONE" &&
-        gemstoneShape === "princess" &&
-        threeStoneSideData && (
-          <group
-            position={[-3.907, 7.551, 0] as [number, number, number]}
-            rotation={[Math.PI / 2, 0.494, 0] as [number, number, number]}
-            scale={0.642}
-          >
-            <mesh
-              castShadow
-              receiveShadow
-              geometry={
-                (threeStoneSideData.nodes["THREE-STONESIDE001"] as Mesh)
-                  ?.geometry
-              }
-            >
-              <MeshRefractionMaterial
-                envMap={texture}
-                bounces={4}
-                aberrationStrength={0.02}
-                ior={3}
-                fresnel={0}
-                color="#e3e3e3"
-                toneMapped={false}
-              />
-            </mesh>
-            <mesh
-              castShadow
-              receiveShadow
-              geometry={
-                (threeStoneSideData.nodes["THREE-STONESIDE001_1"] as Mesh)
-                  ?.geometry
-              }
-              material={metalMaterial}
-            />
-          </group>
-        )}
-
-      {head === "THREE-STONE" &&
-        gemstoneShape === "oval" &&
-        threeStoneSideData && (
-          <group
-            position={[-2.842, 0.307, 0] as [number, number, number]}
-            rotation={[Math.PI / 2, 0.196, Math.PI] as [number, number, number]}
-            scale={0.654}
-          >
-            <mesh
-              castShadow
-              receiveShadow
-              geometry={
-                (threeStoneSideData.nodes["THREE-STONESIDE_2"] as Mesh)
-                  ?.geometry
-              }
-            >
-              <MeshRefractionMaterial
-                envMap={texture}
-                bounces={4}
-                aberrationStrength={0.02}
-                ior={3}
-                fresnel={0}
-                color="#e3e3e3"
-                toneMapped={false}
-              />
-            </mesh>
-            <mesh
-              castShadow
-              receiveShadow
-              geometry={
-                (threeStoneSideData.nodes["THREE-STONESIDE_1"] as Mesh)
-                  ?.geometry
-              }
-              material={metalMaterial}
-            />
-          </group>
-        )}
-
-      {/* Shank */}
-
-      <RingMesh
-        geometry={(shankData.nodes[shank] as Mesh)?.geometry}
-        material={metalMaterial}
-        position={shankProperties.position || [0, 0, 0]}
-        rotation={shankProperties.rotation || [0, 0, 0]}
-        scale={shankProperties.scale || 1}
+      <HeadRenderer
+        headStyle={headStyle}
+        gemstoneShape={gemstoneShape}
+        headData={headData}
+        threeStoneSideData={threeStoneSideData}
+        metalMaterial={metalMaterial}
+        texture={texture}
       />
 
-      {shank === "FRENCH-PAVE" && (
-        <>
-          <PaveMesh
-            gemstoneGeometry={
-              (shankData.nodes["FRENCH-PAVEGEMSTONES"] as Mesh)?.geometry
-            }
-            metalGeometry={
-              (shankData.nodes["FRENCH-PAVESIDE-SETTINGS"] as Mesh)?.geometry
-            }
-            metalMaterial={metalMaterial}
-            texture={texture}
-            position={[0, -1.617, 0]}
-            scale={1.028}
-          />
-          <RingMesh
-            geometry={
-              (shankData.nodes["FRENCH-PAVESIDE-SETTINGS"] as Mesh)?.geometry
-            }
-            material={metalMaterial}
-            position={[0, -1.614, 0]}
-            scale={[1.005, 1.005, 0.996]}
-          />
-        </>
-      )}
-
-      {shank === "BAGUETTE-CHANNEL" && (
-        <RingMesh
-          geometry={
-            (shankData.nodes["BAGUETTE-CHANNELGEMSTONES"] as Mesh)?.geometry
-          }
-          position={[0, -1.518, 0]}
-          isGemstone
-          texture={texture}
-        />
-      )}
+      {/* Shank */}
+      <ShankRenderer
+        shankStyle={shankStyle}
+        headStyle={headStyle}
+        shankData={shankData}
+        metalMaterial={metalMaterial}
+        texture={texture}
+      />
     </group>
   );
 };

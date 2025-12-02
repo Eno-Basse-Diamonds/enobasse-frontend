@@ -1,8 +1,8 @@
-import React from 'react';
-import { MeshRefractionMaterial } from '@react-three/drei';
-import { Mesh } from 'three';
-import type { ThreeDProperties } from '../../../../../lib/types/creative-studio';
-import { METAL_MATERIALS } from '../../../../../lib/utils/constants/creative-studio';
+import React from "react";
+import { MeshRefractionMaterial } from "@react-three/drei";
+import { Mesh } from "three";
+import type { ThreeDProperties } from "../../../../../lib/types/creative-studio";
+import { METAL_MATERIALS } from "../../../../../lib/utils/constants/creative-studio";
 
 interface RingMeshProps {
   geometry: any;
