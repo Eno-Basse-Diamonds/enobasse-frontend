@@ -44,7 +44,7 @@ export const HeroSection: React.FC = () => {
 
       <div className="absolute bottom-24 lg:bottom-28 left-8 right-8 md:left-16 md:right-16 lg:left-24 lg:right-24 z-10 max-w-md md:max-w-lg">
         <div>
-          <h2 className="font-primary font-semibold text-2xl md:text-4xl mb-4 text-white drop-shadow-lg hero-text-animate leading-8 md:leading-10">
+          <h2 className="font-primary font-semibold text-2xl md:text-4xl mb-4 text-white drop-shadow-lg hero-text-animate text-center md:text-left leading-8 md:leading-10">
             You Deserve The Most Unique Jewelry
           </h2>
         </div>
