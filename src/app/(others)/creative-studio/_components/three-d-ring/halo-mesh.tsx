@@ -1,5 +1,5 @@
-import React from "react";
 import { RingMesh } from "./ring-mesh";
+import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface HaloMeshProps {
   gemstoneGeometry: any;
@@ -8,6 +8,7 @@ interface HaloMeshProps {
   texture: any;
   position?: [number, number, number];
   scale?: number | [number, number, number];
+  performanceTier: PerformanceTier;
 }
 
 export function HaloMesh({
@@ -17,11 +18,22 @@ export function HaloMesh({
   texture,
   position = [0, 0, 0],
   scale = 1,
+  performanceTier,
 }: HaloMeshProps) {
   return (
     <group position={position} scale={scale}>
-      <RingMesh geometry={gemstoneGeometry} isGemstone texture={texture} />
-      <RingMesh geometry={metalGeometry} material={metalMaterial} />
+      <RingMesh
+        geometry={gemstoneGeometry}
+        isGemstone
+        isHaloGemstone
+        texture={texture}
+        performanceTier={performanceTier}
+      />
+      <RingMesh
+        geometry={metalGeometry}
+        material={metalMaterial}
+        performanceTier={performanceTier}
+      />
     </group>
   );
 }
@@ -34,6 +46,7 @@ interface HiddenHaloMeshProps {
   texture: any;
   position?: [number, number, number];
   scale?: number | [number, number, number];
+  performanceTier: PerformanceTier;
 }
 
 export function HiddenHaloMesh({
@@ -44,12 +57,27 @@ export function HiddenHaloMesh({
   texture,
   position = [0, 0, 0],
   scale = 1,
+  performanceTier,
 }: HiddenHaloMeshProps) {
   return (
     <group position={position} scale={scale}>
-      <RingMesh geometry={metalGeometry} material={metalMaterial} />
-      <RingMesh geometry={haloMetalGeometry} material={metalMaterial} />
-      <RingMesh geometry={gemstoneGeometry} isGemstone texture={texture} />
+      <RingMesh
+        geometry={metalGeometry}
+        material={metalMaterial}
+        performanceTier={performanceTier}
+      />
+      <RingMesh
+        geometry={haloMetalGeometry}
+        material={metalMaterial}
+        performanceTier={performanceTier}
+      />
+      <RingMesh
+        geometry={gemstoneGeometry}
+        isGemstone
+        isHaloGemstone
+        texture={texture}
+        performanceTier={performanceTier}
+      />
     </group>
   );
 }

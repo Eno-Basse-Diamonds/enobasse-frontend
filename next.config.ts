@@ -6,7 +6,6 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
-  ignoreDuringBuilds: true,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "**" }],
     formats: ["image/webp"],

@@ -6,6 +6,7 @@ import { RingMesh } from "./ring-mesh";
 import { HaloMesh, HiddenHaloMesh } from "./halo-mesh";
 import { ThreeStoneMesh } from "./three-stone-mesh";
 import { GLTFResult } from "./types";
+import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface HeadRendererProps {
   headStyle: string;
@@ -14,6 +15,7 @@ interface HeadRendererProps {
   threeStoneSideData?: GLTFResult;
   metalMaterial: MeshStandardMaterial;
   texture: any;
+  performanceTier: PerformanceTier;
 }
 
 export const HeadRenderer: React.FC<HeadRendererProps> = ({
@@ -23,10 +25,25 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
   threeStoneSideData,
   metalMaterial,
   texture,
+  performanceTier,
 }) => {
   const head = headStyle.toUpperCase();
   const gemstone = gemstoneShape.toUpperCase();
   const headProperties = HEAD_3D_PROPERTIES[head]?.[gemstone];
+
+  // Use performance tier for reduced quality on mobile
+  const getRefractionBounces = (): number => {
+    switch (performanceTier) {
+      case "high":
+        return 4;
+      case "medium":
+        return 2;
+      case "low":
+        return 1;
+      default:
+        return 4;
+    }
+  };
 
   return (
     <>
@@ -37,6 +54,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
           position={headProperties?.position as [number, number, number]}
           rotation={headProperties?.rotation as [number, number, number]}
           scale={headProperties?.scale}
+          performanceTier={performanceTier}
         />
       )}
 
@@ -53,6 +71,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
           texture={texture}
           position={[0, 0.2, 0]}
           scale={1}
+          performanceTier={performanceTier}
         />
       )}
 
@@ -67,6 +86,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             }
             metalMaterial={metalMaterial}
             texture={texture}
+            performanceTier={performanceTier}
           />
         </group>
       )}
@@ -82,6 +102,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             }
             metalMaterial={metalMaterial}
             texture={texture}
+            performanceTier={performanceTier}
           />
           <HaloMesh
             gemstoneGeometry={
@@ -93,6 +114,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             metalMaterial={metalMaterial}
             texture={texture}
             position={[0, -0.612, 0]}
+            performanceTier={performanceTier}
           />
         </group>
       )}
@@ -113,6 +135,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             position={[-2.395, 8.264, -0.025]}
             rotation={[0.018, 0, -0.098]}
             scale={2.961}
+            performanceTier={performanceTier}
           />
         )}
 
@@ -134,7 +157,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             >
               <MeshRefractionMaterial
                 envMap={texture}
-                bounces={4}
+                bounces={getRefractionBounces()}
                 aberrationStrength={0.02}
                 ior={3}
                 fresnel={0}
@@ -172,7 +195,7 @@ export const HeadRenderer: React.FC<HeadRendererProps> = ({
             >
               <MeshRefractionMaterial
                 envMap={texture}
-                bounces={4}
+                bounces={getRefractionBounces()}
                 aberrationStrength={0.02}
                 ior={3}
                 fresnel={0}

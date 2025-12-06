@@ -1,10 +1,14 @@
 "use client";
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useFrame, useLoader, invalidate } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
 import { Group, Mesh, MeshStandardMaterial } from "three";
 import { RGBELoader } from "three-stdlib";
+import {
+  useMobileDetection,
+  PerformanceTier,
+} from "@/lib/hooks/use-mobile-detection";
 import {
   GEMSTONE_3D_PROPERTIES,
   METAL_MATERIALS,
@@ -39,6 +43,9 @@ export function ThreeDRing({
   const [prevConfig, setPrevConfig] = useState("");
   const [isUserInteracting, setIsUserInteracting] = useState(false);
   const controlsRef = useRef<any>(null);
+
+  // Mobile performance optimization
+  const { isMobile, performanceTier } = useMobileDetection();
 
   const currentConfig = `${gemstoneShape}-${headStyle}-${shankStyle}-${metalType}`;
 
@@ -84,7 +91,10 @@ export function ThreeDRing({
 
   return (
     <Canvas
-      shadows
+      shadows={!isMobile}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
+      frameloop={isMobile ? "demand" : "always"}
+      performance={{ min: 0.5 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
       className="w-full h-full"
     >
@@ -108,6 +118,8 @@ export function ThreeDRing({
         imagesReady={imagesReady}
         controlsRef={controlsRef}
         isUserInteracting={isUserInteracting}
+        performanceTier={performanceTier}
+        isMobile={isMobile}
       />
 
       <OrbitControls
@@ -143,6 +155,8 @@ interface RotatingRingProps {
   imagesReady?: boolean;
   controlsRef: React.RefObject<any>;
   isUserInteracting: boolean;
+  performanceTier: PerformanceTier;
+  isMobile: boolean;
 }
 
 const RotatingRing: React.FC<RotatingRingProps> = ({
@@ -161,6 +175,8 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   rotationSpeed = 0.3,
   controlsRef,
   isUserInteracting,
+  performanceTier,
+  isMobile,
 }) => {
   const groupRef = useRef<Group>(null);
 
@@ -174,9 +190,14 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     onImagesGenerated,
   });
 
-  const metalMaterial = new MeshStandardMaterial(
-    METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
-      METAL_MATERIALS["white-gold"]
+  // Memoize material to prevent recreation on each render
+  const metalMaterial = useMemo(
+    () =>
+      new MeshStandardMaterial(
+        METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
+          METAL_MATERIALS["white-gold"]
+      ),
+    [metalType]
   );
 
   const gemstone = gemstoneShape.toUpperCase();
@@ -185,6 +206,10 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
       groupRef.current.rotation.y += delta * rotationSpeed;
+      // On mobile with demand frameloop, we need to manually invalidate
+      if (isMobile) {
+        invalidate();
+      }
     }
   });
 
@@ -200,6 +225,7 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
         scale={gemstoneProperties.scale}
         isGemstone
         texture={texture}
+        performanceTier={performanceTier}
       />
 
       {/* Head */}
@@ -210,6 +236,7 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
         threeStoneSideData={threeStoneSideData}
         metalMaterial={metalMaterial}
         texture={texture}
+        performanceTier={performanceTier}
       />
 
       {/* Shank */}
@@ -219,6 +246,7 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
         shankData={shankData}
         metalMaterial={metalMaterial}
         texture={texture}
+        performanceTier={performanceTier}
       />
     </group>
   );

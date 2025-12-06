@@ -1,8 +1,6 @@
-import React from "react";
+import { memo } from "react";
 import { MeshRefractionMaterial } from "@react-three/drei";
-import { Mesh } from "three";
-import type { ThreeDProperties } from "../../../../../lib/types/creative-studio";
-import { METAL_MATERIALS } from "../../../../../lib/utils/constants/creative-studio";
+import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface RingMeshProps {
   geometry: any;
@@ -13,10 +11,51 @@ interface RingMeshProps {
   castShadow?: boolean;
   receiveShadow?: boolean;
   isGemstone?: boolean;
+  isHaloGemstone?: boolean;
   texture?: any;
+  performanceTier?: PerformanceTier;
 }
 
-export function RingMesh({
+function getRefractionBounces(tier: PerformanceTier): number {
+  switch (tier) {
+    case "high":
+      return 4;
+    case "medium":
+      return 2;
+    case "low":
+      return 1;
+    default:
+      return 4;
+  }
+}
+
+function getAberrationStrength(tier: PerformanceTier): number {
+  switch (tier) {
+    case "high":
+      return 0.02;
+    case "medium":
+      return 0.01;
+    case "low":
+      return 0; // Disable on low-power devices
+    default:
+      return 0.02;
+  }
+}
+
+function getIOR(tier: PerformanceTier): number {
+  switch (tier) {
+    case "high":
+      return 3;
+    case "medium":
+      return 2.4;
+    case "low":
+      return 2;
+    default:
+      return 3;
+  }
+}
+
+function RingMeshComponent({
   geometry,
   material,
   position = [0, 0, 0],
@@ -25,7 +64,9 @@ export function RingMesh({
   castShadow = true,
   receiveShadow = true,
   isGemstone = false,
+  isHaloGemstone = false,
   texture,
+  performanceTier = "high",
 }: RingMeshProps) {
   if (isGemstone) {
     return (
@@ -39,9 +80,9 @@ export function RingMesh({
       >
         <MeshRefractionMaterial
           envMap={texture}
-          bounces={4}
-          aberrationStrength={0.02}
-          ior={3}
+          bounces={getRefractionBounces(performanceTier)}
+          aberrationStrength={getAberrationStrength(performanceTier)}
+          ior={getIOR(performanceTier)}
           fresnel={0}
           color="#e3e3e3"
           toneMapped={false}
@@ -62,3 +103,6 @@ export function RingMesh({
     />
   );
 }
+
+// Memoize to prevent unnecessary re-renders
+export const RingMesh = memo(RingMeshComponent);

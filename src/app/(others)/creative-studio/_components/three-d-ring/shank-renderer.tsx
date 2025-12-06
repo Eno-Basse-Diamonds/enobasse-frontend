@@ -4,6 +4,7 @@ import { getShankProperties } from "@/lib/utils/creative-studio";
 import { RingMesh } from "./ring-mesh";
 import { PaveMesh } from "./pave-mesh";
 import { GLTFResult } from "./types";
+import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface ShankRendererProps {
   shankStyle: string;
@@ -11,6 +12,7 @@ interface ShankRendererProps {
   shankData: GLTFResult;
   metalMaterial: MeshStandardMaterial;
   texture: any;
+  performanceTier: PerformanceTier;
 }
 
 export const ShankRenderer: React.FC<ShankRendererProps> = ({
@@ -19,6 +21,7 @@ export const ShankRenderer: React.FC<ShankRendererProps> = ({
   shankData,
   metalMaterial,
   texture,
+  performanceTier,
 }) => {
   const shank = shankStyle.toUpperCase();
   const shankProperties = getShankProperties(shankStyle, headStyle);
@@ -31,6 +34,7 @@ export const ShankRenderer: React.FC<ShankRendererProps> = ({
         position={shankProperties.position || [0, 0, 0]}
         rotation={shankProperties.rotation || [0, 0, 0]}
         scale={shankProperties.scale || 1}
+        performanceTier={performanceTier}
       />
 
       {shank === "FRENCH-PAVE" && (
@@ -46,6 +50,7 @@ export const ShankRenderer: React.FC<ShankRendererProps> = ({
             texture={texture}
             position={[0, -1.617, 0]}
             scale={1.028}
+            performanceTier={performanceTier}
           />
           <RingMesh
             geometry={
@@ -54,6 +59,7 @@ export const ShankRenderer: React.FC<ShankRendererProps> = ({
             material={metalMaterial}
             position={[0, -1.614, 0]}
             scale={[1.005, 1.005, 0.996]}
+            performanceTier={performanceTier}
           />
         </>
       )}
@@ -66,6 +72,7 @@ export const ShankRenderer: React.FC<ShankRendererProps> = ({
           position={[0, -1.518, 0]}
           isGemstone
           texture={texture}
+          performanceTier={performanceTier}
         />
       )}
     </>
