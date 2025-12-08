@@ -88,16 +88,16 @@ export default async function HomePage() {
       title: "Bamboo Collection",
       href: "/collections/bamboo-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745737/bamboo-collection_suocdq.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203101/bamboo-collection_g8qmxp.webp",
         alt: "Bamboo Collection",
       },
     },
     {
       id: "amora-collection",
       title: "Amora Collection",
-      href: "/collection/amora-collection",
+      href: "/collections/amora-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745735/amora-collection_sqjo2h.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/amora-collection_a5qkxs.webp",
         alt: "Amora Collection",
       },
     },
@@ -106,7 +106,7 @@ export default async function HomePage() {
       title: "New Arrivals",
       href: "/collections/new-arrivals",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756512496/collection-03_puyvz5.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203098/new-arrivals_uudlw9.webp",
         alt: "New Arrivals",
       },
     },
@@ -115,7 +115,7 @@ export default async function HomePage() {
       title: "Pearls",
       href: "/collections/pearls-collection",
       image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1756745733/pearls-collection_brrv3h.webp",
+        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/pearls-collection_ml5yhe.webp",
         alt: "Pearls Collection",
       },
     },

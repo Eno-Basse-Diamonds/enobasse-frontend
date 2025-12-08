@@ -46,11 +46,13 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
                 src={item.image.src}
                 alt={item.image.alt}
                 title={item.image.alt}
-                height={1000}
-                width={1000}
-                loading="lazy"
-                quality={100}
-                className="rounded-sm  w-full h-full object-cover transition-transform duration-500 hover:scale-102"
+                fill
+                sizes={
+                  index === 1 || index === 2
+                    ? "(max-width: 1024px) 100vw, 66vw"
+                    : "(max-width: 1024px) 100vw, 33vw"
+                }
+                className="rounded-sm w-full h-full object-cover transition-transform duration-500 hover:scale-102"
               />
               <h3
                 className={`rounded-sm absolute bottom-4 text-center text-sm md:text-lg font-light mb-2 bg-white px-9 py-2 text-[#502B3A] left-1/2 transform -translate-x-1/2 w-[calc(100%-3rem)] md:w-auto md:transform-none ${getTextPosition(
