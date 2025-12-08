@@ -8,6 +8,11 @@ export interface CartItem {
   quantity: number;
   size?: number;
   engraving?: { text: string; fontStyle: string };
+  amoraOptions?: {
+    selectedLetters: string[];
+    includeChain: boolean;
+    calculatedPrice: number;
+  };
   note?: string;
   addedAt: string;
 }

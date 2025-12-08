@@ -27,10 +27,15 @@ interface CartState {
     size?: number,
     engraving?: { text: string; fontStyle: string },
     currency?: string,
+    amoraOptions?: {
+      selectedLetters: string[];
+      includeChain: boolean;
+      calculatedPrice: number;
+    }
   ) => Promise<void>;
   removeItem: (
     productVariantId: string | number,
-    accountEmail?: string,
+    accountEmail?: string
   ) => Promise<void>;
   updateItem: (
     productVariantId: string | number,
@@ -40,12 +45,12 @@ interface CartState {
       engraving?: { text: string; fontStyle: string };
     },
     accountEmail?: string,
-    currency?: string,
+    currency?: string
   ) => Promise<void>;
   clear: (accountEmail?: string) => Promise<void>;
   refreshWithCurrency: (
     currency: string,
-    accountEmail?: string,
+    accountEmail?: string
   ) => Promise<void>;
 }
 
@@ -63,7 +68,7 @@ export const useCartStore = create<CartState>()(
         try {
           if (accountEmail) {
             const guestItems = get().items.filter((item) =>
-              item.id.startsWith("guest_"),
+              item.id.startsWith("guest_")
             );
             if (guestItems.length > 0) {
               try {
@@ -75,8 +80,8 @@ export const useCartStore = create<CartState>()(
                     item.productCategory,
                     item.quantity,
                     item.size,
-                    item.engraving,
-                  ),
+                    item.engraving
+                  )
                 );
                 await Promise.all(addToCartPromises);
               } catch (e) {}
@@ -102,7 +107,7 @@ export const useCartStore = create<CartState>()(
                   })
                   .catch(() => {
                     const fallbackUsdPrice = Math.ceil(
-                      item.productVariant.price / exchangeRate,
+                      item.productVariant.price / exchangeRate
                     );
                     set((state) => ({
                       originalUsdPrices: {
@@ -143,7 +148,7 @@ export const useCartStore = create<CartState>()(
             const convertedItems = await convertCartItems(
               state.items,
               currency,
-              state.originalUsdPrices,
+              state.originalUsdPrices
             );
             set({ items: convertedItems });
           }
@@ -168,6 +173,11 @@ export const useCartStore = create<CartState>()(
         size?: number,
         engraving?: { text: string; fontStyle: string },
         currency: string = "USD",
+        amoraOptions?: {
+          selectedLetters: string[];
+          includeChain: boolean;
+          calculatedPrice: number;
+        }
       ) => {
         set({ loading: true, error: null });
         try {
@@ -180,6 +190,7 @@ export const useCartStore = create<CartState>()(
               quantity,
               size,
               engraving,
+              amoraOptions
             );
             const response = await getCart(accountEmail, currency);
 
@@ -202,7 +213,7 @@ export const useCartStore = create<CartState>()(
                   })
                   .catch(() => {
                     const fallbackUsdPrice = Math.ceil(
-                      item.productVariant.price / exchangeRate,
+                      item.productVariant.price / exchangeRate
                     );
                     set((state) => ({
                       originalUsdPrices: {
@@ -221,7 +232,7 @@ export const useCartStore = create<CartState>()(
           } else {
             set((state) => {
               const existing = state.items.find(
-                (item) => item.productVariant.id === productVariant.id,
+                (item) => item.productVariant.id === productVariant.id
               );
               if (existing) {
                 return {
@@ -233,7 +244,7 @@ export const useCartStore = create<CartState>()(
                           size: size ?? item.size,
                           engraving: engraving ?? item.engraving,
                         }
-                      : item,
+                      : item
                   ),
                 };
               }
@@ -246,6 +257,7 @@ export const useCartStore = create<CartState>()(
                 quantity,
                 size,
                 engraving,
+                amoraOptions,
               };
 
               const newOriginalUsdPrices = { ...state.originalUsdPrices };
@@ -265,7 +277,7 @@ export const useCartStore = create<CartState>()(
                   .catch(() => {
                     getExchangeRate().then((exchangeRate) => {
                       const fallbackUsdPrice = Math.ceil(
-                        productVariant.price / exchangeRate,
+                        productVariant.price / exchangeRate
                       );
                       set((currentState) => ({
                         originalUsdPrices: {
@@ -300,23 +312,23 @@ export const useCartStore = create<CartState>()(
             await removeFromCart(accountEmail, productVariantId);
             set((state) => ({
               items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId,
+                (item) => item.productVariant.id !== productVariantId
               ),
               originalUsdPrices: Object.fromEntries(
                 Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString(),
-                ),
+                  ([id]) => id !== productVariantId.toString()
+                )
               ),
             }));
           } else {
             set((state) => ({
               items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId,
+                (item) => item.productVariant.id !== productVariantId
               ),
               originalUsdPrices: Object.fromEntries(
                 Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString(),
-                ),
+                  ([id]) => id !== productVariantId.toString()
+                )
               ),
             }));
           }
@@ -338,7 +350,7 @@ export const useCartStore = create<CartState>()(
           engraving?: { text: string; fontStyle: string };
         },
         accountEmail?: string,
-        currency: string = "USD",
+        currency: string = "USD"
       ) => {
         set({ loading: true, error: null });
         try {
@@ -355,7 +367,7 @@ export const useCartStore = create<CartState>()(
                       ...update,
                       size: update.size !== undefined ? update.size : item.size,
                     }
-                  : item,
+                  : item
               ),
             }));
           }
@@ -395,14 +407,14 @@ export const useCartStore = create<CartState>()(
       onRehydrateStorage: () => (state) => {
         state?.hydrate();
       },
-    },
-  ),
+    }
+  )
 );
 
 async function convertCartItems(
   items: CartItem[],
   targetCurrency: string,
-  originalUsdPrices: Record<string, number>,
+  originalUsdPrices: Record<string, number>
 ): Promise<CartItem[]> {
   const convertedItems: CartItem[] = [];
 
@@ -422,14 +434,14 @@ async function convertCartItems(
         convertedPrice = await convertCurrency(
           originalUsdPrices[item.productVariant.id],
           "USD",
-          "NGN",
+          "NGN"
         );
         originalPrice = originalUsdPrices[item.productVariant.id];
       } else if (currentCurrency === "USD") {
         convertedPrice = await convertCurrency(
           item.productVariant.price,
           "USD",
-          "NGN",
+          "NGN"
         );
         originalPrice = item.productVariant.price;
       } else {
@@ -442,7 +454,7 @@ async function convertCartItems(
         convertedPrice = await convertCurrency(
           item.productVariant.price,
           "NGN",
-          "USD",
+          "USD"
         );
       } else {
         convertedPrice = item.productVariant.price;

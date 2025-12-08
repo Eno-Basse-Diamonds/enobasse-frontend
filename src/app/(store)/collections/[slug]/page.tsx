@@ -14,7 +14,10 @@ import { metalOptions } from "@/lib/utils/constants/metal-options";
 import { EmptyState } from "@/components/empty-state";
 import { ProductsPageLoader } from "@/components/loaders/products";
 import { PageHeading } from "@/components/page-heading";
-import { FilterPanelDesktop, FilterPanelMobile } from "@/components/product/filter-panel";
+import {
+  FilterPanelDesktop,
+  FilterPanelMobile,
+} from "@/components/product/filter-panel";
 import { ProductList } from "@/components/product/list";
 import { SectionContainer } from "@/components/section-container";
 

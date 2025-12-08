@@ -30,7 +30,12 @@ import { ProductList } from "@/components/product/list";
 import { Rating } from "@/components/rating";
 import { SectionContainer } from "@/components/section-container";
 import { RingSizeSelector } from "@/components/select-menu";
+
 import { RequestQuoteModal } from "./_components/request-quote-modal";
+import {
+  LetterSelection,
+  MOCK_AVAILABILITY,
+} from "./_components/letter-selection";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -114,6 +119,24 @@ export default function ProductPage() {
   const [selectedSize, setSelectedSize] = useState<number | undefined>(
     undefined
   );
+
+  const [selectedLetters, setSelectedLetters] = useState<string[]>(["A"]);
+  const [includeChain, setIncludeChain] = useState<boolean>(true);
+
+  const isAmoraCollection = product?.collections?.some(
+    (c) => c.slug === "amora-collection"
+  );
+
+  const hasOutOfStockSelection = selectedLetters.some(
+    (l) => MOCK_AVAILABILITY[l] === false
+  );
+
+  // Calculate Amora collection price
+  const letterPrice = product?.priceRange?.min ?? 0;
+  const chainPrice = (product?.priceRange?.max ?? 0) - letterPrice;
+  const amoraPrice = isAmoraCollection
+    ? selectedLetters.length * letterPrice + (includeChain ? chainPrice : 0)
+    : null;
   const quantity = 1;
 
   const handleWishlistToggle = async () => {
@@ -143,7 +166,15 @@ export default function ProductPage() {
       quantity,
       session?.user?.email ?? undefined,
       selectedSize,
-      engraving
+      engraving,
+      preferredCurrency,
+      isAmoraCollection && amoraPrice !== null
+        ? {
+            selectedLetters,
+            includeChain,
+            calculatedPrice: amoraPrice,
+          }
+        : undefined
     );
     router.push("/cart");
   };
@@ -340,6 +371,49 @@ export default function ProductPage() {
                     </div>
                   )}
 
+                {isAmoraCollection && (
+                  <div>
+                    <LetterSelection
+                      selectedLetters={selectedLetters}
+                      onChange={setSelectedLetters}
+                      availability={MOCK_AVAILABILITY}
+                    />
+
+                    {/* Chain option toggle */}
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-[#502B3A] mb-2">
+                        Add Chain
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIncludeChain(false)}
+                          className={`flex-1 py-2.5 px-4 text-sm border rounded-sm transition-colors ${
+                            !includeChain
+                              ? "bg-[#502B3A] text-white border-[#502B3A]"
+                              : "bg-white text-[#502B3A] border-[#502B3A]/20 hover:border-[#502B3A]"
+                          }`}
+                        >
+                          Letters Only
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIncludeChain(true)}
+                          className={`flex-1 py-2.5 px-4 text-sm border rounded-sm transition-colors ${
+                            includeChain
+                              ? "bg-[#502B3A] text-white border-[#502B3A]"
+                              : "bg-white text-[#502B3A] border-[#502B3A]/20 hover:border-[#502B3A]"
+                          }`}
+                        >
+                          With Chain (+
+                          {getCurrencySymbol(product.priceRange.currency)}
+                          {chainPrice.toLocaleString()})
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]">
                   <Engraving
                     engraving={engraving}
@@ -363,6 +437,14 @@ export default function ProductPage() {
                       by phone.
                     </p>
                   </div>
+                ) : isAmoraCollection && amoraPrice !== null ? (
+                  <p className="text-[#502B3A]/60 text-base md:text-lg">
+                    Price:{" "}
+                    <span className="font-semibold text-[#502B3A] text-xl md:text-2xl">
+                      {getCurrencySymbol(product.priceRange.currency)}
+                      {amoraPrice.toLocaleString()}
+                    </span>
+                  </p>
                 ) : (
                   <p className="text-[#502B3A]/60 text-base md:text-lg">
                     Price:{" "}
@@ -377,12 +459,24 @@ export default function ProductPage() {
                 {(!product.isCustomDesign || selectedVariant?.price !== 0) && (
                   <>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
-                      <Button size="xl" onClick={handleAddToCart}>
-                        Add to Cart
-                      </Button>
+                      {hasOutOfStockSelection ? (
+                        <Button size="xl" onClick={handleRequestQuote}>
+                          Request for Item
+                        </Button>
+                      ) : (
+                        <Button size="xl" onClick={handleAddToCart}>
+                          Add to Cart
+                        </Button>
+                      )}
                     </div>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
-                      <Button onClick={handleAddToCart}>Add to Cart</Button>
+                      {hasOutOfStockSelection ? (
+                        <Button onClick={handleRequestQuote}>
+                          Request for Item
+                        </Button>
+                      ) : (
+                        <Button onClick={handleAddToCart}>Add to Cart</Button>
+                      )}
                     </div>
                   </>
                 )}
@@ -487,6 +581,15 @@ export default function ProductPage() {
           onClose={() => setIsQuoteModalOpen(false)}
           product={product}
           variantImage={selectedVariant?.images?.[0]?.url}
+          amoraOptions={
+            isAmoraCollection && amoraPrice !== null
+              ? {
+                  selectedLetters,
+                  includeChain,
+                  calculatedPrice: amoraPrice,
+                }
+              : undefined
+          }
         />
       )}
     </div>

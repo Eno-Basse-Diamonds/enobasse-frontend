@@ -16,6 +16,11 @@ interface RequestQuoteModalProps {
   onClose: () => void;
   product: Product;
   variantImage?: string;
+  amoraOptions?: {
+    selectedLetters: string[];
+    includeChain: boolean;
+    calculatedPrice: number;
+  };
 }
 
 export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
@@ -23,6 +28,7 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
   onClose,
   product,
   variantImage,
+  amoraOptions,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -89,6 +95,7 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
             : "",
           productName: product.name,
           productSku: product.variants[0]?.sku,
+          amoraOptions: amoraOptions,
         }),
       });
 
