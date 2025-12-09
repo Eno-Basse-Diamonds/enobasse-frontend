@@ -11,9 +11,8 @@ interface LetterSelectionProps {
   maxLetters?: number;
 }
 
-const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const ALPHABET = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", "&", "♥", "✝"];
 
-// Export mock availability for use in parent component
 export const MOCK_AVAILABILITY: Record<string, boolean> = {
   A: true,
   B: true,
@@ -41,6 +40,9 @@ export const MOCK_AVAILABILITY: Record<string, boolean> = {
   X: false,
   Y: false,
   Z: false, // X, Y, Z mock OOS
+  "&": true,
+  "♥": true,
+  "✝": true,
 };
 
 export const LetterSelection: React.FC<LetterSelectionProps> = ({
