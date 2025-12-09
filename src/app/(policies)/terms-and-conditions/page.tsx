@@ -40,8 +40,8 @@ export default function TermsAndConditionsPage() {
         <section className="terms-conditions__section">
           <h2 className="terms-conditions__heading">Introduction</h2>
           <p className="terms-conditions__paragraph">
-            These terms and conditions apply to the Eno Bassé Web site located
-            at www.enobasse.com, and all associated Web sites linked to
+            These terms and conditions apply to the Eno Bassé website located at
+            www.enobasse.com, and all associated websites linked to
             www.enobasse.com by Eno Bassé, its subsidiaries and affiliates,
             including Eno Bassé's sites around the world (collectively 'the
             Site'). Please read these terms and conditions (the 'Terms and

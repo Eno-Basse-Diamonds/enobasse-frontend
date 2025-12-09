@@ -33,47 +33,110 @@ export const metadata: Metadata = {
 export default function shippingPage() {
   return (
     <main className="shipping">
-      <h1 className="shipping__title">Shipping and Return Policy</h1>
+      <h1 className="shipping__title">Shipping & Return Policy</h1>
+
+      <p className="shipping__paragraph text-center max-w-2xl mx-auto mb-12">
+        At Eno Bassé Diamonds, every piece is crafted and handled with the
+        utmost care. Our policies are designed to ensure a seamless experience
+        while preserving the integrity of our craftsmanship.
+      </p>
 
       <section className="shipping__section">
-        <h2 className="shipping__heading">
-          Free Shipping. Secure Shopping. Satisfaction Guaranteed.
-        </h2>
-        <p className="shipping__paragraph">
-          Enjoy free expedited shipping with every new purchase. All shipments
-          are fully insured and shipped via{" "}
-          <span className="shipping__highlight">GIG</span> 2nd Day Air
-          Delivery. International orders are shipped{" "}
-          <span className="shipping__highlight">GIG</span> International
-          Priority.
-        </p>
+        <h2 className="shipping__heading">Delivery Timelines</h2>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">
+              Lagos Deliveries (Ready Pieces):
+            </h3>
+            <p className="shipping__paragraph">
+              Orders of in-store items are dispatched within 48 hours of
+              confirmation, with same-day delivery where possible. Delivery
+              timelines exclude weekends and public holidays.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">
+              Outside Lagos (Ready Pieces):
+            </h3>
+            <p className="shipping__paragraph">
+              Orders are delivered within 3–5 working days.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Custom Orders:</h3>
+            <p className="shipping__paragraph">
+              Bespoke pieces require 4–5 weeks for design, production, and
+              delivery. For clients requiring an accelerated timeline, an
+              express service is available. Express orders are completed within
+              2 weeks, subject to design approval and material availability, and
+              attract an additional fee.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section className="shipping__section shipping__section--spaced">
-        <h2 className="shipping__heading">Purchase Policy</h2>
+        <h2 className="shipping__heading">Quality Assurance & Returns</h2>
         <p className="shipping__paragraph">
-          All sales are final. Once an item has been purchased, it cannot be
-          returned or exchanged. We carefully craft each piece to order,
-          ensuring the highest quality and perfect fit for our customers.
+          Every Eno Bassé piece undergoes a meticulous quality-control process
+          before leaving our atelier. In the unlikely event a client observes an
+          issue:
         </p>
+        <ul className="list-disc pl-5 mt-4 space-y-2 text-primary-400">
+          <li>Our team must be notified within 24 hours of delivery.</li>
+          <li>
+            The piece must be returned in pristine, unworn condition,
+            accompanied by its original packaging, certificates, and
+            accessories.
+          </li>
+          <li>
+            Upon receipt, our artisans will assess and resolve the concern
+            within 1–2 weeks, depending on the complexity.
+          </li>
+          <li>
+            Eno Bassé Diamonds reserves the right to determine the most suitable
+            resolution, including repair or replacement.
+          </li>
+        </ul>
+      </section>
+
+      <section className="shipping__section shipping__section--spaced">
+        <h2 className="shipping__heading">Refunds</h2>
         <p className="shipping__paragraph">
-          Our in-stock ring size is 6.5. Please contact us for details about
-          custom sizing options before placing your order. We want to be sure
-          you are completely satisfied with your purchase. In the rare case that
-          there's an issue with your order, we will work with you to resolve it.
+          Refunds apply exclusively to ready pieces purchased from our in-store
+          collection and only when our team confirms that a resolution cannot be
+          achieved after assessment. Approved refunds are processed within 7
+          working days to the original payment account.
         </p>
-        <p className="shipping__paragraph">
-          For any questions or concerns about your order, please contact us at
-          {" "}
-          <Link
-            href="tel:+2349164886579"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            +234 916 488 6579
-          </Link>{" "}
-          within 7 days of receiving your item.
-        </p>
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-2">Custom Orders:</h3>
+          <p className="shipping__paragraph">
+            Bespoke designs are created uniquely for each client and are
+            therefore not eligible for full refunds. Where cancellations are
+            exceptionally approved, 80% of the order value will be refunded. The
+            remaining 20% is non-refundable, covering design development,
+            craftsmanship, and material commitments already undertaken. Once
+            production has commenced, cancellations or refunds may no longer be
+            possible.
+          </p>
+        </div>
+      </section>
+
+      <section className="shipping__section shipping__section--spaced">
+        <h2 className="shipping__heading">Additional Notes</h2>
+        <ul className="list-disc pl-5 mt-4 space-y-2 text-primary-400">
+          <li>
+            Delivery timelines may shift due to courier schedules or unforeseen
+            circumstances.
+          </li>
+          <li>
+            Items returned without prior authorization will not be accepted.
+          </li>
+          <li>
+            By completing a purchase with Eno Bassé Diamonds, clients
+            acknowledge and agree to these terms.
+          </li>
+        </ul>
       </section>
 
       <section className="shipping__section shipping__section--spaced">
