@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import AuthSection from "../_components/auth-section";
+import PasswordResetCodeSection from "../_components/password-reset-code-section";
 
 export const metadata: Metadata = {
   title: "Password Reset",
@@ -30,30 +30,9 @@ export const metadata: Metadata = {
 
 export default function PasswordResetCodePage() {
   return (
-    <AuthSection
-      type="password-reset-code"
-      title="Password Rest Code"
+    <PasswordResetCodeSection
       heroImage="https://res.cloudinary.com/enobasse/image/upload/v1756507386/reset-code_hsywrh.webp"
       logoImage="https://res.cloudinary.com/enobasse/image/upload/v1756507384/logo-alt_q7lagf.png"
-      formFields={[
-        {
-          id: "reset-code",
-          name: "resetCode",
-          label: "Reset Code",
-          type: "number",
-          placeholder: "Enter 6 figure reset code",
-          required: true,
-        },
-      ]}
-      actionButtonText="Continue"
-      messages={{
-        success: "Reset code has been succesfully verified.",
-      }}
-      footer={{
-        text: "For your security, this code expires in 15 minutes",
-      }}
-      showSocialAuth={false}
-      showTermsCheckbox={false}
     />
   );
 }

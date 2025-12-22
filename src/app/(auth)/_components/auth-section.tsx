@@ -70,6 +70,9 @@ export default function AuthSection({
   const addAlert = useAlertStore((state) => state.addAlert);
   const router = useRouter();
   const accountEmail = useAccountStore((state) => state.email);
+  const resetEmail = useAccountStore((state) => state.resetEmail);
+  const setResetEmail = useAccountStore((state) => state.setResetEmail);
+  const clearResetEmail = useAccountStore((state) => state.clearResetEmail);
   const setAccount = useAccountStore((state) => state.setAccount);
   const { setIsAuthenticated } = useAccountStore();
   const { data: session } = useSession();
@@ -118,17 +121,28 @@ export default function AuthSection({
       }
     },
     "forgot-password": async (formData) => {
+      const emailToUse = formData.email || session?.user?.email || "";
+      if (!emailToUse) {
+        throw new Error("Please enter your email address.");
+      }
       const response = await handleRequestResetPassword({
         ...formData,
-        email: session?.user?.email || "",
+        email: emailToUse,
       });
       if (response?.errors) return response;
+      setResetEmail(emailToUse);
       router.push("/password-reset-code");
     },
     "password-reset-code": async (formData) => {
+      const emailToUse = resetEmail || accountEmail || "";
+      if (!emailToUse) {
+        throw new Error(
+          "Email not found. Please restart the password reset process."
+        );
+      }
       const response = await handleResetCode({
         ...formData,
-        email: accountEmail || "",
+        email: emailToUse,
       });
       if (response?.errors) return response;
       router.push("/create-new-password");
@@ -137,11 +151,18 @@ export default function AuthSection({
       if (formData.newPassword !== formData.confirmPassword) {
         throw new Error("Passwords don't match.");
       }
+      const emailToUse = resetEmail || session?.user?.email || "";
+      if (!emailToUse) {
+        throw new Error(
+          "Email not found. Please restart the password reset process."
+        );
+      }
       const response = await handleChangePassword({
         ...formData,
-        email: session?.user?.email || "",
+        email: emailToUse,
       });
       if (response?.errors) return response;
+      clearResetEmail();
       router.push("/sign-in");
     },
   };
@@ -164,12 +185,65 @@ export default function AuthSection({
     }
   };
 
+  const validateForm = (): FormErrors => {
+    const validationErrors: FormErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Email validation
+    if (formData.email !== undefined) {
+      if (!formData.email) {
+        validationErrors.email = ["Email is required."];
+      } else if (!emailRegex.test(formData.email)) {
+        validationErrors.email = ["Please enter a valid email address."];
+      }
+    }
+
+    // Password validation for sign-up
+    if (type === "sign-up" && formData.password !== undefined) {
+      if (!formData.password) {
+        validationErrors.password = ["Password is required."];
+      } else if (formData.password.length < 8) {
+        validationErrors.password = ["Password must be at least 8 characters."];
+      }
+    }
+
+    // Password validation for create-new-password
+    if (type === "create-new-password") {
+      if (formData.newPassword !== undefined) {
+        if (!formData.newPassword) {
+          validationErrors.newPassword = ["New password is required."];
+        } else if (formData.newPassword.length < 8) {
+          validationErrors.newPassword = [
+            "Password must be at least 8 characters.",
+          ];
+        }
+      }
+      if (formData.confirmPassword !== undefined) {
+        if (!formData.confirmPassword) {
+          validationErrors.confirmPassword = ["Please confirm your password."];
+        } else if (formData.newPassword !== formData.confirmPassword) {
+          validationErrors.confirmPassword = ["Passwords don't match."];
+        }
+      }
+    }
+
+    return validationErrors;
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrors({});
     setIsSubmitting(true);
 
     if (!type) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Client-side validation
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       setIsSubmitting(false);
       return;
     }

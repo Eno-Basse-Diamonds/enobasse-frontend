@@ -1,16 +1,10 @@
+import { useState } from "react";
 import { Edit3, Save, X } from "lucide-react";
 import type { Account } from "@/lib/types/accounts";
-
-export type EditFormData = {
-  name: string;
-  email: string;
-  phone: string;
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-};
+import type {
+  EditFormData,
+  AccountFormValidationErrors,
+} from "@/lib/types/account-form";
 
 interface AccountFormProps {
   account: Account | undefined;
@@ -35,7 +29,41 @@ export function AccountForm({
   onCancel,
   isSaving,
 }: AccountFormProps) {
+  const [validationErrors, setValidationErrors] =
+    useState<AccountFormValidationErrors>({});
+
+  const validateForm = (): boolean => {
+    const errors: AccountFormValidationErrors = {};
+
+    // Phone validation - only digits, spaces, dashes, parentheses, and plus sign allowed
+    if (editForm.phone) {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+      if (!phoneRegex.test(editForm.phone)) {
+        errors.phone = "Please enter a valid phone number.";
+      } else if (editForm.phone.replace(/\D/g, "").length < 7) {
+        errors.phone = "Phone number is too short.";
+      }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSaveWithValidation = () => {
+    if (validateForm()) {
+      onSave();
+    }
+  };
+
   const handleInputChange = (field: keyof EditFormData, value: string) => {
+    // Clear validation error when user starts typing
+    if (validationErrors[field as keyof AccountFormValidationErrors]) {
+      setValidationErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field as keyof AccountFormValidationErrors];
+        return newErrors;
+      });
+    }
     onFormChange(field, value);
   };
 
@@ -92,9 +120,14 @@ export function AccountForm({
                 type="tel"
                 value={editForm.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-                className="w-full p-3 border border-primary-200 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className={`w-full p-3 border focus:outline-none focus:ring-1 focus:ring-primary-500 ${validationErrors.phone ? "border-red-400" : "border-primary-200"}`}
                 placeholder="Enter your phone number"
               />
+              {validationErrors.phone && (
+                <p className="mt-1 text-xs text-red-500">
+                  {validationErrors.phone}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-xs uppercase tracking-wider text-primary-300 mb-2">
@@ -163,7 +196,7 @@ export function AccountForm({
 
           <div className="flex gap-4 pt-4">
             <button
-              onClick={onSave}
+              onClick={handleSaveWithValidation}
               disabled={isSaving}
               className="flex items-center gap-2 bg-primary-500 text-white px-6 py-3 hover:bg-primary-400 transition-colors disabled:opacity-50 rounded-sm"
             >

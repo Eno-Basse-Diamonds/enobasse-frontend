@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import Link from "next/link";
 import { EyeOpenIcon } from "../icons/eye-open";
 import { EyeCloseIcon } from "../icons/eye-close";
+export { OtpInput } from "./otp-input";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

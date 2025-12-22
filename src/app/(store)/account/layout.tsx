@@ -1,11 +1,12 @@
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { PageHeading } from "@/components/page-heading";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { useAccountByEmail } from "@/lib/hooks/use-accounts";
+import { getAccountByEmail } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
@@ -17,12 +18,18 @@ export default async function AccountLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
   const session = await getServerSession();
 
+  // Route protection: redirect to sign-in if not authenticated
+  if (!session?.user?.email) {
+    redirect("/sign-in");
+  }
+
+  const queryClient = new QueryClient();
+
   await queryClient.prefetchQuery({
-    queryKey: ["account"],
-    queryFn: () => useAccountByEmail(session?.user?.email),
+    queryKey: ["account", session.user.email],
+    queryFn: () => getAccountByEmail(session.user.email as string),
   });
 
   return (

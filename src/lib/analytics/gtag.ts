@@ -81,7 +81,7 @@ const variantToGAItem = (
   productSlug: string,
   productCategory: string,
   quantity: number = 1,
-  currency: string = "USD"
+  currency: string = "USD",
 ): GAItem => ({
   item_id: String(variant.id),
   item_name: variant.title || productSlug,
@@ -99,7 +99,7 @@ export const trackViewItem = (
   variant: ProductVariant,
   productSlug: string,
   productCategory: string,
-  currency: string = "USD"
+  currency: string = "USD",
 ) => {
   if (!isGALoaded()) return;
 
@@ -120,7 +120,7 @@ export const trackAddToCart = (
   productSlug: string,
   productCategory: string,
   quantity: number = 1,
-  currency: string = "USD"
+  currency: string = "USD",
 ) => {
   if (!isGALoaded()) return;
 
@@ -133,7 +133,7 @@ export const trackAddToCart = (
         productSlug,
         productCategory,
         quantity,
-        currency
+        currency,
       ),
     ],
   });
@@ -147,7 +147,7 @@ export const trackRemoveFromCart = (
   productSlug: string,
   productCategory: string,
   quantity: number = 1,
-  currency: string = "USD"
+  currency: string = "USD",
 ) => {
   if (!isGALoaded()) return;
 
@@ -160,7 +160,7 @@ export const trackRemoveFromCart = (
         productSlug,
         productCategory,
         quantity,
-        currency
+        currency,
       ),
     ],
   });
@@ -174,7 +174,7 @@ export const trackViewCart = (items: CartItem[], currency: string = "USD") => {
 
   const totalValue = items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
 
   window.gtag("event", "view_cart", {
@@ -189,13 +189,13 @@ export const trackViewCart = (items: CartItem[], currency: string = "USD") => {
  */
 export const trackBeginCheckout = (
   items: CartItem[],
-  currency: string = "USD"
+  currency: string = "USD",
 ) => {
   if (!isGALoaded()) return;
 
   const totalValue = items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
 
   window.gtag("event", "begin_checkout", {
@@ -212,13 +212,13 @@ export const trackPurchase = (
   transactionId: string,
   items: CartItem[],
   currency: string = "USD",
-  paymentMethod?: string
+  paymentMethod?: string,
 ) => {
   if (!isGALoaded()) return;
 
   const totalValue = items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
 
   window.gtag("event", "purchase", {
@@ -237,7 +237,7 @@ export const trackAddToWishlist = (
   variant: ProductVariant,
   productSlug: string,
   productCategory: string,
-  currency: string = "USD"
+  currency: string = "USD",
 ) => {
   if (!isGALoaded()) return;
 

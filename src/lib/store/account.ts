@@ -16,6 +16,7 @@ interface BillingAddress {
 
 interface AccountState {
   email: string | null;
+  resetEmail: string | null;
   preferredCurrency: string;
   billingAddress?: BillingAddress;
   isAuthenticated: boolean;
@@ -26,12 +27,15 @@ interface AccountState {
   setPreferredCurrency: (currency: string) => Promise<void>;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setIsHydrated: (isHydated: boolean) => void;
+  setResetEmail: (email: string) => void;
+  clearResetEmail: () => void;
 }
 
 export const useAccountStore = create<AccountState>()(
   persist(
     (set, get) => ({
       email: null,
+      resetEmail: null,
       preferredCurrency: "USD",
       billingAddress: undefined,
       isAuthenticated: false,
@@ -42,6 +46,7 @@ export const useAccountStore = create<AccountState>()(
       clearAccount: () =>
         set({
           email: null,
+          resetEmail: null,
           preferredCurrency: "USD",
           billingAddress: undefined,
           isAuthenticated: false,
@@ -68,6 +73,10 @@ export const useAccountStore = create<AccountState>()(
       },
 
       setIsHydrated: (isHydrated: boolean) => set({ isHydrated }),
+
+      setResetEmail: (email: string) => set({ resetEmail: email }),
+
+      clearResetEmail: () => set({ resetEmail: null }),
     }),
     {
       name: "account-storage",

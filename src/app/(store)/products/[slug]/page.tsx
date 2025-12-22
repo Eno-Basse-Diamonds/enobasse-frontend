@@ -160,7 +160,6 @@ export default function ProductPage() {
         product?.isCustomDesign
       );
 
-      // Track add to wishlist event in GA4
       trackAddToWishlist(
         selectedVariant,
         product?.slug || "",

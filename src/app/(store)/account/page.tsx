@@ -7,6 +7,7 @@ import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
 import { AccountForm } from "./_components/account-form";
 import { DesktopNavigation, MobileNavigation } from "./_components/navigation";
 import type { Account } from "@/lib/types/accounts";
+import type { EditFormData } from "@/lib/types/account-form";
 import { Alert } from "@/components/alert";
 import { AccountLoadingSkeleton } from "@/components/loaders/accounts";
 
@@ -22,17 +23,6 @@ export type AlertState = {
   visible: boolean;
   type: "success" | "error";
   message: string;
-};
-
-export type EditFormData = {
-  name: string;
-  email: string;
-  phone: string;
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
 };
 
 export default function CustomerAccountPage() {
