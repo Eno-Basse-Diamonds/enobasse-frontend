@@ -7,25 +7,26 @@ import SessionProvider from "@/lib/providers/session-provider";
 import { AppAlert } from "@/components/alert";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { domAnimation, LazyMotion } from "motion/react";
 import "./globals.scss";
 
 const lora = Lora({
   variable: "--font-lora",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 const gantari = Gantari({
   variable: "--font-gantari",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 const dancingScript = Dancing_Script({
   variable: "--font-dancing-script",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -151,6 +152,7 @@ export default async function RootLayout({
         />
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalytics />
       </body>
     </html>
   );

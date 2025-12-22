@@ -37,6 +37,11 @@ import {
   LetterSelection,
   MOCK_AVAILABILITY,
 } from "./_components/letter-selection";
+import {
+  trackAddToCart,
+  trackViewItem,
+  trackAddToWishlist,
+} from "@/lib/analytics/gtag";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -154,6 +159,14 @@ export default function ProductPage() {
         preferredCurrency,
         product?.isCustomDesign
       );
+
+      // Track add to wishlist event in GA4
+      trackAddToWishlist(
+        selectedVariant,
+        product?.slug || "",
+        product?.category || "",
+        preferredCurrency
+      );
     }
   };
 
@@ -179,6 +192,15 @@ export default function ProductPage() {
           }
         : undefined
     );
+
+    trackAddToCart(
+      selectedVariant,
+      product?.slug || "",
+      product?.category || "",
+      quantity,
+      preferredCurrency
+    );
+
     addAlert({
       type: "success",
       title: "Added to Cart",
@@ -195,6 +217,17 @@ export default function ProductPage() {
   useEffect(() => {
     hydrate(session?.user?.email ?? undefined);
   }, [session, hydrate]);
+
+  useEffect(() => {
+    if (selectedVariant && product) {
+      trackViewItem(
+        selectedVariant,
+        product.slug,
+        product.category || "",
+        preferredCurrency
+      );
+    }
+  }, [selectedVariant?.id]);
 
   useEffect(() => {
     if (!product?.variants) return;

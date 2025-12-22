@@ -13,6 +13,7 @@ import { ringSizes } from "@/lib/utils/constants/ring-sizes";
 import { EmptyState } from "@/components/empty-state";
 import { CartLoader } from "@/components/loaders/cart";
 import { SectionContainer } from "@/components/section-container";
+import { trackViewCart } from "@/lib/analytics/gtag";
 
 export default function CartPage() {
   const { items, hydrated, hydrate, loading, refreshWithCurrency } =
@@ -60,6 +61,12 @@ export default function CartPage() {
     isHydrated,
     lastCurrency,
   ]);
+
+  useEffect(() => {
+    if (hydrated && items.length > 0 && preferredCurrency) {
+      trackViewCart(items, preferredCurrency);
+    }
+  }, [hydrated, items.length]);
 
   if (isInitialLoad || loading) {
     return <CartLoader />;

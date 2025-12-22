@@ -13,6 +13,7 @@ import { useAccountStore } from "@/lib/store/account";
 import { countries } from "@/lib/utils/constants/countries";
 import { SectionContainer } from "@/components/section-container";
 import { ChevronDownIcon } from "lucide-react";
+import { trackBeginCheckout } from "@/lib/analytics/gtag";
 
 interface FormData {
   email: string;
@@ -89,6 +90,12 @@ export default function CheckoutPage() {
       router.replace("/cart");
     }
   }, [cartItems, router, isProcessingPayment, hydrated]);
+
+  useEffect(() => {
+    if (hydrated && cartItems.length > 0 && preferredCurrency) {
+      trackBeginCheckout(cartItems, preferredCurrency);
+    }
+  }, [hydrated]);
 
   useEffect(() => {
     if (!isHydrated) return;

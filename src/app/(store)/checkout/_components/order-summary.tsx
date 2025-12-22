@@ -15,8 +15,8 @@ import { Button } from "@/components/button";
 import { Building2, Loader2, CheckIcon, Wallet } from "lucide-react";
 import { convertCurrency } from "@/lib/api/exchange-rate";
 import { useAlertStore } from "@/lib/store/alert";
+import { trackPurchase } from "@/lib/analytics/gtag";
 
-// Declare PaystackPop as global for TypeScript
 declare global {
   interface Window {
     PaystackPop: any;
@@ -150,6 +150,8 @@ export function OrderSummary({
 
       clearCart(session?.user?.email || undefined);
 
+      trackPurchase(reference, items, preferredCurrency, "paystack");
+
       setIsConfirmed(true);
       setIsProcessing(false);
 
@@ -194,13 +196,11 @@ export function OrderSummary({
     setPaymentError(null);
 
     try {
-      // Paystack only supports NGN, so convert from USD if needed
       let paymentAmount = subtotal;
       if (preferredCurrency === "USD" || !preferredCurrency) {
         paymentAmount = await convertCurrency(subtotal, "USD", "NGN");
       }
 
-      // Amount in kobo (smallest currency unit)
       const amountInKobo = Math.round(paymentAmount * 100);
 
       const paystackOptions = {
