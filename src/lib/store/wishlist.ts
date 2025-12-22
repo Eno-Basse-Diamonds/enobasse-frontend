@@ -23,6 +23,7 @@ interface WishlistState {
     productCategory: string,
     accountEmail?: string,
     currency?: string,
+    isCustomDesign?: boolean,
   ) => Promise<void>;
   removeItem: (
     productVariantId: string | number,
@@ -150,113 +151,85 @@ export const useWishlistStore = create<WishlistState>()(
         productCategory: string,
         accountEmail?: string,
         currency: string = "USD",
+        isCustomDesign?: boolean,
       ) => {
-        set({ loading: true, error: null });
-        try {
-          if (accountEmail) {
+        // Check if already in wishlist
+        if (
+          get().items.some(
+            (item) => item.productVariant.id === productVariant.id,
+          )
+        ) {
+          return;
+        }
+
+        // Optimistic update - add item immediately
+        const newItem: WishlistItem = {
+          id: accountEmail ? `temp_${Date.now()}` : `guest_${Date.now()}`,
+          addedAt: new Date().toISOString(),
+          productVariant,
+          productSlug,
+          productCategory: productCategory || "",
+          isCustomDesign,
+        };
+
+        const previousItems = get().items;
+        const previousPrices = { ...get().originalUsdPrices };
+
+        const newOriginalUsdPrices = { ...previousPrices };
+        if (productVariant.currency === "USD") {
+          newOriginalUsdPrices[productVariant.id] = productVariant.price;
+        }
+
+        set({
+          items: [...get().items, newItem],
+          originalUsdPrices: newOriginalUsdPrices,
+          error: null,
+        });
+
+        // If authenticated, sync with server in background
+        if (accountEmail) {
+          try {
             await addToWishlist(
               accountEmail,
               productVariant.id,
               productSlug,
               productCategory,
             );
-            const response = await getWishlist(accountEmail, currency);
-
-            const newOriginalUsdPrices = { ...get().originalUsdPrices };
-            const exchangeRate = await getExchangeRate();
-
-            response.items.forEach((item) => {
-              if (item.productVariant.currency === "USD") {
-                newOriginalUsdPrices[item.productVariant.id] =
-                  item.productVariant.price;
-              } else if (item.productVariant.currency === "NGN") {
-                convertCurrency(item.productVariant.price, "NGN", "USD")
-                  .then((usdPrice) => {
-                    set((state) => ({
-                      originalUsdPrices: {
-                        ...state.originalUsdPrices,
-                        [item.productVariant.id]: usdPrice,
-                      },
-                    }));
-                  })
-                  .catch(() => {
-                    const fallbackUsdPrice = Math.ceil(
-                      item.productVariant.price / exchangeRate,
-                    );
-                    set((state) => ({
-                      originalUsdPrices: {
-                        ...state.originalUsdPrices,
-                        [item.productVariant.id]: fallbackUsdPrice,
-                      },
-                    }));
-                  });
-              }
-            });
-
+          } catch (error) {
+            // Rollback on error
             set({
-              items: response.items,
-              originalUsdPrices: newOriginalUsdPrices,
-            });
-          } else {
-            set((state) => {
-              if (
-                state.items.some(
-                  (item) => item.productVariant.id === productVariant.id,
-                )
-              ) {
-                return state;
-              }
-
-              const newItem: WishlistItem = {
-                id: `guest_${Date.now()}`,
-                addedAt: new Date().toISOString(),
-                productVariant,
-                productSlug,
-                productCategory: productCategory || "",
-              };
-
-              const newOriginalUsdPrices = { ...state.originalUsdPrices };
-
-              if (productVariant.currency === "USD") {
-                newOriginalUsdPrices[productVariant.id] = productVariant.price;
-              } else if (productVariant.currency === "NGN") {
-                convertCurrency(productVariant.price, "NGN", "USD")
-                  .then((usdPrice) => {
-                    set((currentState) => ({
-                      originalUsdPrices: {
-                        ...currentState.originalUsdPrices,
-                        [productVariant.id]: usdPrice,
-                      },
-                    }));
-                  })
-                  .catch(() => {
-                    getExchangeRate().then((exchangeRate) => {
-                      const fallbackUsdPrice = Math.ceil(
-                        productVariant.price / exchangeRate,
-                      );
-                      set((currentState) => ({
-                        originalUsdPrices: {
-                          ...currentState.originalUsdPrices,
-                          [productVariant.id]: fallbackUsdPrice,
-                        },
-                      }));
-                    });
-                  });
-              }
-
-              return {
-                items: [...state.items, newItem],
-                originalUsdPrices: newOriginalUsdPrices,
-              };
+              items: previousItems,
+              originalUsdPrices: previousPrices,
+              error:
+                error instanceof Error ? error.message : "Failed to add item",
             });
           }
-        } catch (error) {
-          set({
-            error:
-              error instanceof Error ? error.message : "Failed to add item",
-          });
-        } finally {
-          set({ loading: false });
+        } else {
+          // Guest user - handle currency conversion in background
+          if (productVariant.currency === "NGN") {
+            convertCurrency(productVariant.price, "NGN", "USD")
+              .then((usdPrice) => {
+                set((currentState) => ({
+                  originalUsdPrices: {
+                    ...currentState.originalUsdPrices,
+                    [productVariant.id]: usdPrice,
+                  },
+                }));
+              })
+              .catch(() => {
+                getExchangeRate().then((exchangeRate) => {
+                  const fallbackUsdPrice = Math.ceil(
+                    productVariant.price / exchangeRate,
+                  );
+                  set((currentState) => ({
+                    originalUsdPrices: {
+                      ...currentState.originalUsdPrices,
+                      [productVariant.id]: fallbackUsdPrice,
+                    },
+                  }));
+                });
+              });
+          }
         }
       },
 
@@ -264,39 +237,37 @@ export const useWishlistStore = create<WishlistState>()(
         productVariantId: string | number,
         accountEmail?: string,
       ) => {
-        set({ loading: true, error: null });
-        try {
-          if (accountEmail) {
+        const previousItems = get().items;
+        const previousPrices = { ...get().originalUsdPrices };
+
+        // Optimistic update - remove item immediately
+        set((state) => ({
+          items: state.items.filter(
+            (item) => item.productVariant.id !== productVariantId,
+          ),
+          originalUsdPrices: Object.fromEntries(
+            Object.entries(state.originalUsdPrices).filter(
+              ([id]) => id !== productVariantId.toString(),
+            ),
+          ),
+          error: null,
+        }));
+
+        // If authenticated, sync with server in background
+        if (accountEmail) {
+          try {
             await removeFromWishlist(accountEmail, productVariantId);
-            set((state) => ({
-              items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId,
-              ),
-              originalUsdPrices: Object.fromEntries(
-                Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString(),
-                ),
-              ),
-            }));
-          } else {
-            set((state) => ({
-              items: state.items.filter(
-                (item) => item.productVariant.id !== productVariantId,
-              ),
-              originalUsdPrices: Object.fromEntries(
-                Object.entries(state.originalUsdPrices).filter(
-                  ([id]) => id !== productVariantId.toString(),
-                ),
-              ),
-            }));
+          } catch (error) {
+            // Rollback on error
+            set({
+              items: previousItems,
+              originalUsdPrices: previousPrices,
+              error:
+                error instanceof Error
+                  ? error.message
+                  : "Failed to remove item",
+            });
           }
-        } catch (error) {
-          set({
-            error:
-              error instanceof Error ? error.message : "Failed to remove item",
-          });
-        } finally {
-          set({ loading: false });
         }
       },
 

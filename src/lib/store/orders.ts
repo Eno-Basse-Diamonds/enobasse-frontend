@@ -23,6 +23,9 @@ export interface OrdersStore {
       phone: string;
     };
     currency?: string;
+    paymentMethod?: "paystack" | "bank_transfer";
+    paymentStatus?: "pending" | "paid" | "failed";
+    paymentReference?: string;
   }) => Promise<Order>;
   getOrdersByAccountEmail: (email: string) => Promise<Order[]>;
   getOrderById: (id: string) => Promise<Order>;
@@ -76,6 +79,9 @@ export const useOrdersStore = create<OrdersStore>()(
             customerInfo: orderData.customerInfo,
             billingAddress: orderData.billingAddress,
             currency: orderData.currency,
+            paymentMethod: orderData.paymentMethod,
+            paymentStatus: orderData.paymentStatus,
+            paymentReference: orderData.paymentReference,
           });
 
           set((state) => ({

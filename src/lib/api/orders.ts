@@ -28,6 +28,9 @@ interface CreateOrderDto {
     country: string;
   };
   currency?: string;
+  paymentMethod?: "paystack" | "bank_transfer";
+  paymentStatus?: "pending" | "paid" | "failed";
+  paymentReference?: string;
 }
 
 export interface AdminOrdersResponse {

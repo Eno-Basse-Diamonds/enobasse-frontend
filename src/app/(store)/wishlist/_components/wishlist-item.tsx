@@ -8,6 +8,9 @@ import { useWishlistStore } from "@/lib/store/wishlist";
 import { useSession } from "next-auth/react";
 import { useCartStore } from "@/lib/store/cart";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { useState } from "react";
+import { RequestQuoteModal } from "@/app/(store)/products/[slug]/_components/request-quote-modal";
+import { useAlertStore } from "@/lib/store/alert";
 
 type WishlistItemProps = {
   item: WishlistItemInterface;
@@ -22,8 +25,10 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
   const variant = item.productVariant;
   const { removeItem } = useWishlistStore();
   const { data: session } = useSession();
-  const { addItem: addCartItem } = useCartStore();
+  const { addItem: addCartItem, loading: cartLoading } = useCartStore();
   const quantity = 1;
+  const [isRequestQuoteOpen, setIsRequestQuoteOpen] = useState(false);
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleAddToCart = () => {
     addCartItem(
@@ -34,7 +39,13 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
       session?.user?.email ?? undefined
     );
     removeItem(variant.id, session?.user?.email ?? undefined);
-    router.push("/cart");
+    addAlert({
+      type: "success",
+      title: "Added to Cart",
+      message: `${variant.title} has been added to your cart.`,
+      duration: 4000,
+      dismissible: true,
+    });
   };
 
   const displayCurrency = currentCurrency || variant.currency;
@@ -78,20 +89,46 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
               </p>
             </div>
             <p className="font-medium text-[#502B3A] whitespace-nowrap">
-              {getCurrencySymbol(displayCurrency)}
-              {displayPrice?.toLocaleString()}
+              {item.isCustomDesign ? (
+                "Contact us for pricing"
+              ) : (
+                <>
+                  {getCurrencySymbol(displayCurrency)}
+                  {displayPrice?.toLocaleString()}
+                </>
+              )}
             </p>
           </div>
 
           <div className="mt-auto pt-4 flex justify-between items-center">
             <div className="flex gap-3">
-              <button
-                type="button"
-                className="font-medium text-sm rounded-sm text-[#D1A559] border-[#D1A559] hover:underline"
-                onClick={handleAddToCart}
-              >
-                ADD TO CART
-              </button>
+              {!item.isCustomDesign ? (
+                <button
+                  type="button"
+                  className="font-medium text-sm rounded-sm text-[#D1A559] border-[#D1A559] hover:underline"
+                  onClick={handleAddToCart}
+                >
+                  ADD TO CART
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="font-medium text-sm rounded-sm text-[#D1A559] border-[#D1A559] hover:underline"
+                    onClick={() => setIsRequestQuoteOpen(true)}
+                  >
+                    REQUEST A QUOTE
+                  </button>
+                  {isRequestQuoteOpen && (
+                    <RequestQuoteModal
+                      isOpen={isRequestQuoteOpen}
+                      onClose={() => setIsRequestQuoteOpen(false)}
+                      product={(item.productVariant as any).product}
+                      variantImage={item.productVariant.images[0]?.url}
+                    />
+                  )}
+                </>
+              )}
               <button
                 type="button"
                 className="font-medium rounded-sm text-sm text-red-500 hover:underline"

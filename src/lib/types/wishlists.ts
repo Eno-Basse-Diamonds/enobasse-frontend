@@ -14,4 +14,5 @@ export interface WishlistItem {
   productSlug: string;
   productVariant: ProductVariant;
   productCategory: string;
+  isCustomDesign?: boolean;
 }

@@ -33,7 +33,7 @@ export function useMobileDetection(): MobileDetectionResult {
       // Check for mobile user agent patterns
       const mobileUA =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
+          navigator.userAgent,
         );
 
       // Determine if mobile

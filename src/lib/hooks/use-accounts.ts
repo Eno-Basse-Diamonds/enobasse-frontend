@@ -32,7 +32,7 @@ export const useAdminAccounts = (filters?: {
         params.append("isAdmin", filters.isAdmin.toString());
 
       const response = await api.get<AccountsResponse>(
-        `/accounts?${params.toString()}`
+        `/accounts?${params.toString()}`,
       );
       return response;
     },

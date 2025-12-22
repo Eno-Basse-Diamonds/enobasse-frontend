@@ -18,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { Accordion } from "@/components/accordion/index.";
 import { Alert } from "@/components/alert";
+import { useAlertStore } from "@/lib/store/alert";
 import { Button } from "@/components/button";
 import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
 import { Divider } from "@/components/divider";
@@ -150,12 +151,14 @@ export default function ProductPage() {
         product?.slug || "",
         product?.category || "",
         session?.user?.email ?? undefined,
-        preferredCurrency
+        preferredCurrency,
+        product?.isCustomDesign
       );
     }
   };
 
   const { addItem: addCartItem } = useCartStore();
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleAddToCart = () => {
     if (!selectedVariant) return;
@@ -176,7 +179,13 @@ export default function ProductPage() {
           }
         : undefined
     );
-    router.push("/cart");
+    addAlert({
+      type: "success",
+      title: "Added to Cart",
+      message: `${selectedVariant.title || product?.name} has been added to your cart.`,
+      duration: 4000,
+      dismissible: true,
+    });
   };
 
   const handleRequestQuote = () => {

@@ -249,19 +249,20 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   }, [items]);
 
   const handleWishlistToggle = useCallback(
-    async (product: Product) => {
+    (product: Product) => {
       if (!hydrated) return;
 
       const productVariantId = product.variants[0].id;
       if (wishlistProductVariantIds.has(productVariantId)) {
-        await removeItem(productVariantId, session?.user?.email ?? undefined);
+        removeItem(productVariantId, session?.user?.email ?? undefined);
       } else {
-        await addItem(
+        addItem(
           product.variants[0],
           product.slug,
           product.category,
           session?.user?.email ?? undefined,
-          preferredCurrency
+          preferredCurrency,
+          product.isCustomDesign
         );
       }
     },

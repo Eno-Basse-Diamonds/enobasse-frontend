@@ -4,25 +4,45 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useOrdersStore } from "@/lib/store/orders";
+import { getOrders } from "@/lib/api/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { ShoppingBagIcon } from "lucide-react";
 import { useAccountStore } from "@/lib/store/account";
 import { Order } from "@/lib/types/orders";
 import { EmptyState } from "@/components/empty-state";
 import { OrderHistoryLoader } from "@/components/loaders/orders";
+import { useState } from "react";
 
 export default function OrderHistoryPage() {
   const { data: session } = useSession();
-  const { orders, loading, getOrdersByAccountEmail } = useOrdersStore();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
   const { isHydrated } = useAccountStore();
   const accountEmail = session?.user?.email;
 
   useEffect(() => {
-    if (accountEmail) {
-      getOrdersByAccountEmail(accountEmail);
-    }
-  }, [accountEmail, getOrdersByAccountEmail]);
+    const fetchOrders = async () => {
+      if (accountEmail) {
+        try {
+          setLoading(true);
+          const data = await getOrders(accountEmail);
+          const sortedOrders = data.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+          setOrders(sortedOrders);
+        } catch (error) {
+          console.error("Failed to fetch orders:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [accountEmail]);
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("en-US", {

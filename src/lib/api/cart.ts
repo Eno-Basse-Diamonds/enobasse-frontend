@@ -4,7 +4,7 @@ import { API_URL } from "../utils/constants/api-url";
 
 export const getCart = async (
   accountEmail: string,
-  currency: string = "USD"
+  currency: string = "USD",
 ): Promise<{ items: CartItem[] }> => {
   return api.get(`/cart`, { params: { accountEmail, currency }, cache: false });
 };
@@ -43,7 +43,7 @@ export const addToCart = async (
     selectedLetters: string[];
     includeChain: boolean;
     calculatedPrice: number;
-  }
+  },
 ): Promise<CartItem> => {
   return api.post(
     `/cart`,
@@ -56,13 +56,13 @@ export const addToCart = async (
       productCategory,
       amoraOptions,
     },
-    { params: { accountEmail } }
+    { params: { accountEmail } },
   );
 };
 
 export const removeFromCart = async (
   accountEmail: string,
-  productVariantId: string | number
+  productVariantId: string | number,
 ): Promise<void> => {
   return api.delete(`/cart/${productVariantId}`, { params: { accountEmail } });
 };
@@ -75,7 +75,7 @@ export const updateCartItem = async (
     size?: number;
     engraving?: { text: string; fontStyle: string };
     note?: string;
-  }
+  },
 ): Promise<CartItem> => {
   return api.patch(`/cart/${productVariantId}`, update, {
     params: { accountEmail },

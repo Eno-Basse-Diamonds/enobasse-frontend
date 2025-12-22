@@ -14,6 +14,7 @@ import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { getCurrencySymbol } from "@/lib/utils/money";
+import { useAlertStore } from "@/lib/store/alert";
 import { CloseIcon } from "@/components/icons/close";
 import { ChevronRightIcon } from "@/components/icons/chevron-right";
 import { ChevronLeftIcon } from "@/components/icons/chevron-left";
@@ -68,6 +69,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
 
   const { addItem } = useCartStore();
   const { data: session } = useSession();
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const onAddToCart = () => {
     addItem(
@@ -78,7 +80,13 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
       session?.user?.email ?? undefined,
       selectedSize
     );
-    router.push("/cart");
+    addAlert({
+      type: "success",
+      title: "Added to Cart",
+      message: `${selectedVariant.title || product.name} has been added to your cart.`,
+      duration: 4000,
+      dismissible: true,
+    });
   };
 
   useEffect(() => {

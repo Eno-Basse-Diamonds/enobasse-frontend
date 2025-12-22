@@ -4,14 +4,13 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CheckoutFormSection } from "./_components/checkout-form-section";
+import { CheckoutAuthSection } from "./_components/checkout-auth-section";
 import { OrderSummary } from "./_components/order-summary";
 import { FormInput } from "./_components/form-input";
-import { PaymentConfirmationModal } from "./_components/payment-confirmation.modal";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { countries } from "@/lib/utils/constants/countries";
-import { getCurrencySymbol } from "@/lib/utils/money";
 import { SectionContainer } from "@/components/section-container";
 import { ChevronDownIcon } from "lucide-react";
 
@@ -32,16 +31,20 @@ export default function CheckoutPage() {
   const router = useRouter();
   const {
     items: cartItems,
-    clear: clearCart,
     hydrated,
     hydrate,
     loading,
     refreshWithCurrency,
   } = useCartStore();
-  const { preferredCurrency, isHydrated } = useAccountStore();
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const {
+    preferredCurrency,
+    isHydrated,
+    billingAddress: savedBillingAddress,
+    updateBillingAddress,
+  } = useAccountStore();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [saveAddress, setSaveAddress] = useState(true);
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -81,10 +84,11 @@ export default function CheckoutPage() {
   }, [formData]);
 
   useEffect(() => {
+    if (!hydrated) return;
     if (cartItems.length === 0 && !isProcessingPayment) {
       router.replace("/cart");
     }
-  }, [cartItems, router, isProcessingPayment]);
+  }, [cartItems, router, isProcessingPayment, hydrated]);
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -117,13 +121,26 @@ export default function CheckoutPage() {
     lastCurrency,
   ]);
 
+  useEffect(() => {
+    if (isHydrated) {
+      setFormData((prev) => ({
+        ...prev,
+        email: session?.user?.email || prev.email,
+        firstName: savedBillingAddress?.firstName || prev.firstName,
+        lastName: savedBillingAddress?.lastName || prev.lastName,
+        address: savedBillingAddress?.address || prev.address,
+        apartment: savedBillingAddress?.apartment || prev.apartment,
+        city: savedBillingAddress?.city || prev.city,
+        country: savedBillingAddress?.country || prev.country,
+        region: savedBillingAddress?.region || prev.region,
+        postalCode: savedBillingAddress?.postalCode || prev.postalCode,
+        phone: savedBillingAddress?.phone || prev.phone,
+      }));
+    }
+  }, [savedBillingAddress, isHydrated, session?.user?.email]);
+
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handlePayNow = () => {
-    if (!isFormValid) return;
-    setShowPaymentModal(true);
   };
 
   const billingAddress = {
@@ -138,11 +155,26 @@ export default function CheckoutPage() {
     country: formData.country,
   };
 
-  const handlePaymentConfirmed = () => {
+  const handlePaymentSuccess = () => {
+    if (saveAddress && updateBillingAddress) {
+      updateBillingAddress({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address: formData.address,
+        apartment: formData.apartment,
+        city: formData.city,
+        country: formData.country,
+        region: formData.region,
+        postalCode: formData.postalCode,
+        phone: formData.phone,
+      });
+    }
     setIsProcessingPayment(true);
-    setShowPaymentModal(false);
-    clearCart();
     router.push("/orders");
+  };
+
+  const handleAuthSuccess = (email: string) => {
+    setFormData((prev) => ({ ...prev, email }));
   };
 
   return (
@@ -151,6 +183,10 @@ export default function CheckoutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-3/5">
+              {!session && (
+                <CheckoutAuthSection onAuthSuccess={handleAuthSuccess} />
+              )}
+
               <CheckoutFormSection title="Contact Information">
                 <div className="space-y-4">
                   <FormInput
@@ -283,7 +319,8 @@ export default function CheckoutPage() {
                       name="save-address"
                       type="checkbox"
                       className="h-4 w-4 text-[#D1A559] focus:ring-[#D1A559] border-gray-300 rounded"
-                      checked
+                      checked={saveAddress}
+                      onChange={(e) => setSaveAddress(e.target.checked)}
                     />
                     <label
                       htmlFor="save-address"
@@ -299,9 +336,12 @@ export default function CheckoutPage() {
             <div className="lg:w-2/5">
               <OrderSummary
                 items={cartItems}
-                onPayNow={handlePayNow}
+                email={formData.email}
+                phone={formData.phone}
+                billingAddress={billingAddress}
                 disabled={!isFormValid}
                 currency={preferredCurrency}
+                onPaymentSuccess={handlePaymentSuccess}
               />
 
               {!isFormValid && (
@@ -335,17 +375,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </SectionContainer>
-      <PaymentConfirmationModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onPaymentConfirmed={handlePaymentConfirmed}
-        amount={totalAmount}
-        currencySymbol={getCurrencySymbol(preferredCurrency)}
-        items={cartItems}
-        billingAddress={billingAddress}
-        email={formData.email}
-        phone={formData.phone}
-      />
     </>
   );
 }

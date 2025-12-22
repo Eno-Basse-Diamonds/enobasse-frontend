@@ -49,7 +49,7 @@ export function useRingCapture({
         alt: `${angle} view of ${gemstoneShape} ring with ${headStyle} head, ${shankStyle} shank in ${metalType}`,
       };
     },
-    [gl, scene, camera, gemstoneShape, headStyle, shankStyle, metalType]
+    [gl, scene, camera, gemstoneShape, headStyle, shankStyle, metalType],
   );
 
   const generateImages = useCallback(async () => {
@@ -59,7 +59,7 @@ export function useRingCapture({
       gemstoneShape,
       headStyle,
       shankStyle,
-      metalType
+      metalType,
     );
 
     const images: { src: string; alt: string }[] = [];
@@ -92,7 +92,7 @@ export function useRingCapture({
       images.push(captureImage("front"));
 
       const generatedImages = images.map((img) =>
-        createGeneratedImage(img.src, img.alt)
+        createGeneratedImage(img.src, img.alt),
       );
       setCachedImages(configKey, generatedImages);
 
@@ -129,7 +129,7 @@ export function useRingCapture({
         gemstoneShape,
         headStyle,
         shankStyle,
-        metalType
+        metalType,
       );
 
       const cachedImages = getCachedImages(configKey);
