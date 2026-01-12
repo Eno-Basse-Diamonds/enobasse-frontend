@@ -3,6 +3,8 @@ import { RatingDistribution, Review } from "./reviews";
 
 export type MetalName = "White Gold" | "Yellow Gold" | "Rose Gold" | "Platinum";
 
+export type ProductStatus = "draft" | "published" | "archived";
+
 export interface Metal {
   type: MetalName;
   purity?: string | null;
@@ -42,6 +44,7 @@ export interface Product {
   reviews?: Review[];
   ratingDistribution?: RatingDistribution[];
   isCustomDesign?: boolean;
+  status?: ProductStatus;
   createdAt: any;
 }
 

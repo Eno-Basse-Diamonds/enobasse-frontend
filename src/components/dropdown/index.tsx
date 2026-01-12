@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAccountStore } from "@/lib/store/account";
+import { useCartStore } from "@/lib/store/cart";
+import { useWishlistStore } from "@/lib/store/wishlist";
 import { FacebookIcon } from "../icons/facebook";
 import { XIcon } from "../icons/x";
 import { InstagramIcon } from "../icons/instagram";
@@ -156,8 +158,16 @@ export const CurrencyDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const preferredCurrency = useAccountStore((state) => state.preferredCurrency);
   const isHydrated = useAccountStore((state) => state.isHydrated);
+  const email = useAccountStore((state) => state.email);
   const setPreferredCurrency = useAccountStore(
     (state) => state.setPreferredCurrency
+  );
+
+  const refreshCartWithCurrency = useCartStore(
+    (state) => state.refreshWithCurrency
+  );
+  const refreshWishlistWithCurrency = useWishlistStore(
+    (state) => state.refreshWithCurrency
   );
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -178,6 +188,8 @@ export const CurrencyDropdown: React.FC = () => {
   const handleCurrencyChange = async (currency: string) => {
     if (currency !== preferredCurrency) {
       await setPreferredCurrency(currency);
+      await refreshCartWithCurrency(currency, email ?? undefined);
+      await refreshWishlistWithCurrency(currency, email ?? undefined);
       setIsOpen(false);
     }
   };

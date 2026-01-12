@@ -230,14 +230,29 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (!product?.variants) return;
-    const matchingVariant = product.variants.find(
-      (v) =>
-        Array.isArray(v.metals) &&
-        v.metals.some((m) => m.type === selectedMetal?.type) &&
-        Array.isArray(v.gemstones) &&
-        v.gemstones.some((g) => g.type === selectedGemstone?.type)
-    );
-    if (matchingVariant) setSelectedVariant(matchingVariant);
+
+    const matchingVariant = product.variants.find((v) => {
+      const matchMetal =
+        !selectedMetal ||
+        (Array.isArray(v.metals) &&
+          v.metals.some((m) => m.type === selectedMetal.type));
+      const matchGemstone =
+        !selectedGemstone ||
+        (Array.isArray(v.gemstones) &&
+          v.gemstones.some((g) => g.type === selectedGemstone.type));
+
+      return matchMetal && matchGemstone;
+    });
+
+    if (matchingVariant) {
+      setSelectedVariant(matchingVariant);
+    } else if (selectedVariant?.id) {
+      // Fallback to ID match if attribute match fails (e.g., during currency update)
+      const variantById = product.variants.find(
+        (v) => v.id === selectedVariant.id
+      );
+      if (variantById) setSelectedVariant(variantById);
+    }
   }, [selectedMetal, selectedGemstone, product]);
 
   if (productLoading && relatedLoading) {

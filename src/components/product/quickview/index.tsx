@@ -90,13 +90,19 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   };
 
   useEffect(() => {
-    const matchingVariant = product.variants.find(
-      (v) =>
-        Array.isArray(v.metals) &&
-        v.metals.some((m) => m.type === selectedMetal?.type) &&
-        Array.isArray(v.gemstones) &&
-        v.gemstones.some((g) => g.type === selectedGemstone?.type)
-    );
+    const matchingVariant = product.variants.find((v) => {
+      const matchMetal =
+        !selectedMetal ||
+        (Array.isArray(v.metals) &&
+          v.metals.some((m) => m.type === selectedMetal.type));
+      const matchGemstone =
+        !selectedGemstone ||
+        (Array.isArray(v.gemstones) &&
+          v.gemstones.some((g) => g.type === selectedGemstone.type));
+
+      return matchMetal && matchGemstone;
+    });
+
     if (matchingVariant) {
       setSelectedVariant(matchingVariant);
       setCurrentImageIndex(0);
@@ -104,8 +110,16 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
       setLoadingThumbnails(
         new Set(matchingVariant.images.map((_, index) => index))
       );
+    } else if (selectedVariant?.id) {
+      // Fallback to ID match if attribute match fails (e.g., during currency update)
+      const variantById = product.variants.find(
+        (v) => v.id === selectedVariant.id
+      );
+      if (variantById) {
+        setSelectedVariant(variantById);
+      }
     }
-  }, [selectedMetal?.type, selectedGemstone?.type, product.variants]);
+  }, [selectedMetal, selectedGemstone, product]);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>

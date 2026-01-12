@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Plus } from "lucide-react";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
-import { Product, Gemstone, Metal, ProductVariant } from "@/lib/types/products";
+import {
+  Product,
+  Gemstone,
+  Metal,
+  ProductVariant,
+  ProductStatus,
+} from "@/lib/types/products";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
+import { getExchangeRate } from "@/lib/api/exchange-rate";
 import { MetalsGemstonesSelector } from "./_elements/metals-gemstone-selector";
-import { FormField } from './_elements/form-field';
-import { FormTextareaField } from './_elements/form-textarea-field';
-import { ImageUploadField } from './_elements/image-upload-field';
-import { VariantForm } from './_elements/variant-form';
-import { CollectionsSelector } from './_elements/collections-selector';
+import { FormField } from "./_elements/form-field";
+import { FormTextareaField } from "./_elements/form-textarea-field";
+import { ImageUploadField } from "./_elements/image-upload-field";
+import { VariantForm } from "./_elements/variant-form";
+import { CollectionsSelector } from "./_elements/collections-selector";
 
 interface ProductFormProps {
   product: Product | null;
@@ -44,6 +51,7 @@ interface ProductFormData {
     images: Array<{ url: string; alt: string }>;
   }>;
   isCustomDesign: boolean;
+  status: ProductStatus;
 }
 
 export function ProductForm({ product, onClose }: ProductFormProps) {
@@ -98,7 +106,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       },
     ],
     isCustomDesign: product?.isCustomDesign || false,
-
+    status: product?.status || "published",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -107,6 +115,15 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     type: "success" | "error";
     message: string;
   }>({ visible: false, type: "success", message: "" });
+  const [exchangeRate, setExchangeRate] = useState<number>(1540);
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      const rate = await getExchangeRate();
+      setExchangeRate(rate);
+    };
+    fetchRate();
+  }, []);
 
   const { data: collectionsResponse } = useAdminCollections({
     page: 1,
@@ -130,9 +147,24 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const handleVariantChange = (index: number, field: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
-      variants: prev.variants.map((variant, i) =>
-        i === index ? { ...variant, [field]: value } : variant
-      ),
+      variants: prev.variants.map((variant, i) => {
+        if (i !== index) return variant;
+
+        if (field === "currency" && value !== variant.currency) {
+          // Handle currency conversion
+          let newPrice = variant.price;
+          if (variant.price > 0) {
+            if (variant.currency === "USD" && value === "NGN") {
+              newPrice = Math.ceil(variant.price * exchangeRate);
+            } else if (variant.currency === "NGN" && value === "USD") {
+              newPrice = Math.ceil(variant.price / exchangeRate);
+            }
+          }
+          return { ...variant, [field]: value, price: newPrice };
+        }
+
+        return { ...variant, [field]: value };
+      }),
     }));
   };
 
@@ -233,8 +265,11 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (
+    e: React.FormEvent | null,
+    status: ProductStatus = "published"
+  ) => {
+    if (e) e.preventDefault();
 
     if (!validateForm()) {
       return;
@@ -250,6 +285,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
 
     const submitData = {
       ...formData,
+      status,
       priceRange,
     };
 
@@ -261,7 +297,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
             setAlertState({
               visible: true,
               type: "success",
-              message: "Product updated successfully!",
+              message: `Product ${status === "draft" ? "saved as draft" : "updated"} successfully!`,
             });
             setTimeout(() => onClose(), 1500);
           },
@@ -280,7 +316,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
           setAlertState({
             visible: true,
             type: "success",
-            message: "Product created successfully!",
+            message: `Product ${status === "draft" ? "saved as draft" : "created"} successfully!`,
           });
           setTimeout(() => onClose(), 1500);
         },
@@ -299,8 +335,14 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     setAlertState((prev) => ({ ...prev, visible: false }));
   };
 
+  const isDraft = product?.status === "draft";
   const formTitle = product ? "Edit Product" : "Create New Product";
-  const submitButtonText = product ? "Update" : "Create";
+  const saveDraftText = isDraft ? "Save Draft" : "Save as Draft";
+
+  let submitButtonText = "Create Product";
+  if (product) {
+    submitButtonText = isDraft ? "Publish Product" : "Update Product";
+  }
   const isFormValid = Boolean(
     !createMutation.isPending &&
       !updateMutation.isPending &&
@@ -327,7 +369,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
 
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => handleSubmit(e, "published")}
           className="bg-white w-full max-w-7xl h-full flex flex-col shadow-2xl"
         >
           <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
@@ -510,11 +552,20 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               Cancel
             </Button>
             <Button
+              type="button"
+              variant="outline"
+              loading={createMutation.isPending || updateMutation.isPending}
+              disabled={!isFormValid}
+              onClick={() => handleSubmit(null, "draft")}
+            >
+              {saveDraftText}
+            </Button>
+            <Button
               type="submit"
               loading={createMutation.isPending || updateMutation.isPending}
               disabled={!isFormValid}
             >
-              <span>{submitButtonText} Product</span>
+              <span>{submitButtonText}</span>
             </Button>
           </div>
         </form>
