@@ -20,7 +20,10 @@ export const AppAlert = () => {
   const removeAlert = useAlertStore((state) => state.removeAlert);
 
   return (
-    <>
+    <div
+      className="fixed top-0 right-0 left-0 sm:left-auto sm:top-4 sm:right-4 z-[9999] p-4 sm:p-0 flex flex-col gap-3 pointer-events-none"
+      aria-live="assertive"
+    >
       {alerts.map((alert) => (
         <Alert
           key={alert.id}
@@ -30,11 +33,12 @@ export const AppAlert = () => {
           dismissible={alert.dismissible ?? true}
           onDismiss={() => removeAlert(alert.id)}
           duration={alert.duration}
+          className="pointer-events-auto shadow-lg"
         >
           {alert.message}
         </Alert>
       ))}
-    </>
+    </div>
   );
 };
 
@@ -111,13 +115,14 @@ export const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
-      className={`rounded-sm fixed top-4 right-4 max-w-md w-full z-[9999] border p-4 ${
+      className={`rounded-sm border p-4 w-full sm:max-w-md ${
         variant.bgColor
       } ${variant.borderColor} ${variant.textColor} ${className} ${
-        isExiting ? "opacity-0 transition-opacity duration-300 ease-out" : ""
+        isExiting
+          ? "opacity-0 transition-opacity duration-300 ease-out"
+          : "animate-in slide-in-from-top-2 sm:slide-in-from-right-2 duration-300"
       }`}
       role="alert"
-      aria-live="assertive"
     >
       <div className="flex">
         <div className="flex-shrink-0">

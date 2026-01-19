@@ -81,7 +81,7 @@ export function OrderSummary({
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -99,7 +99,7 @@ export function OrderSummary({
     // First check: simple boolean to catch rapid duplicate calls
     if (hasProcessedPaymentRef.current) {
       console.log(
-        `Payment already processed. Ignoring duplicate callback from ${source}.`
+        `Payment already processed. Ignoring duplicate callback from ${source}.`,
       );
       return;
     }
@@ -110,7 +110,7 @@ export function OrderSummary({
     // Second check: transaction reference to catch component remounts
     if (orderProcessedRef.current === reference) {
       console.log(
-        `Order for reference ${reference} already processed (source: ${source}). Skipping.`
+        `Order for reference ${reference} already processed (source: ${source}). Skipping.`,
       );
       return;
     }
@@ -118,7 +118,7 @@ export function OrderSummary({
     // Mark as processed immediately to prevent race conditions
     orderProcessedRef.current = reference;
     console.log(
-      `Processing successful payment from ${source} for reference: ${reference}`
+      `Processing successful payment from ${source} for reference: ${reference}`,
     );
 
     document.body.style.overflow = "auto";
@@ -167,7 +167,7 @@ export function OrderSummary({
 
       setIsRedirecting(false);
       setPaymentError(
-        "Payment successful but failed to create order. Please contact support."
+        "Payment successful but failed to create order. Please contact support.",
       );
       setIsProcessing(false);
     }
@@ -186,7 +186,14 @@ export function OrderSummary({
     }
 
     if (!paystackPublicKey) {
-      setPaymentError("Payment not configured. Please contact support.");
+      console.error(
+        "Paystack Public Key is missing! Ensure NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY is set in your .env and the project is rebuilt.",
+      );
+      setPaymentError(
+        process.env.NODE_ENV === "development"
+          ? "Paystack Public Key is missing. Check your environment configuration."
+          : "Payment not configured correctly. Please contact support.",
+      );
       return;
     }
 
@@ -251,7 +258,7 @@ export function OrderSummary({
       setPaymentError(
         error instanceof Error
           ? error.message
-          : "Failed to initialize payment. Please try again."
+          : "Failed to initialize payment. Please try again.",
       );
       setIsProcessing(false);
       isInitializingRef.current = false;

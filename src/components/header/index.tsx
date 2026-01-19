@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     document.body.classList.toggle(
       "overflow-hidden",
-      isMobileMenuOpen || isSearchVisible
+      isMobileMenuOpen || isSearchVisible,
     );
     return () => document.body.classList.remove("overflow-hidden");
   }, [isMobileMenuOpen, isSearchVisible]);
