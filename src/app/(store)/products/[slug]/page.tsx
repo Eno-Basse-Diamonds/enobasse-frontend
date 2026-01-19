@@ -31,6 +31,8 @@ import { ProductList } from "@/components/product/list";
 import { Rating } from "@/components/rating";
 import { SectionContainer } from "@/components/section-container";
 import { RingSizeSelector } from "@/components/select-menu";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { ProductSchema } from "@/components/seo/ProductSchema";
 
 import { RequestQuoteModal } from "./_components/request-quote-modal";
 import {
@@ -58,7 +60,7 @@ export default function ProductPage() {
   const { data: product, isLoading: productLoading } = useProduct(
     slug,
     preferredCurrency,
-    isHydrated
+    isHydrated,
   );
 
   const { data: relatedProducts, isLoading: relatedLoading } =
@@ -77,7 +79,7 @@ export default function ProductPage() {
           Array.isArray(product.variants[0].metals) &&
           product.variants[0].metals.length > 0
         ? product.variants[0].metals[0]
-        : undefined
+        : undefined,
   );
   const [selectedGemstone, setSelectedGemstone] = useState<
     Gemstone | undefined
@@ -89,7 +91,7 @@ export default function ProductPage() {
           Array.isArray(product.variants[0].gemstones) &&
           product.variants[0].gemstones.length > 0
         ? product.variants[0].gemstones[0]
-        : undefined
+        : undefined,
   );
 
   const initialVariant =
@@ -123,18 +125,18 @@ export default function ProductPage() {
     { text: string; fontStyle: string } | undefined
   >(undefined);
   const [selectedSize, setSelectedSize] = useState<number | undefined>(
-    undefined
+    undefined,
   );
 
   const [selectedLetters, setSelectedLetters] = useState<string[]>(["A"]);
   const [includeChain, setIncludeChain] = useState<boolean>(true);
 
   const isAmoraCollection = product?.collections?.some(
-    (c) => c.slug === "amora-collection"
+    (c) => c.slug === "amora-collection",
   );
 
   const hasOutOfStockSelection = selectedLetters.some(
-    (l) => MOCK_AVAILABILITY[l] === false
+    (l) => MOCK_AVAILABILITY[l] === false,
   );
 
   // Calculate Amora collection price
@@ -157,14 +159,14 @@ export default function ProductPage() {
         product?.category || "",
         session?.user?.email ?? undefined,
         preferredCurrency,
-        product?.isCustomDesign
+        product?.isCustomDesign,
       );
 
       trackAddToWishlist(
         selectedVariant,
         product?.slug || "",
         product?.category || "",
-        preferredCurrency
+        preferredCurrency,
       );
     }
   };
@@ -189,7 +191,7 @@ export default function ProductPage() {
             includeChain,
             calculatedPrice: amoraPrice,
           }
-        : undefined
+        : undefined,
     );
 
     trackAddToCart(
@@ -197,7 +199,7 @@ export default function ProductPage() {
       product?.slug || "",
       product?.category || "",
       quantity,
-      preferredCurrency
+      preferredCurrency,
     );
 
     addAlert({
@@ -223,7 +225,7 @@ export default function ProductPage() {
         selectedVariant,
         product.slug,
         product.category || "",
-        preferredCurrency
+        preferredCurrency,
       );
     }
   }, [selectedVariant?.id]);
@@ -249,7 +251,7 @@ export default function ProductPage() {
     } else if (selectedVariant?.id) {
       // Fallback to ID match if attribute match fails (e.g., during currency update)
       const variantById = product.variants.find(
-        (v) => v.id === selectedVariant.id
+        (v) => v.id === selectedVariant.id,
       );
       if (variantById) setSelectedVariant(variantById);
     }
@@ -269,7 +271,7 @@ export default function ProductPage() {
 
   const hasMultipleVariants = product.variants.length > 1;
   const uniqueGemstones = Array.from(
-    new Set(product.gemstones?.map((gemstone) => gemstone.type) || [])
+    new Set(product.gemstones?.map((gemstone) => gemstone.type) || []),
   );
   const isRing = product.category === "Rings";
 
@@ -343,6 +345,17 @@ export default function ProductPage() {
           {alertState.message}
         </Alert>
       )}
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "Products", item: "https://enobasse.com/products" },
+          {
+            name: product.name,
+            item: `https://enobasse.com/product/${product.slug}`,
+          },
+        ]}
+      />
+      <ProductSchema product={product} />
       <div className="-mb-6 md:mb-auto">
         <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       </div>
@@ -375,7 +388,7 @@ export default function ProductPage() {
                 <div className="mb-6 md:mb-10 flex justify-between items-center w-full">
                   <Rating
                     rating={calculateAverageRating(
-                      product.ratingDistribution ?? []
+                      product.ratingDistribution ?? [],
                     )}
                     count={product.reviews?.length || 0}
                     showCount={true}

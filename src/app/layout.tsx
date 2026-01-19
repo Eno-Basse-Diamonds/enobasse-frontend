@@ -8,6 +8,8 @@ import { AppAlert } from "@/components/alert";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
+import { WebSiteSchema } from "@/components/seo/WebSiteSchema";
 import { domAnimation, LazyMotion } from "motion/react";
 import "./globals.scss";
 
@@ -145,6 +147,8 @@ export default async function RootLayout({
             </LazyMotion>
           </QueryProvider>
         </SessionProvider>
+        <OrganizationSchema />
+        <WebSiteSchema />
         <Script
           src="https://cloud.umami.is/script.js"
           strategy="afterInteractive"

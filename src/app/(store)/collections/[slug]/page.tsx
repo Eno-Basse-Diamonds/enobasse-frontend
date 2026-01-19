@@ -20,6 +20,8 @@ import {
 } from "@/components/product/filter-panel";
 import { ProductList } from "@/components/product/list";
 import { SectionContainer } from "@/components/section-container";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { CollectionSchema } from "@/components/seo/CollectionSchema";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -49,7 +51,7 @@ export default function CollectionPage() {
     {
       currency: preferredCurrency,
     },
-    isHydrated
+    isHydrated,
   );
   const { collection, products } = data || {};
 
@@ -60,7 +62,7 @@ export default function CollectionPage() {
         selectedFilters,
         sortBy,
       }),
-    [products, selectedFilters, sortBy]
+    [products, selectedFilters, sortBy],
   );
 
   const handleSortChange = useCallback((value: string) => {
@@ -95,6 +97,22 @@ export default function CollectionPage() {
       variants={containerVariants}
       className="mt-12 mb-24"
     >
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "Collections", item: "https://enobasse.com/collections" },
+          {
+            name: collection.name,
+            item: `https://enobasse.com/collections/${collection.slug}`,
+          },
+        ]}
+      />
+      <CollectionSchema
+        name={collection.name}
+        description={collection.description}
+        products={products || []}
+        url={`https://enobasse.com/collections/${collection.slug}`}
+      />
       <PageHeading breadcrumb={{ items: breadcrumbItems }} />
       <SectionContainer id="collection-products">
         <motion.header variants={itemVariants} className="mb-6 lg:mb-12">

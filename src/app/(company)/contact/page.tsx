@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { ContactForm } from "./_components/contact-form";
 import { ContactDetails } from "./_components/contact-details";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -32,6 +33,12 @@ export const metadata: Metadata = {
 export default async function ContactPage() {
   return (
     <div className="min-h-screen bg-stone-100 py-12 px-0 md:px-6 lg:px-8">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "Contact Us", item: "https://enobasse.com/contact" },
+        ]}
+      />
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           <div className="px-4 sm:px-6 md:px-0">

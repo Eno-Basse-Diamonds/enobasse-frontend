@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import { FAQSchema } from "@/components/seo/FAQSchema";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -55,6 +57,13 @@ export default async function FAQsPage() {
 
   return (
     <div className="min-h-screen pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "FAQs", item: "https://enobasse.com/faqs" },
+        ]}
+      />
+      <FAQSchema faqs={faqs} />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="font-primary text-3xl md:text-4xl font-semibold text-primary-500 mb-6">

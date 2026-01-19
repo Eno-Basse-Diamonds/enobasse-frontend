@@ -1,9 +1,9 @@
-import React from "react";
 import {
-  dehydrate,
   HydrationBoundary,
+  dehydrate,
   QueryClient,
 } from "@tanstack/react-query";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { AboutSection } from "./_components/about-section";
 import { BlogHeader } from "./_components/blog-header";
 import { BlogContent } from "./_components/blog-content";
@@ -123,6 +123,9 @@ export default async function HomePage() {
 
   return (
     <main>
+      <BreadcrumbSchema
+        items={[{ name: "Home", item: "https://enobasse.com" }]}
+      />
       <HeroSection />
 
       <SectionContainer id="categories">

@@ -15,10 +15,12 @@ import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { PageHeading } from "@/components/page-heading";
 import { SectionContainer } from "@/components/section-container";
 import { BlogPostDetailLoader } from "@/components/loaders/blog";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 export default function BlogPostContent() {
   const params = useParams();
-  const slug = params.slug as string || "";
+  const slug = (params.slug as string) || "";
   const { data: post, isLoading: isPostLoading } = useBlogPost(slug);
   const { data: relatedPosts, isLoading: isRelatedLoading } =
     useRelatedBlogPosts(slug);
@@ -36,6 +38,14 @@ export default function BlogPostContent() {
 
   return (
     <>
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "Blog", item: "https://enobasse.com/blog" },
+          { name: post.title, item: `https://enobasse.com/blog/${slug}` },
+        ]}
+      />
+      <ArticleSchema post={post} url={`https://enobasse.com/blog/${slug}`} />
       <PageHeading
         breadcrumb={{
           items: [

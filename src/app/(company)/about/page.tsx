@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
 
 export const metadata: Metadata = {
@@ -25,6 +26,12 @@ export const metadata: Metadata = {
 export default function AboutUsPage() {
   return (
     <div className="min-h-screen pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "About Us", item: "https://enobasse.com/about" },
+        ]}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="mb-10 md:mb-16">
