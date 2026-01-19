@@ -418,6 +418,17 @@ async function convertCartItems(
 ): Promise<CartItem[]> {
   const convertedItems: CartItem[] = [];
 
+  // Fetch exchange rate once for the entire batch if needed
+  let exchangeRate = 1540;
+  if (
+    targetCurrency !== "USD" ||
+    items.some(
+      (item) => (item.productVariant.currency || "USD") !== targetCurrency,
+    )
+  ) {
+    exchangeRate = await getExchangeRate();
+  }
+
   for (const item of items) {
     const currentCurrency = item.productVariant.currency || "USD";
 
@@ -431,31 +442,22 @@ async function convertCartItems(
 
     if (targetCurrency === "NGN") {
       if (originalUsdPrices[item.productVariant.id] !== undefined) {
-        convertedPrice = await convertCurrency(
-          originalUsdPrices[item.productVariant.id],
-          "USD",
-          "NGN",
+        convertedPrice = Math.ceil(
+          originalUsdPrices[item.productVariant.id] * exchangeRate,
         );
         originalPrice = originalUsdPrices[item.productVariant.id];
       } else if (currentCurrency === "USD") {
-        convertedPrice = await convertCurrency(
-          item.productVariant.price,
-          "USD",
-          "NGN",
-        );
+        convertedPrice = Math.ceil(item.productVariant.price * exchangeRate);
         originalPrice = item.productVariant.price;
       } else {
         convertedPrice = item.productVariant.price;
       }
     } else {
+      // targetCurrency === 'USD'
       if (originalUsdPrices[item.productVariant.id] !== undefined) {
         convertedPrice = originalUsdPrices[item.productVariant.id];
       } else if (currentCurrency === "NGN") {
-        convertedPrice = await convertCurrency(
-          item.productVariant.price,
-          "NGN",
-          "USD",
-        );
+        convertedPrice = Math.ceil(item.productVariant.price / exchangeRate);
       } else {
         convertedPrice = item.productVariant.price;
       }

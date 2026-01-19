@@ -35,7 +35,7 @@ export default function CartPage() {
     const handleCurrencyChange = async () => {
       if (preferredCurrency && preferredCurrency !== lastCurrency) {
         if (session?.user?.email) {
-          await refreshWithCurrency(session.user.email, preferredCurrency);
+          await refreshWithCurrency(preferredCurrency, session.user.email);
         } else {
           await refreshWithCurrency(preferredCurrency);
         }

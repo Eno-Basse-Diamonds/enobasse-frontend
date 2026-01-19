@@ -61,11 +61,18 @@ const ProductListItem = React.memo(
       !!product.images[1]
     );
 
+    const [isHoverDevice, setIsHoverDevice] = useState(false);
+
+    useEffect(() => {
+      // Check if the device supports hover (desktop/mouse)
+      setIsHoverDevice(window.matchMedia("(hover: hover)").matches);
+    }, []);
+
     return (
       <motion.div
         className="group relative flex flex-col overflow-hidden bg-white"
         variants={item}
-        whileHover={hoverScale}
+        whileHover={isHoverDevice ? hoverScale : undefined}
       >
         <Link
           href={`/products/${product.slug}`}
