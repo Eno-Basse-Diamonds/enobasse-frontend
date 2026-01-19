@@ -186,9 +186,6 @@ export function OrderSummary({
     }
 
     if (!paystackPublicKey) {
-      console.error(
-        "Paystack Public Key is missing! Ensure NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY is set in your .env and the project is rebuilt.",
-      );
       setPaymentError(
         process.env.NODE_ENV === "development"
           ? "Paystack Public Key is missing. Check your environment configuration."
