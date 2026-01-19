@@ -64,6 +64,18 @@
     &-link {
       @apply relative flex flex-row items-center justify-center gap-x-2 font-light text-base text-[#502B3A];
     }
+
+    .group {
+      .absolute {
+        @apply transform transition-all duration-300 ease-in-out;
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+      }
+      &:hover .absolute {
+        @apply translate-y-0 opacity-100 visible;
+      }
+    }
   }
 
   &__dropdown {
@@ -72,18 +84,6 @@
     }
     &-link {
       @apply hover:underline hover:decoration-1 block py-1;
-    }
-  }
-
-  .group {
-    .absolute {
-      @apply transform transition-all duration-300 ease-in-out;
-      transform: translateY(-10px);
-      opacity: 0;
-      visibility: hidden;
-    }
-    &:hover .absolute {
-      @apply translate-y-0 opacity-100 visible;
     }
   }
 

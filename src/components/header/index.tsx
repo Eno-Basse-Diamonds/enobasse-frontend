@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "../logo";
 import { ProductList } from "@/components/product/list";
 import { CurrencyDropdown } from "../dropdown";
@@ -109,6 +110,13 @@ export const Header: React.FC<HeaderProps> = ({
   const toggleSearch = useCallback(() => {
     setIsSearchVisible((prev) => !prev);
   }, []);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsSearchVisible(false);
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle(

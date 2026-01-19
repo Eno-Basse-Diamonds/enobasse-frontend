@@ -44,6 +44,8 @@ const buttonHover = {
   transition: { duration: 0.2 },
 };
 
+import { useMobileDetection } from "@/lib/hooks/use-mobile-detection";
+
 const ProductListItem = React.memo(
   ({
     product,
@@ -58,15 +60,11 @@ const ProductListItem = React.memo(
   }) => {
     const [isFirstImageLoading, setIsFirstImageLoading] = useState(true);
     const [isSecondImageLoading, setIsSecondImageLoading] = useState(
-      !!product.images[1]
+      !!product.images[1],
     );
 
-    const [isHoverDevice, setIsHoverDevice] = useState(false);
-
-    useEffect(() => {
-      // Check if the device supports hover (desktop/mouse)
-      setIsHoverDevice(window.matchMedia("(hover: hover)").matches);
-    }, []);
+    const { isMobile } = useMobileDetection();
+    const isHoverDevice = !isMobile;
 
     return (
       <motion.div
@@ -111,11 +109,13 @@ const ProductListItem = React.memo(
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className={`object-cover bg-gray-100 transition-opacity duration-500 ${
-                product.images[1] ? "group-hover:opacity-0" : ""
+                product.images[1] && isHoverDevice
+                  ? "group-hover:opacity-0"
+                  : ""
               }`}
               onLoad={() => setIsFirstImageLoading(false)}
             />
-            {product.images[1] && (
+            {product.images[1] && isHoverDevice && (
               <>
                 {isSecondImageLoading && (
                   <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100">
@@ -154,7 +154,7 @@ const ProductListItem = React.memo(
               </>
             )}
             {!product.isCustomDesign && (
-              <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-xs font-semibold text-white">
+              <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white">
                 In Store
               </span>
             )}
@@ -169,32 +169,36 @@ const ProductListItem = React.memo(
                 ? "Contact us for pricing"
                 : product.priceRange.min === product.priceRange.max
                   ? `${getCurrencySymbol(
-                      product.priceRange.currency
+                      product.priceRange.currency,
                     )}${product.priceRange.min.toLocaleString()}`
                   : `${getCurrencySymbol(
-                      product.priceRange.currency
+                      product.priceRange.currency,
                     )}${product.priceRange.min.toLocaleString()} - ${getCurrencySymbol(
-                      product.priceRange.currency
+                      product.priceRange.currency,
                     )}${product.priceRange.max.toLocaleString()}`}
             </p>
           </motion.div>
         </Link>
 
         <motion.button
-          className="absolute top-2 left-2 rounded-full bg-white/80 p-2 hover:bg-white lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity lg:duration-300"
+          className={`absolute top-2 left-2 rounded-full bg-white/80 p-2 hover:bg-white transition-all duration-300 ${
+            isHoverDevice
+              ? "opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+              : "opacity-100 visible"
+          }`}
           onClick={onQuickView}
-          whileHover={buttonHover}
+          whileHover={isHoverDevice ? buttonHover : undefined}
           whileTap={{ scale: 0.95 }}
         >
           <EyeOpenIcon className="h-4 w-4 text-gray-700" />
         </motion.button>
 
         <motion.button
-          className={`absolute top-2 right-2 rounded-full bg-white/80 p-2 hover:bg-white ${
+          className={`absolute top-2 right-2 rounded-full bg-white/80 p-2 hover:bg-white z-10 ${
             isInWishlist ? "product-list__button--active" : ""
           }`}
           onClick={onWishlistToggle}
-          whileHover={buttonHover}
+          whileHover={isHoverDevice ? buttonHover : undefined}
           whileTap={{ scale: 0.95 }}
           aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
@@ -206,13 +210,13 @@ const ProductListItem = React.memo(
         </motion.button>
       </motion.div>
     );
-  }
+  },
 );
 ProductListItem.displayName = "ProductListItem";
 
 export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
-    null
+    null,
   );
   const { preferredCurrency, isHydrated } = useAccountStore();
   const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
@@ -269,7 +273,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
           product.category,
           session?.user?.email ?? undefined,
           preferredCurrency,
-          product.isCustomDesign
+          product.isCustomDesign,
         );
       }
     },
@@ -280,7 +284,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
       removeItem,
       session,
       preferredCurrency,
-    ]
+    ],
   );
 
   const handleQuickView = useCallback((product: Product) => {
