@@ -31,7 +31,7 @@ export function CheckoutCartItem({
       updateItem(
         item.productVariant.id,
         { quantity: item.quantity - 1 },
-        accountEmail
+        accountEmail,
       );
     }
   };
@@ -40,7 +40,7 @@ export function CheckoutCartItem({
     updateItem(
       item.productVariant.id,
       { quantity: item.quantity + 1 },
-      accountEmail
+      accountEmail,
     );
   };
 
@@ -70,36 +70,36 @@ export function CheckoutCartItem({
   const isRing = item.productCategory === "Rings";
 
   return (
-    <li className="py-4 flex items-start">
-  <div className="flex-shrink-0 h-24 w-24 overflow-hidden border border-gray-200 relative rounded-sm">
+    <li className="py-4 flex items-start gap-4">
+      <div className="flex-shrink-0 h-20 w-20 sm:h-24 sm:w-24 overflow-hidden border border-gray-200 relative rounded-sm">
         <Link href={`/products/${item.productSlug}`}>
           <Image
             src={imageUrl}
             alt={imageAlt}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
+            sizes="(max-width: 640px) 80px, 96px"
           />
         </Link>
       </div>
 
-      <div className="ml-4 flex-1">
+      <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start">
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <Link
               href={`/products/${item.productSlug}`}
-              className="font-medium text-base text-[#502B3A] hover:underline transition-all"
+              className="font-medium text-sm sm:text-base text-[#502B3A] hover:underline transition-all block truncate"
             >
               <h3>{title}</h3>
             </Link>
 
-            <p className="text-sm text-[#502B3A]/80 mt-1">
+            <p className="text-xs sm:text-sm text-[#502B3A]/80 mt-1 truncate">
               {gemstoneStr && metalStr
                 ? `${gemstoneStr} | ${metalStr}`
                 : metalStr || gemstoneStr}
             </p>
 
-            <div className="my-3 flex items-center gap-4 justify-between">
+            <div className="my-2 sm:my-3 flex flex-wrap items-center gap-3 sm:gap-4 justify-between">
               <QuantityControl
                 quantity={item.quantity}
                 onDecrement={handleDecrement}
@@ -119,20 +119,22 @@ export function CheckoutCartItem({
             </div>
 
             {canBeEngraved && (
-              <Engraving
-                engraving={item.engraving}
-                setEngraving={(val) =>
-                  updateItem(
-                    item.productVariant.id,
-                    { engraving: val },
-                    accountEmail
-                  )
-                }
-              />
+              <div className="mb-2">
+                <Engraving
+                  engraving={item.engraving}
+                  setEngraving={(val) =>
+                    updateItem(
+                      item.productVariant.id,
+                      { engraving: val },
+                      accountEmail,
+                    )
+                  }
+                />
+              </div>
             )}
 
-            <div className="flex flex-row w-full justify-between items-end gap-x-4 mt-2">
-              <p className="text-xs text-gray-500 mt-1">
+            <div className="flex flex-row w-full justify-between items-end gap-x-2 mt-1 sm:mt-2">
+              <p className="text-[10px] sm:text-xs text-gray-500">
                 {item.quantity > 1 && (
                   <>
                     {getCurrencySymbol(currency)}
@@ -140,17 +142,17 @@ export function CheckoutCartItem({
                   </>
                 )}
               </p>
-              <p className="text-base font-medium text-[#502B3A] mt-2">
+              <p className="text-sm sm:text-base font-medium text-[#502B3A]">
                 {getCurrencySymbol(currency)}
                 {(price * item.quantity).toLocaleString()}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-end">
+          <div className="flex-shrink-0 ml-2">
             <button
               onClick={handleRemove}
-              className="text-gray-500 hover:text-red-500 transition-colors"
+              className="text-gray-400 hover:text-red-500 transition-colors p-1"
             >
               <CloseIcon className="h-4 w-4" />
             </button>
