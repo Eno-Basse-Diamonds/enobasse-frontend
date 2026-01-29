@@ -203,12 +203,12 @@ const Newsletter: React.FC = () => {
         noValidate
       >
         <div className="relative">
-          <label htmlFor="email" className="sr-only">
+          <label htmlFor="newsletter-email" className="sr-only">
             Email address
           </label>
           <input
             type="email"
-            id="email"
+            id="newsletter-email"
             name="email"
             className="block p-2.5 w-full text-sm text-gray-900 bg-white border border-white focus:ring-[#D1A559] focus:border-[#D1A559] focus:outline-none pr-12 rounded-l-sm"
             placeholder="Enter email address"

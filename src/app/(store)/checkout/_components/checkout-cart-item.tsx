@@ -72,7 +72,10 @@ export function CheckoutCartItem({
   return (
     <li className="py-4 flex items-start gap-4">
       <div className="flex-shrink-0 h-20 w-20 sm:h-24 sm:w-24 overflow-hidden border border-gray-200 relative rounded-sm">
-        <Link href={`/products/${item.productSlug}`}>
+        <Link
+          href={`/products/${item.productSlug}`}
+          className="relative block w-full h-full"
+        >
           <Image
             src={imageUrl}
             alt={imageAlt}

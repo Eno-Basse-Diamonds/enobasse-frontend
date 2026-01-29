@@ -14,7 +14,7 @@ export function PaymentMethodSelector({
   onMethodChange,
 }: PaymentMethodSelectorProps) {
   return (
-    <div className="mb-6">
+    <div className="my-6">
       <h3 className="text-sm font-semibold text-gray-700 mb-3">
         Select Payment Method
       </h3>
@@ -22,7 +22,7 @@ export function PaymentMethodSelector({
         <button
           type="button"
           onClick={() => onMethodChange("paystack")}
-          className={`relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 ${
+          className={`relative flex flex-col items-center justify-center p-4 rounded-sm border-2 transition-all duration-200 ${
             selectedMethod === "paystack"
               ? "border-[#D1A559] bg-[#D1A559]/5 shadow-sm"
               : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
@@ -73,7 +73,7 @@ export function PaymentMethodSelector({
         <button
           type="button"
           onClick={() => onMethodChange("bank_transfer")}
-          className={`relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all duration-200 ${
+          className={`relative flex flex-col items-center justify-center p-4 rounded-sm border-2 transition-all duration-200 ${
             selectedMethod === "bank_transfer"
               ? "border-[#D1A559] bg-[#D1A559]/5 shadow-sm"
               : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
