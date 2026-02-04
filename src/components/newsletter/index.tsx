@@ -122,7 +122,8 @@ export const NewsletterPopup: React.FC = () => {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
-              priority
+              priority={true}
+              loading="eager"
             />
           </div>
 
