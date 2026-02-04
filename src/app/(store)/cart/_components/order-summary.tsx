@@ -24,9 +24,16 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
   const { preferredCurrency } = useAccountStore();
 
   const subtotal = items.reduce((sum, item) => {
+    // In our system, the store should already have converted items to preferredCurrency.
+    // However, if there's a mismatch, we should ideally handle it.
     const price = item.productVariant.price || 0;
     return sum + price * item.quantity;
   }, 0);
+
+  const displayCurrency =
+    items.length > 0
+      ? items[0].productVariant.currency || preferredCurrency
+      : preferredCurrency;
 
   return (
     <div className="bg-gray-50 p-6 sm:p-8 mx-auto flex-1 space-y-6 lg:mt-0 lg:w-full mt-6 sm:mt-8 rounded-sm">
@@ -37,14 +44,14 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
         <div className="flex justify-between pt-3">
           <span className="text-[#502B3A]/70">Subtotal</span>
           <span className="font-medium text-[#502B3A]">
-            {getCurrencySymbol(preferredCurrency)}
+            {getCurrencySymbol(displayCurrency)}
             {subtotal.toLocaleString(undefined)}
           </span>
         </div>
         <div className="flex justify-between pt-3">
           <span className="text-[#502B3A]/70">Total</span>
           <span className="font-bold text-[#502B3A]">
-            {getCurrencySymbol(preferredCurrency)}
+            {getCurrencySymbol(displayCurrency)}
             {subtotal.toLocaleString(undefined)}
           </span>
         </div>

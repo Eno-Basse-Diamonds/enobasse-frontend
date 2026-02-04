@@ -33,7 +33,15 @@ export default function CartPage() {
     if (!isHydrated) return;
 
     const handleCurrencyChange = async () => {
-      if (preferredCurrency && preferredCurrency !== lastCurrency) {
+      const needsRefresh =
+        preferredCurrency &&
+        (preferredCurrency !== lastCurrency ||
+          items.some(
+            (item) =>
+              (item.productVariant.currency || "USD") !== preferredCurrency,
+          ));
+
+      if (needsRefresh) {
         if (session?.user?.email) {
           await refreshWithCurrency(preferredCurrency, session.user.email);
         } else {

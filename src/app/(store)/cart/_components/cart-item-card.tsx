@@ -31,7 +31,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
       updateItem(
         item.productVariant.id,
         { quantity: item.quantity - 1 },
-        accountEmail
+        accountEmail,
       );
     }
   };
@@ -40,7 +40,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
     updateItem(
       item.productVariant.id,
       { quantity: item.quantity + 1 },
-      accountEmail
+      accountEmail,
     );
   };
 
@@ -105,7 +105,9 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 </p>
 
                 <p className="font-medium text-[#502B3A]">
-                  {getCurrencySymbol(preferredCurrency)}
+                  {getCurrencySymbol(
+                    item.productVariant.currency || preferredCurrency,
+                  )}
                   {price.toLocaleString()}
                 </p>
               </div>
@@ -159,7 +161,9 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-4 w-full justify-between">
                 <div className="text-[#502B3A] text-base whitespace-nowrap">
                   <span className="font-semibold">Total:</span>{" "}
-                  {getCurrencySymbol(preferredCurrency)}
+                  {getCurrencySymbol(
+                    item.productVariant.currency || preferredCurrency,
+                  )}
                   {(price * item.quantity).toLocaleString()}
                 </div>
                 {canBeEngraved && (
@@ -169,7 +173,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                       updateItem(
                         item.productVariant.id,
                         { engraving: val },
-                        accountEmail
+                        accountEmail,
                       )
                     }
                   />

@@ -230,28 +230,79 @@ export const useCartStore = create<CartState>()(
               originalUsdPrices: newOriginalUsdPrices,
             });
           } else {
+            // Guest mode
+            const state = get();
+
+            // First, ensure we have the USD price for our cache
+            const newOriginalUsdPrices = { ...state.originalUsdPrices };
+            if (productVariant.currency === "USD") {
+              newOriginalUsdPrices[productVariant.id] = productVariant.price;
+            } else if (
+              productVariant.currency === "NGN" &&
+              !newOriginalUsdPrices[productVariant.id]
+            ) {
+              // We'll try to convert it back to USD for the cache
+              convertCurrency(productVariant.price, "NGN", "USD").then(
+                (usdPrice) => {
+                  set((s) => ({
+                    originalUsdPrices: {
+                      ...s.originalUsdPrices,
+                      [productVariant.id]: usdPrice,
+                    },
+                  }));
+                },
+              );
+            }
+
+            // Now, ensure the variant matches the CURRENT target currency of the store
+            const targetCurrency = currency || "USD";
+            const currentCurrency = productVariant.currency || "USD";
+
+            let variantToStore = productVariant;
+            if (currentCurrency !== targetCurrency) {
+              const exchangeRate = await getExchangeRate();
+              let convertedPrice: number;
+
+              if (targetCurrency === "NGN") {
+                convertedPrice = Math.ceil(productVariant.price * exchangeRate);
+              } else {
+                convertedPrice = Math.ceil(productVariant.price / exchangeRate);
+              }
+
+              variantToStore = {
+                ...productVariant,
+                price: convertedPrice,
+                currency: targetCurrency,
+                originalPrice:
+                  targetCurrency === "NGN" ? productVariant.price : undefined,
+              };
+            }
+
             set((state) => {
-              const existing = state.items.find(
+              const existingIndex = state.items.findIndex(
                 (item) => item.productVariant.id === productVariant.id,
               );
-              if (existing) {
+
+              if (existingIndex > -1) {
+                const updatedItems = [...state.items];
+                updatedItems[existingIndex] = {
+                  ...updatedItems[existingIndex],
+                  quantity: updatedItems[existingIndex].quantity + quantity,
+                  size: size ?? updatedItems[existingIndex].size,
+                  engraving: engraving ?? updatedItems[existingIndex].engraving,
+                  // Also update the variant to ensure it has the latest price/currency
+                  productVariant: variantToStore,
+                };
                 return {
-                  items: state.items.map((item) =>
-                    item.productVariant.id === productVariant.id
-                      ? {
-                          ...item,
-                          quantity: item.quantity + quantity,
-                          size: size ?? item.size,
-                          engraving: engraving ?? item.engraving,
-                        }
-                      : item,
-                  ),
+                  items: updatedItems,
+                  originalUsdPrices: newOriginalUsdPrices,
                 };
               }
+
               const newItem: CartItem = {
                 id: `guest_${Date.now()}`,
                 addedAt: new Date().toISOString(),
-                productVariant,
+                productVariant: variantToStore,
                 productSlug,
                 productCategory,
                 quantity,
@@ -259,35 +310,6 @@ export const useCartStore = create<CartState>()(
                 engraving,
                 amoraOptions,
               };
-
-              const newOriginalUsdPrices = { ...state.originalUsdPrices };
-
-              if (productVariant.currency === "USD") {
-                newOriginalUsdPrices[productVariant.id] = productVariant.price;
-              } else if (productVariant.currency === "NGN") {
-                convertCurrency(productVariant.price, "NGN", "USD")
-                  .then((usdPrice) => {
-                    set((currentState) => ({
-                      originalUsdPrices: {
-                        ...currentState.originalUsdPrices,
-                        [productVariant.id]: usdPrice,
-                      },
-                    }));
-                  })
-                  .catch(() => {
-                    getExchangeRate().then((exchangeRate) => {
-                      const fallbackUsdPrice = Math.ceil(
-                        productVariant.price / exchangeRate,
-                      );
-                      set((currentState) => ({
-                        originalUsdPrices: {
-                          ...currentState.originalUsdPrices,
-                          [productVariant.id]: fallbackUsdPrice,
-                        },
-                      }));
-                    });
-                  });
-              }
 
               return {
                 items: [...state.items, newItem],
