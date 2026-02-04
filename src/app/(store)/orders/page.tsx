@@ -4,45 +4,25 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { getOrders } from "@/lib/api/orders";
+import { useOrdersStore } from "@/lib/store/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { ShoppingBagIcon } from "lucide-react";
 import { useAccountStore } from "@/lib/store/account";
 import { Order } from "@/lib/types/orders";
 import { EmptyState } from "@/components/empty-state";
 import { OrderHistoryLoader } from "@/components/loaders/orders";
-import { useState } from "react";
 
 export default function OrderHistoryPage() {
   const { data: session } = useSession();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { orders, loading: storeLoading, hydrateOrders } = useOrdersStore();
   const { isHydrated } = useAccountStore();
   const accountEmail = session?.user?.email;
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (accountEmail) {
-        try {
-          setLoading(true);
-          const data = await getOrders(accountEmail);
-          const sortedOrders = data.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-          setOrders(sortedOrders);
-        } catch (error) {
-          console.error("Failed to fetch orders:", error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, [accountEmail]);
+    if (isHydrated) {
+      hydrateOrders(accountEmail || undefined);
+    }
+  }, [accountEmail, isHydrated, hydrateOrders]);
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -52,7 +32,7 @@ export default function OrderHistoryPage() {
     });
   };
 
-  if (!isHydrated || loading) {
+  if (!isHydrated || storeLoading) {
     return <OrderHistoryLoader />;
   }
 
@@ -204,7 +184,7 @@ const BillingSummary = ({ order }: { order: Order }) => {
 
   const subtotal = order.items.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
 
   const shipping = "N/A";

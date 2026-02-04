@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { countries } from "@/lib/utils/constants/countries";
 import { SectionContainer } from "@/components/section-container";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, User } from "lucide-react";
 import { trackBeginCheckout } from "@/lib/analytics/gtag";
 
 interface FormData {
@@ -55,7 +55,7 @@ export default function CheckoutPage() {
     address: "",
     apartment: "",
     city: "",
-    country: "NG",
+    country: "Nigeria",
     region: "",
     postalCode: "",
   });
@@ -63,7 +63,7 @@ export default function CheckoutPage() {
 
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
-    0
+    0,
   );
 
   const isFormValid = useMemo(() => {
@@ -75,7 +75,6 @@ export default function CheckoutPage() {
       "address",
       "city",
       "region",
-      "postalCode",
     ];
 
     return requiredFields.every((field) => {
@@ -191,7 +190,27 @@ export default function CheckoutPage() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-3/5">
               {!session && (
-                <CheckoutAuthSection onAuthSuccess={handleAuthSuccess} />
+                <div className="mb-6 p-6 bg-white border border-gray-100 rounded-sm flex items-center justify-between shadow-sm group hover:border-[#D1A559]/30 transition-all duration-300">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#FDFBF9] border border-[#F3EFE9] flex items-center justify-center group-hover:bg-[#D1A559]/5 transition-colors duration-300">
+                      <User className="w-5 h-5 text-[#502B3A]" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-[#502B3A]">
+                        Returning customer?
+                      </h3>
+                      <p className="text-xs text-[#502B3A]/60 mt-1">
+                        Sign in to checkout faster with your saved details.
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/sign-in"
+                    className="px-6 py-2 border border-[#D1A559] text-[#D1A559] text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-[#D1A559] hover:text-white transition-all duration-300"
+                  >
+                    Sign In
+                  </Link>
+                </div>
               )}
 
               <CheckoutFormSection title="Contact Information">
@@ -311,8 +330,7 @@ export default function CheckoutPage() {
                     />
                     <FormInput
                       id="postal-code"
-                      label="ZIP/Postal code"
-                      required
+                      label="ZIP/Postal code (optional)"
                       value={formData.postalCode}
                       onChange={(e) =>
                         handleInputChange("postalCode", e.target.value)

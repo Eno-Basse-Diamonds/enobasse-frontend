@@ -19,6 +19,7 @@ export interface OrdersStore {
     total: number;
     billingAddress: BillingAddress;
     customerInfo?: {
+      name: string;
       email: string;
       phone: string;
     };
@@ -189,7 +190,7 @@ export const useCheckout = (accountEmail?: string) => {
 
   const checkout = async (
     billingAddress: BillingAddress,
-    customerInfo?: { email: string; phone: string },
+    customerInfo?: { name: string; email: string; phone: string },
   ) => {
     const orderItems: OrderItem[] = items.map((item) => ({
       id: item.id,

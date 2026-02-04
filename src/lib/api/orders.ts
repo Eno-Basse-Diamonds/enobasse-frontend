@@ -15,6 +15,7 @@ interface CreateOrderDto {
   }>;
   total: number;
   customerInfo?: {
+    name: string;
     email: string;
     phone: string;
   };

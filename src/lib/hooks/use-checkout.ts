@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
+import { useOrdersStore } from "@/lib/store/orders";
 import { createOrder } from "@/lib/api/orders";
 import { convertCurrency } from "@/lib/api/exchange-rate";
 import { trackPurchase } from "@/lib/analytics/gtag";
@@ -38,6 +39,7 @@ export function useCheckout({
 
   const { clear: clearCart } = useCartStore();
   const { data: session } = useSession();
+  const { createOrder: persistOrder } = useOrdersStore();
   const { paystackLoaded, initializePayment } = usePaystackPayment();
 
   const subtotal = items.reduce(
@@ -69,12 +71,16 @@ export function useCheckout({
         currency: item.productVariant.currency,
       }));
 
-      await createOrder({
+      await persistOrder({
         items: orderItems,
         total: subtotal,
         billingAddress: billingAddress as any,
         accountEmail: session?.user?.email || undefined,
-        customerInfo: { email: email || "", phone: phone || "" },
+        customerInfo: {
+          name: `${(billingAddress as any).firstName} ${(billingAddress as any).lastName}`,
+          email: email || "",
+          phone: phone || "",
+        },
         currency: preferredCurrency,
         paymentMethod: method,
         paymentStatus: status,

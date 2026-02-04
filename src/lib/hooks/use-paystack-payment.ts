@@ -51,18 +51,24 @@ export function usePaystackPayment() {
       const originalOnSuccess = options.onSuccess;
       const originalOnError = options.onError;
 
+      // Lock scroll
+      document.body.style.overflow = "hidden";
+
       const safeOptions = {
         ...options,
         onClose: () => {
           isInitializingRef.current = false;
+          document.body.style.overflow = "auto";
           originalOnClose();
         },
         onSuccess: (transaction: any) => {
           isInitializingRef.current = false;
+          document.body.style.overflow = "auto";
           originalOnSuccess(transaction);
         },
         onError: (error: any) => {
           isInitializingRef.current = false;
+          document.body.style.overflow = "auto";
           if (originalOnError) originalOnError(error);
         },
       };
@@ -70,6 +76,7 @@ export function usePaystackPayment() {
       paystack.newTransaction(safeOptions);
     } catch (error) {
       isInitializingRef.current = false;
+      document.body.style.overflow = "auto";
       throw error;
     }
   };
