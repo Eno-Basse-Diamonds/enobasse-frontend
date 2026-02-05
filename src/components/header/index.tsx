@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { Logo } from "../logo";
 import { ProductList } from "@/components/product/list";
 import { CurrencyDropdown } from "../dropdown";
-import { useProductsSearch } from "@/lib/hooks/use-products";
+import { useInfiniteProductsSearch } from "@/lib/hooks/use-products";
+import { useInView } from "react-intersection-observer";
 import { ProductsResponse } from "@/lib/types/products";
 import { EmptyState } from "../empty-state";
 import { ChevronRightIcon, SearchSlashIcon } from "lucide-react";
@@ -14,6 +15,7 @@ import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import "./styles.scss";
 import { CloseIcon } from "../icons/close";
 import { MenuIcon } from "../icons/menu";
@@ -710,43 +712,77 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
   initialQuery = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const debouncedQuery = useDebounce(searchQuery, 300);
   const { preferredCurrency } = useAccountStore();
 
   useEffect(() => {
-    if (!isVisible) {
+    if (isVisible) {
+      const savedSearches = localStorage.getItem("recentSearches");
+      if (savedSearches) {
+        setRecentSearches(JSON.parse(savedSearches));
+      }
+    } else {
       setSearchQuery("");
-      setSubmittedQuery("");
     }
   }, [isVisible]);
 
-  const shouldFetch = isVisible && submittedQuery.trim().length > 0;
+  const saveRecentSearch = (term: string) => {
+    const trimmedTerm = term.trim();
+    if (!trimmedTerm) return;
+
+    const updatedSearches = [
+      trimmedTerm,
+      ...recentSearches.filter((s) => s !== trimmedTerm),
+    ].slice(0, 5);
+
+    setRecentSearches(updatedSearches);
+    localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+  };
+
+  const shouldFetch = isVisible && debouncedQuery.trim().length > 0;
 
   const searchParams = shouldFetch
     ? {
-        search: submittedQuery,
-        page: 1,
-        pageSize: 100,
+        search: debouncedQuery,
+        pageSize: 12,
         currency: preferredCurrency,
       }
     : undefined;
 
-  const { data, isLoading } = useProductsSearch(searchParams, shouldFetch) as {
-    data?: ProductsResponse;
-    isLoading: boolean;
-    isError: boolean;
-  };
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteProductsSearch(searchParams, shouldFetch);
 
-  const products = data?.products || [];
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const products = data?.pages.flatMap((page) => page.products) || [];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedQuery(searchQuery.trim());
+    if (searchQuery.trim()) {
+      saveRecentSearch(searchQuery);
+    }
+  };
+
+  const handleRecentSearchClick = (term: string) => {
+    setSearchQuery(term);
+  };
+
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    localStorage.removeItem("recentSearches");
   };
 
   const handleClose = () => {
     setSearchQuery("");
-    setSubmittedQuery("");
     onClose();
   };
 
@@ -785,16 +821,55 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
           </button>
         </form>
 
-        {submittedQuery && (
+        {searchQuery.trim().length === 0 ? (
+          <div className="header__search-overlay-recent mt-8 px-4">
+            {recentSearches.length > 0 && (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    Recent Searches
+                  </h3>
+                  <button
+                    onClick={clearRecentSearches}
+                    className="text-xs text-[#D1A559] hover:underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {recentSearches.map((term, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleRecentSearchClick(term)}
+                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-sm text-sm text-gray-700 transition-colors"
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
           <div className="header__search-overlay-results">
             {isLoading && <ProductListLoader />}
             {products && products.length > 0 ? (
-              <ProductList products={products} />
+              <>
+                <ProductList products={products} />
+                <div
+                  ref={loadMoreRef}
+                  className="h-10 w-full flex items-center justify-center py-4"
+                >
+                  {isFetchingNextPage && (
+                    <div className="w-6 h-6 border-2 border-gray-300 border-t-[#D1A559] rounded-full animate-spin" />
+                  )}
+                </div>
+              </>
             ) : (
               !isLoading && (
                 <EmptyState
                   title="No Results Found"
-                  description="We couldn't find any products that match your query."
+                  description={`We couldn't find any products matching "${searchQuery}".`}
                   icon={<SearchSlashIcon />}
                 />
               )

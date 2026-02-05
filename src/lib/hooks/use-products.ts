@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getProductsForAdmin,
@@ -19,6 +19,25 @@ export function useProductsSearch(
   return useQuery({
     queryKey: ["productSearch", options],
     queryFn: () => getProducts(options),
+    enabled: enabled && options !== undefined,
+  });
+}
+
+export function useInfiniteProductsSearch(
+  options?: ProductFilterOptions,
+  enabled: boolean = true,
+) {
+  return useInfiniteQuery({
+    queryKey: ["productSearchInfinite", options],
+    queryFn: ({ pageParam }) =>
+      getProducts({ ...options, page: pageParam as number }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNextPage) {
+        return lastPage.meta.currentPage + 1;
+      }
+      return undefined;
+    },
     enabled: enabled && options !== undefined,
   });
 }
