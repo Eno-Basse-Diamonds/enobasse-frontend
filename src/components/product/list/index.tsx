@@ -218,6 +218,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
     null,
   );
+  const hasAnimatedOnce = React.useRef(false);
   const { preferredCurrency, isHydrated } = useAccountStore();
   const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
   const { data: session } = useSession();
@@ -291,11 +292,18 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
     setQuickViewProduct(product);
   }, []);
 
+  // after first render, disable animations for appended items
+  useEffect(() => {
+    if (products.length > 0) {
+      hasAnimatedOnce.current = true;
+    }
+  }, [products]);
+
   return (
     <motion.div
       className="grid grid-cols-2 gap-x-6 gap-y-14 md:grid-cols-3 lg:grid-cols-4"
       variants={container}
-      initial="hidden"
+      initial={hasAnimatedOnce.current ? false : "hidden"}
       animate="show"
     >
       {products.map((product) => {

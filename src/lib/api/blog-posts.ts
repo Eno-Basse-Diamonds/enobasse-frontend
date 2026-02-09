@@ -5,6 +5,14 @@ import type { BlogPost } from "../types/blog-post";
 import { calculateReadingTime } from "../helpers/blog-post";
 import { api, ApiError } from "../utils/api";
 
+const parseBlogPostDates = (post: BlogPost): BlogPost => {
+  return {
+    ...post,
+    createdAt: new Date(post.createdAt),
+    updatedAt: new Date(post.updatedAt),
+  };
+};
+
 export type PaginatedBlogResponse = {
   posts: BlogPost[];
   total: number;
@@ -46,30 +54,52 @@ export const getBlogPosts = async (options?: {
   search?: string;
 }): Promise<PaginatedBlogResponse> => {
   const { page = 1, perPage = 9, search } = options || {};
-  return api.get("/blog/posts", { params: { page, perPage, search } });
+
+  const data = await api.get<PaginatedBlogResponse>("/blog/posts", {
+    params: { page, perPage, search },
+  });
+  return {
+    ...data,
+    posts: data.posts.map(parseBlogPostDates),
+  };
 };
 
 export const getBlogPostsForAdmin = async (
   options?: AdminBlogFilterOptions,
 ): Promise<PaginatedBlogResponse> => {
-  return api.get("/blog/posts/admin", { params: options, cache: false });
+  const data = await api.get<PaginatedBlogResponse>("/blog/posts/admin", {
+    params: options,
+    cache: false,
+  });
+  return {
+    ...data,
+    posts: data.posts.map(parseBlogPostDates),
+  };
 };
 
 export const getPublishedBlogPosts = async (
   page = 1,
   perPage = 9,
 ): Promise<PaginatedBlogResponse> => {
-  return api.get("/blog/posts/published", { params: { page, perPage } });
+  const data = await api.get<PaginatedBlogResponse>("/blog/posts/published", {
+    params: { page, perPage },
+  });
+  return {
+    ...data,
+    posts: data.posts.map(parseBlogPostDates),
+  };
 };
 
 export const getBlogPost = async (slug: string): Promise<BlogPost> => {
-  return api.get(`/blog/posts/${slug}`);
+  const post = await api.get<BlogPost>(`/blog/posts/${slug}`);
+  return parseBlogPostDates(post);
 };
 
 export const getRelatedBlogPosts = async (
   slug: string,
 ): Promise<BlogPost[]> => {
-  return api.get(`/blog/posts/${slug}/related`);
+  const posts = await api.get<BlogPost[]>(`/blog/posts/${slug}/related`);
+  return posts.map(parseBlogPostDates);
 };
 
 export async function createBlogPost(

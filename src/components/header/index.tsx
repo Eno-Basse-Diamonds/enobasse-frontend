@@ -712,6 +712,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
   initialQuery = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const debouncedQuery = useDebounce(searchQuery, 300);
   const { preferredCurrency } = useAccountStore();
@@ -754,7 +755,9 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
     useInfiniteProductsSearch(searchParams, shouldFetch);
 
   const { ref: loadMoreRef, inView } = useInView({
-    threshold: 0.1,
+    threshold: 0,
+    rootMargin: "200px",
+    root: scrollContainerRef.current,
   });
 
   useEffect(() => {
@@ -788,6 +791,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({
 
   return (
     <div
+      ref={scrollContainerRef}
       className={`header__search-overlay ${
         isVisible ? "header__search-overlay--visible" : ""
       }`}
