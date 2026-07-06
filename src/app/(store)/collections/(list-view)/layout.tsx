@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "Collections - Eno Bassé Diamonds",
     description:
       "Journey through our artisan-crafted jewelry lines, where every collection tells a story of craftsmanship and timeless elegance.",
-    url: "https://www.enobasse.com/collections",
+    url: "https://enobasse.com/collections",
   },
   twitter: {
     title: "Collections - Eno Bassé Diamonds",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
       "Explore our designer jewelry lines—where heritage techniques meet contemporary design.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/collections",
+    canonical: "https://enobasse.com/collections",
   },
 };
 

@@ -19,10 +19,10 @@ export const ArticleSchema = ({ post, url }: ArticleSchemaProps) => {
     },
     publisher: {
       "@type": "Organization",
-      name: "Enobasse",
+      name: "Eno Bassé Diamonds",
       logo: {
         "@type": "ImageObject",
-        url: "https://enobasse.com/logo.png",
+        url: "https://res.cloudinary.com/enobasse/image/upload/v1756506781/logo_gvieez.png",
       },
     },
     url: url,

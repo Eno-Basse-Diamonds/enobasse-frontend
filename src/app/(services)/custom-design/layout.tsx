@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Custom Jewelry Design - Eno Bassé Diamonds",
     description:
       "Your dream piece, handcrafted by our artisans. Start your custom jewelry journey with a private consultation.",
-    url: "https://www.enobasse.com/custom-design",
+    url: "https://enobasse.com/custom-design",
   },
   twitter: {
     title: "Custom Jewelry Design - Eno Bassé Diamonds",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
       "From initial sketch to final polish: See how we transform your ideas into wearable art. #BespokeJewelry",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/custom-design",
+    canonical: "https://enobasse.com/custom-design",
   },
 };
 

@@ -16,11 +16,11 @@ export const ProductSchema = ({ product }: ProductSchemaProps) => {
     mpn: typeof product.id === "string" ? product.id : undefined,
     brand: {
       "@type": "Brand",
-      name: "Enobasse",
+      name: "Eno Bassé Diamonds",
     },
     offers: {
       "@type": "AggregateOffer",
-      url: `https://enobasse.com/product/${product.slug}`,
+      url: `https://enobasse.com/products/${product.slug}`,
       priceCurrency: product.priceRange.currency,
       lowPrice: product.priceRange.min,
       highPrice: product.priceRange.max,

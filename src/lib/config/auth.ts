@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User, Account } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { validateAccount, findAccount } from "@/lib/api/auth";
@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
         const { email, password } = credentials;
         const account = await validateAccount(email, password);
 
-        if (account) return account;
+        if (account) return account as unknown as User;
         return null;
       },
     }),
@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.isAdmin = (user as any).isAdmin;
+        token.isAdmin = (user as User).isAdmin;
       }
       return token;
     },
@@ -44,15 +44,12 @@ export const authOptions: NextAuthOptions = {
       user,
       account,
     }: {
-      user: any;
-      account: any;
-      profile?: any;
-      email?: any;
-      credentials?: any;
+      user: User;
+      account: Account | null;
     }) {
       if (account?.provider === "google") {
         try {
-          await findAccount(user.email);
+          await findAccount(user.email!);
         } catch (error) {
           try {
             await api.post("/auth/create-account", {

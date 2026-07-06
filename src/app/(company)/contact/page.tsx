@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "Contact - Eno Bassé Diamonds",
     description:
       "Connect with our master jewelers for custom commissions, purchases, or client services. Available by appointment at our showroom.",
-    url: "https://www.enobasse.com/contact",
+    url: "https://enobasse.com/contact",
   },
   twitter: {
     title: "Contact - Eno Bassé Diamonds",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       "Schedule an appointment or inquire about our luxury jewelry collections. Custom commissions available.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/contact",
+    canonical: "https://enobasse.com/contact",
   },
 };
 

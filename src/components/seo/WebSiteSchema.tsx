@@ -4,15 +4,8 @@ export const WebSiteSchema = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    name: "Eno Bassé Diamonds",
     url: "https://enobasse.com",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: "https://enobasse.com/search?q={search_term_string}",
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 
   return (

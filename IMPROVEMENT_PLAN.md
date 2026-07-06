@@ -31,12 +31,39 @@ This project will not have unit tests or e2e tests. The old Playwright stub (`te
 
 **Also noticed, not fixed (small, low-priority):** `src/app/(store)/products/[slug]/_components/reviews.tsx:54` defaults a new review's `authorImage.url` to `https://via.placeholder.com/40x40` — an external placeholder service. Since `remotePatterns` is now locked to `res.cloudinary.com`, this would render as a broken image (harmless — the component already has an `onError` fallback to a generic user icon), but it'd be cleaner to just default to `null`/no image and let the existing fallback icon handle it, rather than depend on an external service at all.
 
-## Phase 2 — SEO fixes
+## Unplanned: Tailwind v3 → v4 migration (done)
 
-- [ ] Replace static `src/app/sitemap.xml` (hand-written, 25 URLs, hardcoded `lastmod: 2025-06-07`, no products/blog posts) with a dynamic `src/app/sitemap.ts` that pulls all products, collections, and blog posts with real `lastmod` values
-- [ ] Replace static `src/app/robots.txt` with `src/app/robots.ts`
-- [ ] Add `ItemList`/`BreadcrumbList` JSON-LD to the products and collections list pages (reuse existing `src/components/seo/*` schema components)
-- [ ] Add page-specific `metadata` export to the home page (`src/app/(home)/page.tsx`) instead of relying solely on root layout defaults
+Dependencies got bumped externally to their latest majors (Next 16.2.10, Tailwind v4, Zod v4, TypeScript 6, etc.). This broke the build: Tailwind v4 moved the PostCSS plugin to a separate package and changed how "satellite" CSS files (outside the main entry) see the theme/utilities. Fixed:
+- [x] `postcss.config.mjs`: `tailwindcss` → `@tailwindcss/postcss` (and dropped `autoprefixer`, which v4 handles internally — removed the now-unused dependency too)
+- [x] Split the Tailwind bootstrap (`@import "tailwindcss"; @config "...";`) out of `globals.scss` into a new plain `src/app/tailwind.css`, since Tailwind v4 parses `@reference`/`@import` targets as literal CSS and chokes on Sass-only syntax (`//` comments, `&__foo` BEM nesting) that `globals.scss` still needs for its component classes. `globals.scss` now just does `@import "./tailwind.css";`.
+- [x] `header/styles.scss` (the only component-level `.scss` using `@apply` outside the main entry) now has `@reference "../../app/tailwind.css";` at the top, per Tailwind v4's rules for satellite stylesheets.
+- [x] Renamed `tailwind.config.js` → `tailwind.config.mjs` (it already used ESM `import`/`export default` syntax; this was silently triggering a Node module-type reparse warning on every build).
+- [x] Kept the existing JS config (`tailwind.config.mjs` — custom colors, fonts, content globs, the `tailwind-scrollbar` plugin) via v4's `@config` compatibility directive rather than rewriting everything to CSS-first `@theme` — lower risk, verified working. A full native-v4 `@theme` migration is a nice-to-have, not required; not added to the plan since the compat path works fine.
+- [x] Verified via clean rebuild (no warnings/errors) and a real headless-browser pass over the homepage, `/about`, and `/faqs` — styling, fonts, colors, and layout all render correctly post-migration.
+
+## Phase 2 — SEO fixes (done)
+
+- [x] Replaced static `sitemap.xml`/`robots.txt` with dynamic `src/app/sitemap.ts` / `src/app/robots.ts`. Sitemap pulls all products (paginated loop), published collections, and published blog posts live from the API, with real `lastModified` where the data has it (products' `createdAt`, blog posts' `updatedAt`/`createdAt`); static marketing pages listed directly. Each data source is wrapped in its own try/catch so one API failure can't take down the whole sitemap — verified this actually works by building with the backend unreachable (sandbox has no backend running) and confirming it falls back to just the static routes instead of failing the build. `revalidate = 3600` so it refreshes hourly in production. `robots.ts` disallows all private/utility routes (account, cart, checkout, orders, wishlist, auth flows, admin, api).
+- [x] Added `ItemList` + `BreadcrumbList` JSON-LD to both the products list and collections list pages (new reusable `src/components/seo/ItemListSchema.tsx`).
+- [x] Added explicit `metadata` to the home page (`(home)/layout.tsx`) instead of relying solely on root defaults, plus two services pages that had **no metadata at all** because they had no `layout.tsx`: created `(services)/maintenance-repairs/layout.tsx` and `(services)/ring-resizing/layout.tsx` (their `page.tsx` files are `"use client"`, so metadata has to live in a layout).
+- [x] Added `public/llms.txt` — a curated markdown overview of the site for LLM consumption, per the emerging (not yet a guaranteed/universally-adopted standard) `llms.txt` convention.
+
+### Real bugs found and fixed during the SEO pass
+
+- [x] **Domain inconsistency**: metadata/canonicals were split between `https://enobasse.com` and `https://www.enobasse.com` across ~17 files (root layout/robots.txt use the apex domain). Standardized everything on the apex domain to avoid canonical/duplicate-content confusion.
+- [x] **Wrong URLs in schema**: `ProductSchema.tsx` and `CollectionSchema.tsx` built product URLs as `/product/{slug}` (singular) — the real route is `/products/{slug}` (plural). Every product URL in that JSON-LD was 404ing.
+- [x] **Broken logo URL**: `OrganizationSchema.tsx` and `ArticleSchema.tsx` referenced `https://enobasse.com/logo.png`, which doesn't exist (no `public/logo.png`). Pointed both at the real Cloudinary-hosted logo used everywhere else in the app.
+- [x] **Fake business data**: `OrganizationSchema.tsx` had a placeholder phone number (`+1-234-567-890`) and generic/wrong social URLs (`facebook.com/enobasse` instead of the real `facebook.com/eno.basse`, etc.). Replaced with the real phone, email, and social handles pulled from the actual contact page and footer. Also upgraded `@type` from generic `Organization` to `JewelryStore` (a schema.org `LocalBusiness` subtype) and added a real `PostalAddress` (Admiralty Mall, Lekki Phase 1, Lekki, Lagos) — this is the single highest-leverage change for local/"near me" search discoverability.
+- [x] **Fake search feature**: `WebSiteSchema.tsx` had a `SearchAction` pointing at `/search?q=` — there is no `/search` route; search is a client-side overlay only. This could have sent Google's Sitelinks Search Box feature to a dead page. Removed it.
+- [x] **A page-crash bug that would have hidden the products page from every crawler**: `products/(list-view)/layout.tsx` directly `await`s `getPreferredCurrency(...)` with no error handling. When that one API call fails, it throws and takes down the *entire* products route — page heading, empty state, and my new BreadcrumbList schema all vanish, with no visible error (silent blank render in production mode). Caught this by literally testing with the backend unreachable. Fixed with a fallback-to-`"USD"` try/catch, and found + fixed the exact same unguarded pattern in `products/[slug]/layout.tsx` and `collections/[slug]/layout.tsx` — meaning every single product and collection detail page had the same fragility. These are the highest-traffic, most SEO-valuable pages on the site, so this was worth fixing now rather than filing for later.
+- [x] **Stray literal quote in title metadata**: both `products/[slug]/layout.tsx` and `collections/[slug]/layout.tsx` had `` `${name} - Eno Bassé Diamonds"` `` in their Twitter title — a copy-paste typo leaving a literal trailing `"` character in the rendered title. Fixed both.
+- [x] Fixed a title-duplication bug I introduced myself while adding home page metadata: setting a full literal title string gets wrapped by the root layout's `title.template`, producing "...Diamond Collections - Eno Bassé Diamonds". Fixed with `title: { absolute: "..." }` to bypass the template for the homepage, verified in a real browser render.
+- [x] Aligned brand name casing across schemas (`"Enobasse"` → `"Eno Bassé Diamonds"` in `ProductSchema`/`ArticleSchema`/`OrganizationSchema`, matching the root layout's branding).
+
+### Not fixed / flagged for later (out of scope for this pass)
+
+- Product JSON-LD offers could add `hasMerchantReturnPolicy`/`shippingDetails` (Google's newer Merchant Listing recommendations), but that requires exact shipping cost/return-window data I don't have confirmed — fabricating it would be worse than omitting it.
+- `reviews.tsx`'s `https://via.placeholder.com` default avatar (noted in Phase 1) is now more visible since `remotePatterns` is locked down — still just cosmetically falls back to a generic icon, not broken.
 
 ## Phase 3 — Server-render the catalog (biggest structural change)
 

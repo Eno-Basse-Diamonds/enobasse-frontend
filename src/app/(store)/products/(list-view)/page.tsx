@@ -16,6 +16,8 @@ import { Pagination } from "@/components/pagination";
 import { FilterPanelDesktop, FilterPanelMobile } from "@/components/product/filter-panel";
 import { ProductList } from "@/components/product/list";
 import { SectionContainer } from "@/components/section-container";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { ItemListSchema } from "@/components/seo/ItemListSchema";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -84,6 +86,21 @@ export default function ProductsPage() {
 
   return (
     <div className="my-12">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", item: "https://enobasse.com" },
+          { name: "Products", item: "https://enobasse.com/products" },
+        ]}
+      />
+      {filteredAndSortedProducts.length > 0 && (
+        <ItemListSchema
+          items={filteredAndSortedProducts.map((product) => ({
+            name: product.name,
+            url: `https://enobasse.com/products/${product.slug}`,
+            image: product.images?.[0]?.url,
+          }))}
+        />
+      )}
       <PageHeading title="All Products" />
       <SectionContainer id="all-products">
         <motion.div

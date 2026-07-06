@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Privacy Policy - Eno Bassé Fine Diamonds",
     description:
       "Your privacy matters. Learn how we protect your personal information in all Eno Bassé jewelry transactions and website interactions.",
-    url: "https://www.enobasse.com/privacy-policy",
+    url: "https://enobasse.com/privacy-policy",
   },
   twitter: {
     title: "Privacy Policy - Eno Bassé Fine Diamonds",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
       "How we protect your data when you shop for fine jewelry online. Your privacy is our priority.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/privacy-policy",
+    canonical: "https://enobasse.com/privacy-policy",
   },
 };
 

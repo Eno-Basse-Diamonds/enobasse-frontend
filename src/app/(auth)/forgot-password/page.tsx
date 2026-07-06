@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Forgot Password - Eno Bassé Diamonds",
     description:
       "Regain access to your jewelry collection account. We'll send a secure reset link to your registered email.",
-    url: "https://www.enobasse.com/forgot-password",
+    url: "https://enobasse.com/forgot-password",
   },
   twitter: {
     card: "summary_large_image",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       "We'll help you securely regain access to your jewelry account.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/forgot-password",
+    canonical: "https://enobasse.com/forgot-password",
   },
 };
 

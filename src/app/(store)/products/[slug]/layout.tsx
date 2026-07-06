@@ -7,6 +7,21 @@ import {
 import { getProduct } from "@/lib/api/products";
 import { getPreferredCurrency } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
+import { logger } from "@/lib/utils/logger";
+
+const DEFAULT_CURRENCY = "USD";
+
+async function resolvePreferredCurrency(
+  email: string | null | undefined,
+): Promise<string> {
+  if (!email) return DEFAULT_CURRENCY;
+  try {
+    return await getPreferredCurrency(email);
+  } catch (error) {
+    logger.error("Failed to fetch preferred currency", error);
+    return DEFAULT_CURRENCY;
+  }
+}
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -18,7 +33,9 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const preferredCurrency = await resolvePreferredCurrency(
+    session?.user?.email,
+  );
   const product = await getProduct(slug, preferredCurrency);
 
   if (!product) {
@@ -52,7 +69,7 @@ export async function generateMetadata({
       ],
     },
     twitter: {
-      title: `${product.name} - Eno Bassé Diamonds"`,
+      title: `${product.name} - Eno Bassé Diamonds`,
       description: description,
       images: [`${product.images[0].url}`],
     },
@@ -65,7 +82,9 @@ export default async function ProductPage({
 }: ProductPageProps) {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const preferredCurrency = await resolvePreferredCurrency(
+    session?.user?.email,
+  );
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

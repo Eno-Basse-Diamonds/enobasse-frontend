@@ -25,7 +25,7 @@ export const CollectionSchema = ({
       itemListElement: products.map((product, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `https://enobasse.com/product/${product.slug}`,
+        url: `https://enobasse.com/products/${product.slug}`,
         name: product.name,
       })),
     },

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Sitemap - Eno Bassé Diamonds",
     description:
       "Navigate all sections of Eno Bassé Diamonds' online presence including jewelry collections, about us, and client services.",
-    url: "https://www.enobasse.com/sitemap",
+    url: "https://enobasse.com/sitemap",
   },
   twitter: {
     title: "Sitemap - Eno Bassé Diamonds",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
       "Access all areas of our luxury jewelry website through our comprehensive sitemap.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/sitemap",
+    canonical: "https://enobasse.com/sitemap",
   },
 };
 

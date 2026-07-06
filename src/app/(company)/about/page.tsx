@@ -12,14 +12,14 @@ export const metadata: Metadata = {
     title: "About Us - Eno Bassé Diamonds",
     description:
       "Eno Bassé has created quality jewelry using time-honored techniques and exceptional gemstones.",
-    url: "https://www.enobasse.com/about",
+    url: "https://enobasse.com/about",
   },
   twitter: {
     title: "About Us - Eno Bassé Diamonds",
     description: "Meet the artisan behind our quality creations.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/about",
+    canonical: "https://enobasse.com/about",
   },
 };
 
@@ -143,7 +143,7 @@ export default function AboutUsPage() {
                   the zeal, talent and qualifications required to grow her brand
                   successfully
                 </p>
-                <div className="mx-auto md:mx-0 mt-8 max-w-[200px] h-auto rounded-sm">
+                <div className="mx-auto md:mx-0 mt-8 max-w-50 h-auto rounded-sm">
                   <Image
                     src="https://res.cloudinary.com/enobasse/image/upload/v1756510657/signature_vh5lg6.webp"
                     alt="Eno Bassé founder name signature"

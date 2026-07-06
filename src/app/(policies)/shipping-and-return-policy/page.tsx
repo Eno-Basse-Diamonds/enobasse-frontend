@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "Shipping & Purchase Policy - Eno Bassé Fine Jewelry",
     description:
       "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Bassé jewelry pieces.",
-    url: "https://www.enobasse.com/shipping-and-return-policy",
+    url: "https://enobasse.com/shipping-and-return-policy",
   },
   twitter: {
     title: "Shipping & Purchase Policy - Eno Bassé Fine Jewelry",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       "Learn about our final sale policy, complimentary shipping, and lifetime craftsmanship guarantee for all Eno Bassé jewelry pieces.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/shipping-and-return-policy",
+    canonical: "https://enobasse.com/shipping-and-return-policy",
   },
 };
 

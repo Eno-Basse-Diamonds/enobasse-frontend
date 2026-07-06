@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Our Blog - Eno Bassé Diamonds",
     description:
       "Where heritage craftsmanship meets modern design insights. Explore our articles on jewelry selection, care, and the art of adornment.",
-    url: "https://www.enobasse.com/blog",
+    url: "https://enobasse.com/blog",
   },
   twitter: {
     title: "Our Blog - Eno Bassé Diamonds",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       "From diamond grading to design philosophy—unpack the world of fine jewelry with our experts. #JewelryWisdom",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/blog",
+    canonical: "https://enobasse.com/blog",
   },
 };
 

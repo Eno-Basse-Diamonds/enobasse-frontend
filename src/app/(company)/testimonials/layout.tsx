@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     title: "Testimonials - Eno Bassé Diamonds",
     description:
       "Real experiences from Eno Bassé collectors. See how our custom jewelry has become part of their life stories.",
-    url: "https://www.enobasse.com/testimonials",
+    url: "https://enobasse.com/testimonials",
   },
   twitter: {
     title: "Testimonials - Eno Bassé Diamonds",
     description: "Hear from our clients about their bespoke jewelry journeys.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/testimonials",
+    canonical: "https://enobasse.com/testimonials",
   },
 };
 

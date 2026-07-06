@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Sign Up - Eno Bassé Diamonds",
     description:
       "Unlock doors to our most coveted pieces and experiences. Your invitation to the world of Eno Bassé begins here.",
-    url: "https://www.enobasse.com/sign-up",
+    url: "https://enobasse.com/sign-up",
     images: [
       {
         url: "https://res.cloudinary.com/enobasse/image/upload/v1756507385/sign-up_tfq8h3.webp",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     images: ["https://res.cloudinary.com/enobasse/image/upload/v1756507385/sign-up_tfq8h3.webp"],
   },
   alternates: {
-    canonical: "https://www.enobasse.com/sign-up",
+    canonical: "https://enobasse.com/sign-up",
   },
 };
 

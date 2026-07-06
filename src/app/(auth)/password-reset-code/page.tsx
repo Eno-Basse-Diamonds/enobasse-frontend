@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Password Reset - Eno Bassé Diamonds",
     description:
       "Protecting your jewelry collection access. Please enter the 6-digit code sent to your registered email.",
-    url: "https://www.enobasse.com/password-reset-code",
+    url: "https://enobasse.com/password-reset-code",
   },
   twitter: {
     title: "Password Reset - Eno Bassé Diamonds",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
       "For your security, we've sent a temporary access code. Never share this code.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/password-reset-code",
+    canonical: "https://enobasse.com/password-reset-code",
   },
 };
 

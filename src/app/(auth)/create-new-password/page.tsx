@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Create New Password - Eno Bassé Diamonds",
     description:
       "Create a strong new password to protect access to your jewelry collection and client profile.",
-    url: "https://www.enobasse.com/create-new-password",
+    url: "https://enobasse.com/create-new-password",
   },
   twitter: {
     title: "Create New Password - Eno Bassé Diamonds",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
       "Update your password to maintain exclusive access to your jewelry portfolio.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/create-new-password",
+    canonical: "https://enobasse.com/create-new-password",
   },
 };
 

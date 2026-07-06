@@ -7,6 +7,21 @@ import {
 import { getServerSession } from "next-auth";
 import { getCollectionWithProducts } from "@/lib/api/collections";
 import { getPreferredCurrency } from "@/lib/api/account";
+import { logger } from "@/lib/utils/logger";
+
+const DEFAULT_CURRENCY = "USD";
+
+async function resolvePreferredCurrency(
+  email: string | null | undefined,
+): Promise<string> {
+  if (!email) return DEFAULT_CURRENCY;
+  try {
+    return await getPreferredCurrency(email);
+  } catch (error) {
+    logger.error("Failed to fetch preferred currency", error);
+    return DEFAULT_CURRENCY;
+  }
+}
 
 interface CollectionLayoutProps {
   children: React.ReactNode;
@@ -20,7 +35,9 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const preferredCurrency = await resolvePreferredCurrency(
+    session?.user?.email,
+  );
   const { collection } = await getCollectionWithProducts(slug, {
     currency: preferredCurrency,
   });
@@ -51,7 +68,7 @@ export const generateMetadata = async ({
       ],
     },
     twitter: {
-      title: `${collection.name} - Eno Bassé Diamonds"`,
+      title: `${collection.name} - Eno Bassé Diamonds`,
       description: collection.description,
       images: [`${collection.image.url}`],
     },
@@ -65,7 +82,9 @@ export default async function CollectionLayout({
   const { slug } = await params;
   const queryClient = new QueryClient();
   const session = await getServerSession();
-  const preferredCurrency = await getPreferredCurrency(session?.user?.email);
+  const preferredCurrency = await resolvePreferredCurrency(
+    session?.user?.email,
+  );
   const options = { currency: preferredCurrency };
 
   await queryClient.prefetchQuery({

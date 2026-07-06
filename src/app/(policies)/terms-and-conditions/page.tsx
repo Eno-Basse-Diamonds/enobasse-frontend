@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: "Terms and Conditions - Eno Bassé Fine Diamonds",
     description:
       "Official terms of service for Eno Bassé jewelry purchases, website use, and customer agreements.",
-    url: "https://www.enobasse.com/terms-and-conditions",
+    url: "https://enobasse.com/terms-and-conditions",
   },
   twitter: {
     title: "Terms and Conditions - Eno Bassé Fine Diamonds",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
       "Understand your rights and responsibilities when purchasing Eno Bassé fine jewelry.",
   },
   alternates: {
-    canonical: "https://www.enobasse.com/terms-and-conditions",
+    canonical: "https://enobasse.com/terms-and-conditions",
   },
 };
 
