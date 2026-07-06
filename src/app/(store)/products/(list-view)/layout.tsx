@@ -11,6 +11,8 @@ import { ProductFilterOptions } from "@/lib/types/products";
 import { getProducts } from "@/lib/api/products";
 import { logger } from "@/lib/utils/logger";
 
+export const revalidate = 3600;
+
 const DEFAULT_CURRENCY = "USD";
 
 export const metadata: Metadata = {
@@ -65,6 +67,7 @@ export default async function ProductListLayout({
   await queryClient.prefetchQuery({
     queryKey: ["products", filterOptions],
     queryFn: () => getProducts(filterOptions),
+    staleTime: 60 * 1000,
   });
 
   return (

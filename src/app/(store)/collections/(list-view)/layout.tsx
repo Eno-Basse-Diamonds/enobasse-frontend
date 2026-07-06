@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-query";
 import { getCollections } from "@/lib/api/collections";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Collections",
   description:
@@ -45,6 +47,7 @@ export default async function CollectionsLayout({
   await queryClient.prefetchQuery({
     queryKey: ["collections"],
     queryFn: () => getCollections(),
+    staleTime: 60 * 1000,
   });
 
   return (

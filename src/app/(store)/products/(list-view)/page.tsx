@@ -36,24 +36,23 @@ export default function ProductsPage() {
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState<string>("featured");
   const [currentPage, setCurrentPage] = useState(1);
-  const { preferredCurrency, isHydrated } = useAccountStore();
+  const { preferredCurrency } = useAccountStore();
   const pageSize = 36;
 
-  const { data, isLoading } = useProducts(
-    {
-      page: currentPage,
-      pageSize,
-      sortBy,
-      currency: preferredCurrency,
-      metals: selectedFilters
-        .filter((f) => f.type === "metal")
-        .map((f) => f.name),
-      gemstones: selectedFilters
-        .filter((f) => f.type === "gemstone")
-        .map((f) => f.name),
-    },
-    isHydrated
-  ) as { data: ProductsResponse; isLoading: boolean };
+  const filterOptions = useMemo(() => ({
+    page: currentPage,
+    pageSize,
+    sortBy,
+    currency: preferredCurrency,
+    metals: selectedFilters
+      .filter((f) => f.type === "metal")
+      .map((f) => f.name),
+    gemstones: selectedFilters
+      .filter((f) => f.type === "gemstone")
+      .map((f) => f.name),
+  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters]);
+
+  const { data, isLoading } = useProducts(filterOptions) as { data: ProductsResponse; isLoading: boolean };
 
   const { products, meta } = data || {};
 
