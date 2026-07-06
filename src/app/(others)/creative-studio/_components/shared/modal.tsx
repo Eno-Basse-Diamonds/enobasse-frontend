@@ -44,7 +44,7 @@ export function Modal({
           bg-white shadow-xl overflow-y-auto
           fixed bottom-0 left-0 right-0 rounded-t-sm h-[70vh]
           sm:static sm:max-w-lg sm:w-full sm:h-auto sm:max-h-[90vh]
-          sm:animate-none creative-studio-animate-slide-up
+          sm:animate-none animate-slide-up
           ${className}
         `}
       >

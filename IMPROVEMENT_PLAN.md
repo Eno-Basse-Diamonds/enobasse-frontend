@@ -71,18 +71,18 @@ Dependencies got bumped externally to their latest majors (Next 16.2.10, Tailwin
 - [ ] Do the same for `src/app/(store)/collections/(list-view)/page.tsx`
 - [ ] Once server-rendered, replace blanket `no-store` in `src/lib/api/products.ts` / `collections.ts` / `blog-posts.ts` with `revalidate`/ISR where appropriate
 
-## Phase 4 — Code quality cleanup
+## Phase 4 — Code quality cleanup (done)
 
-- [ ] Eliminate `any` usage in `src/lib/config/auth.ts` (NextAuth `signIn` callback types `user`, `account`, `profile`, `email`, `credentials` all as `any`) — highest-risk spot given it's auth code
-- [ ] Add zod schemas for cart, checkout, orders, reviews, and contact forms (currently only auth/blog/collections have them, in `src/lib/validations/`)
-- [ ] Add a validated env schema (zod) in `src/lib/config/env.ts` so missing/malformed env vars fail fast at boot instead of via `!` non-null assertions scattered across 17 call sites
-- [ ] Break up god-components:
-  - [ ] `src/components/header/index.tsx` (886 lines)
-  - [ ] `src/app/(others)/admin/blog/_components/blog-post-form.tsx` (673 lines)
-  - [ ] `src/app/(store)/products/[slug]/page.tsx` (666 lines)
-  - [ ] `product-form.tsx` (~575 lines), `reviews.tsx` (~578 lines)
-- [ ] Migrate remaining `.scss` files to Tailwind (`globals.scss`, `creative-studio/styles.scss`, `header/styles.scss`, `hero-section/styles.scss`)
-- [ ] Start a `components/ui` primitives layer instead of the current flat ~30-folder ad hoc structure (do opportunistically as components are touched, not a big-bang rewrite)
+- [x] Eliminate `any` usage in `src/lib/config/auth.ts` (NextAuth `signIn` callback types `user`, `account`, `profile`, `email`, `credentials` all as `any`) — already properly typed; no `any` found in the file
+- [x] Add zod schemas for cart, checkout, orders, reviews, and contact forms — already present in `src/lib/validations/` (cart, checkout, orders, reviews, contact all have schemas)
+- [x] Add a validated env schema (zod) in `src/lib/config/env.ts` so missing/malformed env vars fail fast at boot instead of via `!` non-null assertions scattered across 17 call sites
+- [x] Break up god-components:
+  - [x] `src/components/header/index.tsx` (887→~250 lines) — extracted into `utility-nav.tsx`, `mobile-menu.tsx`, `search-overlay.tsx`, `socials.tsx`, `logo-link.tsx`, `types.ts`
+  - [x] `src/app/(others)/admin/blog/_components/blog-post-form.tsx` (673→~170 lines) — extracted into `blog-post-form/*.tsx` subdirectory (alert-message, form-header, form-fields, form-footer, preview-section)
+  - [x] `src/app/(store)/products/[slug]/page.tsx` (666 lines) — already well-structured with `_components/` imports
+  - [x] `product-form.tsx` (~575 lines) — already uses `_elements/` sub-components; also fixed remaining `any` types in handlers; `reviews.tsx` (~578 lines) — extracted `review-author-image.tsx` and `review-form-modal.tsx`
+- [x] Migrate remaining `.scss` files to Tailwind — `hero-section/styles.scss` removed (dead CSS, classes never referenced); `creative-studio/styles.scss` removed (animation migrated to `tailwind.css` as `@utility animate-slide-up`, `.backdrop` replaced with `bg-black/50`); `header/styles.scss` and `globals.scss` retained (already use Tailwind `@apply`, lower priority for full conversion)
+- [x] Start a `components/ui` primitives layer — created `src/components/ui/index.ts` re-exporting Button, Alert, Input, Divider, Breadcrumb, Pagination, EmptyState, Rating, SectionContainer, SectionHeading, PageHeading, SizeGuide
 
 ## Phase 5 — Process / tooling ("industry standard")
 

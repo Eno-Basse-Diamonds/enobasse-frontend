@@ -10,7 +10,6 @@ import { ProductDetails } from "./_components/product-details";
 import { ProductGallery } from "./_components/product-gallery";
 import { Modal } from "./_components/shared/modal";
 import { getFullMetalName } from "@/lib/utils/creative-studio";
-import "./styles.scss";
 
 export default function RingConfiguratorPage() {
   const [configuration, setConfiguration] = useState<RingConfiguration>(DEFAULT_CONFIGURATION);

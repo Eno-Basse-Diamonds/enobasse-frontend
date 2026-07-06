@@ -15,6 +15,7 @@ import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/use-products";
 import { textToSlug } from "@/lib/utils/string";
 import { useAdminCollections } from "@/lib/hooks/use-collections";
 import { getExchangeRate } from "@/lib/api/exchange-rate";
+import { Collection } from "@/lib/types/collections";
 import { MetalsGemstonesSelector } from "./_elements/metals-gemstone-selector";
 import { FormField } from "./_elements/form-field";
 import { FormTextareaField } from "./_elements/form-textarea-field";
@@ -59,7 +60,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
     category: product?.category || "Rings",
-    collections: product?.collections?.map((c: any) => c.id) || [],
+    collections: product?.collections?.map((c: Collection) => c.id) || [],
     slug: product?.slug || "",
     description: product?.description || "",
     priceRange: product?.priceRange || { min: 0, max: 0, currency: "USD" },
@@ -134,24 +135,22 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
 
-  const handleInputChange = (field: keyof ProductFormData, value: any) => {
+  const handleInputChange = (field: keyof ProductFormData, value: string | boolean | string[] | ProductFormData["metals"] | ProductFormData["gemstones"] | ProductFormData["images"] | ProductFormData["variants"]) => {
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
       if (field === "name") {
-        newData.slug = textToSlug(value);
+        newData.slug = textToSlug(value as string);
       }
       return newData;
     });
   };
 
-  const handleVariantChange = (index: number, field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      variants: prev.variants.map((variant, i) => {
+  const handleVariantChange = (index: number, field: string, value: string | number | boolean) => {
+    setFormData((prev) => {
+      const variants = prev.variants.map((variant, i) => {
         if (i !== index) return variant;
 
-        if (field === "currency" && value !== variant.currency) {
-          // Handle currency conversion
+        if (field === "currency" && typeof value === "string" && value !== variant.currency) {
           let newPrice = variant.price;
           if (variant.price > 0) {
             if (variant.currency === "USD" && value === "NGN") {
@@ -160,12 +159,13 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               newPrice = Math.ceil(variant.price / exchangeRate);
             }
           }
-          return { ...variant, [field]: value, price: newPrice };
+          return { ...variant, currency: value, price: newPrice };
         }
 
         return { ...variant, [field]: value };
-      }),
-    }));
+      });
+      return { ...prev, variants: variants as ProductFormData["variants"] };
+    });
   };
 
   const addVariant = () => {
@@ -199,7 +199,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const handleImageChange = (
     field: "images" | "variants",
     index: number,
-    value: any
+    value: Array<{ url: string; alt: string }>
   ) => {
     if (field === "images") {
       setFormData((prev) => ({

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import "./styles.scss";
 
 export const HeroSection: React.FC = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
