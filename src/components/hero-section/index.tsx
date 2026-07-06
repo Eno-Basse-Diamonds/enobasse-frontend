@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import "./styles.scss";
 
@@ -8,18 +8,24 @@ export const HeroSection: React.FC = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   return (
     <div className="hero-section relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
-      <img
+      <Image
         src="/images/hero-mobile.webp"
         alt="Hero Background"
-        className={`md:hidden absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+        fill
+        priority
+        sizes="100vw"
+        className={`md:hidden object-cover transition-opacity duration-1000 ${
           isVideoLoaded ? "opacity-0" : "opacity-100"
         }`}
       />
 
-      <img
+      <Image
         src="/images/hero.webp"
         alt="Hero Background"
-        className={`hidden md:block absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+        fill
+        priority
+        sizes="100vw"
+        className={`hidden md:block object-cover transition-opacity duration-1000 ${
           isVideoLoaded ? "opacity-0" : "opacity-100"
         }`}
       />
@@ -35,7 +41,6 @@ export const HeroSection: React.FC = () => {
         }`}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
-        <source src="/videos/hero.mov" type="video/quicktime" />
         <source src="/videos/hero.webm" type="video/webm" />
         Your browser does not support the video tag.
       </video>

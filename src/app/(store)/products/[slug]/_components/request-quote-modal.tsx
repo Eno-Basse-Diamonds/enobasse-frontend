@@ -10,6 +10,7 @@ import { Button } from "@/components/button";
 import { Product } from "@/lib/types/products";
 import { API_URL } from "@/lib/utils/constants/api-url";
 import { useAlertStore } from "@/lib/store/alert";
+import { logger } from "@/lib/utils/logger";
 
 interface RequestQuoteModalProps {
   isOpen: boolean;
@@ -106,7 +107,7 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
       showAlert("success", "Quote request sent successfully!");
       onClose();
     } catch (error) {
-      console.error("Error submitting quote request:", error);
+      logger.error("Error submitting quote request:", error);
       showAlert("error", "Failed to send quote request. Please try again.");
     } finally {
       setLoading(false);

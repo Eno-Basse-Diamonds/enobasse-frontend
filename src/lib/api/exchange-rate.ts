@@ -1,3 +1,5 @@
+import { logger } from "@/lib/utils/logger";
+
 export async function convertCurrency(
   amount: number,
   from: string,
@@ -15,7 +17,7 @@ export async function convertCurrency(
     const data = await response.json();
     return data.convertedAmount;
   } catch (error) {
-    console.error("Error converting currency:", error);
+    logger.error("Error converting currency:", error);
     const fallbackRate = 1540;
     if (from === "USD" && to === "NGN") {
       return Math.ceil(amount * fallbackRate);
@@ -35,7 +37,7 @@ export async function getExchangeRate(): Promise<number> {
     const data = await response.json();
     return data.exchangeRate;
   } catch (error) {
-    console.error("Error fetching exchange rate:", error);
+    logger.error("Error fetching exchange rate:", error);
     return 1540; // Fallback rate
   }
 }

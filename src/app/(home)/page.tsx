@@ -198,7 +198,6 @@ export default async function HomePage() {
           href: "/maintenance-repairs",
         }}
         videoSrcMP4="/videos/maintenance.mp4"
-        videoSrcMOV="/videos/maintenance.mov"
         videoSrcWEBM="/videos/maintenance.webm"
       />
 

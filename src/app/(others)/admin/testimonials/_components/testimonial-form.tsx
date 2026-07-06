@@ -6,6 +6,7 @@ import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { Testimonial, CreateTestimonialData } from "@/lib/types/testimonial";
+import { logger } from "@/lib/utils/logger";
 import {
   useCreateTestimonial,
   useUpdateTestimonial,
@@ -92,7 +93,7 @@ export function TestimonialForm({
             setTimeout(() => onClose(), 1500);
           },
           onError: (error) => {
-            console.error("Update error:", error);
+            logger.error("Update error:", error);
           },
         }
       );
@@ -102,7 +103,7 @@ export function TestimonialForm({
           setTimeout(() => onClose(), 1500);
         },
         onError: (error) => {
-          console.error("Create error:", error);
+          logger.error("Create error:", error);
         },
       });
     }

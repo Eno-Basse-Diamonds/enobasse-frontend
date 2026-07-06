@@ -6,7 +6,6 @@ interface ServicesSectionProps {
   description: string[];
   button: { text: string; href: string };
   videoSrcMP4: string;
-  videoSrcMOV: string;
   videoSrcWEBM: string;
 }
 
@@ -15,7 +14,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   description,
   button,
   videoSrcMP4,
-  videoSrcMOV,
   videoSrcWEBM,
 }) => {
   return (
@@ -30,7 +28,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           className="rounded-sm w-full h-full object-cover"
         >
           <source src={videoSrcMP4} type="video/mp4" />
-          <source src={videoSrcMOV} type="video/quicktime" />
           <source src={videoSrcWEBM} type="video/webm" />
           Your browser does not support the video tag.
         </video>

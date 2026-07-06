@@ -8,6 +8,7 @@ import { ItemDetailsForm } from "./_components/item-details-form";
 import { ServiceDetailsForm } from "./_components/service-details-form";
 import { Alert } from "@/components/alert";
 import { sendMaintenanceRepairsMessage } from "@/lib/api/contact";
+import { logger } from "@/lib/utils/logger";
 import { useMaintenanceRepairsStore } from "@/lib/store/maintenance-repairs";
 
 interface FormErrors {
@@ -141,7 +142,7 @@ export default function MaintenanceRepairsForm() {
       resetForm();
       setErrors({});
     } catch (error) {
-      console.error("Error submitting form:", error);
+      logger.error("Error submitting form:", error);
       setAlertMessage({
         type: 'error',
         message: 'Failed to submit the form. Please try again or contact support if the problem persists.'

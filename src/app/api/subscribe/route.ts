@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { logger } from "@/lib/utils/logger";
 
 const EmailSchema = z
   .string()
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
 
     if (!API_KEY || !API_SERVER || !AUDIENCE_ID) {
-      console.error(
+      logger.error(
         "Mailchimp environment variables are not properly configured",
       );
       return NextResponse.json(

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendAbandonedCartReminders } from "@/lib/api/cart";
+import { logger } from "@/lib/utils/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
       count: count,
     });
   } catch (error) {
-    console.error("Failed to send abandoned cart reminders:", error);
+    logger.error("Failed to send abandoned cart reminders:", error);
     return NextResponse.json(
       {
         message: "Internal server error",

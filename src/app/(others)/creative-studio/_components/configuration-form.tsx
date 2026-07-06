@@ -18,6 +18,7 @@ import { MobileConfigurationTabs } from "./mobile-configuration-tabs";
 import { RingSizeSelection } from "./ring-size-selection";
 import { useState } from "react";
 import { sendCreativeStudioRequest } from "@/lib/api/creative-studio";
+import { logger } from "@/lib/utils/logger";
 import { Modal } from "./shared/modal";
 
 interface ConfigurationFormProps {
@@ -191,7 +192,7 @@ function RequestQuoteButton({
       setMessage("");
       setOpen(false);
     } catch (err) {
-      console.error("Error sending ring request", err);
+      logger.error("Error sending ring request", err);
       setError("Failed to submit request. Please try again.");
     } finally {
       setIsSubmitting(false);

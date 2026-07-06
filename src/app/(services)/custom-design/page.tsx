@@ -8,6 +8,7 @@ import { DesignSpecsForm } from "./_components/design-specs-form";
 import { FinalDetailsForm } from "./_components/final-details-form";
 import { NavigationButtons } from "./_components/navigation-buttons";
 import { Alert } from "@/components/alert";
+import { logger } from "@/lib/utils/logger";
 import { sendCustomDesignMessage } from "@/lib/api/contact";
 import { useCustomDesignStore } from "@/lib/store/custom-design";
 
@@ -180,7 +181,7 @@ export default function CustomDesignPage() {
       resetForm();
       setErrors({});
     } catch (error) {
-      console.error("Error submitting form:", error);
+      logger.error("Error submitting form:", error);
       setAlertType("error");
       setAlertMessage("There was an error submitting your request. Please try again later.");
       setShowAlert(true);

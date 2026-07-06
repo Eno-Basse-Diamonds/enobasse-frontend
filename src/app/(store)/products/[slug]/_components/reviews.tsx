@@ -16,6 +16,7 @@ import { StarIcon } from "@/components/icons/star";
 import { Button } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { CloseIcon } from "@/components/icons/close";
+import { logger } from "@/lib/utils/logger";
 
 interface ReviewsProps {
   reviews: Review[];
@@ -60,7 +61,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
       setIsModalOpen(false);
       setAlertState({ visible: true, type: "success", message: "Review submitted successfully!" });
     } catch (error) {
-      console.error("Failed to submit review:", error);
+      logger.error("Failed to submit review:", error);
       setAlertState({ visible: true, type: "error", message: "Failed to submit review. Please try again." });
     }
   };

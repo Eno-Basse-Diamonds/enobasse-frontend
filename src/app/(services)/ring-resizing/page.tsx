@@ -8,6 +8,7 @@ import { RingDetailsForm } from "./_components/ring-details-form";
 import { AdditionalInfoForm } from "./_components/additional-info-form";
 import { Alert } from "@/components/alert";
 import { useRingResizingStore } from "@/lib/store/ring-resizing";
+import { logger } from "@/lib/utils/logger";
 import { sendRingResizingMessage } from "@/lib/api/contact";
 
 interface FormErrors {
@@ -221,7 +222,7 @@ export default function RingResizingPage() {
       resetForm();
       setErrors({});
     } catch (error) {
-      console.error("Error submitting form:", error);
+      logger.error("Error submitting form:", error);
       setAlertType("error");
       setAlertMessage(
         "There was an error submitting your request. Please try again later."

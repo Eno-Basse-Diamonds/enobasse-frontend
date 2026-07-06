@@ -6,6 +6,7 @@ import { createOrder } from "@/lib/api/orders";
 import { convertCurrency } from "@/lib/api/exchange-rate";
 import { trackPurchase } from "@/lib/analytics/gtag";
 import { usePaystackPayment } from "./use-paystack-payment";
+import { logger } from "@/lib/utils/logger";
 
 export type PaymentMethodType = "paystack" | "bank_transfer";
 
@@ -110,7 +111,7 @@ export function useCheckout({
         }, 6000);
       }
     } catch (err) {
-      console.error(`Order creation failed after payment (${source}):`, err);
+      logger.error(`Order creation failed after payment (${source}):`, err);
 
       // Reset blocking refs to allow retry
       orderProcessedRef.current = null;

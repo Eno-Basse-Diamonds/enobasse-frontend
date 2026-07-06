@@ -13,7 +13,6 @@ const OPTIONS = [
 ];
 
 export function DiamondTypeSelection({ activeTab, selectedDiamondType, setSelectedDiamondType }: DiamondTypeSelectionProps) {
-  console.log()
   return (
     <SectionContainer activeTab={activeTab} tabType="diamond" title="Diamond Type">
       <div className="space-y-3">

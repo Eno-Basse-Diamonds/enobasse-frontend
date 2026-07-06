@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/utils/logger";
 
 const cache = new Map<string, { rate: number; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000;
@@ -81,7 +82,7 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Exchange rate fetch error:", error);
+    logger.error("Exchange rate fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch exchange rate" },
       { status: 500 },

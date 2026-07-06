@@ -7,8 +7,10 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "**" }],
-    formats: ["image/webp"],
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
+    formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
   },
   async redirects() {

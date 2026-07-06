@@ -13,6 +13,7 @@ import { EmptyState } from "../empty-state";
 import { ChevronRightIcon, SearchSlashIcon } from "lucide-react";
 import { useWishlistStore } from "@/lib/store/wishlist";
 import { useCartStore } from "@/lib/store/cart";
+import { logger } from "@/lib/utils/logger";
 import { useSession } from "next-auth/react";
 import { useAccountStore } from "@/lib/store/account";
 import { useDebounce } from "@/lib/hooks/use-debounce";
@@ -175,7 +176,7 @@ const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
         const userData = await getCurrentUser();
         setUser(userData);
       } catch (error) {
-        console.error("Error fetching user:", error);
+        logger.error("Error fetching user:", error);
       } finally {
         setIsLoading(false);
       }
