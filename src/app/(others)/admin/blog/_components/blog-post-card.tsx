@@ -62,7 +62,13 @@ export const BlogPostCard = memo(function BlogPostCard({
             </span>
             <span className="flex items-center">
               <Calendar className="w-4 h-4 mr-1" />
-              {new Date(post.createdAt).toLocaleDateString()}
+              {(() => {
+                const date = new Date(post.createdAt);
+                const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+                const day = String(date.getUTCDate()).padStart(2, "0");
+                const year = date.getUTCFullYear();
+                return `${month}/${day}/${year}`;
+              })()}
             </span>
           </div>
           <div className="flex space-x-3 w-full">

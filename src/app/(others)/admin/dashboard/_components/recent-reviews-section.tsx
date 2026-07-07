@@ -92,7 +92,13 @@ export const RecentReviewsSection = ({
                         by {review.authorName}
                       </p>
                       <p className="text-xs text-gray-400">
-                        {new Date(review.createdAt).toLocaleDateString()}
+                        {(() => {
+                          const date = new Date(review.createdAt);
+                          const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+                          const day = String(date.getUTCDate()).padStart(2, "0");
+                          const year = date.getUTCFullYear();
+                          return `${month}/${day}/${year}`;
+                        })()}
                       </p>
                     </div>
                   </div>

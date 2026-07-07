@@ -38,7 +38,13 @@ export const PreviewSection = ({
         </span>
         <span className="flex items-center">
           <Calendar className="w-4 h-4 mr-2" />
-          {new Date().toLocaleDateString()}
+          {(() => {
+            const date = new Date();
+            const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+            const day = String(date.getUTCDate()).padStart(2, "0");
+            const year = date.getUTCFullYear();
+            return `${month}/${day}/${year}`;
+          })()}
         </span>
         <span
           className={`px-3 py-1 text-xs font-semibold ${

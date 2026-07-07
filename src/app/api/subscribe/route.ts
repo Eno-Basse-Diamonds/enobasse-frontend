@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { logger } from "@/lib/utils/logger";
+import { API_URL } from "@/lib/utils/constants/api-url";
 
 const EmailSchema = z
   .string()
@@ -20,37 +21,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const API_KEY = process.env.MAILCHIMP_API_KEY;
-    const API_SERVER = process.env.MAILCHIMP_API_SERVER;
-    const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
-
-    if (!API_KEY || !API_SERVER || !AUDIENCE_ID) {
-      logger.error(
-        "Mailchimp environment variables are not properly configured",
-      );
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 },
-      );
-    }
-
-    const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
-
-    const data = {
-      email_address: emailValidation.data,
-      status: "subscribed",
-    };
-
-    const options = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `api_key ${API_KEY}`,
-      },
-    };
-
     try {
-      const response = await axios.post(url, data, options);
-      if (response.status === 200) {
+      const response = await axios.post(`${API_URL}/newsletter/subscribe`, {
+        email: emailValidation.data,
+      });
+
+      if (response.status === 201) {
         return NextResponse.json(
           { message: "Awesome! You have successfully subscribed!" },
           { status: 201 },
@@ -58,18 +34,20 @@ export async function POST(request: NextRequest) {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.data.title === "Member Exists") {
+        if (error.response?.status === 409) {
           return NextResponse.json(
             { error: "You are already subscribed to our newsletter!" },
             { status: 409 },
           );
         }
+        logger.error("Backend newsletter subscription error details:", error.response?.data);
       }
 
+      logger.error("Error subscribing to newsletter on backend:", error);
       return NextResponse.json(
         {
           error:
-            "Oops! There was an error subscribing you to the newsletter. Please email us at info@enobasse.com and we'll add you to the list.",
+            "Oops! There was an error subscribing you to the newsletter. Please try again later.",
         },
         { status: 500 },
       );

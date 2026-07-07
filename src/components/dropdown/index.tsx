@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import { useAccountStore } from "@/lib/store/account";
 import { useCartStore } from "@/lib/store/cart";
 import { useWishlistStore } from "@/lib/store/wishlist";
@@ -231,15 +230,12 @@ export const CurrencyDropdown: React.FC = () => {
         className="flex items-center space-x-1 px-1 py-1 text-sm font-medium text-gray-700 hover:text-gray-900"
       >
         <span className="flex flex-row items-center mr-2">
-          <Image
+          <img
             src={
               currencies.find((c) => c.value === preferredCurrency)?.flag || ""
             }
             alt={`${preferredCurrency} Flag`}
-            height={50}
-            width={100}
             className="h-4 w-auto mr-2"
-            loading="eager"
           />{" "}
           {preferredCurrency}
         </span>
@@ -258,31 +254,32 @@ export const CurrencyDropdown: React.FC = () => {
         </svg>
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-[7.2rem] bg-white shadow-md border border-gray-200 z-10">
-          {currencies.map((currency) => (
-            <button
-              key={currency.value}
-              onClick={() => handleCurrencyChange(currency.value)}
-              className={`flex items-center w-full text-left px-4 py-2 text-sm ${
-                preferredCurrency === currency.value
-                  ? "bg-gray-100"
-                  : "text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              <Image
-                src={currency.flag}
-                alt={`${currency.label} Flag`}
-                height={50}
-                width={100}
-                className="h-4 w-auto mr-2"
-                loading="eager"
-              />
-              {currency.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <div
+        className={`absolute right-0 mt-2 w-[7.2rem] bg-white shadow-md border border-gray-200 z-10 transition-all duration-200 ease-out ${
+          isOpen
+            ? "opacity-100 translate-y-0 pointer-events-auto visible"
+            : "opacity-0 -translate-y-1 pointer-events-none invisible"
+        }`}
+      >
+        {currencies.map((currency) => (
+          <button
+            key={currency.value}
+            onClick={() => handleCurrencyChange(currency.value)}
+            className={`flex items-center w-full text-left px-4 py-2 text-sm ${
+              preferredCurrency === currency.value
+                ? "bg-gray-100"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            <img
+              src={currency.flag}
+              alt={`${currency.label} Flag`}
+              className="h-4 w-auto mr-2"
+            />
+            {currency.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

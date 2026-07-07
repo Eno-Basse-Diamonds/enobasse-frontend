@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Truck,
   Star,
+  Mail,
 } from "lucide-react";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
 import { usePathname } from "next/navigation";
@@ -64,6 +65,12 @@ export default function AdminLayout({
       label: "Reviews",
       href: "/admin/reviews",
       active: pathname === "/admin/reviews",
+    },
+    {
+      icon: Mail,
+      label: "Newsletter",
+      href: "/admin/newsletter",
+      active: pathname === "/admin/newsletter",
     },
     {
       icon: Users,

@@ -76,7 +76,7 @@ export const PrivacyConsent = () => {
 
               <button
                 onClick={handleNecessaryOnly}
-                className="rounded-sm px-4 py-2 border border-white text-white font-medium text-sm tracking-wide sm:flex-1 hover:bg-white hover:bg-opacity-10 transition-all duration-200"
+                className="rounded-sm px-4 py-2 border border-white text-white font-medium text-sm tracking-wide sm:flex-1 hover:bg-white/10 hover:text-primary-500 transition-all duration-200"
               >
                 NECESSARY COOKIES ONLY
               </button>

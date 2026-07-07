@@ -4,7 +4,7 @@ import { ReactNode, FormEvent, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession, getSession } from "next-auth/react";
 import {
   handleChangePassword,
   handleRequestResetPassword,
@@ -117,7 +117,13 @@ export default function AuthSection({
       } else if (result?.ok) {
         setIsAuthenticated(true);
         setAccount({ email: formData.email });
-        router.push("/account");
+        
+        const updatedSession = await getSession();
+        if (updatedSession?.user?.isAdmin) {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/account");
+        }
       }
     },
     "forgot-password": async (formData) => {

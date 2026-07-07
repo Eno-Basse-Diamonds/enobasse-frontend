@@ -121,7 +121,7 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out p-4 md:p-0"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out p-4 md:p-0"
       initial="hidden"
       animate="visible"
       exit="hidden"

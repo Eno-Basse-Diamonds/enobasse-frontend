@@ -137,7 +137,7 @@ export const ContactForm: React.FC = () => {
       </form>
 
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[99999] backdrop-blur-sm">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[99999] backdrop-blur-sm">
           <div className="rounded-sm bg-white p-6 max-w-md w-full">
             <div className="text-center">
               <CircleCheck

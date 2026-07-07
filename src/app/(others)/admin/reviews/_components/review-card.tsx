@@ -123,7 +123,13 @@ export const ReviewCard = memo(function ReviewCard({
           <div className="flex items-center justify-between text-sm text-primary-300 mb-4">
             <span className="flex items-center">
               <Calendar className="w-4 h-4 mr-1" />
-              {new Date(review.createdAt).toLocaleDateString()}
+              {(() => {
+                const date = new Date(review.createdAt);
+                const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+                const day = String(date.getUTCDate()).padStart(2, "0");
+                const year = date.getUTCFullYear();
+                return `${month}/${day}/${year}`;
+              })()}
             </span>
           </div>
         </div>

@@ -156,7 +156,7 @@ export default async function HomePage() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <SectionContainer
           id="blog"
-          className="bg-[#D1A559] bg-opacity-20 px-4 lg:px-8 py-8 lg:py-16"
+          className="bg-[#D1A559]/20 px-4 lg:px-8 py-8 lg:py-16"
         >
           <BlogHeader />
           <BlogContent />
