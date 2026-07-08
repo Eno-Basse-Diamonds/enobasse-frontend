@@ -49,25 +49,11 @@ export interface CacheStats {
   oldestEntry: number | null;
 }
 
-export interface ThreeDProperties {
-  position?: [number, number, number];
-  rotation?: [number, number, number];
-  scale?: number | [number, number, number];
-}
-
 export interface MetalMaterial {
   color: string;
   metalness: number;
   roughness: number;
 }
-
-export type Shank3DProperties =
-  | ThreeDProperties
-  | {
-      [headStyle: string]:
-        | ThreeDProperties
-        | { [gemstoneShape: string]: ThreeDProperties };
-    };
 
 export type GemstoneShape =
   | "round"
@@ -82,11 +68,20 @@ export type GemstoneShape =
   | "cushion";
 export type HeadStyle =
   | "4-prong-nouveau"
+  | "6-prong-diamond"
+  | "6-prong-nouveau"
+  | "classic-basket"
   | "classic-bezel"
   | "classic-halo"
-  | "hidden-halo"
+  | "clustered-diamond"
+  | "diamond-basket"
+  | "diamond-tulip"
   | "dual-halo"
-  | "three-stone";
+  | "fancy-halo"
+  | "floral-halo"
+  | "hidden-halo"
+  | "surprise-diamond"
+  | "vintage-trefoil";
 export type ShankStyle =
   | "solitaire"
   | "knife-edge-solitaire"
@@ -94,7 +89,15 @@ export type ShankStyle =
   | "french-pave"
   | "cathedral-pave"
   | "baguette-channel"
-  | "twist-pave";
+  | "twist-pave"
+  | "alternating-baguette"
+  | "alternating-marquise"
+  | "floating-station"
+  | "floral-bypass"
+  | "knife-edge-pave"
+  | "round-channel"
+  | "three-stone"
+  | "triple-row-pave";
 export type MetalType = "white-gold" | "yellow-gold" | "rose-gold" | "platinum";
 export type Karat = "14k" | "18k";
 export type TabType = "diamond" | "head" | "shank" | "metal" | "engraving";

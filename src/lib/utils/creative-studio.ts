@@ -1,14 +1,5 @@
-import type {
-  RingConfiguration,
-  ThreeDProperties,
-} from "../types/creative-studio";
-import {
-  METAL_TYPES,
-  KARATS,
-  HEAD_STYLES,
-  SHANK_STYLES,
-  SHANK_3D_PROPERTIES,
-} from "./constants/creative-studio";
+import type { RingConfiguration } from "../types/creative-studio";
+import { METAL_TYPES, KARATS, HEAD_STYLES, SHANK_STYLES } from "./constants/creative-studio";
 
 export const createConfigKey = (
   gemstoneShape: string,
@@ -64,20 +55,30 @@ export const validateConfiguration = (config: RingConfiguration): boolean => {
   );
 };
 
+// Asset folder/file names don't always match the style ids used in the UI.
+const SHANK_FOLDER_ALIASES: Record<string, string> = {
+  solitaire: "solitare",
+  "alternating-baguette": "alterating-baguette",
+};
+
 export const getModelPath = (
   type: "gemstone" | "head" | "shank",
   id: string,
   gemstoneShape?: string,
 ): string => {
-  const basePath = "/3d-models";
+  const basePath = "/models";
 
   switch (type) {
     case "gemstone":
-      return `${basePath}/Gemstone/${id.toUpperCase()}.glb`;
-    case "head":
-      return `${basePath}/Head/${gemstoneShape?.toUpperCase()}/${id.toUpperCase()}.glb`;
-    case "shank":
-      return `${basePath}/Shank/${id.toUpperCase()}.glb`;
+      return `${basePath}/gemstones/${id.toLowerCase()}.gltf`;
+    case "head": {
+      const shape = (gemstoneShape || "").toLowerCase();
+      return `${basePath}/head/${id}/${shape}.gltf`;
+    }
+    case "shank": {
+      const folder = SHANK_FOLDER_ALIASES[id] || id;
+      return `${basePath}/shank/${folder}.gltf`;
+    }
     default:
       return "";
   }
@@ -94,44 +95,3 @@ export const debounce = <T extends (...args: any[]) => void>(
   };
 };
 
-export const getShankProperties = (
-  shankStyle: string,
-  headStyle?: string,
-): ThreeDProperties => {
-  const shank = shankStyle.toUpperCase();
-  const properties = SHANK_3D_PROPERTIES[shank];
-
-  if (!properties) {
-    return {
-      position: [0, 0, 0],
-      rotation: [0, 0, 0],
-      scale: 1,
-    };
-  }
-
-  const isSimpleProperties =
-    "position" in properties ||
-    "rotation" in properties ||
-    "scale" in properties;
-
-  if (isSimpleProperties) {
-    return properties as ThreeDProperties;
-  }
-
-  const nestedProperties = properties as Record<string, ThreeDProperties>;
-  const head = headStyle?.toUpperCase();
-
-  if (head && nestedProperties[head]) {
-    return nestedProperties[head];
-  }
-
-  if (nestedProperties.default) {
-    return nestedProperties.default;
-  }
-
-  return {
-    position: [0, 0, 0],
-    rotation: [0, 0, 0],
-    scale: 1,
-  };
-};

@@ -4,8 +4,6 @@ import type {
   KaratOption,
   FontOption,
   RingConfiguration,
-  ThreeDProperties,
-  Shank3DProperties,
 } from "../../types/creative-studio";
 
 export const GEMSTONE_SHAPES: Option[] = [
@@ -124,12 +122,16 @@ export const HEAD_STYLES: Option[] = [
     image:
       "https://res.cloudinary.com/enobasse/image/upload/v1758110909/dual-halo_ofeg6s.png",
   },
-  {
-    id: "three-stone",
-    name: "Three Stone",
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1758110906/6-prong-nouveau_bkwxwe.png",
-  },
+  { id: "6-prong-diamond", name: "6 Prong Diamond", image: "" },
+  { id: "6-prong-nouveau", name: "6 Prong Nouveau", image: "" },
+  { id: "classic-basket", name: "Classic Basket", image: "" },
+  { id: "clustered-diamond", name: "Clustered Diamond", image: "" },
+  { id: "diamond-basket", name: "Diamond Basket", image: "" },
+  { id: "diamond-tulip", name: "Diamond Tulip", image: "" },
+  { id: "fancy-halo", name: "Fancy Halo", image: "" },
+  { id: "floral-halo", name: "Floral Halo", image: "" },
+  { id: "surprise-diamond", name: "Surprise Diamond", image: "" },
+  { id: "vintage-trefoil", name: "Vintage Trefoil", image: "" },
 ];
 
 export const SHANK_STYLES: Option[] = [
@@ -175,6 +177,14 @@ export const SHANK_STYLES: Option[] = [
     image:
       "https://res.cloudinary.com/enobasse/image/upload/v1758289228/twist-pave_b2pz5e.png",
   },
+  { id: "alternating-baguette", name: "Alternating Baguette", image: "" },
+  { id: "alternating-marquise", name: "Alternating Marquise", image: "" },
+  { id: "floating-station", name: "Floating Station", image: "" },
+  { id: "floral-bypass", name: "Floral Bypass", image: "" },
+  { id: "knife-edge-pave", name: "Knife Edge Pavé", image: "" },
+  { id: "round-channel", name: "Round Channel", image: "" },
+  { id: "three-stone", name: "Three Stone", image: "" },
+  { id: "triple-row-pave", name: "Triple Row Pavé", image: "" },
 ];
 
 export const METAL_TYPES: MetalOption[] = [
@@ -198,56 +208,154 @@ export const ENGRAVING_FONTS: FontOption[] = [
   { name: "Dancing Script", fontFamily: '"Dancing Script", cursive' },
 ];
 
-export const HEAD_STYLES_BY_GEMSTONE: Record<string, string[]> = {
-  round: [
-    "4-prong-nouveau",
-    "classic-halo",
-    "hidden-halo",
-    "dual-halo",
-    "classic-bezel",
-    "three-stone",
-  ],
-  princess: ["4-prong-nouveau", "classic-bezel", "three-stone"],
-  radiant: ["4-prong-nouveau", "classic-bezel"],
-  emerald: ["4-prong-nouveau", "classic-bezel"],
-  marquise: ["4-prong-nouveau", "classic-bezel"],
-  oval: ["4-prong-nouveau", "classic-bezel", "three-stone"],
-  pear: ["4-prong-nouveau", "classic-bezel"],
-  heart: ["4-prong-nouveau", "classic-bezel"],
-  asscher: ["4-prong-nouveau", "classic-bezel"],
-  cushion: ["4-prong-nouveau", "classic-bezel"],
-};
-
+// Both maps below are derived directly from which gemstone-shape files
+// exist in each /models/head/<style> folder — not every head style
+// supports every shape (e.g. only 6-prong settings exist for marquise
+// and pear; only a handful of styles ship a heart-cut variant).
 export const GEMSTONES_BY_HEAD_STYLE: Record<string, string[]> = {
   "4-prong-nouveau": [
-    "round",
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "oval",
     "princess",
     "radiant",
+    "round",
+  ],
+  "6-prong-diamond": ["marquise", "oval", "pear", "round"],
+  "6-prong-nouveau": ["marquise", "oval", "pear", "round"],
+  "classic-basket": [
+    "asscher",
+    "cushion",
     "emerald",
     "marquise",
     "oval",
     "pear",
-    "heart",
-    "asscher",
-    "cushion",
+    "princess",
+    "radiant",
+    "round",
   ],
-  "classic-halo": ["round"],
-  "hidden-halo": ["round"],
-  "dual-halo": ["round"],
   "classic-bezel": [
-    "round",
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
     "princess",
     "radiant",
+    "round",
+  ],
+  "classic-halo": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "clustered-diamond": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "diamond-basket": [
+    "asscher",
+    "cushion",
     "emerald",
     "marquise",
     "oval",
     "pear",
-    "heart",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "diamond-tulip": [
     "asscher",
     "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
   ],
-  "three-stone": ["round", "princess", "oval"],
+  "dual-halo": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "fancy-halo": ["cushion", "oval", "round"],
+  "floral-halo": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "hidden-halo": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "surprise-diamond": [
+    "asscher",
+    "cushion",
+    "emerald",
+    "heart",
+    "marquise",
+    "oval",
+    "pear",
+    "princess",
+    "radiant",
+    "round",
+  ],
+  "vintage-trefoil": ["asscher", "cushion", "oval", "round"],
 };
+
+export const HEAD_STYLES_BY_GEMSTONE: Record<string, string[]> = Object.keys(
+  GEMSTONES_BY_HEAD_STYLE,
+).reduce(
+  (byGemstone, headStyle) => {
+    GEMSTONES_BY_HEAD_STYLE[headStyle].forEach((shape) => {
+      byGemstone[shape] = [...(byGemstone[shape] || []), headStyle];
+    });
+    return byGemstone;
+  },
+  {} as Record<string, string[]>,
+);
 
 export const DEFAULT_CONFIGURATION: RingConfiguration = {
   gemstoneShape: "round",
@@ -269,185 +377,33 @@ export const METAL_MATERIALS = {
   platinum: { color: "#e5e4e2", metalness: 0.95, roughness: 0.2 },
 };
 
-export const GEMSTONE_3D_PROPERTIES: Record<string, ThreeDProperties> = {
-  ROUND: { position: [0.001, 9.5, 0.007], scale: 0.78 },
-  PRINCESS: {
-    position: [0.001, 9.2, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 0.9,
-  },
-  RADIANT: {
-    position: [0.001, 9.2, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 1.5,
-  },
-  EMERALD: {
-    position: [-0.07, 9.2, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: [0.9, 0.95, 0.85],
-  },
-  MARQUISE: {
-    position: [0.001, 8.8, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: [0.8, 0.7, 0.7],
-  },
-  OVAL: {
-    position: [0.001, 9.2, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: [0.78, 0.9, 0.78],
-  },
-  PEAR: {
-    position: [0.001, 9.2, -0.3],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 0.78,
-  },
-  HEART: {
-    position: [0.001, 9.2, -0.3],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 0.78,
-  },
-  ASSCHER: {
-    position: [0.001, 9, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 0.78,
-  },
-  CUSHION: {
-    position: [0.001, 9.2, 0.007],
-    rotation: [Math.PI / 2, 0, 0],
-    scale: 0.83,
-  },
+// The /models library rigs every shank/head asset with named socket
+// ("MainAnchor"/"ConnectionAnchor") and accent-diamond ("Decoration")
+// locator nodes, so placement is read directly off each glTF's node
+// transforms instead of hand-tuned per-combination tables. These two
+// constants are the only calibration knobs needed to reconcile the
+// gemstone library's unit scale with the metal parts' unit scale, and
+// to size the assembled ring for the existing camera/orbit setup.
+export const GEM_SCALE = 0.01;
+export const RING_SCENE_SCALE = 1000;
+
+// Accent-diamond anchors are named "<PREFIX>_SIDE_Anchor_NNN". The prefix
+// says which gemstone shape belongs at that socket; the value below maps
+// each prefix to the shape file that should be instanced there. There is
+// no baguette-cut or tapered-baguette asset in /models/gemstones, so
+// "BGT" (baguette-channel) falls back to the emerald (step-cut) shape and
+// "TPR" (three-stone's side-stone sockets) falls back to round, as the
+// closest available matches. Any other/unrecognized prefix also falls
+// back to round in ACCENT_GEM_SHAPES lookups.
+export const ACCENT_SHAPE_BY_ANCHOR_PREFIX: Record<string, string> = {
+  RND: "round",
+  BGT: "emerald",
+  MRQ: "marquise",
+  PRN: "princess",
+  PER: "pear",
 };
 
-export const SHANK_3D_PROPERTIES: Record<string, Shank3DProperties> = {
-  SOLITAIRE: { position: [0, -1.605, 0], scale: [1.21, 1.21, 1.386] },
-  "KNIFE-EDGE-SOLITAIRE": { position: [0, -1, 0], scale: 1 },
-
-  "SPLIT-RING-SOLITAIRE": {
-    default: { position: [0, -0.2, 0], scale: [1.05, 1.05, 1.286] },
-    "4-PRONG-NOUVEAU": { position: [0, -0.2, 0], scale: [1.05, 1.05, 1.286] },
-    "CLASSIC-BEZEL": { position: [0, -0.15, 0], scale: [1.08, 1.08, 1.32] },
-    "CLASSIC-HALO": { position: [0, -0.25, 0], scale: [1.12, 1.12, 1.35] },
-    "HIDDEN-HALO": { position: [0, -0.18, 0], scale: [1.06, 1.06, 1.3] },
-    "DUAL-HALO": { position: [0, -0.38, 0], scale: [1.15, 1.15, 1.38] },
-    "THREE-STONE": { position: [0, -0.22, 0], scale: [1.1, 1.1, 1.33] },
-  },
-
-  "FRENCH-PAVE": { position: [0, -1.605, 0], scale: [1.21, 1.21, 1.386] },
-  "CATHEDRAL-PAVE": { position: [0, -1, 0] },
-  "BAGUETTE-CHANNEL": { position: [0, -1.3, 0] },
-
-  "TWIST-PAVE": {
-    default: { position: [0.031, -0.3, 0], scale: 0.95 },
-    "4-PRONG-NOUVEAU": { position: [0.031, -0.3, 0], scale: 0.95 },
-    "CLASSIC-BEZEL": { position: [0.035, -0.25, 0], scale: 0.98 },
-    "CLASSIC-HALO": { position: [0.028, -1.2, 0], scale: 1.02 },
-    "HIDDEN-HALO": { position: [0.033, -0.4, 0], scale: 0.96 },
-    "DUAL-HALO": { position: [0.025, -1.2, 0], scale: 1.05 },
-    "THREE-STONE": { position: [0.03, -1, 0], scale: 1.0 },
-  },
-};
-
-export const HEAD_3D_PROPERTIES: Record<
-  string,
-  Record<string, ThreeDProperties>
-> = {
-  "4-PRONG-NOUVEAU": {
-    ROUND: { position: [0, 0.7, 0], scale: 0.95 },
-    PRINCESS: {
-      position: [0, 0, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.9,
-    },
-    RADIANT: {
-      position: [0, 0, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.9,
-    },
-    EMERALD: {
-      position: [0, 0, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.9,
-    },
-    MARQUISE: {
-      position: [0, 0.5, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.8,
-    },
-    OVAL: { position: [0, 0, 0], rotation: [Math.PI / 2, 0, 0], scale: 0.9 },
-    PEAR: { position: [0, 0, 0.4], rotation: [Math.PI / 2, 0, 0], scale: 0.9 },
-    HEART: { position: [0, 0, 0.4], rotation: [Math.PI / 2, 0, 0], scale: 0.9 },
-    ASSCHER: {
-      position: [0, 0, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.9,
-    },
-    CUSHION: {
-      position: [0, 0, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.9,
-    },
-  },
-  "CLASSIC-BEZEL": {
-    ROUND: { position: [0, 9.5, 0], rotation: [Math.PI / 2, 0, 0], scale: 0.9 },
-    PRINCESS: {
-      position: [0, 9.4, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.96,
-    },
-    RADIANT: {
-      position: [0, 9.3, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.86,
-    },
-    EMERALD: {
-      position: [0, 9.2, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: [0.95, 0.95, 0.8],
-    },
-    MARQUISE: {
-      position: [0, 8.5, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: [0.86, 0.86, 0.6],
-    },
-    OVAL: {
-      position: [0, 9, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: [0.89, 0.86, 0.8],
-    },
-    PEAR: {
-      position: [0, 9, 0.36],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: [0.9, 0.87, 0.8],
-    },
-    HEART: {
-      position: [0.099, 9, 0.37],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: [1.1, 1.1, 0.75],
-    },
-    ASSCHER: {
-      position: [0, 9.4, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.91,
-    },
-    CUSHION: {
-      position: [0, 9.5, 0],
-      rotation: [Math.PI / 2, 0, 0],
-      scale: 0.91,
-    },
-  },
-  "CLASSIC-HALO": {},
-  "HIDDEN-HALO": {},
-  "DUAL-HALO": {},
-  "THREE-STONE": {
-    ROUND: {},
-    PRINCESS: { rotation: [Math.PI / 2, 0, 0], scale: 0.9 },
-    RADIANT: {},
-    EMERALD: {},
-    MARQUISE: {},
-    OVAL: { rotation: [Math.PI / 2, 0, 0], scale: [0.9, 0.8, 0.9] },
-    PEAR: {},
-    HEART: {},
-    ASSCHER: {},
-    CUSHION: {},
-  },
-};
+// Gemstone shapes that need to be preloaded so any accent-diamond anchor
+// can be filled, regardless of which shape the user picked for the center
+// stone.
+export const ACCENT_GEM_SHAPES = ["round", "emerald", "marquise", "princess", "pear"];

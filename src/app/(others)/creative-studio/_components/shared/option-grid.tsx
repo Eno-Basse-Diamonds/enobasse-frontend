@@ -48,12 +48,21 @@ export function OptionGrid({
             disabled={isDisabled}
             title={option.name}
           >
-            <Image
-              src={option.image}
-              alt={option.name}
-              height={imageSize}
-              width={imageSize}
-            />
+            {option.image ? (
+              <Image
+                src={option.image}
+                alt={option.name}
+                height={imageSize}
+                width={imageSize}
+              />
+            ) : (
+              <div
+                className="flex items-center justify-center rounded-sm bg-gray-100 text-gray-400 text-[10px] font-medium uppercase"
+                style={{ height: imageSize, width: imageSize }}
+              >
+                {option.name.slice(0, 2)}
+              </div>
+            )}
             <p className="text-xs">{option.name}</p>
           </button>
         );

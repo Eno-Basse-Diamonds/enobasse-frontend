@@ -1,24 +1,35 @@
 "use client";
 
-import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, invalidate } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
-import { Group, Mesh, MeshStandardMaterial } from "three";
+import { BufferGeometry, Group, MeshStandardMaterial } from "three";
 import { RGBELoader } from "three-stdlib";
 import {
   useMobileDetection,
   PerformanceTier,
 } from "@/lib/hooks/use-mobile-detection";
 import {
-  GEMSTONE_3D_PROPERTIES,
+  ACCENT_GEM_SHAPES,
+  ACCENT_SHAPE_BY_ANCHOR_PREFIX,
+  GEM_SCALE,
   METAL_MATERIALS,
+  RING_SCENE_SCALE,
 } from "../../../../lib/utils/constants/creative-studio";
 import { getModelPath } from "@/lib/utils/creative-studio";
 import { RingMesh } from "./three-d-ring/ring-mesh";
 import { HeadRenderer } from "./three-d-ring/head-renderer";
 import { ShankRenderer } from "./three-d-ring/shank-renderer";
 import { useRingCapture } from "./three-d-ring/use-ring-capture";
+import {
+  findFirstMeshGeometry,
+  getAnchorTransform,
+} from "./three-d-ring/anchor-utils";
 import { GLTFResult } from "./three-d-ring/types";
+
+const ACCENT_MODEL_PATHS = ACCENT_GEM_SHAPES.map((shape) =>
+  getModelPath("gemstone", shape),
+);
 
 interface ThreeDRingProps {
   gemstoneShape: string;
@@ -60,14 +71,12 @@ export function ThreeDRing({
   const shankPath = getModelPath("shank", shankStyle);
   const shankData = useGLTF(shankPath) as GLTFResult;
 
+  // Accent-diamond anchors can call for any of a handful of shapes
+  // (see ACCENT_SHAPE_BY_ANCHOR_PREFIX), so all of them are preloaded up
+  // front — independent of the selected center gemstone shape.
+  const accentData = useGLTF(ACCENT_MODEL_PATHS) as GLTFResult[];
+
   const texture = useLoader(RGBELoader, environment);
-
-  let threeStoneSideData: GLTFResult | undefined = undefined;
-
-  if (headStyle === "three-stone") {
-    const sideHeadPath = `/3d-models/Head/${gemstoneShape.toUpperCase()}/${headStyle.toUpperCase()}.SIDE.glb`;
-    threeStoneSideData = useGLTF(sideHeadPath) as GLTFResult;
-  }
 
   useEffect(() => {
     if (gemstoneData && headData && shankData) {
@@ -107,11 +116,11 @@ export function ThreeDRing({
         headData={headData}
         gemstoneData={gemstoneData}
         shankData={shankData}
+        accentData={accentData}
         metalType={metalType}
         gemstoneShape={gemstoneShape}
         shankStyle={shankStyle}
         headStyle={headStyle}
-        threeStoneSideData={threeStoneSideData}
         texture={texture}
         sceneReady={sceneReady}
         onImagesGenerated={onImagesGenerated}
@@ -147,8 +156,8 @@ interface RotatingRingProps {
   headData: GLTFResult;
   gemstoneData: GLTFResult;
   shankData: GLTFResult;
+  accentData: GLTFResult[];
   rotationSpeed?: number;
-  threeStoneSideData?: GLTFResult;
   texture: any;
   sceneReady: boolean;
   onImagesGenerated?: (images: { src: string; alt: string }[]) => void;
@@ -163,12 +172,12 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   headData,
   gemstoneData,
   shankData,
+  accentData,
   gemstoneShape,
   metalType,
   shankStyle,
   headStyle,
   texture,
-  threeStoneSideData,
   sceneReady,
   onImagesGenerated,
   imagesReady = false,
@@ -200,8 +209,42 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     [metalType]
   );
 
-  const gemstone = gemstoneShape.toUpperCase();
-  const gemstoneProperties = GEMSTONE_3D_PROPERTIES[gemstone];
+  const gemstoneGeometry = useMemo(
+    () => findFirstMeshGeometry(gemstoneData.nodes),
+    [gemstoneData],
+  );
+
+  const accentGeometryByShape = useMemo(() => {
+    const byShape: Record<string, BufferGeometry | undefined> = {};
+    ACCENT_GEM_SHAPES.forEach((shape, index) => {
+      byShape[shape] = findFirstMeshGeometry(accentData[index].nodes);
+    });
+    return byShape;
+  }, [accentData]);
+
+  const accentGeometryByShapePrefix = useCallback(
+    (prefix: string): BufferGeometry | undefined => {
+      const shape = ACCENT_SHAPE_BY_ANCHOR_PREFIX[prefix] || "round";
+      return accentGeometryByShape[shape];
+    },
+    [accentGeometryByShape],
+  );
+
+  // The head attaches at the shank's ConnectionAnchor, and the center
+  // gemstone attaches at the head's MainAnchor — both socket transforms are
+  // authored directly on the glTF nodes, so no per-combination tuning table
+  // is needed to line pieces up.
+  const headAttachment = useMemo(
+    () => getAnchorTransform(shankData.nodes.ConnectionAnchor),
+    [shankData],
+  );
+  const gemstoneAttachment = useMemo(
+    () => getAnchorTransform(headData.nodes.MainAnchor),
+    [headData],
+  );
+  const gemstoneScale = gemstoneAttachment.scale.map(
+    (s) => s * GEM_SCALE,
+  ) as [number, number, number];
 
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
@@ -214,40 +257,45 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   });
 
   return (
-    <group ref={groupRef} dispose={null}>
-      {/* Gemstone */}
-      <RingMesh
-        geometry={
-          (gemstoneData.nodes[gemstoneShape.toUpperCase()] as Mesh)?.geometry
-        }
-        position={gemstoneProperties.position as [number, number, number]}
-        rotation={gemstoneProperties.rotation as [number, number, number]}
-        scale={gemstoneProperties.scale}
-        isGemstone
-        texture={texture}
-        performanceTier={performanceTier}
-      />
-
-      {/* Head */}
-      <HeadRenderer
-        headStyle={headStyle}
-        gemstoneShape={gemstoneShape}
-        headData={headData}
-        threeStoneSideData={threeStoneSideData}
-        metalMaterial={metalMaterial}
-        texture={texture}
-        performanceTier={performanceTier}
-      />
-
+    <group ref={groupRef} dispose={null} scale={RING_SCENE_SCALE}>
       {/* Shank */}
       <ShankRenderer
-        shankStyle={shankStyle}
-        headStyle={headStyle}
         shankData={shankData}
         metalMaterial={metalMaterial}
         texture={texture}
         performanceTier={performanceTier}
+        gemScale={GEM_SCALE}
+        accentGeometryByShapePrefix={accentGeometryByShapePrefix}
       />
+
+      <group
+        position={headAttachment.position}
+        quaternion={headAttachment.quaternion}
+      >
+        {/* Head */}
+        <HeadRenderer
+          headData={headData}
+          metalMaterial={metalMaterial}
+          texture={texture}
+          performanceTier={performanceTier}
+          gemScale={GEM_SCALE}
+          accentGeometryByShapePrefix={accentGeometryByShapePrefix}
+        />
+
+        {/* Gemstone */}
+        <group
+          position={gemstoneAttachment.position}
+          quaternion={gemstoneAttachment.quaternion}
+          scale={gemstoneScale}
+        >
+          <RingMesh
+            geometry={gemstoneGeometry}
+            isGemstone
+            texture={texture}
+            performanceTier={performanceTier}
+          />
+        </group>
+      </group>
     </group>
   );
 };
