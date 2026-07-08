@@ -30,7 +30,7 @@ export const AdminHeader: React.FC<HeaderProps> = ({ title, admin }) => {
           >
             View Website
           </Button>
-          <Link href="/admin/account" className="flex items-center space-x-3">
+          <Link href="/admin/settings" className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm font-medium">
               {initials}
             </div>

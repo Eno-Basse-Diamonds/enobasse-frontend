@@ -61,8 +61,6 @@ export default async function SitemapPage() {
         { name: "Necklaces", href: "/collections/necklaces" },
         { name: "Pendants", href: "/collections/pendants" },
         { name: "Earrings", href: "/collections/earrings" },
-        { name: "Wristwears", href: "/collections/wristwears" },
-        { name: "Bangles", href: "/collections/bangles" },
         { name: "Bracelets", href: "/collections/bracelets" },
       ],
     },

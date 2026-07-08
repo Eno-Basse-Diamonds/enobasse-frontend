@@ -53,7 +53,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/product/gold-bead-bangle/",
-        destination: "/collections/bangles",
+        destination: "/collections/bracelets",
         permanent: true,
       },
       {
@@ -83,7 +83,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/product/square-and-pear-cut-diamond-bangle/",
-        destination: "/collections/bangles",
+        destination: "/collections/bracelets",
+        permanent: true,
+      },
+      {
+        source: "/collections/bangles",
+        destination: "/collections/bracelets",
         permanent: true,
       },
 

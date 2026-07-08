@@ -44,14 +44,13 @@ export default function CollectionPage() {
   const { slug } = useParams<{ slug: string }>();
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState("featured");
-  const { preferredCurrency, isHydrated } = useAccountStore();
+  const { preferredCurrency } = useAccountStore();
 
-  const { data, isLoading } = useCollection(
+  const { data, isLoading, isError, error } = useCollection(
     slug,
     {
       currency: preferredCurrency,
     },
-    isHydrated,
   );
   const { collection, products } = data || {};
 
@@ -77,6 +76,18 @@ export default function CollectionPage() {
     return (
       <SectionContainer id="collection-products">
         <ProductsPageLoader />
+      </SectionContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <SectionContainer id="collection-error">
+        <EmptyState
+          title="Something went wrong"
+          description={error?.message || "Failed to load collection. Please try again."}
+          icon={<SearchSlashIcon />}
+        />
       </SectionContainer>
     );
   }

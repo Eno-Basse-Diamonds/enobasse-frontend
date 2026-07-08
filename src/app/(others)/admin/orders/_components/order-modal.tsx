@@ -19,6 +19,7 @@ export function OrderModal({
   const [status, setStatus] = useState(order.status);
   const [billing, setBilling] = useState(order.billingAddress);
   const [customer, setCustomer] = useState({
+    name: order.customerInfo?.name || "",
     email: order.customerInfo?.email || "",
     phone: order.customerInfo?.phone || "",
   });
@@ -69,7 +70,7 @@ export function OrderModal({
                     <div className="flex-shrink-0 w-16 h-16 relative border border-gray-200">
                       <Image
                         src={
-                          it.productVariant?.images[0].url ||
+                          it.productVariant?.images?.[0]?.url ||
                           "/placeholder-image.jpg"
                         }
                         alt={it.productVariant?.title || "Product image"}
@@ -134,6 +135,15 @@ export function OrderModal({
                   Customer Info
                 </h4>
                 <div className="space-y-3">
+                  <input
+                    type="text"
+                    value={customer?.name}
+                    onChange={(e) =>
+                      setCustomer({ ...customer, name: e.target.value })
+                    }
+                    placeholder="Name"
+                    className="w-full p-2 border border-gray-300"
+                  />
                   <input
                     type="email"
                     value={customer?.email}

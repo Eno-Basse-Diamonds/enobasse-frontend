@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { SearchSlashIcon } from "lucide-react";
 import { useTestimonials } from "@/lib/hooks/use-testimonials";
+import { EmptyState } from "@/components/empty-state";
 
 export default function TestimonialsPage() {
-  const { data, isLoading } = useTestimonials();
+  const { data, isLoading, isError, error } = useTestimonials();
   const testimonials = data || [];
 
   const getInitials = (name: string) => {
@@ -27,6 +29,18 @@ export default function TestimonialsPage() {
             <div className="h-4 bg-gray-200 w-3/4"></div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+        <EmptyState
+          title="Something went wrong"
+          description={error?.message || "Failed to load testimonials. Please try again."}
+          icon={<SearchSlashIcon />}
+        />
       </div>
     );
   }

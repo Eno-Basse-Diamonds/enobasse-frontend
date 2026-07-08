@@ -37,7 +37,6 @@ export const DesignSpecsForm = ({
     "Earrings",
     "Bracelet",
     "Pendant",
-    "Bangles",
   ];
 
   const metalTypes = [

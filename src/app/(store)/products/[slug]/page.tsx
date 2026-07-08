@@ -9,7 +9,7 @@ import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
 import { ImageGallery } from "./_components/image-gallery";
 import { ProductDetails } from "./_components/product-details";
 import { Reviews } from "./_components/reviews";
-import { Heart } from "lucide-react";
+import { Heart, SearchSlashIcon } from "lucide-react";
 import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
 import { calculateAverageRating } from "@/lib/utils/reviews";
 import { useWishlistStore } from "@/lib/store/wishlist";
@@ -22,6 +22,7 @@ import { useAlertStore } from "@/lib/store/alert";
 import { Button } from "@/components/button";
 import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
 import { Divider } from "@/components/divider";
+import { EmptyState } from "@/components/empty-state";
 import { ShareDropdown } from "@/components/dropdown";
 import { WishlistIcon } from "@/components/icons/wishlist";
 import { ProductDetailPageLoader } from "@/components/loaders/products";
@@ -47,7 +48,7 @@ import {
 
 export default function ProductPage() {
   const router = useRouter();
-  const { preferredCurrency, isHydrated } = useAccountStore();
+  const { preferredCurrency } = useAccountStore();
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -57,14 +58,13 @@ export default function ProductPage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   const { slug } = useParams<{ slug: string }>();
-  const { data: product, isLoading: productLoading } = useProduct(
+  const { data: product, isLoading: productLoading, isError: productError } = useProduct(
     slug,
     preferredCurrency,
-    isHydrated,
   );
 
   const { data: relatedProducts, isLoading: relatedLoading } =
-    useRelatedProducts(slug, 4, preferredCurrency, isHydrated);
+    useRelatedProducts(slug, 4, preferredCurrency);
   const { data: session } = useSession();
 
   const dismissAlert = () => {
@@ -259,6 +259,18 @@ export default function ProductPage() {
 
   if (productLoading && relatedLoading) {
     return <ProductDetailPageLoader />;
+  }
+
+  if (productError) {
+    return (
+      <SectionContainer id="product-error">
+        <EmptyState
+          title="Something went wrong"
+          description="Failed to load product. Please try again."
+          icon={<SearchSlashIcon />}
+        />
+      </SectionContainer>
+    );
   }
 
   if (!product) {

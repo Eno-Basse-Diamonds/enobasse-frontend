@@ -4,6 +4,7 @@ import {
   type CacheOptions,
   type CacheRequestConfig,
 } from "axios-cache-interceptor";
+import { getSession } from "next-auth/react";
 import { notFound, redirect } from "next/navigation";
 import { API_URL } from "./constants/api-url";
 
@@ -55,6 +56,19 @@ class ApiClient {
   }
 
   private setupInterceptors() {
+    this.axiosInstance.interceptors.request.use(async (config) => {
+      if (typeof window !== "undefined") {
+        const session = await getSession();
+        if (session?.accessToken) {
+          config.headers.set(
+            "Authorization",
+            `Bearer ${session.accessToken}`,
+          );
+        }
+      }
+      return config;
+    });
+
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {

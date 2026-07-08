@@ -34,15 +34,26 @@ export const createAccount = async (
   return response;
 };
 
-export const validateAccount = async (
+interface AuthTokenResponse {
+  accessToken: string;
+  account: UserAccount;
+}
+
+export const login = async (
   email: string,
   password: string,
-): Promise<UserAccount> => {
-  return api.post("/auth/validate-account", { email, password });
+): Promise<AuthTokenResponse> => {
+  return api.post("/auth/login", { email, password });
 };
 
-export const findAccount = async (email: string): Promise<UserAccount> => {
-  return api.post("/accounts/email", { param: { email } });
+export const issueTokenForEmail = async (
+  email: string,
+): Promise<AuthTokenResponse> => {
+  return api.post(
+    "/auth/issue-token",
+    { email },
+    { headers: { "x-internal-secret": process.env.INTERNAL_API_SECRET } },
+  );
 };
 
 export async function signOut() {}

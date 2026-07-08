@@ -34,6 +34,7 @@ export interface Order {
   currency?: string;
   originalPrices?: any;
   customerInfo?: {
+    name: string;
     email: string;
     phone: string;
   };

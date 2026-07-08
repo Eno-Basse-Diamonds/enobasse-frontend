@@ -1,14 +1,31 @@
 import Image from "next/image";
-import { User, Calendar, Star, Barcode } from "lucide-react";
+import {
+  User,
+  Calendar,
+  Star,
+  Barcode,
+  ShieldCheck,
+  ShieldOff,
+  Trash2,
+} from "lucide-react";
 import { Review } from "@/lib/types/review";
 import { useState, memo } from "react";
+import { Button } from "@/components/button";
 
 interface ReviewCardProps {
   review: Review;
+  onToggleVerified: (review: Review) => void;
+  onDelete: (id: string) => void;
+  isTogglingVerified?: boolean;
+  isDeleting?: boolean;
 }
 
 export const ReviewCard = memo(function ReviewCard({
   review,
+  onToggleVerified,
+  onDelete,
+  isTogglingVerified = false,
+  isDeleting = false,
 }: ReviewCardProps) {
   const [imageError, setImageError] = useState(false);
   const [productImageError, setProductImageError] = useState(false);
@@ -28,28 +45,52 @@ export const ReviewCard = memo(function ReviewCard({
     <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full">
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex-grow">
-          <div className="flex items-center mb-4">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
-              {review.authorImage?.url && !imageError ? (
-                <Image
-                  src={review.authorImage.url}
-                  alt={review.authorImage.alt || review.authorName}
-                  fill
-                  className="object-cover"
-                  sizes="48px"
-                  onError={() => setImageError(true)}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                  <User className="w-6 h-6 text-gray-400" />
-                </div>
-              )}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
+                {review.authorImage?.url && !imageError ? (
+                  <Image
+                    src={review.authorImage.url}
+                    alt={review.authorImage.alt || review.authorName}
+                    fill
+                    className="object-cover"
+                    sizes="48px"
+                    onError={() => setImageError(true)}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <User className="w-6 h-6 text-gray-400" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <h4 className="font-semibold text-primary-500">
+                  {review.authorName}
+                </h4>
+                <p className="text-sm text-primary-300">
+                  {review.authorEmail}
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-semibold text-primary-500">
-                {review.authorName}
-              </h4>
-              <p className="text-sm text-primary-300">{review.authorEmail}</p>
+
+            <div
+              className={`px-2 py-1 text-xs font-semibold whitespace-nowrap ${
+                review.isVerified
+                  ? "bg-green-100 text-green-800"
+                  : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              {review.isVerified ? (
+                <span className="flex items-center">
+                  <ShieldCheck className="w-3 h-3 mr-1" />
+                  Verified
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <ShieldOff className="w-3 h-3 mr-1" />
+                  Unverified
+                </span>
+              )}
             </div>
           </div>
 
@@ -131,6 +172,30 @@ export const ReviewCard = memo(function ReviewCard({
                 return `${month}/${day}/${year}`;
               })()}
             </span>
+          </div>
+
+          <div className="flex space-x-3 w-full">
+            <Button
+              variant={review.isVerified ? "outline" : "primary"}
+              leadingIcon={
+                review.isVerified ? <ShieldOff /> : <ShieldCheck />
+              }
+              onClick={() => onToggleVerified(review)}
+              loading={isTogglingVerified}
+              disabled={isTogglingVerified}
+              className="w-full"
+            >
+              <span>{review.isVerified ? "Unverify" : "Verify"}</span>
+            </Button>
+            <Button
+              variant="outline"
+              leadingIcon={<Trash2 />}
+              onClick={() => onDelete(review.id)}
+              disabled={isDeleting}
+              className="w-full text-red-600 hover:text-red-700 hover:border-red-300"
+            >
+              <span>Delete</span>
+            </Button>
           </div>
         </div>
       </div>

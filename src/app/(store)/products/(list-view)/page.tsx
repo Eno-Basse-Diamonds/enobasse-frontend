@@ -52,9 +52,9 @@ export default function ProductsPage() {
       .map((f) => f.name),
   }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters]);
 
-  const { data, isLoading } = useProducts(filterOptions) as { data: ProductsResponse; isLoading: boolean };
+  const { data, isLoading, isError, error } = useProducts(filterOptions);
 
-  const { products, meta } = data || {};
+  const { products = [], meta } = data || { meta: { currentPage: 1, totalPages: 1 } };
 
   const filteredAndSortedProducts = useMemo(
     () =>
@@ -157,6 +157,12 @@ export default function ProductsPage() {
 
             {isLoading ? (
               <ProductListLoader />
+            ) : isError ? (
+              <EmptyState
+                title="Something went wrong"
+                description={error?.message || "Failed to load products. Please try again."}
+                icon={<SearchSlashIcon />}
+              />
             ) : filteredAndSortedProducts.length === 0 ? (
               <EmptyState
                 title="No Results Found"

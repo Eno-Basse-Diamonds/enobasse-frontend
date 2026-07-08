@@ -26,6 +26,7 @@ export interface ProductVariant {
   currency: string;
   metals: Metal[];
   gemstones: Gemstone[];
+  inventory: { quantity: number; inStock: boolean };
   images: Array<{ url: string; alt: string }>;
 }
 

@@ -1,8 +1,7 @@
 import { NextAuthOptions, User, Account } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { validateAccount, findAccount } from "@/lib/api/auth";
-import { api } from "@/lib/utils/api";
+import { login, issueTokenForEmail, createAccount } from "@/lib/api/auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -20,10 +19,12 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) return null;
 
         const { email, password } = credentials;
-        const account = await validateAccount(email, password);
-
-        if (account) return account as unknown as User;
-        return null;
+        try {
+          const { accessToken, account } = await login(email, password);
+          return { ...account, accessToken } as unknown as User;
+        } catch {
+          return null;
+        }
       },
     }),
   ],
@@ -31,12 +32,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.isAdmin = (user as User).isAdmin;
+        token.accessToken = (user as User).accessToken;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.isAdmin = token.isAdmin;
+        session.accessToken = token.accessToken;
       }
       return session;
     },
@@ -49,17 +52,18 @@ export const authOptions: NextAuthOptions = {
     }) {
       if (account?.provider === "google") {
         try {
-          await findAccount(user.email!);
-        } catch (error) {
+          const issued = await issueTokenForEmail(user.email!);
+          user.isAdmin = issued.account.isAdmin;
+          user.accessToken = issued.accessToken;
+        } catch {
           try {
-            await api.post("/auth/create-account", {
-              name: user.name,
-              email: user.email,
-            });
-          } catch (error) {
-            return true;
+            await createAccount(user.name ?? "", user.email!);
+            const issued = await issueTokenForEmail(user.email!);
+            user.isAdmin = issued.account.isAdmin;
+            user.accessToken = issued.accessToken;
+          } catch {
+            return false;
           }
-          return true;
         }
       }
       return true;

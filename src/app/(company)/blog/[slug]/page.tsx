@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Markdown from "react-markdown";
+import { SearchSlashIcon } from "lucide-react";
 import { BlogHeroImage } from "./_components/blog-hero-image";
 import { TableOfContents } from "./_components/table-of-content";
 import { RelatedPosts } from "./_components/related-posts";
@@ -12,6 +13,7 @@ import {
   generateTableOfContents,
 } from "@/lib/helpers/blog-post";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
+import { EmptyState } from "@/components/empty-state";
 import { PageHeading } from "@/components/page-heading";
 import { SectionContainer } from "@/components/section-container";
 import { BlogPostDetailLoader } from "@/components/loaders/blog";
@@ -21,12 +23,24 @@ import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 export default function BlogPostContent() {
   const params = useParams();
   const slug = (params.slug as string) || "";
-  const { data: post, isLoading: isPostLoading } = useBlogPost(slug);
+  const { data: post, isLoading: isPostLoading, isError: isPostError, error: postError } = useBlogPost(slug);
   const { data: relatedPosts, isLoading: isRelatedLoading } =
     useRelatedBlogPosts(slug);
 
   if (isPostLoading) {
     return <BlogPostDetailLoader />;
+  }
+
+  if (isPostError) {
+    return (
+      <SectionContainer id="blog-post-error" className="mt-8 md:mt-12">
+        <EmptyState
+          title="Something went wrong"
+          description={postError?.message || "Failed to load blog post. Please try again."}
+          icon={<SearchSlashIcon />}
+        />
+      </SectionContainer>
+    );
   }
 
   if (!post) {

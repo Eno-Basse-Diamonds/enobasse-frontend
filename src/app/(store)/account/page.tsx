@@ -41,9 +41,9 @@ export default function CustomerAccountPage() {
     country: "",
   });
 
-  const { data: account, isLoading } = useAccountByEmail(
+  const { data: account, isLoading, isError, error } = useAccountByEmail(
     session?.user?.email
-  ) as { data: Account | undefined; isLoading: boolean };
+  );
   const updateMutation = useUpdateAccount();
 
   const [alertState, setAlertState] = useState<AlertState>({
@@ -156,7 +156,7 @@ export default function CustomerAccountPage() {
       case "profile":
         return (
           <AccountForm
-            account={account}
+            account={account ?? undefined}
             session={session}
             isEditing={isEditing}
             editForm={editForm}
@@ -174,6 +174,18 @@ export default function CustomerAccountPage() {
 
   if (isLoading) {
     return <AccountLoadingSkeleton />;
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        <div className="text-center">
+          <p className="text-red-600">
+            {error?.message || "Failed to load account. Please try again."}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

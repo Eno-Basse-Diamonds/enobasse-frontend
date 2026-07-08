@@ -42,3 +42,18 @@ export const getReviewsForAdmin = async (
 ): Promise<PaginatedReviewResponse> => {
   return api.get("/reviews", { params: options, cache: false });
 };
+
+export interface UpdateReviewData {
+  isVerified?: boolean;
+}
+
+export const updateReview = async (
+  id: string,
+  data: UpdateReviewData,
+): Promise<Review> => {
+  return api.patch(`/reviews/${id}`, data);
+};
+
+export const deleteReview = async (id: string): Promise<void> => {
+  return api.delete(`/reviews/${id}`);
+};

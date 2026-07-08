@@ -43,12 +43,10 @@ export function TestimonialForm({
   };
 
   const handleImageChange = (field: string, value: string) => {
-    if (formData.avatar) {
-      setFormData((prev) => ({
-        ...prev,
-        avatar: { ...prev.avatar!, [field]: value },
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      avatar: { url: "", alt: "", ...prev.avatar, [field]: value },
+    }));
   };
 
   const validateForm = (): boolean => {

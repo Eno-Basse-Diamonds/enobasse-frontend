@@ -64,22 +64,11 @@ export default function AdminAnalyticsPage() {
                   </h3>
                 </div>
                 <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium text-primary-400 mb-1">
-                      Email
-                    </label>
-                    <div className="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-mono">
-                      enobasse01@gmail.com
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-primary-400 mb-1">
-                      Password
-                    </label>
-                    <div className="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-mono">
-                      qC7!HLUEGDVJtt
-                    </div>
-                  </div>
+                  <p className="text-sm text-primary-400">
+                    Credentials for the shared Umami login are kept in the
+                    team password manager, not in this app. Ask an admin for
+                    access if you don&apos;t have it yet.
+                  </p>
                 </div>
               </div>
 

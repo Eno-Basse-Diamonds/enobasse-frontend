@@ -9,7 +9,13 @@ import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { ReviewList } from "./_components/review-list";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { useReviewsForAdmin } from "@/lib/hooks/use-reviews";
+import { DeleteConfirmationModal } from "../accounts/_components/delete-confirmation-modal";
+import {
+  useReviewsForAdmin,
+  useUpdateReview,
+  useDeleteReview,
+} from "@/lib/hooks/use-reviews";
+import { Review } from "@/lib/types/review";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AdminReviewsSkeletonLoader } from "@/components/loaders/reviews";
@@ -20,6 +26,10 @@ export default function AdminReviewsPage() {
   const searchParams = useSearchParams();
 
   const [inputValue, setInputValue] = useState("");
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    reviewId: string | null;
+  }>({ isOpen: false, reviewId: null });
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -51,6 +61,8 @@ export default function AdminReviewsPage() {
   };
 
   const { data, isLoading } = useReviewsForAdmin(filterOptions);
+  const updateMutation = useUpdateReview();
+  const deleteMutation = useDeleteReview();
 
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {
@@ -116,7 +128,84 @@ export default function AdminReviewsPage() {
     { value: "1", label: "1 Star" },
   ];
 
-  const currentFilters = currentVerified === "true" ? ["verified"] : [];
+  const filterOptionsList = [
+    { value: "verified", label: "Verified" },
+    { value: "unverified", label: "Unverified" },
+  ];
+
+  const currentFilters =
+    currentVerified === "true"
+      ? ["verified"]
+      : currentVerified === "false"
+        ? ["unverified"]
+        : [];
+
+  const handleFilterChange = (filters: string[]) => {
+    const newlyAdded = filters.find((f) => !currentFilters.includes(f));
+
+    if (newlyAdded === "verified") {
+      updateURL({ isVerified: "true", page: 1 });
+    } else if (newlyAdded === "unverified") {
+      updateURL({ isVerified: "false", page: 1 });
+    } else if (filters.length === 0) {
+      updateURL({ isVerified: "", page: 1 });
+    }
+  };
+
+  const handleToggleVerified = (review: Review) => {
+    updateMutation.mutate(
+      { id: review.id, data: { isVerified: !review.isVerified } },
+      {
+        onSuccess: () => {
+          setAlertState({
+            visible: true,
+            type: "success",
+            message: review.isVerified
+              ? "Review unverified successfully!"
+              : "Review verified successfully!",
+          });
+        },
+        onError: () => {
+          setAlertState({
+            visible: true,
+            type: "error",
+            message: "Failed to update review. Please try again.",
+          });
+        },
+      }
+    );
+  };
+
+  const handleDelete = (id: string) => {
+    setDeleteModalState({ isOpen: true, reviewId: id });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalState({ isOpen: false, reviewId: null });
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteModalState.reviewId) return;
+
+    deleteMutation.mutate(deleteModalState.reviewId, {
+      onSuccess: () => {
+        setAlertState({
+          visible: true,
+          type: "success",
+          message: "Review deleted successfully!",
+        });
+        setDeleteModalState({ isOpen: false, reviewId: null });
+      },
+      onError: () => {
+        setAlertState({
+          visible: true,
+          type: "error",
+          message: "Failed to delete review. Please try again.",
+        });
+        setDeleteModalState({ isOpen: false, reviewId: null });
+      },
+    });
+  };
 
   return (
     <>
@@ -183,17 +272,33 @@ export default function AdminReviewsPage() {
 
                 <AdminFilterSortPanel
                   sortOptions={sortOptions}
+                  filterOptions={filterOptionsList}
                   currentSort={currentSort}
                   currentSortOrder={currentSortOrder}
                   currentFilters={currentFilters}
                   onSortChange={handleSortChange}
                   onSortOrderChange={handleSortOrderChange}
+                  onFilterChange={handleFilterChange}
                 />
               </div>
             </div>
 
             {!isLoading && data?.reviews && data.reviews.length > 0 ? (
-              <ReviewList reviews={data.reviews} />
+              <ReviewList
+                reviews={data.reviews}
+                onToggleVerified={handleToggleVerified}
+                onDelete={handleDelete}
+                togglingVerifiedId={
+                  updateMutation.isPending
+                    ? (updateMutation.variables?.id ?? null)
+                    : null
+                }
+                deletingId={
+                  deleteMutation.isPending
+                    ? (deleteMutation.variables ?? null)
+                    : null
+                }
+              />
             ) : !isLoading && data?.reviews && data.reviews.length === 0 ? (
               <EmptyState
                 title="No Reviews Found"
@@ -218,6 +323,15 @@ export default function AdminReviewsPage() {
           </div>
         </>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={deleteModalState.isOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        title="Delete Review"
+        message="Are you sure you want to delete this review? This action cannot be undone."
+        isDeleting={deleteMutation.isPending}
+      />
     </>
   );
 }

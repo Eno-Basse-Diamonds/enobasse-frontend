@@ -1,6 +1,8 @@
 "use client";
 
+import { SearchSlashIcon } from "lucide-react";
 import { CollectionListLoader } from "@/components/loaders/collections";
+import { EmptyState } from "@/components/empty-state";
 import { PageHeading } from "@/components/page-heading";
 import { SectionContainer } from "@/components/section-container";
 import { CollectionCard } from "./_components/collection-card";
@@ -9,7 +11,7 @@ import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { ItemListSchema } from "@/components/seo/ItemListSchema";
 
 export default function CollectionsPage() {
-  const { data, isLoading } = useCollections();
+  const { data, isLoading, isError, error } = useCollections();
   const collections = data || [];
 
   return (
@@ -42,6 +44,14 @@ export default function CollectionsPage() {
         </h2>
         {isLoading ? (
           <CollectionListLoader />
+        ) : isError ? (
+          <div className="col-span-full">
+            <EmptyState
+              title="Something went wrong"
+              description={error?.message || "Failed to load collections. Please try again."}
+              icon={<SearchSlashIcon />}
+            />
+          </div>
         ) : (
           collections.map((collection, index) => (
             <CollectionCard

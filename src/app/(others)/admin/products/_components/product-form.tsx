@@ -92,7 +92,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
           purity: m.purity ?? undefined,
           weightGrams: m.weightGrams,
         })) || [],
-      inventory: { quantity: 1, inStock: true },
+      inventory: v.inventory ?? { quantity: 0, inStock: false },
       images: v.images,
     })) || [
       {

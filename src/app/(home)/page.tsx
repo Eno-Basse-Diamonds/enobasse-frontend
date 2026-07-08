@@ -68,13 +68,6 @@ export default async function HomePage() {
     },
     {
       image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512321/bangles_lka5bf.webp",
-      alt: "White gold diamond bangle",
-      title: "Bangles",
-      href: "/collections/bangles",
-    },
-    {
-      image:
         "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
       alt: "White gold diamond bracelets",
       title: "Bracelets",
