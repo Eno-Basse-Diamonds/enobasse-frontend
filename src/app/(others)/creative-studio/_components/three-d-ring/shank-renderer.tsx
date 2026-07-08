@@ -1,5 +1,5 @@
 import React from "react";
-import { BufferGeometry, Mesh, MeshStandardMaterial } from "three";
+import { BufferGeometry, Mesh, MeshPhysicalMaterial } from "three";
 import { RingMesh } from "./ring-mesh";
 import { AccentDiamonds } from "./accent-diamonds";
 import { getDecorationAnchors } from "./anchor-utils";
@@ -8,7 +8,7 @@ import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface ShankRendererProps {
   shankData: GLTFResult;
-  metalMaterial: MeshStandardMaterial;
+  metalMaterial: MeshPhysicalMaterial;
   texture: any;
   performanceTier: PerformanceTier;
   gemScale: number;

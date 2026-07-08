@@ -21,37 +21,43 @@ function getRefractionBounces(tier: PerformanceTier): number {
     case "high":
       return 4;
     case "medium":
-      return 2;
+      return 3;
     case "low":
-      return 1;
+      return 2;
     default:
       return 4;
   }
 }
 
+// Real diamond has a high dispersion index (~0.044 vs ~0.01-0.02 for glass),
+// which is what produces its characteristic rainbow "fire" — a subtle
+// aberrationStrength here reads as glassy, not diamond-like.
 function getAberrationStrength(tier: PerformanceTier): number {
   switch (tier) {
     case "high":
-      return 0.02;
+      return 0.04;
     case "medium":
-      return 0.01;
+      return 0.03;
     case "low":
-      return 0; // Disable on low-power devices
+      return 0.03; // Disable on low-power devices
     default:
-      return 0.02;
+      return 0.04;
   }
 }
 
+// A real diamond's IOR is 2.417; kept close to that (rather than pushed to
+// 3, which warps facets into an unnaturally swirly look) for a believable
+// refraction pattern.
 function getIOR(tier: PerformanceTier): number {
   switch (tier) {
     case "high":
-      return 3;
+      return 2.6;
     case "medium":
-      return 2.4;
+      return 2.42;
     case "low":
-      return 2;
+      return 2.2;
     default:
-      return 3;
+      return 2.6;
   }
 }
 
@@ -83,9 +89,9 @@ function RingMeshComponent({
           bounces={getRefractionBounces(performanceTier)}
           aberrationStrength={getAberrationStrength(performanceTier)}
           ior={getIOR(performanceTier)}
-          fresnel={0}
-          color="#e3e3e3"
-          toneMapped={false}
+          fresnel={1}
+          color="#f7f7f7"
+          toneMapped
         />
       </mesh>
     );

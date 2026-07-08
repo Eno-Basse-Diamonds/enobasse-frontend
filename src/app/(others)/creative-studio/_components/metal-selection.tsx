@@ -26,7 +26,8 @@ export function MetalSelection({
               <button
                 key={metal.id}
                 onClick={() => setSelectedMetalType(metal.id)}
-                className={`w-8 h-8 rounded-full border-2 bg-${metal.id} ${
+                style={{ backgroundColor: metal.color }}
+                className={`w-8 h-8 rounded-full border-2 ${
                   selectedMetalType === metal.id
                     ? "border-primary-500"
                     : "border-gray-300"

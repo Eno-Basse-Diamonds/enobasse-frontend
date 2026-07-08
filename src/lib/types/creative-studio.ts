@@ -53,6 +53,9 @@ export interface MetalMaterial {
   color: string;
   metalness: number;
   roughness: number;
+  clearcoat: number;
+  clearcoatRoughness: number;
+  envMapIntensity: number;
 }
 
 export type GemstoneShape =

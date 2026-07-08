@@ -4,6 +4,7 @@ import type {
   KaratOption,
   FontOption,
   RingConfiguration,
+  MetalMaterial,
 } from "../../types/creative-studio";
 
 export const GEMSTONE_SHAPES: Option[] = [
@@ -460,11 +461,45 @@ export const DEFAULT_CONFIGURATION: RingConfiguration = {
   engravingFont: "Arial, sans-serif",
 };
 
-export const METAL_MATERIALS = {
-  "white-gold": { color: "#dbdbdb", metalness: 0.95, roughness: 0.2 },
-  "yellow-gold": { color: "#ffd280", metalness: 0.95, roughness: 0.2 },
-  "rose-gold": { color: "#ffbaa3", metalness: 0.95, roughness: 0.2 },
-  platinum: { color: "#e5e4e2", metalness: 0.95, roughness: 0.2 },
+// Real polished jewelry metal is fully metallic (no dielectric diffuse
+// component) with a very low roughness — that's what gives it a mirror-like,
+// rather than matte, reflection. A slight clearcoat layer on top mimics the
+// glassy micro-polish sheen of a finished piece, and envMapIntensity is
+// boosted above 1 so the single HDR environment reads as bright studio
+// lighting rather than a dim reflection.
+export const METAL_MATERIALS: Record<string, MetalMaterial> = {
+  "white-gold": {
+    color: "#e9e9e9",
+    metalness: 1,
+    roughness: 0.1,
+    clearcoat: 0.4,
+    clearcoatRoughness: 0.1,
+    envMapIntensity: 1.4,
+  },
+  "yellow-gold": {
+    color: "#e8b923",
+    metalness: 1,
+    roughness: 0.14,
+    clearcoat: 0.35,
+    clearcoatRoughness: 0.12,
+    envMapIntensity: 1.3,
+  },
+  "rose-gold": {
+    color: "#e6a896",
+    metalness: 1,
+    roughness: 0.14,
+    clearcoat: 0.35,
+    clearcoatRoughness: 0.12,
+    envMapIntensity: 1.3,
+  },
+  platinum: {
+    color: "#c9c7c0",
+    metalness: 1,
+    roughness: 0.16,
+    clearcoat: 0.25,
+    clearcoatRoughness: 0.15,
+    envMapIntensity: 1.2,
+  },
 };
 
 // The /models library rigs every shank/head asset with named socket

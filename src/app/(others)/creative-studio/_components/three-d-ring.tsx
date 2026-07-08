@@ -8,7 +8,7 @@ import {
   BufferGeometry,
   Group,
   Mesh,
-  MeshStandardMaterial,
+  MeshPhysicalMaterial,
   Vector3,
 } from "three";
 import { RGBELoader } from "three-stdlib";
@@ -121,6 +121,16 @@ export function ThreeDRing({
         <Environment files={environment} />
       </Suspense>
 
+      {/* Environment lighting alone reads as flat/ambient; these two lights
+          add the crisp specular glints real studio jewelry photography
+          relies on for metal and diamond sparkle. */}
+      <directionalLight
+        position={[30, 50, 30]}
+        intensity={1.6}
+        castShadow={!isMobile}
+      />
+      <directionalLight position={[-30, 15, -25]} intensity={0.5} />
+
       <RotatingRing
         key={currentConfig}
         headData={headData}
@@ -209,10 +219,13 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     onImagesGenerated,
   });
 
-  // Memoize material to prevent recreation on each render
+  // Memoize material to prevent recreation on each render. MeshPhysicalMaterial
+  // (rather than MeshStandardMaterial) is used so the clearcoat layer in
+  // METAL_MATERIALS can render — that's what gives polished jewelry its
+  // glassy top-layer sheen on top of the base metal reflection.
   const metalMaterial = useMemo(
     () =>
-      new MeshStandardMaterial(
+      new MeshPhysicalMaterial(
         METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
           METAL_MATERIALS["white-gold"]
       ),
@@ -323,6 +336,19 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     gemstoneAttachment,
     gemstoneScale,
   ]);
+
+  // On mobile, frameloop="demand" means useFrame only runs when a frame is
+  // actually rendered, which otherwise only happens via invalidate() calls,
+  // user interaction, or prop changes. The invalidate() inside useFrame below
+  // keeps an already-running rotation loop going, but can't *start* one —
+  // when imagesReady/isUserInteracting flips to let rotation resume, nothing
+  // else requests that first frame, so auto-rotation never kicks in. This
+  // effect fires that bootstrap frame.
+  useEffect(() => {
+    if (isMobile && imagesReady && !isUserInteracting) {
+      invalidate();
+    }
+  }, [isMobile, imagesReady, isUserInteracting]);
 
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
