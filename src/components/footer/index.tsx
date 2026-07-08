@@ -123,6 +123,11 @@ const Navigation: React.FC = () => {
       id: "services-heading",
       navItems: [
         {
+          label: "Design Your Ring",
+          href: "/creative-studio",
+          ariaLabel: "Design Your Ring",
+        },
+        {
           label: "Custom Design",
           href: "/custom-design",
           ariaLabel: "Custom design",

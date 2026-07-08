@@ -7,10 +7,10 @@ import { PersonalInfoForm } from "./_components/personal-info-form";
 import { DesignSpecsForm } from "./_components/design-specs-form";
 import { FinalDetailsForm } from "./_components/final-details-form";
 import { NavigationButtons } from "./_components/navigation-buttons";
-import { Alert } from "@/components/alert";
 import { logger } from "@/lib/utils/logger";
 import { sendCustomDesignMessage } from "@/lib/api/contact";
 import { useCustomDesignStore } from "@/lib/store/custom-design";
+import { useAlertStore } from "@/lib/store/alert";
 
 interface PersonalInfo {
   firstName: string;
@@ -57,10 +57,8 @@ interface FormData {
 export default function CustomDesignPage() {
   const { formData, currentStep, setFormData, setCurrentStep, resetForm } = useCustomDesignStore();
   const [errors, setErrors] = useState<FormErrors>({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<"success" | "error">("success");
-  const [alertMessage, setAlertMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleInputChange = (
     section: keyof typeof formData,
@@ -142,9 +140,13 @@ export default function CustomDesignPage() {
     if (validateStep(currentStep)) {
       setCurrentStep(Math.min(currentStep + 1, 3));
     } else {
-      setAlertType("error");
-      setAlertMessage("Please fill in all required fields correctly before proceeding.");
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all required fields correctly before proceeding.",
+        duration: 5000,
+        dismissible: true,
+      });
     }
   };
 
@@ -153,9 +155,13 @@ export default function CustomDesignPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validateStep(currentStep)) {
-      setAlertType("error");
-      setAlertMessage("Please fill in all required fields correctly before submitting.");
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all required fields correctly before submitting.",
+        duration: 5000,
+        dismissible: true,
+      });
       return;
     }
 
@@ -175,16 +181,24 @@ export default function CustomDesignPage() {
       };
 
       await sendCustomDesignMessage(message);
-      setAlertType("success");
-      setAlertMessage("Thank you for your custom design request! We will contact you within 24 hours to discuss your design in detail.");
-      setShowAlert(true);
+      addAlert({
+        type: "success",
+        title: "Request Submitted",
+        message: "Thank you for your custom design request! We will contact you within 24 hours to discuss your design in detail.",
+        duration: 5000,
+        dismissible: true,
+      });
       resetForm();
       setErrors({});
     } catch (error) {
       logger.error("Error submitting form:", error);
-      setAlertType("error");
-      setAlertMessage("There was an error submitting your request. Please try again later.");
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "There was an error submitting your request. Please try again later.",
+        duration: 5000,
+        dismissible: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -192,17 +206,6 @@ export default function CustomDesignPage() {
 
   return (
     <div className="min-h-screen max-w-4xl py-12 mx-auto">
-      {showAlert && (
-        <Alert
-          type={alertType}
-          title={alertType === "success" ? "Request Submitted" : "Error"}
-          dismissible
-          onDismiss={() => setShowAlert(false)}
-          duration={5000}
-        >
-          {alertMessage}
-        </Alert>
-      )}
       <Header />
       <ProgressBar currentStep={currentStep} />
 

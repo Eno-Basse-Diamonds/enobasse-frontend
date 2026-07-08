@@ -4,8 +4,8 @@ import { useState } from "react";
 import { CircleCheck } from "lucide-react";
 import { sendMessage } from "@/lib/api/contact";
 import { logger } from "@/lib/utils/logger";
-import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
+import { useAlertStore } from "@/lib/store/alert";
 
 interface ContactFormState {
   firstName: string;
@@ -25,7 +25,7 @@ export const ContactForm: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -37,7 +37,6 @@ export const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError(null);
 
     try {
       await sendMessage({
@@ -57,7 +56,13 @@ export const ContactForm: React.FC = () => {
       });
     } catch (error) {
       logger.error("Error submitting contact form", error);
-      setError("There was an error sending your message. Please try again.");
+      addAlert({
+        type: "error",
+        title: "Submission Failed",
+        message: "There was an error sending your message. Please try again.",
+        duration: 5000,
+        dismissible: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -65,17 +70,6 @@ export const ContactForm: React.FC = () => {
 
   return (
     <>
-      {error && (
-        <Alert
-          type="error"
-          className="mb-6"
-          dismissible
-          onDismiss={() => setError(null)}
-        >
-          {error}
-        </Alert>
-      )}
-
       <form onSubmit={handleSubmit}>
         <div className="rounded-sm bg-white border border-primary-100 shadow-sm py-6 px-4 sm:px-6 md:p-8">
           <div className="space-y-6">

@@ -65,7 +65,7 @@ export function CheckoutCartItem({
         }`
       : "";
 
-  const engravableProducts = ["Rings", "Wristwears", "Neckpieces"];
+  const engravableProducts = ["Rings", "Wristwears", "Neckpieces", "Bracelets", "Necklaces"];
   const canBeEngraved = engravableProducts.includes(item.productCategory);
   const isRing = item.productCategory === "Rings";
 

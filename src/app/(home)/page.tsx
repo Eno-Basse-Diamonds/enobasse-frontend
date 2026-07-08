@@ -10,6 +10,7 @@ import { BlogContent } from "./_components/blog-content";
 import { HelpSection } from "./_components/help-section";
 import { ServicesSection } from "./_components/services-section";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
+import { getCollections } from "@/lib/api/collections";
 import { HeroSection } from "@/components/hero-section";
 import { SectionContainer } from "@/components/section-container";
 import { SectionHeading } from "@/components/section-heading";
@@ -75,7 +76,7 @@ export default async function HomePage() {
     },
   ];
 
-  const bentoItems = [
+  let bentoItems = [
     {
       id: "bamboo-collection",
       title: "Bamboo Collection",
@@ -113,6 +114,32 @@ export default async function HomePage() {
       },
     },
   ];
+
+  try {
+    const dbCollections = await getCollections();
+    bentoItems = bentoItems.map((item) => {
+      const match = dbCollections.find(
+        (c) =>
+          c.slug === item.id ||
+          (item.id === "pearls" && c.slug === "pearls-collection") ||
+          c.slug === item.href.split("/").pop()
+      );
+      if (match) {
+        return {
+          id: match.slug,
+          title: match.name,
+          href: `/collections/${match.slug}`,
+          image: {
+            src: match.image?.url || item.image.src,
+            alt: match.name,
+          },
+        };
+      }
+      return item;
+    });
+  } catch (error) {
+    console.error("Failed to fetch dynamic collections for home page:", error);
+  }
 
   return (
     <main>

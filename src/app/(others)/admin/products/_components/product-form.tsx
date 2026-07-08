@@ -28,7 +28,7 @@ interface ProductFormProps {
   onClose: () => void;
 }
 
-const PRODUCT_CATEGORIES = ["Rings", "Earrings", "Wristwears", "Neckpieces"];
+const PRODUCT_CATEGORIES = ["Rings", "Earrings", "Bracelets", "Necklaces"];
 
 interface ProductFormData {
   sku: string;

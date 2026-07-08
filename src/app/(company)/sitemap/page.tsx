@@ -57,7 +57,6 @@ export default async function SitemapPage() {
         { name: "Rings", href: "/collections/rings" },
         { name: "Engagement Rings", href: "/collections/engagement-rings" },
         { name: "Wedding Rings", href: "/collections/wedding-rings" },
-        { name: "Neckpieces", href: "/collections/neckpieces" },
         { name: "Necklaces", href: "/collections/necklaces" },
         { name: "Pendants", href: "/collections/pendants" },
         { name: "Earrings", href: "/collections/earrings" },

@@ -6,10 +6,10 @@ import { NavigationButtons } from "./_components/navigation-buttons";
 import { CustomerDetailsForm } from "./_components/customer-details-form";
 import { ItemDetailsForm } from "./_components/item-details-form";
 import { ServiceDetailsForm } from "./_components/service-details-form";
-import { Alert } from "@/components/alert";
 import { sendMaintenanceRepairsMessage } from "@/lib/api/contact";
 import { logger } from "@/lib/utils/logger";
 import { useMaintenanceRepairsStore } from "@/lib/store/maintenance-repairs";
+import { useAlertStore } from "@/lib/store/alert";
 
 interface FormErrors {
   customerInfo?: {
@@ -34,9 +34,8 @@ export default function MaintenanceRepairsForm() {
   const { formData, currentStep, setFormData, setCurrentStep, resetForm } = useMaintenanceRepairsStore();
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleInputChange = (
     section: keyof typeof formData,
@@ -134,20 +133,24 @@ export default function MaintenanceRepairsForm() {
           images: formData.itemInfo.images,
         },
       });
-      setAlertMessage({
+      addAlert({
         type: 'success',
-        message: 'Thank you for your maintenance request. We\'ll review your submission and contact you within 24 hours with a detailed quote and timeline.'
+        title: 'Request Submitted',
+        message: 'Thank you for your maintenance request. We\'ll review your submission and contact you within 24 hours with a detailed quote and timeline.',
+        duration: 5000,
+        dismissible: true,
       });
-      setShowAlert(true);
       resetForm();
       setErrors({});
     } catch (error) {
       logger.error("Error submitting form:", error);
-      setAlertMessage({
+      addAlert({
         type: 'error',
-        message: 'Failed to submit the form. Please try again or contact support if the problem persists.'
+        title: 'Submission Failed',
+        message: 'Failed to submit the form. Please try again or contact support if the problem persists.',
+        duration: 5000,
+        dismissible: true,
       });
-      setShowAlert(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -199,17 +202,6 @@ export default function MaintenanceRepairsForm() {
 
   return (
     <div className="min-h-screen py-12">
-      {showAlert && alertMessage && (
-        <Alert
-          type={alertMessage.type}
-          title={alertMessage.type === 'success' ? "Request Submitted" : "Submission Failed"}
-          dismissible
-          onDismiss={() => setShowAlert(false)}
-          duration={5000}
-        >
-          {alertMessage.message}
-        </Alert>
-      )}
       <div className="container mx-auto md:px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

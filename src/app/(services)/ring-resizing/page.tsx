@@ -6,10 +6,10 @@ import { NavigationButtons } from "./_components/navigation-buttons";
 import { CustomerDetailsForm } from "./_components/customer-details-form";
 import { RingDetailsForm } from "./_components/ring-details-form";
 import { AdditionalInfoForm } from "./_components/additional-info-form";
-import { Alert } from "@/components/alert";
-import { useRingResizingStore } from "@/lib/store/ring-resizing";
 import { logger } from "@/lib/utils/logger";
 import { sendRingResizingMessage } from "@/lib/api/contact";
+import { useAlertStore } from "@/lib/store/alert";
+import { useRingResizingStore } from "@/lib/store/ring-resizing";
 
 interface FormErrors {
   firstName?: string;
@@ -35,10 +35,8 @@ export default function RingResizingPage() {
   } = useRingResizingStore();
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<"success" | "error">("success");
-  const [alertMessage, setAlertMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const addAlert = useAlertStore((state) => state.addAlert);
 
   const ringTypes = [
     "Wedding Band",
@@ -171,11 +169,13 @@ export default function RingResizingPage() {
     if (validateStep(currentStep)) {
       setCurrentStep(Math.min(currentStep + 1, 3));
     } else {
-      setAlertType("error");
-      setAlertMessage(
-        "Please fill in all required fields correctly before proceeding."
-      );
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all required fields correctly before proceeding.",
+        duration: 5000,
+        dismissible: true,
+      });
     }
   };
 
@@ -187,11 +187,13 @@ export default function RingResizingPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateStep(currentStep)) {
-      setAlertType("error");
-      setAlertMessage(
-        "Please fill in all required fields correctly before submitting."
-      );
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "Please fill in all required fields correctly before submitting.",
+        duration: 5000,
+        dismissible: true,
+      });
       return;
     }
 
@@ -213,21 +215,25 @@ export default function RingResizingPage() {
       };
 
       await sendRingResizingMessage(message);
-      setAlertType("success");
-      setAlertMessage(
-        "Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline."
-      );
-      setShowAlert(true);
+      addAlert({
+        type: "success",
+        title: "Request Submitted",
+        message: "Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.",
+        duration: 5000,
+        dismissible: true,
+      });
       setIsSubmitted(true);
       resetForm();
       setErrors({});
     } catch (error) {
       logger.error("Error submitting form:", error);
-      setAlertType("error");
-      setAlertMessage(
-        "There was an error submitting your request. Please try again later."
-      );
-      setShowAlert(true);
+      addAlert({
+        type: "error",
+        title: "Error",
+        message: "There was an error submitting your request. Please try again later.",
+        duration: 5000,
+        dismissible: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -281,17 +287,6 @@ export default function RingResizingPage() {
 
   return (
     <div className="min-h-screen py-12">
-      {showAlert && (
-        <Alert
-          type={alertType}
-          title={alertType === "success" ? "Request Submitted" : "Error"}
-          dismissible
-          onDismiss={() => setShowAlert(false)}
-          duration={5000}
-        >
-          {alertMessage}
-        </Alert>
-      )}
       <div className="container mx-auto md:px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

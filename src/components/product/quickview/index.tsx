@@ -448,9 +448,15 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               {!product.isCustomDesign || selectedVariant?.price !== 0 ? (
                 <>
                   <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
-                    <Button size="lg" onClick={onAddToCart}>
-                      Add to Cart
-                    </Button>
+                    {selectedVariant?.inventory?.inStock === false || selectedVariant?.inventory?.quantity === 0 ? (
+                      <Button size="lg" disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                        Sold
+                      </Button>
+                    ) : (
+                      <Button size="lg" onClick={onAddToCart}>
+                        Add to Cart
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="lg"
@@ -469,9 +475,15 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                     </Button>
                   </div>
                   <div className="grid-cols-2 gap-4 mb-4 grid md:hidden">
-                    <Button variant="outline" onClick={onAddToCart}>
-                      Add to Cart
-                    </Button>
+                    {selectedVariant?.inventory?.inStock === false || selectedVariant?.inventory?.quantity === 0 ? (
+                      <Button variant="outline" disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                        Sold
+                      </Button>
+                    ) : (
+                      <Button variant="outline" onClick={onAddToCart}>
+                        Add to Cart
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       onClick={() => onWishlistToggle(product)}

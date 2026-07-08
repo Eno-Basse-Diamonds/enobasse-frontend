@@ -153,7 +153,13 @@ const ProductListItem = React.memo(
                 />
               </>
             )}
-            {!product.isCustomDesign && (
+            {product.variants && product.variants.length > 0 && product.variants.every(
+              (v) => v.inventory?.inStock === false || v.inventory?.quantity === 0
+            ) ? (
+              <span className="absolute bottom-2 right-2 z-10 bg-red-600 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white uppercase">
+                Sold
+              </span>
+            ) : !product.isCustomDesign && (
               <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white">
                 In Store
               </span>

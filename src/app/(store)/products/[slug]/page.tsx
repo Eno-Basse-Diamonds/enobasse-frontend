@@ -139,6 +139,10 @@ export default function ProductPage() {
     (l) => MOCK_AVAILABILITY[l] === false,
   );
 
+  const isOutOfStock =
+    selectedVariant?.inventory?.inStock === false ||
+    selectedVariant?.inventory?.quantity === 0;
+
   // Calculate Amora collection price
   const letterPrice = product?.priceRange?.min ?? 0;
   const chainPrice = (product?.priceRange?.max ?? 0) - letterPrice;
@@ -540,7 +544,11 @@ export default function ProductPage() {
                 {(!product.isCustomDesign || selectedVariant?.price !== 0) && (
                   <>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
-                      {hasOutOfStockSelection ? (
+                      {isOutOfStock ? (
+                        <Button size="xl" disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                          Sold
+                        </Button>
+                      ) : hasOutOfStockSelection ? (
                         <Button size="xl" onClick={handleRequestQuote}>
                           Request for Item
                         </Button>
@@ -551,7 +559,11 @@ export default function ProductPage() {
                       )}
                     </div>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
-                      {hasOutOfStockSelection ? (
+                      {isOutOfStock ? (
+                        <Button disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                          Sold
+                        </Button>
+                      ) : hasOutOfStockSelection ? (
                         <Button onClick={handleRequestQuote}>
                           Request for Item
                         </Button>

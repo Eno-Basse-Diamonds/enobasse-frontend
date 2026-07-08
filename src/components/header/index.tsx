@@ -58,9 +58,9 @@ const DEFAULT_MAIN_NAV_ITEMS: DropdownNavigation[] = [
     href: "/collections/bracelets",
   },
   {
-    id: "neckpieces",
+    id: "necklaces",
     title: "Necklaces",
-    href: "/collections/neckpieces",
+    href: "/collections/necklaces",
   },
 ];
 
