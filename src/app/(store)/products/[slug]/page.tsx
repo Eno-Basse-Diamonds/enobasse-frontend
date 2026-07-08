@@ -495,7 +495,7 @@ export default function ProductPage() {
                   </div>
                 )}
 
-                <div className="flex flex-row gap-x-4 md:gap-x-14 ml-[1px]">
+                <div className="flex flex-row gap-x-4 md:gap-x-14 ml-px">
                   <Engraving
                     engraving={engraving}
                     setEngraving={setEngraving}
@@ -627,7 +627,7 @@ export default function ProductPage() {
                 one, from shopping to delivery
               </h2>
               <p className="text-[#502B3A] text-base font-light leading-relaxed">
-                Every item we send comes in our signature EnoBasse packaging.
+                Every item we send comes in our signature Eno Bassé Diamonds packaging.
                 Engagement rings arrive in a deluxe ring box within an elegant
                 presentation box ready for your proposal. The presentation box
                 also secures your appraisal certificate and diamond grading

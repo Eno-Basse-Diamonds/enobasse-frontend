@@ -31,7 +31,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  companyName = "EnoBasse, LLC",
+  companyName = "Eno Bassé Diamonds, LLC",
   copyrightYear = new Date().getFullYear(),
   className = "",
 }) => {
@@ -80,6 +80,42 @@ const Navigation: React.FC = () => {
           ariaLabel: "Testimonials",
         },
         { label: "Sitemap", href: "/sitemap", ariaLabel: "Sitemap" },
+      ],
+    },
+    {
+      title: "Shop",
+      id: "shop-heading",
+      navItems: [
+        {
+          label: "All Products",
+          href: "/products",
+          ariaLabel: "All products",
+        },
+        {
+          label: "Collections",
+          href: "/collections",
+          ariaLabel: "Collections",
+        },
+        {
+          label: "Rings",
+          href: "/collections/rings",
+          ariaLabel: "Rings",
+        },
+        {
+          label: "Earrings",
+          href: "/collections/earrings",
+          ariaLabel: "Earrings",
+        },
+        {
+          label: "Bracelets",
+          href: "/collections/bracelets",
+          ariaLabel: "Bracelets",
+        },
+        {
+          label: "Necklaces",
+          href: "/collections/necklaces",
+          ariaLabel: "Necklaces",
+        },
       ],
     },
     {
@@ -141,7 +177,7 @@ const Navigation: React.FC = () => {
               <li key={`${section.id}-${item.href}`} className="mb-2">
                 <Link
                   href={item.href}
-                  className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-[1px] after:h-[1px] after:w-full after:bg-[#1B1B1D] after:transition-transform after:duration-100 after:transform after:scale-x-0 after:origin-left hover:after:scale-x-100"
+                  className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-px after:h-px after:w-full after:bg-[#1B1B1D] after:transition-transform after:duration-100 after:transform after:scale-x-0 after:origin-left hover:after:scale-x-100"
                   aria-label={item.ariaLabel}
                 >
                   {item.label}
@@ -220,7 +256,7 @@ const Newsletter: React.FC = () => {
           />
           <button
             type="submit"
-            className="absolute top-0 end-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80 rounded-r-sm"
+            className="absolute top-0 inset-e-0 p-2.5 flex items-center justify-center h-full text-sm font-medium text-white bg-[#D1A559] border border-[#D1A559] hover:bg-[#D1A559]/80 focus:ring-1 focus:outline-none focus:ring-[#D1A559]/80 rounded-r-sm"
             aria-label="Subscribe"
             disabled={isSubmitting || !email}
           >

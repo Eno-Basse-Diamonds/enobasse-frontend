@@ -33,13 +33,19 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
 
   useEffect(() => {
     if (isVisible) {
+      document.body.style.overflow = "hidden";
       const savedSearches = localStorage.getItem("recentSearches");
       if (savedSearches) {
         setRecentSearches(JSON.parse(savedSearches));
       }
     } else {
+      document.body.style.overflow = "";
       setSearchQuery("");
     }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isVisible]);
 
   const saveRecentSearch = (term: string) => {
@@ -65,8 +71,20 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
       }
     : undefined;
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteProductsSearch(searchParams, shouldFetch);
+  const {
+    data,
+    isLoading,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteProductsSearch(searchParams, shouldFetch);
+
+  const isSearching =
+    searchQuery.trim().length > 0 &&
+    (searchQuery.trim().toLowerCase() !== debouncedQuery.trim().toLowerCase() ||
+      isLoading ||
+      (isFetching && !isFetchingNextPage));
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
@@ -170,8 +188,9 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
           </div>
         ) : (
           <div className="header__search-overlay-results">
-            {isLoading && <ProductListLoader />}
-            {products && products.length > 0 ? (
+            {isSearching ? (
+              <ProductListLoader />
+            ) : products && products.length > 0 ? (
               <>
                 <ProductList products={products} />
                 <div
@@ -184,13 +203,11 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
                 </div>
               </>
             ) : (
-              !isLoading && (
-                <EmptyState
-                  title="No Results Found"
-                  description={`We couldn't find any products matching "${searchQuery}".`}
-                  icon={<SearchSlashIcon />}
-                />
-              )
+              <EmptyState
+                title="No Results Found"
+                description={`We couldn't find any products matching "${searchQuery}".`}
+                icon={<SearchSlashIcon />}
+              />
             )}
           </div>
         )}

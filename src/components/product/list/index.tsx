@@ -241,12 +241,12 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   }, [session, hydrate, preferredCurrency, hydrated, isHydrated, lastCurrency]);
 
   useEffect(() => {
-    if (quickViewProduct) {
-      document.body.style.overflow = "hidden";
-    }
+    if (!quickViewProduct) return;
+
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     };
   }, [quickViewProduct]);
 
@@ -292,6 +292,17 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
     setQuickViewProduct(product);
   }, []);
 
+  const uniqueProducts = useMemo(() => {
+    const seen = new Set<string>();
+    return products.filter((product) => {
+      if (!product.id) return false;
+      const idStr = String(product.id);
+      if (seen.has(idStr)) return false;
+      seen.add(idStr);
+      return true;
+    });
+  }, [products]);
+
   // after first render, disable animations for appended items
   useEffect(() => {
     if (products.length > 0) {
@@ -306,7 +317,7 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
       initial={hasAnimatedOnce.current ? false : "hidden"}
       animate="show"
     >
-      {products.map((product) => {
+      {uniqueProducts.map((product) => {
         const productVariantId = product.variants[0]?.id;
         const isInWishlist = wishlistProductVariantIds.has(productVariantId);
         return (
