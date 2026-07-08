@@ -1,4 +1,12 @@
-import { Mesh, Object3D, Quaternion, Vector3 } from "three";
+import {
+  Box3,
+  BufferGeometry,
+  Matrix4,
+  Mesh,
+  Object3D,
+  Quaternion,
+  Vector3,
+} from "three";
 
 export interface AnchorTransform {
   position: [number, number, number];
@@ -53,4 +61,29 @@ export function findFirstMeshGeometry(nodes: Record<string, Object3D>) {
 // Accent-diamond anchors are named "<PREFIX>_SIDE_Anchor_NNN".
 export function getAnchorShapePrefix(anchor: Object3D): string {
   return anchor.name.replace(/_SIDE_Anchor.*$/, "");
+}
+
+export function makeTransformMatrix(
+  position: [number, number, number],
+  quaternion: [number, number, number, number],
+  scale: [number, number, number],
+): Matrix4 {
+  return new Matrix4().compose(
+    new Vector3(...position),
+    new Quaternion(...quaternion),
+    new Vector3(...scale),
+  );
+}
+
+// Bounds are used to auto-fit and recenter the assembled ring, since each
+// head/shank combination has different proportions (a chunky triple-row
+// pavé shank isn't the same size as a plain solitaire).
+export function getTransformedBoundingBox(
+  geometry: BufferGeometry | undefined,
+  matrix: Matrix4,
+): Box3 | null {
+  if (!geometry) return null;
+  if (!geometry.boundingBox) geometry.computeBoundingBox();
+  if (!geometry.boundingBox) return null;
+  return geometry.boundingBox.clone().applyMatrix4(matrix);
 }

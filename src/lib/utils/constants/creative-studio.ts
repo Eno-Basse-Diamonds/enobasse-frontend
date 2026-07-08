@@ -122,16 +122,66 @@ export const HEAD_STYLES: Option[] = [
     image:
       "https://res.cloudinary.com/enobasse/image/upload/v1758110909/dual-halo_ofeg6s.png",
   },
-  { id: "6-prong-diamond", name: "6 Prong Diamond", image: "" },
-  { id: "6-prong-nouveau", name: "6 Prong Nouveau", image: "" },
-  { id: "classic-basket", name: "Classic Basket", image: "" },
-  { id: "clustered-diamond", name: "Clustered Diamond", image: "" },
-  { id: "diamond-basket", name: "Diamond Basket", image: "" },
-  { id: "diamond-tulip", name: "Diamond Tulip", image: "" },
-  { id: "fancy-halo", name: "Fancy Halo", image: "" },
-  { id: "floral-halo", name: "Floral Halo", image: "" },
-  { id: "surprise-diamond", name: "Surprise Diamond", image: "" },
-  { id: "vintage-trefoil", name: "Vintage Trefoil", image: "" },
+  {
+    id: "6-prong-diamond",
+    name: "6 Prong Diamond",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110908/6-prong-diamond_cvvlto.png",
+  },
+  {
+    id: "6-prong-nouveau",
+    name: "6 Prong Nouveau",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110906/6-prong-nouveau_bkwxwe.png",
+  },
+  {
+    id: "classic-basket",
+    name: "Classic Basket",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110899/classic-basket_yasfzk.png",
+  },
+  {
+    id: "clustered-diamond",
+    name: "Clustered Diamond",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110899/clustered-diamond_il3yzr.png",
+  },
+  {
+    id: "diamond-basket",
+    name: "Diamond Basket",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110904/diamond-basket_ifmfc9.png",
+  },
+  {
+    id: "diamond-tulip",
+    name: "Diamond Tulip",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110901/diamond-tulip_hrha4n.png",
+  },
+  {
+    id: "fancy-halo",
+    name: "Fancy Halo",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110900/fancy-halo_kgm1ps.png",
+  },
+  {
+    id: "floral-halo",
+    name: "Floral Halo",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110907/floral-halo_gur4as.png",
+  },
+  {
+    id: "surprise-diamond",
+    name: "Surprise Diamond",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110904/surprise-diamond_jvx4ll.png",
+  },
+  {
+    id: "vintage-trefoil",
+    name: "Vintage Trefoil",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758110905/vintage-trefoil_ale6b6.png",
+  },
 ];
 
 export const SHANK_STYLES: Option[] = [
@@ -163,7 +213,7 @@ export const SHANK_STYLES: Option[] = [
     id: "cathedral-pave",
     name: "Cathedral Pavé",
     image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1758289221/knife-edge-solitare_myigc2.png",
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289221/cathedral-pave_xhu5mm.png",
   },
   {
     id: "baguette-channel",
@@ -177,14 +227,54 @@ export const SHANK_STYLES: Option[] = [
     image:
       "https://res.cloudinary.com/enobasse/image/upload/v1758289228/twist-pave_b2pz5e.png",
   },
-  { id: "alternating-baguette", name: "Alternating Baguette", image: "" },
-  { id: "alternating-marquise", name: "Alternating Marquise", image: "" },
-  { id: "floating-station", name: "Floating Station", image: "" },
-  { id: "floral-bypass", name: "Floral Bypass", image: "" },
-  { id: "knife-edge-pave", name: "Knife Edge Pavé", image: "" },
-  { id: "round-channel", name: "Round Channel", image: "" },
-  { id: "three-stone", name: "Three Stone", image: "" },
-  { id: "triple-row-pave", name: "Triple Row Pavé", image: "" },
+  {
+    id: "alternating-baguette",
+    name: "Alternating Baguette",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289228/alternating-baguette_jhfibh.png",
+  },
+  {
+    id: "alternating-marquise",
+    name: "Alternating Marquise",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289230/alternating-marquise_av5eod.png",
+  },
+  {
+    id: "floating-station",
+    name: "Floating Station",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289221/floating-station_fegdht.png",
+  },
+  {
+    id: "floral-bypass",
+    name: "Floral Bypass",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289221/floral-bypass_rgxrzd.png",
+  },
+  {
+    id: "knife-edge-pave",
+    name: "Knife Edge Pavé",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289221/knife-edge-pave_smtjd6.png",
+  },
+  {
+    id: "round-channel",
+    name: "Round Channel",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289222/round-channel_axdpvw.png",
+  },
+  {
+    id: "three-stone",
+    name: "Three Stone",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289225/three-stone_mssq9o.png",
+  },
+  {
+    id: "triple-row-pave",
+    name: "Triple Row Pavé",
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1758289227/triple-row-pave_enksqj.png",
+  },
 ];
 
 export const METAL_TYPES: MetalOption[] = [
@@ -380,12 +470,24 @@ export const METAL_MATERIALS = {
 // The /models library rigs every shank/head asset with named socket
 // ("MainAnchor"/"ConnectionAnchor") and accent-diamond ("Decoration")
 // locator nodes, so placement is read directly off each glTF's node
-// transforms instead of hand-tuned per-combination tables. These two
-// constants are the only calibration knobs needed to reconcile the
-// gemstone library's unit scale with the metal parts' unit scale, and
-// to size the assembled ring for the existing camera/orbit setup.
+// transforms instead of hand-tuned per-combination tables. GEM_SCALE is
+// the calibration knob needed to reconcile the gemstone library's unit
+// scale with the metal parts' unit scale (verified against a real 1ct
+// round diamond's ~6.5mm diameter).
 export const GEM_SCALE = 0.01;
-export const RING_SCENE_SCALE = 1000;
+
+// Head/shank combinations vary a lot in size (a chunky triple-row-pavé
+// shank isn't the same footprint as a plain solitaire), so the ring is
+// scaled dynamically per-configuration rather than by one fixed constant:
+// its largest bounding-box dimension is scaled to this many scene units.
+// Calibrated against the viewer's camera (fov 33, min zoom distance 40)
+// so the ring comfortably fits in frame — including while rotating —
+// with margin left over.
+export const TARGET_RING_SIZE = 20;
+
+// Fallback uniform scale used only if the bounding box can't be computed
+// (e.g. geometry not yet loaded).
+export const FALLBACK_RING_SCALE = 500;
 
 // Accent-diamond anchors are named "<PREFIX>_SIDE_Anchor_NNN". The prefix
 // says which gemstone shape belongs at that socket; the value below maps

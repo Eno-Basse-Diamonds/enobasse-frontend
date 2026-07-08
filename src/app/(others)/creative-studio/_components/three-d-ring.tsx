@@ -3,7 +3,14 @@
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader, invalidate } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
-import { BufferGeometry, Group, MeshStandardMaterial } from "three";
+import {
+  Box3,
+  BufferGeometry,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  Vector3,
+} from "three";
 import { RGBELoader } from "three-stdlib";
 import {
   useMobileDetection,
@@ -12,9 +19,10 @@ import {
 import {
   ACCENT_GEM_SHAPES,
   ACCENT_SHAPE_BY_ANCHOR_PREFIX,
+  FALLBACK_RING_SCALE,
   GEM_SCALE,
   METAL_MATERIALS,
-  RING_SCENE_SCALE,
+  TARGET_RING_SIZE,
 } from "../../../../lib/utils/constants/creative-studio";
 import { getModelPath } from "@/lib/utils/creative-studio";
 import { RingMesh } from "./three-d-ring/ring-mesh";
@@ -24,6 +32,8 @@ import { useRingCapture } from "./three-d-ring/use-ring-capture";
 import {
   findFirstMeshGeometry,
   getAnchorTransform,
+  getTransformedBoundingBox,
+  makeTransformMatrix,
 } from "./three-d-ring/anchor-utils";
 import { GLTFResult } from "./three-d-ring/types";
 
@@ -246,6 +256,74 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     (s) => s * GEM_SCALE,
   ) as [number, number, number];
 
+  // Head/shank combinations vary a lot in size and proportion, so the ring
+  // is auto-fit and recentered per-configuration from its actual assembled
+  // bounding box, rather than by one fixed scale tuned to a single
+  // combination (which would over- or under-fill the frame for others).
+  const { centerOffset, autoScale } = useMemo(() => {
+    const box = new Box3();
+
+    const shankBox = getTransformedBoundingBox(
+      (shankData.nodes.Body as Mesh)?.geometry,
+      makeTransformMatrix([0, 0, 0], [0, 0, 0, 1], [1, 1, 1]),
+    );
+    if (shankBox) box.union(shankBox);
+
+    const headMatrix = makeTransformMatrix(
+      headAttachment.position,
+      headAttachment.quaternion,
+      headAttachment.scale,
+    );
+    const headBox = getTransformedBoundingBox(
+      (headData.nodes.Body as Mesh)?.geometry,
+      headMatrix,
+    );
+    if (headBox) box.union(headBox);
+
+    const gemstoneMatrix = headMatrix
+      .clone()
+      .multiply(
+        makeTransformMatrix(
+          gemstoneAttachment.position,
+          gemstoneAttachment.quaternion,
+          gemstoneScale,
+        ),
+      );
+    const gemstoneBox = getTransformedBoundingBox(
+      gemstoneGeometry,
+      gemstoneMatrix,
+    );
+    if (gemstoneBox) box.union(gemstoneBox);
+
+    if (box.isEmpty()) {
+      return {
+        centerOffset: [0, 0, 0] as [number, number, number],
+        autoScale: FALLBACK_RING_SCALE,
+      };
+    }
+
+    const center = box.getCenter(new Vector3());
+    const size = box.getSize(new Vector3());
+    const maxDimension = Math.max(size.x, size.y, size.z);
+
+    return {
+      centerOffset: [-center.x, -center.y, -center.z] as [
+        number,
+        number,
+        number,
+      ],
+      autoScale:
+        maxDimension > 0 ? TARGET_RING_SIZE / maxDimension : FALLBACK_RING_SCALE,
+    };
+  }, [
+    shankData,
+    headData,
+    gemstoneGeometry,
+    headAttachment,
+    gemstoneAttachment,
+    gemstoneScale,
+  ]);
+
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
       groupRef.current.rotation.y += delta * rotationSpeed;
@@ -257,24 +335,11 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   });
 
   return (
-    <group ref={groupRef} dispose={null} scale={RING_SCENE_SCALE}>
-      {/* Shank */}
-      <ShankRenderer
-        shankData={shankData}
-        metalMaterial={metalMaterial}
-        texture={texture}
-        performanceTier={performanceTier}
-        gemScale={GEM_SCALE}
-        accentGeometryByShapePrefix={accentGeometryByShapePrefix}
-      />
-
-      <group
-        position={headAttachment.position}
-        quaternion={headAttachment.quaternion}
-      >
-        {/* Head */}
-        <HeadRenderer
-          headData={headData}
+    <group ref={groupRef} dispose={null} scale={autoScale}>
+      <group position={centerOffset}>
+        {/* Shank */}
+        <ShankRenderer
+          shankData={shankData}
           metalMaterial={metalMaterial}
           texture={texture}
           performanceTier={performanceTier}
@@ -282,18 +347,33 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
           accentGeometryByShapePrefix={accentGeometryByShapePrefix}
         />
 
-        {/* Gemstone */}
         <group
-          position={gemstoneAttachment.position}
-          quaternion={gemstoneAttachment.quaternion}
-          scale={gemstoneScale}
+          position={headAttachment.position}
+          quaternion={headAttachment.quaternion}
         >
-          <RingMesh
-            geometry={gemstoneGeometry}
-            isGemstone
+          {/* Head */}
+          <HeadRenderer
+            headData={headData}
+            metalMaterial={metalMaterial}
             texture={texture}
             performanceTier={performanceTier}
+            gemScale={GEM_SCALE}
+            accentGeometryByShapePrefix={accentGeometryByShapePrefix}
           />
+
+          {/* Gemstone */}
+          <group
+            position={gemstoneAttachment.position}
+            quaternion={gemstoneAttachment.quaternion}
+            scale={gemstoneScale}
+          >
+            <RingMesh
+              geometry={gemstoneGeometry}
+              isGemstone
+              texture={texture}
+              performanceTier={performanceTier}
+            />
+          </group>
         </group>
       </group>
     </group>
