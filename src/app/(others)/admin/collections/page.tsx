@@ -19,6 +19,7 @@ import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { AdminCollectionsSkeletonLoader } from "@/components/loaders/collections";
 import { Pagination } from "@/components/pagination";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 
 export default function AdminCollectionsPage() {
   const { data: session } = useSession();
@@ -30,6 +31,7 @@ export default function AdminCollectionsPage() {
     null
   );
   const [inputValue, setInputValue] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -80,13 +82,19 @@ export default function AdminCollectionsPage() {
   };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id, {
+    setDeleteId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteId) return;
+    deleteMutation.mutate(deleteId, {
       onSuccess: () => {
         setAlertState({
           visible: true,
           type: "success",
           message: "Collection deleted successfully!",
         });
+        setDeleteId(null);
       },
       onError: () => {
         setAlertState({
@@ -94,6 +102,7 @@ export default function AdminCollectionsPage() {
           type: "error",
           message: "Failed to delete collection. Please try again.",
         });
+        setDeleteId(null);
       },
     });
   };
@@ -262,6 +271,14 @@ export default function AdminCollectionsPage() {
               onClose={handleFormClose}
             />
           )}
+
+          <DeleteConfirmationModal
+            isOpen={deleteId !== null}
+            onClose={() => setDeleteId(null)}
+            onConfirm={handleConfirmDelete}
+            title="Delete Collection"
+            isDeleting={deleteMutation.isPending}
+          />
         </>
       )}
     </>

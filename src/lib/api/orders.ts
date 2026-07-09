@@ -103,6 +103,8 @@ export const getAdminOrders = async (params: {
   perPage?: number;
   status?: string;
   search?: string;
+  sortBy?: string;
+  sortOrder?: string;
 }): Promise<AdminOrdersResponse> => {
   return api.get(`/orders/admin`, { cache: false, params });
 };

@@ -10,7 +10,7 @@ import { useAdminAccounts, useDeleteAccount } from "@/lib/hooks/use-accounts";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
 import { Account } from "@/lib/types/accounts";
 import { AccountForm } from "./_components/account-form";
-import { DeleteConfirmationModal } from "./_components/delete-confirmation-modal";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 import { EmptyState } from "@/components/empty-state";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";

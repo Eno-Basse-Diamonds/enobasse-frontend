@@ -17,6 +17,7 @@ import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { AdminProductsSkeletonLoader } from "@/components/loaders/products";
 import { Pagination } from "@/components/pagination";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 
 export default function AdminProductsPage() {
   const { data: session } = useSession();
@@ -26,6 +27,7 @@ export default function AdminProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [inputValue, setInputValue] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -85,13 +87,19 @@ export default function AdminProductsPage() {
   };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id, {
+    setDeleteId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteId) return;
+    deleteMutation.mutate(deleteId, {
       onSuccess: () => {
         setAlertState({
           visible: true,
           type: "success",
           message: "Product deleted successfully!",
         });
+        setDeleteId(null);
       },
       onError: () => {
         setAlertState({
@@ -99,6 +107,7 @@ export default function AdminProductsPage() {
           type: "error",
           message: "Failed to delete product. Please try again.",
         });
+        setDeleteId(null);
       },
     });
   };
@@ -286,6 +295,14 @@ export default function AdminProductsPage() {
           {isModalOpen && (
             <ProductForm product={editingProduct} onClose={handleFormClose} />
           )}
+
+          <DeleteConfirmationModal
+            isOpen={deleteId !== null}
+            onClose={() => setDeleteId(null)}
+            onConfirm={handleConfirmDelete}
+            title="Delete Product"
+            isDeleting={deleteMutation.isPending}
+          />
         </>
       )}
     </>

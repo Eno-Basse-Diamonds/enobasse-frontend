@@ -13,10 +13,12 @@ import { EmptyState } from "@/components/empty-state";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { Pagination } from "@/components/pagination";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 
 export default function AdminNewsletterPage() {
   const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -31,24 +33,29 @@ export default function AdminNewsletterPage() {
   const ITEMS_PER_PAGE = 10;
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to remove this subscription?")) {
-      deleteMutation.mutate(id, {
-        onSuccess: () => {
-          setAlertState({
-            visible: true,
-            type: "success",
-            message: "Subscriber removed successfully!",
-          });
-        },
-        onError: () => {
-          setAlertState({
-            visible: true,
-            type: "error",
-            message: "Failed to remove subscriber. Please try again.",
-          });
-        },
-      });
-    }
+    setDeleteId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteId) return;
+    deleteMutation.mutate(deleteId, {
+      onSuccess: () => {
+        setAlertState({
+          visible: true,
+          type: "success",
+          message: "Subscriber removed successfully!",
+        });
+        setDeleteId(null);
+      },
+      onError: () => {
+        setAlertState({
+          visible: true,
+          type: "error",
+          message: "Failed to remove subscriber. Please try again.",
+        });
+        setDeleteId(null);
+      },
+    });
   };
 
   const handleExportCSV = () => {
@@ -271,6 +278,15 @@ export default function AdminNewsletterPage() {
             icon={<Mail className="w-16 h-16 text-gray-400" />}
           />
         )}
+
+        <DeleteConfirmationModal
+          isOpen={deleteId !== null}
+          onClose={() => setDeleteId(null)}
+          onConfirm={handleConfirmDelete}
+          title="Remove Subscriber"
+          message="Are you sure you want to remove this subscriber? They will stop receiving newsletter emails."
+          isDeleting={deleteMutation.isPending}
+        />
       </div>
     </>
   );

@@ -10,7 +10,6 @@ import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
 import { Order } from "@/lib/types/orders";
 import { OrdersTable } from "./_components/orders-table";
 import { OrderModal } from "./_components/order-modal";
-import { useEffect } from "react";
 import { Alert } from "@/components/alert";
 import { Pagination } from "@/components/pagination";
 
@@ -30,6 +29,9 @@ export default function AdminOrdersPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentStatus = searchParams.get("status") || "";
+  const currentSort = searchParams.get("sortBy") || "createdAt";
+  const currentSortOrder =
+    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const perPage = Number(searchParams.get("perPage")) || 10;
 
   const { data, isLoading } = useAdminOrders({
@@ -37,9 +39,11 @@ export default function AdminOrdersPage() {
     perPage,
     search: currentSearch || undefined,
     status: currentStatus || undefined,
+    sortBy: currentSort as "createdAt" | "updatedAt" | "total",
+    sortOrder: currentSortOrder,
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (selectedOrder) {
       document.body.style.overflow = "hidden";
     }
@@ -76,7 +80,11 @@ export default function AdminOrdersPage() {
     updateURL({ search: "", page: 1 });
   };
 
-  const sortOptions = [{ value: "createdAt", label: "Date Created" }];
+  const sortOptions = [
+    { value: "createdAt", label: "Date Created" },
+    { value: "updatedAt", label: "Last Updated" },
+    { value: "total", label: "Total" },
+  ];
   const filterOptions = [
     { value: "pending", label: "Pending" },
     { value: "confirmed", label: "Confirmed" },
@@ -88,6 +96,14 @@ export default function AdminOrdersPage() {
   ];
 
   const currentFilters = currentStatus ? [currentStatus] : [];
+
+  const handleSortChange = (sort: string) => {
+    updateURL({ sortBy: sort, page: 1 });
+  };
+
+  const handleSortOrderChange = (order: "ASC" | "DESC") => {
+    updateURL({ sortOrder: order, page: 1 });
+  };
 
   const handleFilterChange = (filters: string[]) => {
     updateURL({ status: filters[0] || "", page: 1 });
@@ -151,9 +167,11 @@ export default function AdminOrdersPage() {
             <AdminFilterSortPanel
               sortOptions={sortOptions}
               filterOptions={filterOptions}
-              currentSort={"createdAt"}
+              currentSort={currentSort}
+              currentSortOrder={currentSortOrder}
               currentFilters={currentFilters}
-              onSortChange={() => {}}
+              onSortChange={handleSortChange}
+              onSortOrderChange={handleSortOrderChange}
               onFilterChange={handleFilterChange}
             />
           </div>

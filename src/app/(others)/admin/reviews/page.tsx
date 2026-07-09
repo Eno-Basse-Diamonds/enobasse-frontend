@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
 import { ReviewList } from "./_components/review-list";
 import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { DeleteConfirmationModal } from "../accounts/_components/delete-confirmation-modal";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 import {
   useReviewsForAdmin,
   useUpdateReview,

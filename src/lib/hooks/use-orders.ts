@@ -11,6 +11,8 @@ export const useAdminOrders = (params: {
   perPage?: number;
   status?: string;
   search?: string;
+  sortBy?: "createdAt" | "updatedAt" | "total";
+  sortOrder?: "ASC" | "DESC";
 }) => {
   return useQuery<AdminOrdersResponse, Error>({
     queryKey: [
@@ -20,6 +22,8 @@ export const useAdminOrders = (params: {
         perPage: params.perPage,
         status: params.status,
         search: params.search,
+        sortBy: params.sortBy,
+        sortOrder: params.sortOrder,
       },
     ],
     queryFn: () => getAdminOrders(params),

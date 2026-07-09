@@ -16,6 +16,7 @@ import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import { AdminBlogSkeletonLoader } from "@/components/loaders/blog";
 import { Pagination } from "@/components/pagination";
+import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();
@@ -25,6 +26,7 @@ export default function AdminBlogPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
   const [inputValue, setInputValue] = useState("");
+  const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;
@@ -80,13 +82,19 @@ export default function AdminBlogPage() {
   };
 
   const handleDelete = (slug: string) => {
-    deleteMutation.mutate(slug, {
+    setDeleteSlug(slug);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteSlug) return;
+    deleteMutation.mutate(deleteSlug, {
       onSuccess: () => {
         setAlertState({
           visible: true,
           type: "success",
           message: "Blog post deleted successfully!",
         });
+        setDeleteSlug(null);
       },
       onError: () => {
         setAlertState({
@@ -94,6 +102,7 @@ export default function AdminBlogPage() {
           type: "error",
           message: "Failed to delete blog post. Please try again.",
         });
+        setDeleteSlug(null);
       },
     });
   };
@@ -195,7 +204,7 @@ export default function AdminBlogPage() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search collections..."
+                  placeholder="Search blog posts..."
                   value={inputValue}
                   onChange={handleInputChange}
                   className="pl-10 pr-20 w-full p-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent"
@@ -258,6 +267,14 @@ export default function AdminBlogPage() {
           {isModalOpen && (
             <BlogPostForm blogPost={editingBlog} onClose={handleFormClose} />
           )}
+
+          <DeleteConfirmationModal
+            isOpen={deleteSlug !== null}
+            onClose={() => setDeleteSlug(null)}
+            onConfirm={handleConfirmDelete}
+            title="Delete Blog Post"
+            isDeleting={deleteMutation.isPending}
+          />
         </>
       )}
     </>
