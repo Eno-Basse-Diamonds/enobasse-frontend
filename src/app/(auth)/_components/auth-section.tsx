@@ -96,14 +96,17 @@ export default function AuthSection({
     "sign-up": async (formData) => {
       const response = await handleSignUp(formData);
       if (response?.errors) return response;
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
-        redirect: true,
-        callbackUrl: "/account",
+        redirect: false,
       });
+      if (result?.error) {
+        throw new Error("Account created but sign-in failed. Please sign in manually.");
+      }
       setIsAuthenticated(true);
       setAccount({ email: formData.email });
+      router.push("/account");
     },
     "sign-in": async (formData) => {
       const result = await signIn("credentials", {
