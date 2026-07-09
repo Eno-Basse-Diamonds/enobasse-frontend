@@ -140,10 +140,10 @@ export function TestimonialForm({
         </div>
       )}
 
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
         <form
           onSubmit={handleSubmit}
-          className="bg-white w-full max-w-2xl h-full flex flex-col shadow-2xl rounded-sm"
+          className="bg-white w-full max-w-2xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
         >
           <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
             <h3 className="text-2xl font-semibold text-primary-500">

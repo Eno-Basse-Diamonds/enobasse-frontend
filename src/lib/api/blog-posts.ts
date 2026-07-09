@@ -1,5 +1,3 @@
-"use server";
-
 import { BlogPostFormData, BlogPostSchema } from "@/lib/validations/blog";
 import type { BlogPost } from "../types/blog-post";
 import { calculateReadingTime } from "../helpers/blog-post";

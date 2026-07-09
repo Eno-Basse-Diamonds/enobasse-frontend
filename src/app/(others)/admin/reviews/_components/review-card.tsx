@@ -45,7 +45,7 @@ export const ReviewCard = memo(function ReviewCard({
     <div className="bg-white shadow overflow-hidden hover:shadow-md transition-all duration-300 rounded-sm border border-primary-500/10 flex flex-col h-full">
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex-grow">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div className="flex items-center">
               <div className="relative w-12 h-12 rounded-full overflow-hidden mr-3">
                 {review.authorImage?.url && !imageError ? (

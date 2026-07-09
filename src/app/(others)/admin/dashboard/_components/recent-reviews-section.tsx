@@ -59,7 +59,7 @@ export const RecentReviewsSection = ({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 truncate">
                           {review.product?.name}
@@ -69,7 +69,7 @@ export const RecentReviewsSection = ({
                         </p>
                       </div>
 
-                      <div className="flex items-center ml-3 flex-shrink-0">
+                      <div className="flex items-center sm:ml-3 flex-shrink-0">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}

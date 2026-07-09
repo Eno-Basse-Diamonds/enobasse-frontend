@@ -104,7 +104,7 @@ export function MetalsGemstonesSelector({
     <div className="space-y-6">
       <div>
         <h4 className="text-lg font-semibold text-primary-500 mb-4">Metals</h4>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {metalOptions.map((metal) => {
             const isSelected = selectedMetals.some(m => m.type === metal.name);
             const details = metalDetails[metal.name] || { purity: '', weight: '' };
@@ -168,7 +168,7 @@ export function MetalsGemstonesSelector({
 
       <div>
         <h4 className="text-lg font-semibold text-primary-500 mb-4">Gemstones</h4>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {gemstones.map((gemstone) => {
             const isSelected = selectedGemstones.some(g => g.type === gemstone.name);
             const details = gemstoneDetails[gemstone.name] || { weight: '' };

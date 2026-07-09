@@ -41,10 +41,10 @@ export function OrderModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
       <form
         onSubmit={handleSubmit}
-        className="bg-white w-full max-w-4xl h-full flex flex-col shadow-2xl"
+        className="bg-white w-full max-w-4xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
       >
         <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
           <div className="flex items-center gap-3">
@@ -70,35 +70,48 @@ export function OrderModal({
               </h4>
               <div className="space-y-3">
                 {order.items.map((it) => (
-                  <div key={it.id} className="flex items-center gap-4 text-sm">
-                    <div className="flex-shrink-0 w-16 h-16 relative border border-gray-200">
-                      <Image
-                        src={
-                          it.productVariant?.images?.[0]?.url ||
-                          "/placeholder-image.jpg"
-                        }
-                        alt={it.productVariant?.title || "Product image"}
-                        fill
-                        className="object-cover rounded-md"
-                        sizes="64px"
-                      />
+                  <div key={it.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 border-b border-gray-100 last:border-b-0 text-sm">
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="flex-shrink-0 w-16 h-16 relative border border-gray-200">
+                        <Image
+                          src={
+                            it.productVariant?.images?.[0]?.url ||
+                            "/placeholder-image.jpg"
+                          }
+                          alt={it.productVariant?.title || "Product image"}
+                          fill
+                          className="object-cover rounded-md"
+                          sizes="64px"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-medium truncate max-w-[200px] sm:max-w-xs">
+                          {it.productVariant?.title}
+                        </div>
+                        <div className="text-primary-300 text-xs">
+                          SKU: {it.productVariant?.sku || "-"}
+                        </div>
+                        <div className="sm:hidden text-xs text-gray-500 mt-1">
+                          {it.quantity} × {getCurrencySymbol(it.productVariant?.currency)}{Number(it.productVariant?.price || 0).toLocaleString()}
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex-1">
-                      <div className="font-medium">
-                        {it.productVariant?.title}
+                    <div className="hidden sm:flex items-center gap-6 text-right">
+                      <div className="w-20 text-gray-600">x{it.quantity}</div>
+                      <div className="w-24 text-gray-600">
+                        {getCurrencySymbol(it.productVariant?.currency)}
+                        {Number(it.productVariant?.price || 0).toLocaleString()}
                       </div>
-                      <div className="text-primary-300">
-                        SKU: {it.productVariant?.sku || "-"}
+                      <div className="w-28 font-semibold text-primary-500">
+                        {getCurrencySymbol(it.productVariant?.currency)}
+                        {Number(
+                          (it.productVariant?.price || 0) * it.quantity
+                        ).toLocaleString()}
                       </div>
                     </div>
-                    <div className="w-24 text-right">x{it.quantity}</div>
-                    <div className="w-28 text-right">
-                      {getCurrencySymbol(it.productVariant?.currency)}
-                      {Number(it.productVariant?.price || 0).toLocaleString()}
-                    </div>
-                    <div className="w-32 text-right font-semibold">
-                      {getCurrencySymbol(it.productVariant?.currency)}
+                    <div className="sm:hidden self-end font-semibold text-primary-500">
+                      Total: {getCurrencySymbol(it.productVariant?.currency)}
                       {Number(
                         (it.productVariant?.price || 0) * it.quantity
                       ).toLocaleString()}

@@ -19,7 +19,7 @@ export default function AdminAnalyticsPage() {
         }}
       />
 
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8">
         <div>
           <div className="mb-8">
             <h1 className="text-lg font-medium text-gray-900">
@@ -31,8 +31,8 @@ export default function AdminAnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-white shadow-sm rounded-sm border border-primary-500/10 p-8 mb-8">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-white shadow-sm rounded-sm border border-primary-500/10 p-4 sm:p-6 lg:p-8 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-primary-500/10 rounded-sm flex items-center justify-center">
                   <BarChart3 className="w-6 h-6 text-primary-500" />

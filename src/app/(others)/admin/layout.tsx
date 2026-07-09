@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Home,
   Package,
@@ -8,20 +9,21 @@ import {
   FileText,
   BarChart3,
   Folder,
-  TriangleAlert,
   MessageSquare,
-  Truck,
   Star,
   Mail,
+  Truck,
+  Menu,
+  X,
 } from "lucide-react";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/button";
 
 export default function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sidebarItems = [
     {
@@ -93,30 +95,53 @@ export default function AdminLayout({
   ];
 
   return (
-    <>
-      <div className="hidden lg:flex h-full bg-gray-50">
-        <AdminSidebarNavigation sidebarItems={sidebarItems} />
-        <div className="flex-1 ml-72 bg-gray-100 min-h-screen overflow-x-auto">
-          {children}
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[55] lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile sidebar drawer */}
+      <div
+        className={`fixed inset-y-0 left-0 z-[60] w-72 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:hidden ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="relative h-full">
+          <AdminSidebarNavigation
+            sidebarItems={sidebarItems}
+            onItemClick={() => setSidebarOpen(false)}
+          />
         </div>
       </div>
 
-      <div className="lg:hidden flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 text-center">
-        <div className="max-w-md mx-auto space-y-4">
-          <div className="text-red-500 mb-4">
-            <TriangleAlert className="h-12 w-12 mx-auto" />
-          </div>
-          <h1 className="font-primary text-2xl font-bold text-primary-500">
-            Access Restricted
-          </h1>
-          <p className="text-primary-300">
-            Admin dashboard is only available on desktop devices.
-          </p>
-          <div className="pt-4">
-            <Button href="/">Go Home</Button>
-          </div>
+      {/* Desktop sidebar */}
+      <div className="hidden lg:block">
+        <div className="fixed top-0 left-0 z-50">
+          <AdminSidebarNavigation sidebarItems={sidebarItems} />
         </div>
       </div>
-    </>
+
+      {/* Mobile top bar */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 py-3 flex items-center">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 mr-3 text-primary-500 hover:text-secondary-500"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        <span className="font-primary text-lg font-semibold text-primary-500 truncate">
+          Admin
+        </span>
+      </div>
+
+      {/* Main content */}
+      <div className="lg:ml-72 pt-14 lg:pt-0 min-w-0 overflow-x-auto">
+        {children}
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,3 @@
-"use server";
-
 import { api } from "../utils/api";
 
 export interface NewsletterSubscription {

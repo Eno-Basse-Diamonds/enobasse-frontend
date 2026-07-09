@@ -232,8 +232,8 @@ export default function AdminReviewsPage() {
         <AdminReviewsSkeletonLoader />
       ) : (
         <>
-          <div className="flex-1 p-8">
-            <div className="flex items-center justify-between mb-8">
+          <div className="flex-1 p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
                 <h3 className="text-lg font-medium text-gray-900">
                   Reviews ({data?.total || 0})
@@ -263,7 +263,7 @@ export default function AdminReviewsPage() {
                 )}
               </form>
 
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 <RatingDropdown
                   value={currentRating ?? ""}
                   onChange={handleRatingFilterChange}

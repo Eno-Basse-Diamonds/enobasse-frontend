@@ -122,10 +122,10 @@ export function BlogPostForm({ blogPost, onClose }: BlogPostFormProps) {
     <>
       <AlertMessage state={state} />
 
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-10">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
         <form
           onSubmit={handleSubmit}
-          className="bg-white w-full max-w-7xl h-full flex flex-col shadow-2xl"
+          className="bg-white w-full max-w-7xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
         >
           <FormHeader
             title={formTitle}
