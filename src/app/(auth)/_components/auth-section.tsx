@@ -97,22 +97,24 @@ export default function AuthSection({
       const response = await handleSignUp(formData);
       if (response?.errors) return response;
 
-      // Retry sign-in a few times to allow the backend to propagate the new account
-      let result;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        if (attempt > 0) {
-          await new Promise((resolve) => setTimeout(resolve, 600));
-        }
-        result = await signIn("credentials", {
-          email: formData.email,
-          password: formData.password,
-          redirect: false,
-        });
-        if (!result?.error) break;
+      // Use the server-issued token to sign in instantly, no login round-trip needed
+      const signInParams: Record<string, string> = {
+        email: formData.email,
+        redirect: "false",
+      };
+
+      if (response?.preIssuedToken) {
+        signInParams.preIssuedToken = response.preIssuedToken;
+      } else {
+        signInParams.password = formData.password;
       }
 
+      const result = await signIn("credentials", {
+        ...signInParams,
+        redirect: false,
+      });
+
       if (result?.error) {
-        // Account was created — send them to sign-in rather than showing a cryptic error
         router.push("/sign-in");
         return;
       }

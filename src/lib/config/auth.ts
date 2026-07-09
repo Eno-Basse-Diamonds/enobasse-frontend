@@ -14,10 +14,22 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        preIssuedToken: { label: "Pre-issued Token", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials) return null;
 
+        // Sign-up flow: a token was already issued server-side, use it directly
+        if (credentials.preIssuedToken) {
+          try {
+            const tokenData = JSON.parse(credentials.preIssuedToken);
+            return { ...tokenData.account, accessToken: tokenData.accessToken } as unknown as User;
+          } catch {
+            return null;
+          }
+        }
+
+        // Sign-in flow: authenticate with email + password
         const { email, password } = credentials;
         try {
           const { accessToken, account } = await login(email, password);
