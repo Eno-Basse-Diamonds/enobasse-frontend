@@ -115,14 +115,14 @@ export function ThreeDRing({
       frameloop={isMobile ? "demand" : "always"}
       performance={{ min: 0.5 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
-      gl={{ toneMappingExposure: 1.5 }}
+      gl={{ toneMappingExposure: 1.2 }}
       className="w-full h-full"
     >
       <Suspense fallback={null}>
         <Environment files={environment} />
       </Suspense>
 
-      {/* Environment lighting alone reads as flat/ambient; these two lights
+      {/* Environment lighting alone reads as flat/ambient; these lights
           add the crisp specular glints real studio jewelry photography
           relies on for metal and diamond sparkle. */}
       <directionalLight
@@ -131,6 +131,12 @@ export function ThreeDRing({
         castShadow={!isMobile}
       />
       <directionalLight position={[-30, 15, -25]} intensity={0.5} />
+      {/* Rim light from behind/above — creates bright edge highlights on the
+          diamond crown and pavilion facets, giving the stone shape definition
+          against any background. */}
+      <directionalLight position={[0, 40, 25]} intensity={0.8} />
+      {/* Backlight for edge definition on the far side of the diamond. */}
+      <directionalLight position={[0, 20, -40]} intensity={0.4} />
 
       <RotatingRing
         key={currentConfig}
