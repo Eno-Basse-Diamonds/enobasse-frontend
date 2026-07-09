@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getProductsForAdmin,
@@ -50,6 +50,7 @@ export function useProducts(
     queryKey: ["products", options],
     queryFn: () => getProducts(options),
     enabled: enabled && options !== undefined,
+    placeholderData: keepPreviousData,
   });
 }
 

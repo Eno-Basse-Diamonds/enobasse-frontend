@@ -34,6 +34,18 @@ class ApiClient {
         headers: {
           "Content-Type": "application/json",
         },
+        paramsSerializer: (params) => {
+          return Object.entries(params)
+            .map(([key, value]) => {
+              if (value === undefined || value === null) return '';
+              if (Array.isArray(value)) {
+                return value.map(v => `${encodeURIComponent(key)}=${encodeURIComponent(v)}`).join('&');
+              }
+              return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`;
+            })
+            .filter(Boolean)
+            .join('&');
+        },
       }),
       {
         ttl: 60 * 1000,

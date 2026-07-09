@@ -22,7 +22,7 @@ export function useCreateReview() {
     }) => createReview(productId, reviewData),
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["product", variables.productId],
+        queryKey: ["product"],
       });
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },

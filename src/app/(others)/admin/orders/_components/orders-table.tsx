@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Order } from "@/lib/types/orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { Button } from "@/components/button";
+import { PaymentStatusBadge } from "@/components/badge/payment-status-badge";
 
 export function OrdersTable({
   orders,
@@ -124,9 +125,12 @@ export function OrdersTable({
                 </div>
               </Td>
               <Td>
-                <span className="text-xs px-2 py-1 border capitalize rounded-sm">
-                  {order.status}
-                </span>
+                <div className="flex flex-col gap-1 items-start">
+                  <span className="text-xs px-2 py-1 border capitalize rounded-sm">
+                    {order.status}
+                  </span>
+                  <PaymentStatusBadge paymentStatus={order.paymentStatus} />
+                </div>
               </Td>
               <Td>
                 <Button

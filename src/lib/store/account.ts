@@ -12,6 +12,7 @@ interface BillingAddress {
   region: string;
   postalCode: string;
   phone: string;
+  email?: string;
 }
 
 interface AccountState {
@@ -23,7 +24,8 @@ interface AccountState {
   isHydrated: boolean;
   setAccount: (account: { email: string }) => void;
   clearAccount: () => void;
-  updateBillingAddress?: (address: BillingAddress) => void;
+  updateBillingAddress: (address: BillingAddress) => Promise<void>;
+  updateLocalBillingAddress: (address: BillingAddress) => void;
   setPreferredCurrency: (currency: string) => Promise<void>;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setIsHydrated: (isHydated: boolean) => void;
@@ -52,7 +54,29 @@ export const useAccountStore = create<AccountState>()(
           isAuthenticated: false,
         }),
 
-      updateBillingAddress: (address) => set({ billingAddress: address }),
+      updateBillingAddress: async (address) => {
+        set({ billingAddress: address });
+
+        if (get().isAuthenticated) {
+          try {
+            await updateAccount(get().email || "", {
+              billingAddress: {
+                street: address.address + (address.apartment ? `, ${address.apartment}` : ""),
+                city: address.city,
+                state: address.region,
+                postalCode: address.postalCode,
+                country: address.country,
+              },
+              phone: address.phone,
+              name: `${address.firstName} ${address.lastName}`.trim(),
+            });
+          } catch (error) {
+            // Keep local changes anyway
+          }
+        }
+      },
+
+      updateLocalBillingAddress: (address) => set({ billingAddress: address }),
 
       setIsAuthenticated: (isAuthenticated: boolean) => {
         set({ isAuthenticated });

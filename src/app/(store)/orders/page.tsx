@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -14,15 +14,23 @@ import { OrderHistoryLoader } from "@/components/loaders/orders";
 
 export default function OrderHistoryPage() {
   const { data: session } = useSession();
-  const { orders, loading: storeLoading, hydrateOrders } = useOrdersStore();
+  const {
+    orders,
+    loading: storeLoading,
+    hydrateOrders,
+    totalPages,
+    total,
+  } = useOrdersStore();
   const { isHydrated } = useAccountStore();
   const accountEmail = session?.user?.email;
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 5;
 
   useEffect(() => {
     if (isHydrated) {
-      hydrateOrders(accountEmail || undefined);
+      hydrateOrders(accountEmail || undefined, currentPage, perPage);
     }
-  }, [accountEmail, isHydrated, hydrateOrders]);
+  }, [accountEmail, isHydrated, hydrateOrders, currentPage]);
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -106,14 +114,18 @@ export default function OrderHistoryPage() {
                   >
                     <div className="flex flex-col md:flex-row gap-6">
                       <div className="flex-shrink-0">
-                        <div className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200 rounded-sm">
-                          <Image
-                            src={item.productVariant.images[0].url}
-                            alt={item.productVariant.images[0].alt}
-                            fill
-                            className="size-full object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
-                          />
+                        <div className="shrink-0 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden border border-gray-200 rounded-sm bg-gray-50 flex items-center justify-center">
+                          {item.productVariant.images?.[0]?.url ? (
+                            <Image
+                              src={item.productVariant.images[0].url}
+                              alt={item.productVariant.images[0].alt || "Product image"}
+                              fill
+                              className="size-full object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
+                            />
+                          ) : (
+                            <ShoppingBagIcon className="w-12 h-12 text-gray-400" />
+                          )}
                         </div>
                       </div>
                       <div className="flex-grow">
@@ -175,6 +187,73 @@ export default function OrderHistoryPage() {
           </div>
         );
       })}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between border border-gray-100 bg-white px-4 py-3 sm:px-6 mt-8 max-w-4xl mx-auto rounded-sm shadow-sm">
+          <div className="flex flex-1 justify-between sm:hidden">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="relative inline-flex items-center rounded-sm border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="relative ml-3 inline-flex items-center rounded-sm border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+          <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Showing page <span className="font-medium">{currentPage}</span> of{" "}
+                <span className="font-medium">{totalPages}</span> (<span className="font-medium">{total}</span> orders total)
+              </p>
+            </div>
+            <div>
+              <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="relative inline-flex items-center rounded-l-md px-3 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="sr-only">Previous</span>
+                  &laquo;
+                </button>
+                {Array.from({ length: totalPages }).map((_, i) => {
+                  const pageNumber = i + 1;
+                  const isCurrent = pageNumber === currentPage;
+                  return (
+                    <button
+                      key={pageNumber}
+                      onClick={() => setCurrentPage(pageNumber)}
+                      aria-current={isCurrent ? "page" : undefined}
+                      className={`relative inline-flex items-semibold px-4 py-2 text-sm font-semibold focus:z-20 focus:outline-offset-0 ${
+                        isCurrent
+                          ? "z-10 bg-[#502B3A] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#502B3A]"
+                          : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="relative inline-flex items-center rounded-r-md px-3 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="sr-only">Next</span>
+                  &raquo;
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -11,6 +11,9 @@ import { Product } from "@/lib/types/products";
 import { API_URL } from "@/lib/utils/constants/api-url";
 import { useAlertStore } from "@/lib/store/alert";
 import { logger } from "@/lib/utils/logger";
+import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
+import { useAccountByEmail } from "@/lib/hooks/use-accounts";
 
 interface RequestQuoteModalProps {
   isOpen: boolean;
@@ -35,6 +38,10 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
   const [loading, setLoading] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const addAlert = useAlertStore((state) => state.addAlert);
+  const { data: session } = useSession();
+  const { isHydrated, billingAddress: savedBillingAddress } = useAccountStore();
+  const { data: dbAccount } = useAccountByEmail(session?.user?.email);
+  const hasInitializedRef = useRef(false);
 
   const showAlert = (type: "success" | "error", message: string) => {
     addAlert({
@@ -66,9 +73,45 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
     } else {
       const timer = setTimeout(() => setIsMounted(false), 300);
       document.body.style.overflow = "auto";
+      hasInitializedRef.current = false;
       return () => clearTimeout(timer);
     }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [isOpen]);
+
+  // Autofill form data when the modal is opened
+  useEffect(() => {
+    if (isOpen && isHydrated && !hasInitializedRef.current && (session === undefined || dbAccount !== undefined)) {
+      setFormData((prev) => {
+        const email = session?.user?.email || savedBillingAddress?.email || prev.email;
+        let firstName = savedBillingAddress?.firstName || prev.firstName;
+        let lastName = savedBillingAddress?.lastName || prev.lastName;
+        let phone = savedBillingAddress?.phone || prev.phone;
+
+        if (dbAccount) {
+          if (dbAccount.name) {
+            const parts = dbAccount.name.trim().split(/\s+/);
+            firstName = parts[0] || firstName;
+            lastName = parts.slice(1).join(" ") || lastName;
+          }
+          phone = dbAccount.phone || phone;
+        }
+
+        hasInitializedRef.current = true;
+
+        return {
+          ...prev,
+          email,
+          phone,
+          firstName,
+          lastName,
+        };
+      });
+    }
+  }, [isOpen, isHydrated, session, dbAccount, savedBillingAddress]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -84,36 +127,44 @@ export const RequestQuoteModal: React.FC<RequestQuoteModalProps> = ({
     setLoading(true);
 
     try {
+      const { currency, ...submitData } = formData;
       const response = await fetch(`${API_URL}/contact/quote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,
+          ...submitData,
           priceRange: formData.priceRange
             ? `${formData.currency === "USD" ? "$" : "₦"}${formData.priceRange}`
             : "",
           productName: product.name,
           productSku: product.variants[0]?.sku,
+          productImageUrl: variantImage || product.images?.[0]?.url || "",
           amoraOptions: amoraOptions,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit quote request");
+        const errData = await response.json().catch(() => null);
+        const errMsg = errData?.message
+          ? (Array.isArray(errData.message) ? errData.message.join(", ") : errData.message)
+          : "Failed to submit quote request";
+        throw new Error(errMsg);
       }
 
       showAlert("success", "Quote request sent successfully!");
       onClose();
     } catch (error) {
       logger.error("Error submitting quote request:", error);
-      showAlert("error", "Failed to send quote request. Please try again.");
+      const message = error instanceof Error ? error.message : "Failed to send quote request. Please try again.";
+      showAlert("error", message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!product) return null;
   if (!isMounted && !isOpen) return null;
 
   return (

@@ -123,7 +123,19 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({
                     <RequestQuoteModal
                       isOpen={isRequestQuoteOpen}
                       onClose={() => setIsRequestQuoteOpen(false)}
-                      product={(item.productVariant as any).product}
+                      product={
+                        (item.productVariant as any).product || {
+                          id: variant.id,
+                          name: variant.title,
+                          slug: item.productSlug,
+                          description: variant.description || "",
+                          priceRange: { min: variant.price, max: variant.price, currency: variant.currency },
+                          category: item.productCategory,
+                          images: variant.images || [],
+                          variants: [variant],
+                          createdAt: new Date(),
+                        }
+                      }
                       variantImage={item.productVariant.images[0]?.url}
                     />
                   )}

@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import {
   Collection,
   CollectionWithProducts,
@@ -32,6 +32,7 @@ export function useCollection(
     queryKey: ["collection", slug, options],
     queryFn: () => getCollectionWithProducts(slug, options),
     enabled: enabled,
+    placeholderData: keepPreviousData,
   });
 }
 

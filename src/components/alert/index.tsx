@@ -21,7 +21,7 @@ export const AppAlert = () => {
 
   return (
     <div
-      className="fixed top-0 right-0 left-0 sm:left-auto sm:top-4 sm:right-4 z-[9999] p-4 sm:p-0 flex flex-col gap-3 pointer-events-none"
+      className="fixed top-0 right-0 left-0 sm:left-auto sm:top-4 sm:right-4 z-9999 p-4 sm:p-0 flex flex-col gap-3 pointer-events-none"
       aria-live="assertive"
     >
       {alerts.map((alert) => (
@@ -125,7 +125,7 @@ export const Alert: React.FC<AlertProps> = ({
       role="alert"
     >
       <div className="flex">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <IconComponent className={`h-5 w-5 ${variant.iconColor}`} />
         </div>
         <div className="ml-3 flex-1">
@@ -137,7 +137,7 @@ export const Alert: React.FC<AlertProps> = ({
             <button
               type="button"
               onClick={handleDismiss}
-              className="-mx-1.5 -my-1.5 inline-flex p-1.5 focus:outline-none hover:bg-black hover:bg-opacity-10 hover:rounded-full"
+              className="-mx-1.5 -my-1.5 inline-flex p-1.5 focus:outline-none hover:bg-black/10 hover:rounded-full"
               aria-label="Dismiss alert"
             >
               <X className="h-4 w-4" />

@@ -58,6 +58,8 @@ export interface ProductFilterOptions {
   pageSize?: number;
   search?: string;
   currency?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export interface ProductsResponse {

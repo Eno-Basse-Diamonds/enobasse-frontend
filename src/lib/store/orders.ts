@@ -10,6 +10,10 @@ import {
 
 export interface OrdersStore {
   orders: Order[];
+  total: number;
+  totalPages: number;
+  page: number;
+  perPage: number;
   loading: boolean;
   error: string | null;
   hydrated: boolean;
@@ -25,29 +29,46 @@ export interface OrdersStore {
     };
     currency?: string;
     paymentMethod?: "paystack" | "bank_transfer";
-    paymentStatus?: "pending" | "paid" | "failed";
+    /** paymentStatus is intentionally excluded — orders start as PENDING server-side */
     paymentReference?: string;
   }) => Promise<Order>;
   getOrdersByAccountEmail: (email: string) => Promise<Order[]>;
   getOrderById: (id: string) => Promise<Order>;
   clearCartAfterOrder: (accountEmail?: string) => void;
-  hydrateOrders: (accountEmail?: string) => Promise<void>;
+  hydrateOrders: (accountEmail?: string, page?: number, perPage?: number) => Promise<void>;
+  addOrder: (order: Order) => void;
+  updateOrderState: (
+    orderId: string,
+    status: Order["status"],
+    paymentStatus: Order["paymentStatus"],
+  ) => void;
 }
 
 export const useOrdersStore = create<OrdersStore>()(
   persist(
     (set, get) => ({
       orders: [],
+      total: 0,
+      totalPages: 0,
+      page: 1,
+      perPage: 5,
       loading: false,
       error: null,
       hydrated: false,
 
-      hydrateOrders: async (accountEmail?: string) => {
+      hydrateOrders: async (accountEmail?: string, page: number = 1, perPage: number = 5) => {
         set({ loading: true, error: null });
         try {
           if (accountEmail) {
-            const orders = await getOrders(accountEmail);
-            set({ orders, hydrated: true });
+            const response = await getOrders(accountEmail, page, perPage);
+            set({
+              orders: response.orders,
+              total: response.total,
+              totalPages: response.totalPages,
+              page: response.page,
+              perPage: response.perPage,
+              hydrated: true,
+            });
           } else {
             set({ hydrated: true });
           }
@@ -73,15 +94,13 @@ export const useOrdersStore = create<OrdersStore>()(
               quantity: item.quantity,
               size: item.size,
               engraving: item.engraving,
-              price: item.price,
-              currency: item.currency,
+              amoraOptions: item.amoraOptions,
             })),
             total: orderData.total,
             customerInfo: orderData.customerInfo,
             billingAddress: orderData.billingAddress,
             currency: orderData.currency,
             paymentMethod: orderData.paymentMethod,
-            paymentStatus: orderData.paymentStatus,
             paymentReference: orderData.paymentReference,
           });
 
@@ -104,10 +123,10 @@ export const useOrdersStore = create<OrdersStore>()(
         set({ loading: true, error: null });
         try {
           if (email) {
-            const orders = await getOrders(email);
+            const response = await getOrders(email);
 
-            const sortedOrders = orders.sort(
-              (a, b) =>
+            const sortedOrders = response.orders.sort(
+              (a: Order, b: Order) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime(),
             );
@@ -170,6 +189,28 @@ export const useOrdersStore = create<OrdersStore>()(
         if (cartStore.items.length > 0) {
           cartStore.clear(accountEmail);
         }
+      },
+
+      addOrder: (order) => {
+        set((state) => {
+          const exists = state.orders.some((o) => o.id === order.id);
+          if (exists) {
+            return {
+              orders: state.orders.map((o) => (o.id === order.id ? order : o)),
+            };
+          }
+          return {
+            orders: [order, ...state.orders],
+          };
+        });
+      },
+
+      updateOrderState: (orderId, status, paymentStatus) => {
+        set((state) => ({
+          orders: state.orders.map((o) =>
+            o.id === orderId ? { ...o, status, paymentStatus } : o,
+          ),
+        }));
       },
     }),
     {

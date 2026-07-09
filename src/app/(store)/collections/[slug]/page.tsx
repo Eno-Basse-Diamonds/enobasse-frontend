@@ -9,11 +9,11 @@ import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { FilterOption } from "@/lib/types/products";
 import { useCollection } from "@/lib/hooks/use-collections";
 import { useAccountStore } from "@/lib/store/account";
-import { filterAndSortProducts } from "@/lib/utils/products";
 import { metalOptions } from "@/lib/utils/constants/metal-options";
 import { EmptyState } from "@/components/empty-state";
-import { ProductsPageLoader } from "@/components/loaders/products";
+import { ProductsPageLoader, ProductListLoader } from "@/components/loaders/products";
 import { PageHeading } from "@/components/page-heading";
+import { Pagination } from "@/components/pagination";
 import {
   FilterPanelDesktop,
   FilterPanelMobile,
@@ -44,35 +44,61 @@ export default function CollectionPage() {
   const { slug } = useParams<{ slug: string }>();
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState("featured");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const { preferredCurrency } = useAccountStore();
+  const pageSize = 36;
 
-  const { data, isLoading, isError, error } = useCollection(
-    slug,
-    {
-      currency: preferredCurrency,
-    },
-  );
-  const { collection, products } = data || {};
+  const filterOptions = useMemo(() => ({
+    page: currentPage,
+    pageSize,
+    sortBy,
+    currency: preferredCurrency,
+    metals: selectedFilters
+      .filter((f) => f.type === "metal")
+      .map((f) => f.name),
+    gemstones: selectedFilters
+      .filter((f) => f.type === "gemstone")
+      .map((f) => f.name),
+    minPrice,
+    maxPrice,
+  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice]);
 
-  const filteredAndSortedProducts = useMemo(
-    () =>
-      filterAndSortProducts({
-        products: products || [],
-        selectedFilters,
-        sortBy,
-      }),
-    [products, selectedFilters, sortBy],
-  );
+  const { data, isLoading, isFetching, isError, error } = useCollection(slug, filterOptions);
+  const { collection, products = [], meta } = data || {};
+
+  const totalProducts = Number(meta?.total ?? 0);
+  const startProduct = products.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endProduct = (currentPage - 1) * pageSize + products.length;
 
   const handleSortChange = useCallback((value: string) => {
     setSortBy(value);
+    setCurrentPage(1);
   }, []);
 
   const handleFilterChange = useCallback((filters: FilterOption[]) => {
     setSelectedFilters(filters);
+    setCurrentPage(1);
   }, []);
 
-  if (isLoading) {
+  const handlePriceChange = useCallback(
+    (min: number | undefined, max: number | undefined) => {
+      setMinPrice(min);
+      setMaxPrice(max);
+      setCurrentPage(1);
+    },
+    []
+  );
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, []);
+
+  if (isLoading && !collection) {
     return (
       <SectionContainer id="collection-products">
         <ProductsPageLoader />
@@ -194,6 +220,9 @@ export default function CollectionPage() {
               metalOptions={metalOptions as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              onPriceChange={handlePriceChange}
             />
           </motion.aside>
 
@@ -203,6 +232,9 @@ export default function CollectionPage() {
                 metalOptions={metalOptions as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                onPriceChange={handlePriceChange}
               />
             </div>
             <motion.div
@@ -211,11 +243,10 @@ export default function CollectionPage() {
               transition={{ delay: 0.5 }}
               className="flex justify-between items-center mb-6"
             >
-              <p className="text-gray-600">
-                {filteredAndSortedProducts.length}{" "}
-                {filteredAndSortedProducts.length === 1
-                  ? "product"
-                  : "products"}
+              <p className="text-gray-600 text-sm">
+                {totalProducts > 0
+                  ? `Showing ${startProduct}-${endProduct} of ${totalProducts} products`
+                  : "0 products"}
               </p>
               <div className="relative">
                 <select
@@ -234,15 +265,28 @@ export default function CollectionPage() {
               </div>
             </motion.div>
 
-            {filteredAndSortedProducts.length === 0 ? (
-              <EmptyState
-                title="No Results Found"
-                description="We couldn't find any products that match your filters."
-                icon={<SearchSlashIcon />}
-              />
-            ) : (
-              <ProductList products={filteredAndSortedProducts} />
-            )}
+            <div className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+              {isLoading && !products.length ? (
+                <ProductListLoader />
+              ) : products.length === 0 ? (
+                <EmptyState
+                  title="No Results Found"
+                  description="We couldn't find any products that match your filters."
+                  icon={<SearchSlashIcon />}
+                />
+              ) : (
+                <>
+                  <ProductList products={products} />
+                  <div className="mt-8 flex justify-center">
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={meta?.totalPages || 1}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       </SectionContainer>

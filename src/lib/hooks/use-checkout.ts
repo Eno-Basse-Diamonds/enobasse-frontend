@@ -2,11 +2,14 @@ import { useState, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
 import { useOrdersStore } from "@/lib/store/orders";
-import { createOrder } from "@/lib/api/orders";
-import { convertCurrency } from "@/lib/api/exchange-rate";
 import { trackPurchase } from "@/lib/analytics/gtag";
 import { usePaystackPayment } from "./use-paystack-payment";
 import { logger } from "@/lib/utils/logger";
+import { getItemLineTotal } from "@/lib/utils/money";
+import {
+  initializePaystackOrder,
+  getOrderPaymentStatus,
+} from "@/lib/api/orders";
 
 export type PaymentMethodType = "paystack" | "bank_transfer";
 
@@ -34,19 +37,15 @@ export function useCheckout({
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // Refs for race condition prevention
-  const orderProcessedRef = useRef<string | null>(null);
+  /** Prevents duplicate handling if Paystack fires onSuccess more than once. */
   const hasProcessedPaymentRef = useRef(false);
 
   const { clear: clearCart } = useCartStore();
   const { data: session } = useSession();
-  const { createOrder: persistOrder } = useOrdersStore();
-  const { paystackLoaded, initializePayment } = usePaystackPayment();
+  const { createOrder: persistOrder, addOrder, updateOrderState } = useOrdersStore();
+  const { paystackLoaded, resumeTransaction } = usePaystackPayment();
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.productVariant.price * item.quantity,
-    0,
-  );
+  const subtotal = items.reduce((sum, item) => sum + getItemLineTotal(item), 0);
 
   const generateReference = () => {
     const timestamp = Date.now().toString(36);
@@ -54,89 +53,68 @@ export function useCheckout({
     return `ENO-${timestamp}-${randomPart}`.toUpperCase();
   };
 
-  const handleOrderCreation = async (
-    reference: string,
-    source: string,
-    method: PaymentMethodType,
-    status: "paid" | "pending",
-  ) => {
-    try {
-      const orderItems = items.map((item) => ({
-        productVariant: item.productVariant,
-        productSlug: item.productSlug,
-        productCategory: item.productCategory,
-        quantity: item.quantity,
-        size: item.size,
-        engraving: item.engraving,
-        price: item.productVariant.price,
-        currency: item.productVariant.currency,
-      }));
+  const buildOrderItems = () =>
+    items.map((item) => ({
+      productVariant: item.productVariant,
+      productSlug: item.productSlug,
+      productCategory: item.productCategory,
+      quantity: item.quantity,
+      size: item.size,
+      engraving: item.engraving,
+      amoraOptions: item.amoraOptions,
+    }));
 
-      await persistOrder({
-        items: orderItems,
-        total: subtotal,
-        billingAddress: billingAddress as any,
-        accountEmail: session?.user?.email || undefined,
-        customerInfo: {
-          name: `${(billingAddress as any).firstName} ${(billingAddress as any).lastName}`,
-          email: email || "",
-          phone: phone || "",
-        },
-        currency: preferredCurrency,
-        paymentMethod: method,
-        paymentStatus: status,
-        paymentReference: reference,
-      });
+  /**
+   * Polls the order's payment status after the Paystack popup reports
+   * success. The popup callback firing isn't proof the payment is real —
+   * only the backend's signature-verified webhook (plus its own
+   * amount/currency check against Paystack) can confirm that. This makes the
+   * UI reflect actual backend state instead of trusting the client callback.
+   */
+  const pollOrderStatus = async (
+    orderId: string,
+    { intervalMs = 2000, timeoutMs = 20000 } = {},
+  ): Promise<{ status: string; paymentStatus: string } | null> => {
+    const deadline = Date.now() + timeoutMs;
 
-      clearCart(session?.user?.email || undefined);
-
-      if (method === "paystack") {
-        trackPurchase(reference, items, preferredCurrency, "paystack");
+    while (Date.now() < deadline) {
+      try {
+        const result = await getOrderPaymentStatus(orderId);
+        if (result.paymentStatus !== "pending") {
+          return result;
+        }
+      } catch (err) {
+        logger.error("Failed to poll order payment status:", err);
       }
-
-      setIsConfirmed(true);
-      setIsProcessing(false);
-
-      if (status === "paid") {
-        document.body.style.overflow = "auto";
-        setIsRedirecting(true);
-        // Delay for UI feedback before final redirect/callback
-        setTimeout(() => {
-          onPaymentSuccess();
-        }, 3000);
-      } else {
-        // Bank transfer confirmation delay
-        setTimeout(() => {
-          onPaymentSuccess();
-        }, 6000);
-      }
-    } catch (err) {
-      logger.error(`Order creation failed after payment (${source}):`, err);
-
-      // Reset blocking refs to allow retry
-      orderProcessedRef.current = null;
-      hasProcessedPaymentRef.current = false;
-
-      setIsRedirecting(false);
-      setPaymentError(
-        method === "paystack"
-          ? "Payment successful but failed to create order. Please contact support."
-          : "Failed to create order. Please try again.",
-      );
-      setIsProcessing(false);
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
     }
+
+    return null;
   };
 
-  const handlePaymentSuccess = async (transaction: any, source: string) => {
-    if (hasProcessedPaymentRef.current) return;
-    hasProcessedPaymentRef.current = true;
+  const handlePaymentConfirmed = async (orderId: string, reference: string) => {
+    clearCart(session?.user?.email || undefined);
+    trackPurchase(reference, items, preferredCurrency, "paystack");
 
-    const reference = transaction?.reference || transaction?.ref || "unknown";
+    const result = await pollOrderStatus(orderId);
 
-    if (orderProcessedRef.current === reference) return;
-    orderProcessedRef.current = reference;
-
-    await handleOrderCreation(reference, source, "paystack", "paid");
+    if (result?.paymentStatus === "paid") {
+      updateOrderState(orderId, "confirmed", "paid");
+      setIsConfirmed(true);
+      setIsProcessing(false);
+      document.body.style.overflow = "auto";
+      setIsRedirecting(true);
+      setTimeout(() => {
+        onPaymentSuccess();
+      }, 3000);
+    } else {
+      setIsProcessing(false);
+      document.body.style.overflow = "auto";
+      setPaymentError(
+        "Payment received — confirming with our system. If this doesn't update shortly, contact support with reference: " +
+          reference,
+      );
+    }
   };
 
   const handlePaystackPayment = async () => {
@@ -147,45 +125,36 @@ export function useCheckout({
       return;
     }
 
-    const paystackPublicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
-    if (!paystackPublicKey) {
-      setPaymentError("Payment configuration error. Please contact support.");
-      return;
-    }
-
     setIsProcessing(true);
     setPaymentError(null);
+    hasProcessedPaymentRef.current = false;
 
     try {
-      let paymentAmount = subtotal;
-      if (preferredCurrency === "USD" || !preferredCurrency) {
-        paymentAmount = await convertCurrency(subtotal, "USD", "NGN");
-      }
-
-      const amountInKobo = Math.round(paymentAmount * 100);
-
-      initializePayment({
-        key: paystackPublicKey,
-        email: email,
-        amount: amountInKobo,
-        currency: "NGN",
-        ref: generateReference(),
-        metadata: {
-          items: items.map((item: any) => ({
-            name: item.productVariant?.name || item.productSlug,
-            quantity: item.quantity,
-          })),
-          phone,
-          billingAddress,
-          originalAmount: subtotal,
-          originalCurrency: preferredCurrency || "USD",
+      const { order, accessCode, reference } = await initializePaystackOrder({
+        items: buildOrderItems(),
+        total: subtotal,
+        billingAddress: billingAddress as any,
+        accountEmail: session?.user?.email || undefined,
+        customerInfo: {
+          name: `${(billingAddress as any).firstName} ${(billingAddress as any).lastName}`,
+          email: email || "",
+          phone: phone || "",
         },
+        currency: preferredCurrency,
+      });
+
+      addOrder(order);
+
+      resumeTransaction({
+        accessCode,
         onClose: () => {
-          document.body.style.overflow = "auto";
           setIsProcessing(false);
+          document.body.style.overflow = "auto";
         },
-        onSuccess: (transaction: any) => {
-          handlePaymentSuccess(transaction, "onSuccess");
+        onSuccess: () => {
+          if (hasProcessedPaymentRef.current) return;
+          hasProcessedPaymentRef.current = true;
+          handlePaymentConfirmed(order.id, reference);
         },
         onError: () => {
           setIsProcessing(false);
@@ -194,6 +163,7 @@ export function useCheckout({
         },
       });
     } catch (error) {
+      logger.error("Failed to initialize Paystack payment:", error);
       setPaymentError(
         error instanceof Error
           ? error.message
@@ -206,13 +176,38 @@ export function useCheckout({
   const handleBankTransfer = async () => {
     setIsProcessing(true);
     setPaymentError(null);
-    const reference = generateReference(); // Or leave empty for backend to generate
-    await handleOrderCreation(
-      reference,
-      "bank_transfer",
-      "bank_transfer",
-      "pending",
-    );
+    const reference = generateReference();
+
+    try {
+      await persistOrder({
+        items: buildOrderItems(),
+        total: subtotal,
+        billingAddress: billingAddress as any,
+        accountEmail: session?.user?.email || undefined,
+        customerInfo: {
+          name: `${(billingAddress as any).firstName} ${(billingAddress as any).lastName}`,
+          email: email || "",
+          phone: phone || "",
+        },
+        currency: preferredCurrency,
+        paymentMethod: "bank_transfer",
+        // paymentStatus is intentionally omitted — server always starts as PENDING
+        paymentReference: reference,
+      });
+
+      clearCart(session?.user?.email || undefined);
+      setIsConfirmed(true);
+      setIsProcessing(false);
+
+      // Longer delay to show the bank-transfer instructions message
+      setTimeout(() => {
+        onPaymentSuccess();
+      }, 6000);
+    } catch (err) {
+      logger.error("Bank transfer order creation failed:", err);
+      setPaymentError("Failed to create order. Please try again.");
+      setIsProcessing(false);
+    }
   };
 
   return {

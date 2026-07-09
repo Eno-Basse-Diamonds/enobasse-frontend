@@ -352,14 +352,16 @@ export default function ProductPage() {
   return (
     <div className="my-6 md:my-12">
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
-          {alertState.message}
-        </Alert>
+        <div className="fixed top-24 right-4 z-50 max-w-sm w-full md:max-w-md">
+          <Alert
+            type={alertState.type}
+            dismissible
+            onDismiss={dismissAlert}
+            duration={5000}
+          >
+            {alertState.message}
+          </Alert>
+        </div>
       )}
       <BreadcrumbSchema
         items={[

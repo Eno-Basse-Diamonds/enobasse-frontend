@@ -9,6 +9,7 @@ import { RatingDistribution } from "@/lib/types/reviews";
 import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
 import { useCreateReview } from "@/lib/hooks/use-reviews";
 import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
 import { Rating } from "@/components/rating";
 import { StarIcon } from "@/components/icons/star";
 import { Button } from "@/components/button";
@@ -34,7 +35,11 @@ export const Reviews: React.FC<ReviewsProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session } = useSession();
+  const { isHydrated, billingAddress: savedBillingAddress } = useAccountStore();
   const createReviewMutation = useCreateReview();
+
+  const userEmail = session?.user?.email || savedBillingAddress?.email || "";
+  const hasReviewed = userEmail ? reviews.some((r) => r.authorEmail.toLowerCase() === userEmail.toLowerCase()) : false;
 
   const handleSubmitReview = async (review: {
     rating: number;
@@ -59,9 +64,10 @@ export const Reviews: React.FC<ReviewsProps> = ({
 
       setIsModalOpen(false);
       setAlertState({ visible: true, type: "success", message: "Review submitted successfully!" });
-    } catch (error) {
+    } catch (error: any) {
       logger.error("Failed to submit review:", error);
-      setAlertState({ visible: true, type: "error", message: "Failed to submit review. Please try again." });
+      const message = error instanceof Error ? error.message : "Failed to submit review. Please try again.";
+      setAlertState({ visible: true, type: "error", message });
     }
   };
 
@@ -164,19 +170,32 @@ export const Reviews: React.FC<ReviewsProps> = ({
               Share your thoughts
             </h3>
             <p className="text-[#502B3A]/80 text-sm md:text-base mb-4">
-              {session ?
-                "If you've used this product, share your thoughts with other customers" :
-                "Sign in to share your thoughts about this product with other customers"
+              {hasReviewed ?
+                "You have already shared your thoughts on this product. Thank you!" :
+                (session ?
+                  "If you've used this product, share your thoughts with other customers" :
+                  "Sign in to share your thoughts about this product with other customers"
+                )
               }
             </p>
-            <Button
-              variant="outline"
-              aria-label={session ? "Write a review" : "Sign in to write a review"}
-              onClick={() => session ? setIsModalOpen(true) : null}
-              className="w-full sm:w-auto text-[#502B3A] text-sm md:text-base"
-            >
-              {session ? "Write a review" : "Sign in to write a review"}
-            </Button>
+            {hasReviewed ? (
+              <Button
+                variant="outline"
+                disabled
+                className="w-full sm:w-auto text-gray-400 border-gray-200 cursor-not-allowed text-sm md:text-base"
+              >
+                Review already submitted
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                aria-label={session ? "Write a review" : "Sign in to write a review"}
+                onClick={() => session ? setIsModalOpen(true) : null}
+                className="w-full sm:w-auto text-[#502B3A] text-sm md:text-base"
+              >
+                {session ? "Write a review" : "Sign in to write a review"}
+              </Button>
+            )}
           </motion.div>
         </motion.aside>
 

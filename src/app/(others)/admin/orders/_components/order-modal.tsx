@@ -8,6 +8,7 @@ import { useUpdateOrder } from "@/lib/hooks/use-orders";
 import { getCurrencySymbol } from "@/lib/utils/money";
 import { X } from "lucide-react";
 import { Button } from "@/components/button";
+import { PaymentStatusBadge } from "@/components/badge/payment-status-badge";
 
 export function OrderModal({
   order,
@@ -46,9 +47,12 @@ export function OrderModal({
         className="bg-white w-full max-w-4xl h-full flex flex-col shadow-2xl"
       >
         <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
-          <h3 className="text-2xl font-semibold text-primary-500">
-            Order #{order.shortId}
-          </h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-2xl font-semibold text-primary-500">
+              Order #{order.shortId}
+            </h3>
+            <PaymentStatusBadge paymentStatus={order.paymentStatus} />
+          </div>
           <Button
             variant="ghost"
             onClick={onClose}

@@ -10,8 +10,7 @@ interface CreateOrderDto {
     quantity: number;
     size?: number;
     engraving?: { text: string; fontStyle: string };
-    price: number;
-    currency: string;
+    amoraOptions?: { selectedLetters: string[]; includeChain: boolean; calculatedPrice: number };
   }>;
   total: number;
   customerInfo?: {
@@ -30,7 +29,7 @@ interface CreateOrderDto {
   };
   currency?: string;
   paymentMethod?: "paystack" | "bank_transfer";
-  paymentStatus?: "pending" | "paid" | "failed";
+  /** paymentStatus intentionally excluded — backend always creates orders as PENDING */
   paymentReference?: string;
 }
 
@@ -42,12 +41,22 @@ export interface AdminOrdersResponse {
   perPage: number;
 }
 
+export interface PaginatedOrdersResponse {
+  orders: Order[];
+  total: number;
+  totalPages: number;
+  page: number;
+  perPage: number;
+}
+
 export const getOrders = async (
   accountEmail?: string,
+  page?: number,
+  perPage?: number,
   status?: string,
-): Promise<Order[]> => {
+): Promise<PaginatedOrdersResponse> => {
   return api.get(`/orders`, {
-    params: { accountEmail, status },
+    params: { accountEmail, page, perPage, status },
   });
 };
 
@@ -59,6 +68,34 @@ export const createOrder = async (
   createOrderDto: CreateOrderDto,
 ): Promise<Order> => {
   return api.post(`/orders`, createOrderDto);
+};
+
+export interface InitializePaystackResponse {
+  order: Order;
+  accessCode: string;
+  reference: string;
+}
+
+/**
+ * Creates the order AND initializes the Paystack transaction server-side —
+ * the backend recomputes the real total from the product catalog and is the
+ * one that tells Paystack what to charge, so the popup can't be tricked into
+ * charging less than the order is actually worth.
+ */
+export const initializePaystackOrder = async (
+  createOrderDto: CreateOrderDto,
+): Promise<InitializePaystackResponse> => {
+  return api.post(`/orders/paystack/initialize`, createOrderDto);
+};
+
+/**
+ * Minimal, unauthenticated status check for post-payment polling — works for
+ * guest checkouts too, unlike `getOrder` which requires a signed-in session.
+ */
+export const getOrderPaymentStatus = async (
+  orderId: string,
+): Promise<{ status: string; paymentStatus: string }> => {
+  return api.get(`/orders/${orderId}/payment-status`, { cache: false });
 };
 
 export const getAdminOrders = async (params: {

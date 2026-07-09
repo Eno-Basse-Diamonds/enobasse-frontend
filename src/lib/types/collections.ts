@@ -31,4 +31,6 @@ export interface CollectionFilterOptions {
   metals?: string[];
   gemstones?: string[];
   currency?: string;
+  page?: number;
+  pageSize?: number;
 }

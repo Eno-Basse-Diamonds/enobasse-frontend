@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CheckoutFormSection } from "./_components/checkout-form-section";
@@ -14,6 +14,7 @@ import { countries } from "@/lib/utils/constants/countries";
 import { SectionContainer } from "@/components/section-container";
 import { ChevronDownIcon, User } from "lucide-react";
 import { trackBeginCheckout } from "@/lib/analytics/gtag";
+import { useAccountByEmail } from "@/lib/hooks/use-accounts";
 
 interface FormData {
   email: string;
@@ -42,6 +43,7 @@ export default function CheckoutPage() {
     isHydrated,
     billingAddress: savedBillingAddress,
     updateBillingAddress,
+    updateLocalBillingAddress,
   } = useAccountStore();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -60,6 +62,8 @@ export default function CheckoutPage() {
     postalCode: "",
   });
   const { data: session } = useSession();
+  const { data: dbAccount } = useAccountByEmail(session?.user?.email);
+  const hasInitializedRef = useRef(false);
 
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.productVariant.price * item.quantity,
@@ -128,22 +132,80 @@ export default function CheckoutPage() {
   ]);
 
   useEffect(() => {
-    if (isHydrated) {
-      setFormData((prev) => ({
-        ...prev,
-        email: session?.user?.email || prev.email,
-        firstName: savedBillingAddress?.firstName || prev.firstName,
-        lastName: savedBillingAddress?.lastName || prev.lastName,
-        address: savedBillingAddress?.address || prev.address,
-        apartment: savedBillingAddress?.apartment || prev.apartment,
-        city: savedBillingAddress?.city || prev.city,
-        country: savedBillingAddress?.country || prev.country,
-        region: savedBillingAddress?.region || prev.region,
-        postalCode: savedBillingAddress?.postalCode || prev.postalCode,
-        phone: savedBillingAddress?.phone || prev.phone,
-      }));
+    if (isHydrated && !hasInitializedRef.current && (session === undefined || dbAccount !== undefined)) {
+      setFormData((prev) => {
+        const email = session?.user?.email || savedBillingAddress?.email || prev.email;
+        let firstName = savedBillingAddress?.firstName || prev.firstName;
+        let lastName = savedBillingAddress?.lastName || prev.lastName;
+        let address = savedBillingAddress?.address || prev.address;
+        let apartment = savedBillingAddress?.apartment || prev.apartment;
+        let city = savedBillingAddress?.city || prev.city;
+        let country = savedBillingAddress?.country || prev.country;
+        let region = savedBillingAddress?.region || prev.region;
+        let postalCode = savedBillingAddress?.postalCode || prev.postalCode;
+        let phone = savedBillingAddress?.phone || prev.phone;
+
+        if (dbAccount) {
+          if (dbAccount.name) {
+            const parts = dbAccount.name.trim().split(/\s+/);
+            firstName = parts[0] || firstName;
+            lastName = parts.slice(1).join(" ") || lastName;
+          }
+          phone = dbAccount.phone || phone;
+
+          if (dbAccount.billingAddress) {
+            const dbAddr = dbAccount.billingAddress;
+            if (dbAddr.street) {
+              const parts = dbAddr.street.split(",");
+              address = parts[0]?.trim() || address;
+              apartment = parts.slice(1).join(",")?.trim() || apartment;
+            }
+            city = dbAddr.city || city;
+            country = dbAddr.country || country;
+            region = dbAddr.state || region;
+            postalCode = dbAddr.postalCode || postalCode;
+          }
+        }
+
+        hasInitializedRef.current = true;
+
+        return {
+          email,
+          phone,
+          firstName,
+          lastName,
+          address,
+          apartment,
+          city,
+          country,
+          region,
+          postalCode,
+        };
+      });
     }
-  }, [savedBillingAddress, isHydrated, session?.user?.email]);
+  }, [savedBillingAddress, isHydrated, session, dbAccount]);
+
+  // Autosave form data locally and to database (debounced)
+  useEffect(() => {
+    if (!isHydrated || !hasInitializedRef.current) return;
+
+    const timer = setTimeout(() => {
+      updateBillingAddress({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address: formData.address,
+        apartment: formData.apartment,
+        city: formData.city,
+        country: formData.country,
+        region: formData.region,
+        postalCode: formData.postalCode,
+        phone: formData.phone,
+        email: formData.email,
+      });
+    }, 2000); // 2 second debounce to prevent spamming database API
+
+    return () => clearTimeout(timer);
+  }, [formData, isHydrated, updateBillingAddress]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -173,6 +235,7 @@ export default function CheckoutPage() {
         region: formData.region,
         postalCode: formData.postalCode,
         phone: formData.phone,
+        email: formData.email,
       });
     }
     setIsProcessingPayment(true);

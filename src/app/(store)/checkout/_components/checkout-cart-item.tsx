@@ -7,7 +7,7 @@ import { SizeSelect } from "../../cart/_components/size-select";
 import { CartItem } from "@/lib/types/carts";
 import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
-import { getCurrencySymbol } from "@/lib/utils/money";
+import { getCurrencySymbol, getItemLineTotal } from "@/lib/utils/money";
 import { CloseIcon } from "@/components/icons/close";
 import { Engraving } from "@/components/modal";
 
@@ -138,7 +138,7 @@ export function CheckoutCartItem({
 
             <div className="flex flex-row w-full justify-between items-end gap-x-2 mt-1 sm:mt-2">
               <p className="text-[10px] sm:text-xs text-gray-500">
-                {item.quantity > 1 && (
+                {!item.amoraOptions && item.quantity > 1 && (
                   <>
                     {getCurrencySymbol(currency)}
                     {price.toLocaleString()} each
@@ -147,7 +147,7 @@ export function CheckoutCartItem({
               </p>
               <p className="text-sm sm:text-base font-medium text-[#502B3A]">
                 {getCurrencySymbol(currency)}
-                {(price * item.quantity).toLocaleString()}
+                {getItemLineTotal(item).toLocaleString()}
               </p>
             </div>
           </div>

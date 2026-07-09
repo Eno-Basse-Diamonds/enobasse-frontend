@@ -10,7 +10,7 @@ import { OrderTotals } from "./order-totals";
 import { BankTransferDetails } from "./bank-transfer-details";
 import { PaymentMethodSelector } from "./payment-method-selector";
 import { useAccountStore } from "@/lib/store/account";
-import { getCurrencySymbol } from "@/lib/utils/money";
+import { getCurrencySymbol, getItemLineTotal } from "@/lib/utils/money";
 
 type OrderSummaryProps = {
   items: CartItem[];
@@ -53,10 +53,7 @@ export function OrderSummary({
     onPaymentSuccess,
   });
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.productVariant.price * item.quantity,
-    0,
-  );
+  const subtotal = items.reduce((sum, item) => sum + getItemLineTotal(item), 0);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const formattedPrice = (amount: number) => amount.toLocaleString();
 

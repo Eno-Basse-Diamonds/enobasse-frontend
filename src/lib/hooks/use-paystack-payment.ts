@@ -6,13 +6,8 @@ declare global {
   }
 }
 
-interface PaystackOptions {
-  key: string;
-  email: string;
-  amount: number;
-  currency: string;
-  ref: string;
-  metadata?: any;
+interface ResumeTransactionOptions {
+  accessCode: string;
   onClose: () => void;
   onSuccess: (transaction: any) => void;
   onError?: (error: any) => void;
@@ -36,7 +31,18 @@ export function usePaystackPayment() {
     };
   }, []);
 
-  const initializePayment = (options: PaystackOptions) => {
+  /**
+   * Resumes a transaction that was already initialized server-side (via
+   * Paystack's Initialize Transaction API), using the resulting accessCode.
+   * The amount/currency were fixed server-side at initialize time, so
+   * there's nothing for the popup to accept from the client here.
+   *
+   * Note: Paystack's `resumeTransaction` only forwards onSuccess/onCancel/
+   * onLoad/onError to the underlying transaction — NOT onClose — so a
+   * closed-without-completing popup surfaces via `onCancel`, mapped to our
+   * `onClose` callback for API-shape consistency with the old flow.
+   */
+  const resumeTransaction = (options: ResumeTransactionOptions) => {
     if (!paystackLoaded || !window.PaystackPop) {
       throw new Error("Payment system not ready. Please wait and try again.");
     }
@@ -54,9 +60,8 @@ export function usePaystackPayment() {
       // Lock scroll
       document.body.style.overflow = "hidden";
 
-      const safeOptions = {
-        ...options,
-        onClose: () => {
+      paystack.resumeTransaction(options.accessCode, {
+        onCancel: () => {
           isInitializingRef.current = false;
           document.body.style.overflow = "auto";
           originalOnClose();
@@ -71,9 +76,7 @@ export function usePaystackPayment() {
           document.body.style.overflow = "auto";
           if (originalOnError) originalOnError(error);
         },
-      };
-
-      paystack.newTransaction(safeOptions);
+      });
     } catch (error) {
       isInitializingRef.current = false;
       document.body.style.overflow = "auto";
@@ -83,7 +86,7 @@ export function usePaystackPayment() {
 
   return {
     paystackLoaded,
-    initializePayment,
+    resumeTransaction,
     isInitializing: isInitializingRef.current,
   };
 }

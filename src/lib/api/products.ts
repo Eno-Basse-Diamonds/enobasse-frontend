@@ -8,14 +8,25 @@ import { api } from "@/lib/utils/api";
 export const getProducts = async (
   options?: ProductFilterOptions,
 ): Promise<ProductsResponse> => {
-  return api.get("/products", { params: options });
+  // Strip out empty arrays so they aren't sent as noise to the backend
+  const params = options
+    ? Object.fromEntries(
+        Object.entries(options).filter(
+          ([, v]) => v !== undefined && !(Array.isArray(v) && v.length === 0),
+        ),
+      )
+    : undefined;
+  return api.get("/products", { params });
 };
 
 export const getProduct = async (
   slug: string,
   currency: string,
 ): Promise<Product> => {
-  return api.get(`/products/${slug}`, { params: { currency: currency } });
+  return api.get(`/products/${slug}`, {
+    params: { currency: currency },
+    cache: false,
+  });
 };
 
 export const getRelatedProducts = async (

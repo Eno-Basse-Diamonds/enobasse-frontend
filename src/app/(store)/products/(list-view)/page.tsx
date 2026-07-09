@@ -5,8 +5,7 @@ import * as motion from "motion/react-client";
 import { easeOut } from "motion/react";
 import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
 import { useProducts } from "@/lib/hooks/use-products";
-import { ProductsResponse, FilterOption } from "@/lib/types/products";
-import { filterAndSortProducts } from "@/lib/utils/products";
+import { FilterOption } from "@/lib/types/products";
 import { metalOptions } from "@/lib/utils/constants/metal-options";
 import { useAccountStore } from "@/lib/store/account";
 import { EmptyState } from "@/components/empty-state";
@@ -36,6 +35,8 @@ export default function ProductsPage() {
   const [selectedFilters, setSelectedFilters] = useState<FilterOption[]>([]);
   const [sortBy, setSortBy] = useState<string>("featured");
   const [currentPage, setCurrentPage] = useState(1);
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const { preferredCurrency } = useAccountStore();
   const pageSize = 36;
 
@@ -50,21 +51,30 @@ export default function ProductsPage() {
     gemstones: selectedFilters
       .filter((f) => f.type === "gemstone")
       .map((f) => f.name),
-  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters]);
+    minPrice,
+    maxPrice,
+  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice]);
 
-  const { data, isLoading, isError, error } = useProducts(filterOptions);
+  const { data, isLoading, isFetching, isError, error } = useProducts(filterOptions);
 
-  const { products = [], meta } = data || { meta: { currentPage: 1, totalPages: 1 } };
+  const { products = [], meta } = data || {
+    meta: {
+      total: 0,
+      currentPage: 1,
+      totalPages: 1,
+      pageSize: 36,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    },
+  };
 
-  const filteredAndSortedProducts = useMemo(
-    () =>
-      filterAndSortProducts({
-        products,
-        selectedFilters,
-        sortBy,
-      }),
-    [products, selectedFilters, sortBy]
-  );
+  // Products come pre-sorted and pre-filtered from the server.
+  // No client-side sort/filter needed — we display them as-is.
+  const displayProducts = products;
+
+  const totalProducts = meta.total;
+  const startProduct = displayProducts.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endProduct = (currentPage - 1) * pageSize + displayProducts.length;
 
   const handleSortChange = useCallback((value: string) => {
     setSortBy(value);
@@ -75,6 +85,15 @@ export default function ProductsPage() {
     setSelectedFilters(filters);
     setCurrentPage(1);
   }, []);
+
+  const handlePriceChange = useCallback(
+    (min: number | undefined, max: number | undefined) => {
+      setMinPrice(min);
+      setMaxPrice(max);
+      setCurrentPage(1);
+    },
+    []
+  );
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
@@ -91,9 +110,9 @@ export default function ProductsPage() {
           { name: "Products", item: "https://enobasse.com/products" },
         ]}
       />
-      {filteredAndSortedProducts.length > 0 && (
+      {displayProducts.length > 0 && (
         <ItemListSchema
-          items={filteredAndSortedProducts.map((product) => ({
+          items={displayProducts.map((product) => ({
             name: product.name,
             url: `https://enobasse.com/products/${product.slug}`,
             image: product.images?.[0]?.url,
@@ -116,6 +135,9 @@ export default function ProductsPage() {
               metalOptions={metalOptions as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              onPriceChange={handlePriceChange}
             />
           </motion.aside>
           <motion.div variants={itemVariants} className="lg:w-3/4">
@@ -124,6 +146,9 @@ export default function ProductsPage() {
                 metalOptions={metalOptions as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                onPriceChange={handlePriceChange}
               />
             </div>
             <motion.div
@@ -132,11 +157,10 @@ export default function ProductsPage() {
               transition={{ delay: 0.5 }}
               className="flex justify-between items-center mb-6"
             >
-              <p className="text-gray-600">
-                {filteredAndSortedProducts.length}{" "}
-                {filteredAndSortedProducts.length === 1
-                  ? "product"
-                  : "products"}
+              <p className="text-gray-600 text-sm">
+                {totalProducts > 0
+                  ? `Showing ${startProduct}-${endProduct} of ${totalProducts} products`
+                  : "0 products"}
               </p>
               <div className="relative">
                 <select
@@ -155,32 +179,34 @@ export default function ProductsPage() {
               </div>
             </motion.div>
 
-            {isLoading ? (
-              <ProductListLoader />
-            ) : isError ? (
-              <EmptyState
-                title="Something went wrong"
-                description={error?.message || "Failed to load products. Please try again."}
-                icon={<SearchSlashIcon />}
-              />
-            ) : filteredAndSortedProducts.length === 0 ? (
-              <EmptyState
-                title="No Results Found"
-                description="We couldn't find any products that match your filters."
-                icon={<SearchSlashIcon />}
-              />
-            ) : (
-              <>
-                <ProductList products={filteredAndSortedProducts} />
-                <div className="mt-8 flex justify-center">
-                  <Pagination
-                    currentPage={Number(meta.currentPage)}
-                    totalPages={meta.totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
-              </>
-            )}
+            <div className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+              {isLoading && !displayProducts.length ? (
+                <ProductListLoader />
+              ) : isError ? (
+                <EmptyState
+                  title="Something went wrong"
+                  description={error?.message || "Failed to load products. Please try again."}
+                  icon={<SearchSlashIcon />}
+                />
+              ) : displayProducts.length === 0 ? (
+                <EmptyState
+                  title="No Results Found"
+                  description="We couldn't find any products that match your filters."
+                  icon={<SearchSlashIcon />}
+                />
+              ) : (
+                <>
+                  <ProductList products={displayProducts} />
+                  <div className="mt-8 flex justify-center">
+                    <Pagination
+                      currentPage={Number(meta.currentPage)}
+                      totalPages={meta.totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       </SectionContainer>

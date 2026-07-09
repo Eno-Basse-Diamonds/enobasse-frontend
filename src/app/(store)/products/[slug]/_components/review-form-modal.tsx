@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as motion from "motion/react-client";
 import { easeOut } from "motion/react";
+import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
+import { useAccountByEmail } from "@/lib/hooks/use-accounts";
 import { Button } from "@/components/button";
 import { CloseIcon } from "@/components/icons/close";
 import { StarIcon } from "@/components/icons/star";
@@ -69,6 +72,35 @@ export const ReviewFormModal: React.FC<ReviewFormModalProps> = ({
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
   const modalRef = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession();
+  const { isHydrated, billingAddress: savedBillingAddress } = useAccountStore();
+  const { data: dbAccount } = useAccountByEmail(session?.user?.email);
+  const hasInitializedRef = useRef(false);
+
+  useEffect(() => {
+    if (isOpen && isHydrated && !hasInitializedRef.current && (session === undefined || dbAccount !== undefined)) {
+      const emailVal = session?.user?.email || savedBillingAddress?.email || "";
+      let nameVal = "";
+
+      if (dbAccount && dbAccount.name) {
+        nameVal = dbAccount.name;
+      } else if (savedBillingAddress?.firstName) {
+        nameVal = `${savedBillingAddress.firstName} ${savedBillingAddress.lastName || ""}`.trim();
+      } else if (session?.user?.name) {
+        nameVal = session.user.name;
+      }
+
+      setEmail(emailVal);
+      setName(nameVal);
+      hasInitializedRef.current = true;
+    }
+  }, [isOpen, isHydrated, session, dbAccount, savedBillingAddress]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      hasInitializedRef.current = false;
+    }
+  }, [isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
