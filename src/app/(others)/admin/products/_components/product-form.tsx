@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
 import {
@@ -18,10 +18,10 @@ import { getExchangeRate } from "@/lib/api/exchange-rate";
 import { Collection } from "@/lib/types/collections";
 import { MetalsGemstonesSelector } from "./_elements/metals-gemstone-selector";
 import { FormField } from "./_elements/form-field";
-import { FormTextareaField } from "./_elements/form-textarea-field";
 import { ImageUploadField } from "./_elements/image-upload-field";
-import { VariantForm } from "./_elements/variant-form";
-import { CollectionsSelector } from "./_elements/collections-selector";
+import { VariantCard } from "./_elements/variant-card";
+import { CollectionsMultiSelect } from "./_elements/collections-multi-select";
+import { AdminModal } from "./_elements/admin-modal";
 
 interface ProductFormProps {
   product: Product | null;
@@ -29,6 +29,16 @@ interface ProductFormProps {
 }
 
 const PRODUCT_CATEGORIES = ["Rings", "Earrings", "Bracelets", "Necklaces"];
+
+const TABS = [
+  { key: "basic", label: "Basic Info" },
+  { key: "media", label: "Media" },
+  { key: "materials", label: "Materials" },
+  { key: "variants", label: "Variants" },
+  { key: "options", label: "Options" },
+] as const;
+
+type TabKey = (typeof TABS)[number]["key"];
 
 interface ProductFormData {
   sku: string;
@@ -55,7 +65,19 @@ interface ProductFormData {
   status: ProductStatus;
 }
 
+const defaultVariant = {
+  sku: "",
+  title: "",
+  price: 0,
+  currency: "USD",
+  gemstones: [],
+  metals: [],
+  inventory: { quantity: 1, inStock: true },
+  images: [],
+};
+
 export function ProductForm({ product, onClose }: ProductFormProps) {
+  const [activeTab, setActiveTab] = useState<TabKey>("basic");
   const [formData, setFormData] = useState<ProductFormData>({
     sku: product?.variants?.[0]?.sku || "",
     name: product?.name || "",
@@ -76,36 +98,26 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
         purity: m.purity ?? undefined,
         weightGrams: m.weightGrams,
       })) || [],
-    variants: product?.variants?.map((v: ProductVariant) => ({
-      sku: v.sku,
-      title: v.title,
-      price: v.price,
-      currency: v.currency,
-      gemstones:
-        v.gemstones?.map((g: Gemstone) => ({
-          type: g.type,
-          weightCarat: g.weightCarat,
-        })) || [],
-      metals:
-        v.metals?.map((m: Metal) => ({
-          type: m.type,
-          purity: m.purity ?? undefined,
-          weightGrams: m.weightGrams,
-        })) || [],
-      inventory: v.inventory ?? { quantity: 0, inStock: false },
-      images: v.images,
-    })) || [
-      {
-        sku: "",
-        title: "",
-        price: 0,
-        currency: "USD",
-        gemstones: [],
-        metals: [],
-        inventory: { quantity: 1, inStock: true },
-        images: [],
-      },
-    ],
+    variants:
+      product?.variants?.map((v: ProductVariant) => ({
+        sku: v.sku,
+        title: v.title,
+        price: v.price,
+        currency: v.currency,
+        gemstones:
+          v.gemstones?.map((g: Gemstone) => ({
+            type: g.type,
+            weightCarat: g.weightCarat,
+          })) || [],
+        metals:
+          v.metals?.map((m: Metal) => ({
+            type: m.type,
+            purity: m.purity ?? undefined,
+            weightGrams: m.weightGrams,
+          })) || [],
+        inventory: v.inventory ?? { quantity: 0, inStock: false },
+        images: v.images,
+      })) || [{ ...defaultVariant }],
     isCustomDesign: product?.isCustomDesign || false,
     status: product?.status || "published",
   });
@@ -130,12 +142,24 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     page: 1,
     pageSize: 100,
   });
-  const collectionsData = collectionsResponse?.collections;
+  const collectionsData = (
+    collectionsResponse?.collections || []
+  ).map((c: Collection) => ({ id: c.id, name: c.name }));
 
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
 
-  const handleInputChange = (field: keyof ProductFormData, value: string | boolean | string[] | ProductFormData["metals"] | ProductFormData["gemstones"] | ProductFormData["images"] | ProductFormData["variants"]) => {
+  const handleInputChange = (
+    field: keyof ProductFormData,
+    value:
+      | string
+      | boolean
+      | string[]
+      | ProductFormData["metals"]
+      | ProductFormData["gemstones"]
+      | ProductFormData["images"]
+      | ProductFormData["variants"]
+  ) => {
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
       if (field === "name") {
@@ -145,12 +169,20 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     });
   };
 
-  const handleVariantChange = (index: number, field: string, value: string | number | boolean) => {
+  const handleVariantChange = (
+    index: number,
+    field: string,
+    value: string | number | boolean
+  ) => {
     setFormData((prev) => {
       const variants = prev.variants.map((variant, i) => {
         if (i !== index) return variant;
 
-        if (field === "currency" && typeof value === "string" && value !== variant.currency) {
+        if (
+          field === "currency" &&
+          typeof value === "string" &&
+          value !== variant.currency
+        ) {
           let newPrice = variant.price;
           if (variant.price > 0) {
             if (variant.currency === "USD" && value === "NGN") {
@@ -171,20 +203,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const addVariant = () => {
     setFormData((prev) => ({
       ...prev,
-      variants: [
-        ...prev.variants,
-        {
-          sku: "",
-          title: "",
-          price: 0,
-          currency: "USD",
-          gemstones: [],
-          metals: [],
-          inventory: { quantity: 1, inStock: true },
-          images: [],
-        },
-      ],
+      variants: [...prev.variants, { ...defaultVariant }],
     }));
+    setActiveTab("variants");
   };
 
   const removeVariant = (index: number) => {
@@ -202,10 +223,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     value: Array<{ url: string; alt: string }>
   ) => {
     if (field === "images") {
-      setFormData((prev) => ({
-        ...prev,
-        images: value,
-      }));
+      setFormData((prev) => ({ ...prev, images: value }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -219,49 +237,40 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Product name is required";
-    }
-
-    if (!formData.slug.trim()) {
-      newErrors.slug = "Product slug is required";
-    }
-
-    if (!formData.description.trim()) {
+    if (!formData.name.trim()) newErrors.name = "Product name is required";
+    if (!formData.slug.trim()) newErrors.slug = "Product slug is required";
+    if (!formData.description.trim())
       newErrors.description = "Product description is required";
-    }
-
-    if (formData.images.length === 0) {
+    if (formData.images.length === 0)
       newErrors.images = "At least one product image is required";
-    }
-
-    if (formData.variants.length === 0) {
+    if (formData.variants.length === 0)
       newErrors.variants = "At least one product variant is required";
-    }
-
-    if (formData.collections.length === 0) {
+    if (formData.collections.length === 0)
       newErrors.collections = "At least one collection is required";
-    }
 
-    // Validate variants
     formData.variants.forEach((variant, index) => {
-      if (!variant.sku.trim()) {
+      if (!variant.sku.trim())
         newErrors[`variant-${index}-sku`] = "Variant SKU is required";
-      }
-      if (!variant.title.trim()) {
+      if (!variant.title.trim())
         newErrors[`variant-${index}-title`] = "Variant title is required";
-      }
-      if (variant.price <= 0) {
+      if (variant.price <= 0)
         newErrors[`variant-${index}-price`] =
           "Variant price must be greater than 0";
-      }
-      if (variant.images.length === 0) {
+      if (variant.images.length === 0)
         newErrors[`variant-${index}-images`] =
           "At least one variant image is required";
-      }
     });
 
     setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      if (newErrors.name || newErrors.slug || newErrors.description || newErrors.collections)
+        setActiveTab("basic");
+      else if (newErrors.images) setActiveTab("media");
+      else if (newErrors.variants || Object.keys(newErrors).some((k) => k.startsWith("variant-")))
+        setActiveTab("variants");
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -270,12 +279,8 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     status: ProductStatus = "published"
   ) => {
     if (e) e.preventDefault();
+    if (!validateForm()) return;
 
-    if (!validateForm()) {
-      return;
-    }
-
-    // Calculate price range from variants
     const prices = formData.variants.map((v) => v.price).filter((p) => p > 0);
     const priceRange = {
       min: prices.length > 0 ? Math.min(...prices) : 0,
@@ -283,74 +288,270 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       currency: formData.variants[0]?.currency || "USD",
     };
 
-    const submitData = {
-      ...formData,
-      status,
-      priceRange,
-    };
+    const submitData = { ...formData, status, priceRange };
 
-    if (product) {
-      updateMutation.mutate(
-        { id: product.id as string, data: submitData },
-        {
-          onSuccess: () => {
-            setAlertState({
-              visible: true,
-              type: "success",
-              message: `Product ${status === "draft" ? "saved as draft" : "updated"} successfully!`,
-            });
-            setTimeout(() => onClose(), 1500);
-          },
-          onError: (error) => {
-            setAlertState({
-              visible: true,
-              type: "error",
-              message: error.message || "Failed to update product",
-            });
-          },
-        }
-      );
-    } else {
-      createMutation.mutate(submitData, {
-        onSuccess: () => {
-          setAlertState({
-            visible: true,
-            type: "success",
-            message: `Product ${status === "draft" ? "saved as draft" : "created"} successfully!`,
-          });
-          setTimeout(() => onClose(), 1500);
-        },
-        onError: (error) => {
-          setAlertState({
-            visible: true,
-            type: "error",
-            message: error.message || "Failed to create product",
-          });
-        },
-      });
-    }
+    const mutate = product ? updateMutation : createMutation;
+    const payload = product
+      ? { id: product.id as string, data: submitData }
+      : submitData;
+
+    mutate.mutate(payload as any, {
+      onSuccess: () => {
+        const action = product
+          ? status === "draft"
+            ? "saved as draft"
+            : "updated"
+          : status === "draft"
+            ? "saved as draft"
+            : "created";
+        setAlertState({
+          visible: true,
+          type: "success",
+          message: `Product ${action} successfully!`,
+        });
+        setTimeout(() => onClose(), 1500);
+      },
+      onError: (error: any) => {
+        setAlertState({
+          visible: true,
+          type: "error",
+          message: error.message || "Failed to save product",
+        });
+      },
+    });
   };
 
-  const dismissAlert = () => {
+  const dismissAlert = () =>
     setAlertState((prev) => ({ ...prev, visible: false }));
-  };
 
   const isDraft = product?.status === "draft";
-  const formTitle = product ? "Edit Product" : "Create New Product";
+  const formTitle = product ? "Edit Product" : "New Product";
   const saveDraftText = isDraft ? "Save Draft" : "Save as Draft";
+  const submitText = product
+    ? isDraft
+      ? "Publish"
+      : "Update"
+    : "Create Product";
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
-  let submitButtonText = "Create Product";
-  if (product) {
-    submitButtonText = isDraft ? "Publish Product" : "Update Product";
-  }
-  const isFormValid = Boolean(
-    !createMutation.isPending &&
-      !updateMutation.isPending &&
-      formData.name.trim() &&
-      formData.description.trim() &&
-      formData.images.length > 0 &&
-      formData.variants.length > 0
-  );
+  const tabHasErrors = (tab: TabKey) => {
+    if (tab === "basic")
+      return !!errors.name || !!errors.slug || !!errors.description || !!errors.collections;
+    if (tab === "media") return !!errors.images;
+    if (tab === "variants")
+      return (
+        !!errors.variants ||
+        formData.variants.some(
+          (_, i) =>
+            errors[`variant-${i}-sku`] ||
+            errors[`variant-${i}-title`] ||
+            errors[`variant-${i}-price`] ||
+            errors[`variant-${i}-images`]
+        )
+      );
+    return false;
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "basic":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-base font-semibold text-primary-500 mb-4">
+                Basic Information
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <FormField
+                    label="Product Name *"
+                    name="name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    placeholder="Enter product name..."
+                    error={errors?.name}
+                  />
+                </div>
+
+                <FormField
+                  label="Slug *"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={(e) => handleInputChange("slug", e.target.value)}
+                  placeholder="product-slug"
+                  error={errors?.slug}
+                />
+
+                <FormField
+                  label="Base SKU"
+                  name="sku"
+                  value={formData.sku}
+                  onChange={(e) => handleInputChange("sku", e.target.value)}
+                  placeholder="Enter product SKU..."
+                  error={errors?.sku}
+                />
+
+                <div>
+                  <label className="block text-sm font-semibold text-primary-400 mb-2">
+                    Category *
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) =>
+                      handleInputChange("category", e.target.value)
+                    }
+                    className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+                  >
+                    {PRODUCT_CATEGORIES.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <CollectionsMultiSelect
+                  collections={collectionsData}
+                  selectedIds={formData.collections}
+                  onChange={(ids) => handleInputChange("collections", ids)}
+                  error={errors?.collections}
+                />
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-semibold text-primary-400 mb-2">
+                    Description *
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) =>
+                      handleInputChange("description", e.target.value)
+                    }
+                    rows={8}
+                    placeholder="Enter product description..."
+                    className="w-full p-3 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+                  />
+                  {errors?.description && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "media":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-base font-semibold text-primary-500 mb-4">
+                Product Images *
+              </h4>
+              <p className="text-sm text-gray-500 mb-4">
+                Upload product images. First image will be used as the cover.
+              </p>
+              <ImageUploadField
+                images={formData.images}
+                onImageChange={(images) => handleInputChange("images", images)}
+                error={errors?.images}
+              />
+            </div>
+          </div>
+        );
+
+      case "materials":
+        return (
+          <div className="space-y-6">
+            <MetalsGemstonesSelector
+              selectedMetals={formData.metals || []}
+              selectedGemstones={formData.gemstones || []}
+              onMetalsChange={(metals) => handleInputChange("metals", metals)}
+              onGemstonesChange={(gemstones) =>
+                handleInputChange("gemstones", gemstones)
+              }
+            />
+          </div>
+        );
+
+      case "variants":
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-semibold text-primary-500">
+                  Product Variants *
+                </h4>
+                <p className="text-sm text-gray-500">
+                  Define different variations (size, color, etc.)
+                </p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                leadingIcon={<Plus />}
+                onClick={addVariant}
+              >
+                Add Variant
+              </Button>
+            </div>
+
+            {errors?.variants && (
+              <p className="text-red-500 text-sm">{errors.variants}</p>
+            )}
+
+            <div className="space-y-3">
+              {formData.variants.map((variant, index) => (
+                <VariantCard
+                  key={index}
+                  variant={variant}
+                  index={index}
+                  onVariantChange={handleVariantChange}
+                  onImageChange={(images) =>
+                    handleImageChange("variants", index, images)
+                  }
+                  onRemove={() => removeVariant(index)}
+                  canRemove={formData.variants.length > 1}
+                  errors={errors}
+                />
+              ))}
+            </div>
+          </div>
+        );
+
+      case "options":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-base font-semibold text-primary-500 mb-4">
+                Custom Design Options
+              </h4>
+              <label className="inline-flex items-center gap-3 p-4 border border-gray-200 rounded-sm cursor-pointer hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  checked={formData.isCustomDesign}
+                  onChange={(e) =>
+                    handleInputChange("isCustomDesign", e.target.checked)
+                  }
+                  className="h-5 w-5 text-primary-500 focus:ring-primary-300"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-800">
+                    This is a custom design product
+                  </span>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Custom design products allow customers to personalize their jewelry
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -367,209 +568,59 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
         </div>
       )}
 
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
-        <form
-          onSubmit={(e) => handleSubmit(e, "published")}
-          className="bg-white w-full max-w-7xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
-        >
-          <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
-            <h3 className="text-2xl font-semibold text-primary-500">
-              {formTitle}
-            </h3>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onClose}
-              className="rounded-full w-8 h-8"
-            >
-              <X className="w-6 h-6" />
-            </Button>
-          </div>
-
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="space-y-8">
-              {/* Basic Product Information */}
-              <section>
-                <h4 className="text-lg font-semibold text-primary-500 mb-4">
-                  Basic Information
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    label="Product Name *"
-                    name="name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    placeholder="Enter product name..."
-                    error={errors?.name}
-                  />
-
-                  <FormField
-                    label="SKU *"
-                    name="sku"
-                    value={formData.sku}
-                    onChange={(e) => handleInputChange("sku", e.target.value)}
-                    placeholder="Enter product SKU..."
-                    error={errors?.sku}
-                  />
-
-                  <FormField
-                    label="Slug *"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={(e) => handleInputChange("slug", e.target.value)}
-                    placeholder="product-slug"
-                    error={errors?.slug}
-                  />
-
-                  <div>
-                    <label className="block text-sm font-semibold text-primary-400 mb-2">
-                      Category *
-                    </label>
-                    <select
-                      value={formData.category}
-                      onChange={(e) =>
-                        handleInputChange("category", e.target.value)
-                      }
-                      className="w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
-                    >
-                      {PRODUCT_CATEGORIES.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <section>
-                    <CollectionsSelector
-                      collections={collectionsData || []}
-                      selectedCollections={formData.collections}
-                      onCollectionsChange={(collections) =>
-                        handleInputChange("collections", collections)
-                      }
-                    />
-                  </section>
-
-                  <FormTextareaField
-                    label="Description *"
-                    name="description"
-                    value={formData.description}
-                    onChange={(e) =>
-                      handleInputChange("description", e.target.value)
-                    }
-                    rows={13}
-                    placeholder="Enter product description..."
-                    error={errors?.description}
-                  />
-                </div>
-              </section>
-
-              <MetalsGemstonesSelector
-                selectedMetals={formData.metals || []}
-                selectedGemstones={formData.gemstones || []}
-                onMetalsChange={(metals) => handleInputChange("metals", metals)}
-                onGemstonesChange={(gemstones) =>
-                  handleInputChange("gemstones", gemstones)
-                }
-              />
-
-              {/* Product Images */}
-              <section>
-                <h4 className="text-lg font-semibold text-primary-500 mb-4">
-                  Product Images *
-                </h4>
-                <ImageUploadField
-                  images={formData.images}
-                  onImageChange={(images) =>
-                    handleInputChange("images", images)
-                  }
-                  error={errors?.images}
-                />
-              </section>
-
-              {/* Product Variants */}
-              <section>
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-primary-500">
-                    Product Variants *
-                  </h4>
-                  <Button
-                    type="button"
-                    size="sm"
-                    leadingIcon={<Plus />}
-                    onClick={addVariant}
-                  >
-                    Add Variant
-                  </Button>
-                </div>
-
-                <div className="space-y-6">
-                  {formData.variants.map((variant, index) => (
-                    <VariantForm
-                      key={index}
-                      variant={variant}
-                      index={index}
-                      onVariantChange={handleVariantChange}
-                      onImageChange={(images) =>
-                        handleImageChange("variants", index, images)
-                      }
-                      onRemove={() => removeVariant(index)}
-                      canRemove={formData.variants.length > 1}
-                      errors={errors}
-                    />
-                  ))}
-                </div>
-              </section>
-
-              {/* Custom Design Options */}
-              <section>
-                <h4 className="text-lg font-semibold text-primary-500 mb-4">
-                  Custom Design Options
-                </h4>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.isCustomDesign}
-                        onChange={(e) =>
-                          handleInputChange("isCustomDesign", e.target.checked)
-                        }
-                        className="h-4 w-4 text-primary-500 focus:ring-primary-300 focus:ring-1"
-                      />
-                      <span className="ml-2">
-                        This is a custom design product
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+      <AdminModal
+        title={formTitle}
+        onClose={onClose}
+        footer={
+          <>
             <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
+          Cancel
+        </Button>
             <Button
-              type="button"
               variant="outline"
-              loading={createMutation.isPending || updateMutation.isPending}
-              disabled={!isFormValid}
+              loading={isPending}
+              disabled={isPending}
               onClick={() => handleSubmit(null, "draft")}
             >
               {saveDraftText}
             </Button>
             <Button
               type="submit"
-              loading={createMutation.isPending || updateMutation.isPending}
-              disabled={!isFormValid}
+              loading={isPending}
+              disabled={isPending}
+              onClick={(e: any) => handleSubmit(e, "published")}
             >
-              <span>{submitButtonText}</span>
+              {submitText}
             </Button>
-          </div>
-        </form>
-      </div>
+          </>
+        }
+      >
+        {/* Tab Navigation */}
+        <div className="flex gap-1 border-b border-gray-200 mb-6 -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-x-auto">
+          {TABS.map((tab) => {
+            const hasErr = tabHasErrors(tab.key);
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={`relative px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                  activeTab === tab.key
+                    ? "border-primary-500 text-primary-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                {tab.label}
+                {hasErr && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {renderTabContent()}
+      </AdminModal>
     </>
   );
 }

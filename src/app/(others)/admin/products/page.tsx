@@ -245,7 +245,7 @@ export default function AdminProductsPage() {
                   ))}
                 {currentCollection && (
                   <button
-                    onClick={() => updateURL({ collection: "", page: 1 })}
+                    onClick={() => updateURL({ collectionId: "", page: 1 })}
                     className="px-4 py-2 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-50"
                   >
                     Clear Filter
