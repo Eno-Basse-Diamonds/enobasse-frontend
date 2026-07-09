@@ -90,7 +90,8 @@ function RingMeshComponent({
           aberrationStrength={getAberrationStrength(performanceTier)}
           ior={getIOR(performanceTier)}
           fresnel={1}
-          color="#f7f7f7"
+          color="#e0e4e7"
+          fastChroma={performanceTier !== "high"}
           toneMapped
         />
       </mesh>

@@ -41,18 +41,18 @@ export function useRingCapture({
   }, [productConfig, prevConfig]);
 
   const captureImage = useCallback(
-    (angle: "front" | "top" | "side"): { src: string; alt: string } => {
-      gl.render(scene, camera);
+    (cam: any, angle: "front" | "top" | "side"): { src: string; alt: string } => {
+      gl.render(scene, cam);
       const dataURL = gl.domElement.toDataURL("image/png");
       return {
         src: dataURL,
         alt: `${angle} view of ${gemstoneShape} ring with ${headStyle} head, ${shankStyle} shank in ${metalType}`,
       };
     },
-    [gl, scene, camera, gemstoneShape, headStyle, shankStyle, metalType],
+    [gl, scene, gemstoneShape, headStyle, shankStyle, metalType],
   );
 
-  const generateImages = useCallback(async () => {
+  const generateImages = useCallback(() => {
     if (imagesGenerated) return;
 
     const configKey = createConfigKey(
@@ -64,32 +64,30 @@ export function useRingCapture({
 
     const images: { src: string; alt: string }[] = [];
 
+    // Save main camera original state
     const originalPosition = camera.position.clone();
     const originalRotation = camera.rotation.clone();
     const originalQuaternion = camera.quaternion.clone();
 
+    // Temporarily disable OrbitControls to prevent conflicts
+    const controlsWasEnabled = controlsRef.current?.enabled;
     if (controlsRef.current) {
       controlsRef.current.enabled = false;
     }
 
     try {
-      // Side view
-      camera.position.set(20, 25, 30);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      images.push(captureImage("side"));
+      const captureView = (position: [number, number, number], angle: "front" | "top" | "side") => {
+        // Move the actual main camera
+        camera.position.set(...position);
+        camera.lookAt(0, 0, 0);
+        camera.updateMatrixWorld(true);
+        return captureImage(camera, angle);
+      };
 
-      // Top view
-      camera.position.set(0, 40, 0);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      images.push(captureImage("top"));
-
-      // Front view
-      camera.position.set(0, 25, -40);
-      camera.lookAt(0, 0, 0);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      images.push(captureImage("front"));
+      // Capture the three views synchronously without moving the camera on screen
+      images.push(captureView([20, 25, 30], "side"));
+      images.push(captureView([0, 40, 0], "top"));
+      images.push(captureView([0, 25, -40], "front"));
 
       const generatedImages = images.map((img) =>
         createGeneratedImage(img.src, img.alt),
@@ -101,14 +99,22 @@ export function useRingCapture({
       }
 
       setImagesGenerated(true);
+    } catch (error) {
+      console.error("Error generating preview images:", error);
     } finally {
+      // Restore the main camera to its original state
       camera.position.copy(originalPosition);
       camera.rotation.copy(originalRotation);
       camera.quaternion.copy(originalQuaternion);
+      camera.updateMatrixWorld(true);
 
-      if (controlsRef.current) {
-        controlsRef.current.enabled = true;
+      // Re-enable controls if they were enabled
+      if (controlsRef.current && controlsWasEnabled !== undefined) {
+        controlsRef.current.enabled = controlsWasEnabled;
       }
+
+      // Re-render the original view so the canvas displays correctly
+      gl.render(scene, camera);
     }
   }, [
     imagesGenerated,
@@ -117,6 +123,8 @@ export function useRingCapture({
     shankStyle,
     metalType,
     camera,
+    gl,
+    scene,
     controlsRef,
     captureImage,
     setCachedImages,
@@ -141,7 +149,7 @@ export function useRingCapture({
 
       const timeoutId = setTimeout(() => {
         generateImages();
-      }, 2000);
+      }, 200);
 
       return () => clearTimeout(timeoutId);
     }

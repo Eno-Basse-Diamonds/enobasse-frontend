@@ -115,6 +115,7 @@ export function ThreeDRing({
       frameloop={isMobile ? "demand" : "always"}
       performance={{ min: 0.5 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
+      gl={{ toneMappingExposure: 1.5 }}
       className="w-full h-full"
     >
       <Suspense fallback={null}>

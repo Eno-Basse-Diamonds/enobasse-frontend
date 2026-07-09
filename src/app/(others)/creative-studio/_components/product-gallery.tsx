@@ -64,7 +64,8 @@ export function ProductGallery({
       setIsGenerating(false);
       setCurrentImageIndex(0);
     } else {
-      setGeneratedImages([]);
+      // Keep previous images to prevent flashing/loader, just set imagesReady to false.
+      // They will be replaced once the new images are generated.
       setImagesReady(false);
       setIsGenerating(false);
       setCurrentImageIndex(0);
@@ -139,7 +140,7 @@ export function ProductGallery({
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-gray-100 rounded-sm flex items-center justify-center aspect-square pt-10 relative overflow-hidden">
             <div
-              className={`w-full h-full ${(isInitialLoad && !imagesReady) || isGenerating ? "filter blur-md" : ""}`}
+              className={`w-full h-full ${(isInitialLoad && !imagesReady) ? "filter blur-md" : ""}`}
             >
               <ThreeDRing
                 gemstoneShape={gemstoneShape}
@@ -152,9 +153,9 @@ export function ProductGallery({
               />
             </div>
 
-            {((isInitialLoad && !imagesReady) || isGenerating) && (
+            {(isInitialLoad && !imagesReady) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
-                <LoadingSpinner size="lg" text="Generating product views..." />
+                <LoadingSpinner size="lg" text="Loading 3D viewer..." />
               </div>
             )}
 
@@ -195,7 +196,7 @@ export function ProductGallery({
             className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden mb-4"
           >
           <div
-            className={`w-full h-full ${((isInitialLoad && currentImageIndex === 0 && !imagesReady) || (isGenerating && currentImageIndex === 0)) ? "filter blur-md" : ""}`}
+            className={`w-full h-full ${(isInitialLoad && currentImageIndex === 0 && !imagesReady) ? "filter blur-md" : ""}`}
           >
             {currentImageIndex === 0 ? (
               <div className="w-full h-full flex items-center justify-center mt-6">
@@ -222,9 +223,9 @@ export function ProductGallery({
             )}
           </div>
 
-          {((isInitialLoad && currentImageIndex === 0 && !imagesReady) || (isGenerating && currentImageIndex === 0)) && (
+          {(isInitialLoad && currentImageIndex === 0 && !imagesReady) && (
             <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
-              <LoadingSpinner size="lg" text="Generating product views..." />
+              <LoadingSpinner size="lg" text="Loading 3D viewer..." />
             </div>
           )}
 
