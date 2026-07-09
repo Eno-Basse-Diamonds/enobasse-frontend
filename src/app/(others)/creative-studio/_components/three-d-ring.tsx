@@ -110,12 +110,12 @@ export function ThreeDRing({
 
   return (
     <Canvas
-      shadows={false}
-      dpr={isMobile ? [0.5, 1] : [1, 2]}
+      shadows={performanceTier === "high"}
+      dpr={isMobile ? [1, 1.5] : [1, 2]}
       frameloop={isMobile ? "demand" : "always"}
-      performance={{ min: 0.3 }}
+      performance={{ min: 0.5 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
-      gl={{ toneMappingExposure: 1.2, antialias: !isMobile }}
+      gl={{ toneMappingExposure: 1.5, antialias: true }}
       className="w-full h-full"
     >
       <Suspense fallback={null}>
@@ -125,7 +125,9 @@ export function ThreeDRing({
       <directionalLight
         position={[30, 50, 30]}
         intensity={isMobile ? 1.2 : 1.6}
-        castShadow={false}
+        castShadow={performanceTier === "high"}
+        shadow-mapSize={1024}
+        shadow-bias={-0.0001}
       />
       <directionalLight position={[-30, 15, -25]} intensity={isMobile ? 0.3 : 0.5} />
 
@@ -217,17 +219,18 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     onImagesGenerated,
   });
 
-  // Memoize material to prevent recreation on each render. MeshPhysicalMaterial
-  // (rather than MeshStandardMaterial) is used so the clearcoat layer in
-  // METAL_MATERIALS can render — that's what gives polished jewelry its
-  // glassy top-layer sheen on top of the base metal reflection.
   const metalMaterial = useMemo(
-    () =>
-      new MeshPhysicalMaterial(
-        METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
-          METAL_MATERIALS["white-gold"]
-      ),
-    [metalType]
+    () => {
+      const base = METAL_MATERIALS[metalType as keyof typeof METAL_MATERIALS] ||
+        METAL_MATERIALS["white-gold"];
+      if (!isMobile) return new MeshPhysicalMaterial(base);
+      return new MeshPhysicalMaterial({
+        ...base,
+        roughness: base.roughness * 0.3,
+        envMapIntensity: base.envMapIntensity * 1.4,
+      });
+    },
+    [metalType, isMobile]
   );
 
   const gemstoneGeometry = useMemo(

@@ -111,7 +111,7 @@ function RingMeshComponent({
           ior={getIOR(performanceTier)}
           fresnel={1}
           color="#c8d0d8"
-          fastChroma={performanceTier !== "high"}
+          fastChroma={performanceTier === "medium"}
           toneMapped
         />
       </mesh>

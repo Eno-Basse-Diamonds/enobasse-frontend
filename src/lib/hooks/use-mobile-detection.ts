@@ -42,8 +42,9 @@ export function useMobileDetection(): MobileDetectionResult {
       // Check for low-power indicators
       const hardwareConcurrency = navigator.hardwareConcurrency || 4;
       const isLowCores = hardwareConcurrency <= 4;
-      const isHighDPR = window.devicePixelRatio > 2;
-      const isLowPower = isMobile && (isLowCores || isHighDPR);
+      // High DPR (> 2) is characteristic of premium retina displays on powerful devices,
+      // not low-power hardware. We only classify as low power if CPU core count is low.
+      const isLowPower = isMobile && isLowCores;
 
       // Determine performance tier
       let performanceTier: PerformanceTier = "high";
