@@ -96,14 +96,27 @@ export default function AuthSection({
     "sign-up": async (formData) => {
       const response = await handleSignUp(formData);
       if (response?.errors) return response;
-      const result = await signIn("credentials", {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
-      });
-      if (result?.error) {
-        throw new Error("Account created but sign-in failed. Please sign in manually.");
+
+      // Retry sign-in a few times to allow the backend to propagate the new account
+      let result;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        if (attempt > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 600));
+        }
+        result = await signIn("credentials", {
+          email: formData.email,
+          password: formData.password,
+          redirect: false,
+        });
+        if (!result?.error) break;
       }
+
+      if (result?.error) {
+        // Account was created — send them to sign-in rather than showing a cryptic error
+        router.push("/sign-in");
+        return;
+      }
+
       setIsAuthenticated(true);
       setAccount({ email: formData.email });
       router.push("/account");
