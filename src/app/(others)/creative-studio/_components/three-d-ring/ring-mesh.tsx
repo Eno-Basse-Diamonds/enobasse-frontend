@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { MeshRefractionMaterial } from "@react-three/drei";
+import { MeshPhysicalMaterial } from "three";
 import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface RingMeshProps {
@@ -21,9 +22,9 @@ function getRefractionBounces(tier: PerformanceTier): number {
     case "high":
       return 4;
     case "medium":
-      return 3;
-    case "low":
       return 2;
+    case "low":
+      return 1;
     default:
       return 4;
   }
@@ -34,9 +35,9 @@ function getAberrationStrength(tier: PerformanceTier): number {
     case "high":
       return 0.05;
     case "medium":
-      return 0.04;
-    case "low":
       return 0.03;
+    case "low":
+      return 0;
     default:
       return 0.05;
   }
@@ -47,9 +48,9 @@ function getIOR(tier: PerformanceTier): number {
     case "high":
       return 2.7;
     case "medium":
-      return 2.5;
-    case "low":
       return 2.3;
+    case "low":
+      return 2.2;
     default:
       return 2.7;
   }
@@ -69,6 +70,31 @@ function RingMeshComponent({
   performanceTier = "high",
 }: RingMeshProps) {
   if (isGemstone) {
+    // On low-tier devices, MeshRefractionMaterial is too expensive.
+    // Use a lightweight MeshPhysicalMaterial with env map instead.
+    if (performanceTier === "low") {
+      return (
+        <mesh
+          geometry={geometry}
+          position={position}
+          rotation={rotation}
+          scale={scale}
+          castShadow={false}
+          receiveShadow={false}
+        >
+          <meshPhysicalMaterial
+            envMap={texture}
+            envMapIntensity={1.5}
+            metalness={0}
+            roughness={0.05}
+            transparent
+            opacity={0.92}
+            color="#e8ecf0"
+          />
+        </mesh>
+      );
+    }
+
     return (
       <mesh
         geometry={geometry}

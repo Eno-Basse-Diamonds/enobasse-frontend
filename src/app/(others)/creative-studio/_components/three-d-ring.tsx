@@ -110,33 +110,24 @@ export function ThreeDRing({
 
   return (
     <Canvas
-      shadows={!isMobile}
-      dpr={isMobile ? [1, 1.5] : [1, 2]}
+      shadows={false}
+      dpr={isMobile ? [0.5, 1] : [1, 2]}
       frameloop={isMobile ? "demand" : "always"}
-      performance={{ min: 0.5 }}
+      performance={{ min: 0.3 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
-      gl={{ toneMappingExposure: 1.2 }}
+      gl={{ toneMappingExposure: 1.2, antialias: !isMobile }}
       className="w-full h-full"
     >
       <Suspense fallback={null}>
         <Environment files={environment} />
       </Suspense>
 
-      {/* Environment lighting alone reads as flat/ambient; these lights
-          add the crisp specular glints real studio jewelry photography
-          relies on for metal and diamond sparkle. */}
       <directionalLight
         position={[30, 50, 30]}
-        intensity={1.6}
-        castShadow={!isMobile}
+        intensity={isMobile ? 1.2 : 1.6}
+        castShadow={false}
       />
-      <directionalLight position={[-30, 15, -25]} intensity={0.5} />
-      {/* Rim light from behind/above — creates bright edge highlights on the
-          diamond crown and pavilion facets, giving the stone shape definition
-          against any background. */}
-      <directionalLight position={[0, 40, 25]} intensity={0.8} />
-      {/* Backlight for edge definition on the far side of the diamond. */}
-      <directionalLight position={[0, 20, -40]} intensity={0.4} />
+      <directionalLight position={[-30, 15, -25]} intensity={isMobile ? 0.3 : 0.5} />
 
       <RotatingRing
         key={currentConfig}
@@ -162,12 +153,12 @@ export function ThreeDRing({
         ref={controlsRef}
         enabled={true}
         enableZoom={true}
-        enablePan={true}
+        enablePan={isMobile ? false : true}
         enableRotate={true}
-        minDistance={40}
-        maxDistance={60}
-        zoomSpeed={0.8}
-        rotateSpeed={0.7}
+        minDistance={isMobile ? 45 : 40}
+        maxDistance={isMobile ? 50 : 60}
+        zoomSpeed={isMobile ? 0.5 : 0.8}
+        rotateSpeed={isMobile ? 0.4 : 0.7}
         onStart={() => setIsUserInteracting(true)}
         onEnd={() => setIsUserInteracting(false)}
       />
@@ -360,7 +351,6 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
   useFrame((_, delta) => {
     if (groupRef.current && imagesReady && !isUserInteracting) {
       groupRef.current.rotation.y += delta * rotationSpeed;
-      // On mobile with demand frameloop, we need to manually invalidate
       if (isMobile) {
         invalidate();
       }

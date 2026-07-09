@@ -6,6 +6,7 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["10.58.84.197"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
