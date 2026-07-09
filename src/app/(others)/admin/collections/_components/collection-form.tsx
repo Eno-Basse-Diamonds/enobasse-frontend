@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
@@ -15,6 +15,7 @@ import {
   CollectionFormSchema,
   CollectionFormData,
 } from "@/lib/validations/collections";
+import { AdminModal } from "../../products/_components/_elements/admin-modal";
 
 interface CollectionFormProps {
   collection: Collection | null;
@@ -132,16 +133,8 @@ export function CollectionForm({ collection, onClose }: CollectionFormProps) {
     setAlertState((prev) => ({ ...prev, visible: false }));
   };
 
-  const formTitle = collection ? "Edit Collection" : "Create New Collection";
-  const submitButtonText = collection ? "Update" : "Create";
-  const isFormValid = Boolean(
-    !createMutation.isPending &&
-      !updateMutation.isPending &&
-      formData.name.trim() &&
-      formData.slug.trim() &&
-      formData.description.trim() &&
-      formData.image.url
-  );
+  const formTitle = collection ? "Edit Collection" : "New Collection";
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
     <>
@@ -158,84 +151,57 @@ export function CollectionForm({ collection, onClose }: CollectionFormProps) {
         </div>
       )}
 
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white w-full max-w-4xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
-        >
-          <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
-            <h3 className="text-2xl font-semibold text-primary-500">
-              {formTitle}
-            </h3>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onClose}
-              className="rounded-full w-8 h-8"
-            >
-              <X className="w-6 h-6" />
-            </Button>
-          </div>
+      <AdminModal
+        title={formTitle}
+        onClose={onClose}
+        confirmText={collection ? "Update Collection" : "Create Collection"}
+        confirmLoading={isPending}
+      >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <FormField
+            label="Collection Name *"
+            name="name"
+            value={formData.name}
+            onChange={(e) => handleInputChange("name", e.target.value)}
+            placeholder="Enter collection name..."
+            error={errors?.name?.[0]}
+          />
 
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="space-y-6">
-              <FormField
-                label="Collection Name *"
-                name="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Enter collection name..."
-                error={errors?.name?.[0]}
-              />
+          <FormField
+            label="Slug *"
+            name="slug"
+            value={formData.slug}
+            onChange={(e) => handleInputChange("slug", e.target.value)}
+            placeholder="collection-slug"
+            error={errors?.slug?.[0]}
+          />
 
-              <FormField
-                label="Slug *"
-                name="slug"
-                value={formData.slug}
-                onChange={(e) => handleInputChange("slug", e.target.value)}
-                placeholder="collection-slug"
-                error={errors?.slug?.[0]}
-              />
+          <FormTextareaField
+            label="Description *"
+            name="description"
+            value={formData.description}
+            onChange={(e) =>
+              handleInputChange("description", e.target.value)
+            }
+            rows={4}
+            placeholder="Enter collection description..."
+            error={errors?.description?.[0]}
+          />
 
-              <FormTextareaField
-                label="Description *"
-                name="description"
-                value={formData.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
-                rows={4}
-                placeholder="Enter collection description..."
-                error={errors?.description?.[0]}
-              />
+          <ImageUploadField
+            formData={formData}
+            errors={errors}
+            onImageChange={handleImageChange}
+          />
 
-              <ImageUploadField
-                formData={formData}
-                errors={errors}
-                onImageChange={handleImageChange}
-              />
+          <StatusField
+            published={formData.published}
+            onChange={(value) => handleInputChange("published", value)}
+          />
 
-              <StatusField
-                published={formData.published}
-                onChange={(value) => handleInputChange("published", value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              loading={createMutation.isPending || updateMutation.isPending}
-              disabled={!isFormValid}
-            >
-              <span>{submitButtonText} Collection</span>
-            </Button>
-          </div>
+          <button type="submit" className="hidden" />
         </form>
-      </div>
+      </AdminModal>
     </>
   );
 }
@@ -257,8 +223,8 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
   error,
 }) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       {label}
     </label>
     <input
@@ -292,8 +258,8 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
   rows,
   error,
 }) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       {label}
     </label>
     <textarea
@@ -301,7 +267,7 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
       value={value}
       onChange={onChange}
       rows={rows}
-      className="w-full p-4 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+      className="w-full p-3 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
       placeholder={placeholder}
     />
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
@@ -317,11 +283,11 @@ const ImageUploadField = ({
   errors: FormErrors;
   onImageChange: (field: keyof typeof formData.image, value: string) => void;
 }) => (
-  <div className="image-upload">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       Featured Image *
     </label>
-    <div className="flex flex-row gap-2 items-center">
+    <div className="flex flex-col sm:flex-row gap-2">
       <CldUploadWidget
         uploadPreset="collections"
         options={{
@@ -349,7 +315,7 @@ const ImageUploadField = ({
         name="image.alt"
         value={formData.image.alt}
         onChange={(e) => onImageChange("alt", e.target.value)}
-        className="h-10 px-3 py-2 border text-sm border-primary-100 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+        className="flex-1 h-10 px-3 py-2 border text-sm border-primary-100 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
         placeholder="Image alt text"
       />
     </div>
@@ -364,7 +330,7 @@ const ImageUploadField = ({
           gravity="auto"
           quality="auto"
           format="avif"
-          className="w-full h-48 object-cover border border-gray-200"
+          className="w-full h-40 object-cover border border-gray-200"
         />
       </div>
     )}
@@ -380,11 +346,11 @@ interface StatusFieldProps {
 }
 
 const StatusField: React.FC<StatusFieldProps> = ({ published, onChange }) => (
-  <div className="status-field">
+  <div>
     <label className="block text-sm font-semibold text-primary-400 mb-2">
       Should this collection appear on the collections page for customers?
     </label>
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center gap-4">
       <label className="inline-flex items-center">
         <input
           type="radio"

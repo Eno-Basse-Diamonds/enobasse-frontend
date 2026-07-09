@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, User, MessageSquare } from "lucide-react";
+import { User, MessageSquare } from "lucide-react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Alert } from "@/components/alert";
 import { Button } from "@/components/button";
@@ -11,6 +11,7 @@ import {
   useCreateTestimonial,
   useUpdateTestimonial,
 } from "@/lib/hooks/use-testimonials";
+import { AdminModal } from "../../products/_components/_elements/admin-modal";
 
 interface TestimonialFormProps {
   testimonial: Testimonial | null;
@@ -117,15 +118,7 @@ export function TestimonialForm({
     }
   }, [testimonial, createMutation, updateMutation, onClose]);
 
-  const formTitle = testimonial ? "Edit Testimonial" : "Create New Testimonial";
-  const submitButtonText = testimonial ? "Update" : "Create";
-  const isFormValid = Boolean(
-    !createMutation.isPending &&
-      !updateMutation.isPending &&
-      formData.text.trim() &&
-      formData.name.trim()
-  );
-
+  const formTitle = testimonial ? "Edit Testimonial" : "New Testimonial";
   const mutation = testimonial ? updateMutation : createMutation;
 
   return (
@@ -140,92 +133,66 @@ export function TestimonialForm({
         </div>
       )}
 
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 md:p-10">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white w-full max-w-2xl max-h-[calc(100vh-2rem)] md:max-h-[90vh] flex flex-col shadow-2xl rounded-sm"
-        >
-          <div className="flex items-center justify-between p-6 border-b border-primary-500/10 bg-gray-50">
-            <h3 className="text-2xl font-semibold text-primary-500">
-              {formTitle}
-            </h3>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={onClose}
-              className="rounded-full w-8 h-8"
-            >
-              <X className="w-6 h-6" />
-            </Button>
+      <AdminModal
+        title={formTitle}
+        onClose={onClose}
+        maxWidth="max-w-2xl"
+        confirmText={testimonial ? "Update Testimonial" : "Create Testimonial"}
+        confirmLoading={mutation.isPending}
+      >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <FormField
+            label="Customer Name *"
+            name="name"
+            value={formData.name}
+            onChange={(e) => handleInputChange("name", e.target.value)}
+            placeholder="Enter customer name..."
+            error={errors?.name}
+            icon={<User className="w-4 h-4" />}
+          />
+
+          <FormField
+            label="Handle (Optional)"
+            name="handle"
+            value={formData.handle || ""}
+            onChange={(e) => handleInputChange("handle", e.target.value)}
+            placeholder="@username"
+            error={errors?.handle}
+            icon={<MessageSquare className="w-4 h-4" />}
+          />
+
+          <FormTextareaField
+            label="Testimonial Text *"
+            name="text"
+            value={formData.text}
+            onChange={(e) => handleInputChange("text", e.target.value)}
+            rows={4}
+            placeholder="Write the customer testimonial..."
+            characterCount={formData.text.length}
+            maxCharacters={500}
+            error={errors?.text}
+          />
+
+          <ImageUploadField
+            formData={formData}
+            onImageChange={handleImageChange}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <StatusField
+              isActive={formData.isActive}
+              onChange={(value) => handleInputChange("isActive", value)}
+            />
+
+            <OrderField
+              order={formData.order}
+              onChange={(value) => handleInputChange("order", value)}
+            />
           </div>
 
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="space-y-6">
-              <FormField
-                label="Customer Name *"
-                name="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="Enter customer name..."
-                error={errors?.name}
-                icon={<User className="w-4 h-4" />}
-              />
-
-              <FormField
-                label="Handle (Optional)"
-                name="handle"
-                value={formData.handle || ""}
-                onChange={(e) => handleInputChange("handle", e.target.value)}
-                placeholder="@username"
-                error={errors?.handle}
-                icon={<MessageSquare className="w-4 h-4" />}
-              />
-
-              <FormTextareaField
-                label="Testimonial Text *"
-                name="text"
-                value={formData.text}
-                onChange={(e) => handleInputChange("text", e.target.value)}
-                rows={4}
-                placeholder="Write the customer testimonial..."
-                characterCount={formData.text.length}
-                maxCharacters={500}
-                error={errors?.text}
-              />
-
-              <ImageUploadField
-                formData={formData}
-                onImageChange={handleImageChange}
-              />
-
-              <div className="grid grid-cols-2 gap-4">
-                <StatusField
-                  isActive={formData.isActive}
-                  onChange={(value) => handleInputChange("isActive", value)}
-                />
-
-                <OrderField
-                  order={formData.order}
-                  onChange={(value) => handleInputChange("order", value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              loading={mutation.isPending}
-              disabled={!isFormValid}
-            >
-              <span>{submitButtonText} Testimonial</span>
-            </Button>
-          </div>
+          <button type="submit" className="hidden" />
         </form>
-      </div>
+      </AdminModal>
     </>
   );
 }
@@ -249,8 +216,8 @@ const FormField: React.FC<FormFieldProps> = ({
   error,
   icon,
 }) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       {label}
     </label>
     <div className="relative">
@@ -264,7 +231,7 @@ const FormField: React.FC<FormFieldProps> = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`w-full p-2 border border-primary-100 text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300 ${
+        className={`w-full p-2 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300 ${
           icon ? "pl-10" : ""
         }`}
         placeholder={placeholder}
@@ -297,8 +264,8 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
   characterCount,
   maxCharacters,
 }) => (
-  <div className="block">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       {label}
     </label>
     <textarea
@@ -306,7 +273,7 @@ const FormTextareaField: React.FC<FormTextareaFieldProps> = ({
       value={value}
       onChange={onChange}
       rows={rows}
-      className="w-full p-4 border border-primary-100 text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+      className="w-full p-3 border border-primary-100 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
       placeholder={placeholder}
     />
     {characterCount !== undefined && maxCharacters !== undefined && (
@@ -325,11 +292,11 @@ const ImageUploadField = ({
   formData: CreateTestimonialData;
   onImageChange: (field: string, value: string) => void;
 }) => (
-  <div className="image-upload">
-    <label className="block text-sm font-semibold text-primary-400 mb-2">
+  <div>
+    <label className="block text-sm font-semibold text-primary-400 mb-1.5">
       Customer Avatar (Optional)
     </label>
-    <div className="flex flex-row gap-2 items-center">
+    <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
       <CldUploadWidget
         uploadPreset="testimonials"
         options={{
@@ -357,7 +324,7 @@ const ImageUploadField = ({
         name="avatar.alt"
         value={formData.avatar?.alt || ""}
         onChange={(e) => onImageChange("alt", e.target.value)}
-        className="h-10 px-3 py-2 border text-sm border-primary-100 rounded-sm focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+        className="flex-1 h-10 px-3 py-2 border text-sm border-primary-100 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
         placeholder="Image alt text"
       />
     </div>
@@ -385,11 +352,11 @@ interface StatusFieldProps {
 }
 
 const StatusField: React.FC<StatusFieldProps> = ({ isActive, onChange }) => (
-  <div className="status-field">
+  <div>
     <label className="block text-sm font-semibold text-primary-400 mb-2">
       Status
     </label>
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center gap-4">
       <label className="inline-flex items-center">
         <input
           type="radio"
@@ -420,7 +387,7 @@ interface OrderFieldProps {
 }
 
 const OrderField: React.FC<OrderFieldProps> = ({ order, onChange }) => (
-  <div className="order-field">
+  <div>
     <label className="block text-sm font-semibold text-primary-400 mb-2">
       Display Order
     </label>
