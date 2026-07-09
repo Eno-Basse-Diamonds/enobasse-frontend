@@ -26,7 +26,7 @@ export function AdminModal({ title, onClose, children, footer }: AdminModalProps
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 min-h-[320px] sm:min-h-[400px]">
           {children}
         </div>
 
