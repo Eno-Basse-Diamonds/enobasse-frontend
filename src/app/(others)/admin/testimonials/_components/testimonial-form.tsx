@@ -139,8 +139,12 @@ export function TestimonialForm({
         maxWidth="max-w-2xl"
         confirmText={testimonial ? "Update Testimonial" : "Create Testimonial"}
         confirmLoading={mutation.isPending}
+        onConfirm={() => {
+          const form = document.querySelector("#testimonial-form") as HTMLFormElement;
+          form?.requestSubmit();
+        }}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form id="testimonial-form" onSubmit={handleSubmit} className="space-y-5">
           <FormField
             label="Customer Name *"
             name="name"
@@ -190,8 +194,7 @@ export function TestimonialForm({
             />
           </div>
 
-          <button type="submit" className="hidden" />
-        </form>
+          </form>
       </AdminModal>
     </>
   );

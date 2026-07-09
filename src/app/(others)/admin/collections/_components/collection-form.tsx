@@ -156,8 +156,12 @@ export function CollectionForm({ collection, onClose }: CollectionFormProps) {
         onClose={onClose}
         confirmText={collection ? "Update Collection" : "Create Collection"}
         confirmLoading={isPending}
+        onConfirm={() => {
+          const form = document.querySelector("#collection-form") as HTMLFormElement;
+          form?.requestSubmit();
+        }}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form id="collection-form" onSubmit={handleSubmit} className="space-y-5">
           <FormField
             label="Collection Name *"
             name="name"
@@ -198,8 +202,6 @@ export function CollectionForm({ collection, onClose }: CollectionFormProps) {
             published={formData.published}
             onChange={(value) => handleInputChange("published", value)}
           />
-
-          <button type="submit" className="hidden" />
         </form>
       </AdminModal>
     </>

@@ -186,8 +186,12 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
         onClose={onClose}
         confirmText={`${submitButtonText} Account`}
         confirmLoading={isPending}
+        onConfirm={() => {
+          const form = document.querySelector("#account-form") as HTMLFormElement;
+          form?.requestSubmit();
+        }}
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form id="account-form" onSubmit={handleSubmit} className="space-y-6">
           <section>
             <h4 className="text-base font-semibold text-primary-500 mb-4">
               Basic Information
@@ -343,8 +347,7 @@ export function AccountForm({ account, onClose }: AccountFormProps) {
             </div>
           </section>
 
-          <button type="submit" className="hidden" />
-        </form>
+          </form>
       </AdminModal>
     </>
   );
