@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { MeshRefractionMaterial } from "@react-three/drei";
-import { MeshPhysicalMaterial } from "three";
 import type { PerformanceTier } from "@/lib/hooks/use-mobile-detection";
 
 interface RingMeshProps {
@@ -70,69 +69,15 @@ function RingMeshComponent({
   performanceTier = "high",
 }: RingMeshProps) {
   if (isGemstone) {
-    const isIOS =
-      typeof window !== "undefined" &&
-      typeof navigator !== "undefined" &&
-      (/iPad|iPhone|iPod/i.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
-
-    if (isIOS) {
-      // `transmission` is unreliable on iOS Safari's WebGL/Metal backend —
-      // it frequently renders as an opaque white/cloudy blob instead of a
-      // clear gem (see mrdoob/three.js#26829 and related iOS transmission
-      // reports). Fake the glassy look with reflections/clearcoat instead
-      // of relying on the transmission render pass.
-      return (
-        <mesh
-          geometry={geometry}
-          position={position}
-          rotation={rotation}
-          scale={scale}
-          castShadow={castShadow}
-          receiveShadow={receiveShadow}
-        >
-          <meshPhysicalMaterial
-            envMap={texture}
-            envMapIntensity={3.5}
-            metalness={0.0}
-            roughness={0.02}
-            ior={2.417}
-            clearcoat={1.0}
-            clearcoatRoughness={0.0}
-            specularIntensity={1.0}
-            transparent
-            opacity={0.85}
-            color="#ffffff"
-          />
-        </mesh>
-      );
-    }
-
-    // On low-tier devices, MeshRefractionMaterial is too expensive.
-    // Use a lightweight MeshPhysicalMaterial with env map instead.
-    if (performanceTier === "low") {
-      return (
-        <mesh
-          geometry={geometry}
-          position={position}
-          rotation={rotation}
-          scale={scale}
-          castShadow={false}
-          receiveShadow={false}
-        >
-          <meshPhysicalMaterial
-            envMap={texture}
-            envMapIntensity={1.5}
-            metalness={0}
-            roughness={0.05}
-            transparent
-            opacity={0.92}
-            color="#e8ecf0"
-          />
-        </mesh>
-      );
-    }
-
+    // A flat MeshPhysicalMaterial (with or without `transmission`) can't
+    // reproduce facet-by-facet sparkle — every facet reflects the same
+    // uniform envMap color, so the gem reads as a plain pale blob. That's
+    // true on every platform; it isn't an iOS-only limitation, and
+    // `transmission` is additionally known to be unreliable on iOS
+    // Safari's WebGL/Metal backend. MeshRefractionMaterial's per-facet
+    // raymarched reflections are what actually produce the diamond look,
+    // so it's used everywhere — including iOS and low-tier devices, just
+    // with cheaper bounces/aberration/ior on the latter.
     return (
       <mesh
         geometry={geometry}
