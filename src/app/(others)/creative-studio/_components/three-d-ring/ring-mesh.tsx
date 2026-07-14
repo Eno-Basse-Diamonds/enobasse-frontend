@@ -77,6 +77,11 @@ function RingMeshComponent({
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
 
     if (isIOS) {
+      // `transmission` is unreliable on iOS Safari's WebGL/Metal backend —
+      // it frequently renders as an opaque white/cloudy blob instead of a
+      // clear gem (see mrdoob/three.js#26829 and related iOS transmission
+      // reports). Fake the glassy look with reflections/clearcoat instead
+      // of relying on the transmission render pass.
       return (
         <mesh
           geometry={geometry}
@@ -88,14 +93,15 @@ function RingMeshComponent({
         >
           <meshPhysicalMaterial
             envMap={texture}
-            envMapIntensity={2.5}
+            envMapIntensity={3.5}
             metalness={0.0}
-            roughness={0.01}
+            roughness={0.02}
             ior={2.417}
-            transmission={0.9}
-            thickness={1.5}
             clearcoat={1.0}
             clearcoatRoughness={0.0}
+            specularIntensity={1.0}
+            transparent
+            opacity={0.85}
             color="#ffffff"
           />
         </mesh>
