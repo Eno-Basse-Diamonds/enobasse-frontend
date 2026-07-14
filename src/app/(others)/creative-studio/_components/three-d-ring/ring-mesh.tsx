@@ -70,6 +70,38 @@ function RingMeshComponent({
   performanceTier = "high",
 }: RingMeshProps) {
   if (isGemstone) {
+    const isIOS =
+      typeof window !== "undefined" &&
+      typeof navigator !== "undefined" &&
+      (/iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
+
+    if (isIOS) {
+      return (
+        <mesh
+          geometry={geometry}
+          position={position}
+          rotation={rotation}
+          scale={scale}
+          castShadow={castShadow}
+          receiveShadow={receiveShadow}
+        >
+          <meshPhysicalMaterial
+            envMap={texture}
+            envMapIntensity={2.5}
+            metalness={0.0}
+            roughness={0.01}
+            ior={2.417}
+            transmission={0.9}
+            thickness={1.5}
+            clearcoat={1.0}
+            clearcoatRoughness={0.0}
+            color="#ffffff"
+          />
+        </mesh>
+      );
+    }
+
     // On low-tier devices, MeshRefractionMaterial is too expensive.
     // Use a lightweight MeshPhysicalMaterial with env map instead.
     if (performanceTier === "low") {
