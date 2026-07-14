@@ -11,6 +11,7 @@ import {
   handleResetCode,
 } from "@/lib/actions/account";
 import { handleSignUp } from "@/lib/actions/auth";
+import { login } from "@/lib/api/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
 import { blurDataURL } from "@/lib/utils/constants/blur-data-url";
@@ -124,9 +125,14 @@ export default function AuthSection({
       router.push("/account");
     },
     "sign-in": async (formData) => {
+      const { accessToken, account } = await login(
+        formData.email,
+        formData.password,
+      );
+
       const result = await signIn("credentials", {
         email: formData.email,
-        password: formData.password,
+        preIssuedToken: JSON.stringify({ accessToken, account }),
         redirect: false,
       });
 
@@ -135,7 +141,7 @@ export default function AuthSection({
       } else if (result?.ok) {
         setIsAuthenticated(true);
         setAccount({ email: formData.email });
-        
+
         const updatedSession = await getSession();
         if (updatedSession?.user?.isAdmin) {
           router.push("/admin/dashboard");
@@ -169,6 +175,13 @@ export default function AuthSection({
         email: emailToUse,
       });
       if (response?.errors) return response;
+      if (response?.valid === false) {
+        return {
+          errors: {
+            resetCode: ["Invalid or expired code. Please try again."],
+          },
+        };
+      }
       router.push("/create-new-password");
     },
     "create-new-password": async (formData) => {

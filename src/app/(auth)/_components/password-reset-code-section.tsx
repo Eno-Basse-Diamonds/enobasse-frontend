@@ -109,7 +109,7 @@ export default function PasswordResetCodeSection({
         resetCode: otpValue,
       });
 
-      if (response?.errors) {
+      if (response?.errors || !response?.valid) {
         setError("Invalid or expired code. Please try again.");
       } else {
         showAlert("success", "Reset code has been successfully verified.");

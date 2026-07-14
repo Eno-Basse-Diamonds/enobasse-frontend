@@ -5,7 +5,7 @@ import { getToken } from "next-auth/jwt";
 const protectedRoutes = ["/account", "/admin"];
 const authRoutes = ["/sign-in", "/sign-up"];
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route),

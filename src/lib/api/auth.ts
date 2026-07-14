@@ -1,4 +1,6 @@
+import axios from "axios";
 import { api } from "../utils/api";
+import { API_URL } from "../utils/constants/api-url";
 import { SignupFormSchema } from "../validations/auth";
 
 interface UserAccount {
@@ -43,7 +45,18 @@ export const login = async (
   email: string,
   password: string,
 ): Promise<AuthTokenResponse> => {
-  return api.post("/auth/login", { email, password });
+  try {
+    const response = await axios.post(`${API_URL}/auth/login`, {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error('Invalid email or password.');
+  }
 };
 
 export const issueTokenForEmail = async (

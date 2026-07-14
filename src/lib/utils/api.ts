@@ -77,6 +77,20 @@ class ApiClient {
             `Bearer ${session.accessToken}`,
           );
         }
+      } else {
+        try {
+          const { getServerSession } = await import("next-auth");
+          const { authOptions } = await import("../config/auth");
+          const session = await getServerSession(authOptions);
+          if (session?.accessToken) {
+            config.headers.set(
+              "Authorization",
+              `Bearer ${session.accessToken}`,
+            );
+          }
+        } catch {
+          // Gracefully fallback on the server if session cannot be retrieved
+        }
       }
       return config;
     });

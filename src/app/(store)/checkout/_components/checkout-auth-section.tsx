@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { handleSignUp } from "@/lib/actions/auth";
+import { login } from "@/lib/api/auth";
 import { useAlertStore } from "@/lib/store/alert";
 import { useAccountStore } from "@/lib/store/account";
 import { PasswordInput, Input } from "@/components/input";
@@ -61,9 +62,14 @@ export function CheckoutAuthSection({
 
     try {
       if (authMode === "sign-in") {
+        const { accessToken, account } = await login(
+          formData.email,
+          formData.password,
+        );
+
         const result = await signIn("credentials", {
           email: formData.email,
-          password: formData.password,
+          preIssuedToken: JSON.stringify({ accessToken, account }),
           redirect: false,
         });
 

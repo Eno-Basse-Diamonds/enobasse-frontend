@@ -21,7 +21,7 @@ export default function SignInPage() {
           name: "password",
           label: "Password",
           type: "password",
-          placeholder: "Create your password",
+          placeholder: "Enter your password",
           required: true,
           showForgot: true,
         },

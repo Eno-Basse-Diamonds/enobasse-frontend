@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { User, Package, Heart, LogOut, ShoppingCart, Lock } from "lucide-react";
+import { useCartStore } from "@/lib/store/cart";
+import { useWishlistStore } from "@/lib/store/wishlist";
+import { useAccountStore } from "@/lib/store/account";
 import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
 import { AccountForm } from "./_components/account-form";
 import { DesktopNavigation, MobileNavigation } from "./_components/navigation";
@@ -147,7 +150,12 @@ export default function CustomerAccountPage() {
       id: "signout",
       label: "Sign Out",
       icon: LogOut,
-      action: () => signOut(),
+      action: () => {
+        useCartStore.getState().clear();
+        useWishlistStore.getState().clear();
+        useAccountStore.getState().clearAccount();
+        signOut();
+      },
     },
   ];
 

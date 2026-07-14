@@ -41,15 +41,11 @@ export default function CartPage() {
               (item.productVariant.currency || "USD") !== preferredCurrency,
           ));
 
-      if (needsRefresh) {
-        if (session?.user?.email) {
-          await refreshWithCurrency(preferredCurrency, session.user.email);
-        } else {
-          await refreshWithCurrency(preferredCurrency);
-        }
-        setLastCurrency(preferredCurrency);
-      } else if (session?.user?.email && preferredCurrency && !hydrated) {
+      if (session?.user?.email && preferredCurrency) {
         await hydrate(session.user.email, preferredCurrency);
+        setLastCurrency(preferredCurrency);
+      } else if (needsRefresh) {
+        await refreshWithCurrency(preferredCurrency);
         setLastCurrency(preferredCurrency);
       } else if (!session && !hydrated) {
         await hydrate();

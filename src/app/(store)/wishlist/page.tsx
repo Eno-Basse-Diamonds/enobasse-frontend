@@ -24,15 +24,11 @@ export default function WishlistPage() {
     if (!isHydrated) return;
 
     const handleCurrencyChange = async () => {
-      if (preferredCurrency && preferredCurrency !== lastCurrency) {
-        if (session?.user?.email) {
-          await hydrate(session.user.email, preferredCurrency);
-        } else {
-          await refreshWithCurrency(preferredCurrency);
-        }
-        setLastCurrency(preferredCurrency);
-      } else if (session?.user?.email && preferredCurrency && !hydrated) {
+      if (session?.user?.email && preferredCurrency) {
         await hydrate(session.user.email, preferredCurrency);
+        setLastCurrency(preferredCurrency);
+      } else if (preferredCurrency && preferredCurrency !== lastCurrency) {
+        await refreshWithCurrency(preferredCurrency);
         setLastCurrency(preferredCurrency);
       } else if (!session && !hydrated) {
         await hydrate();
