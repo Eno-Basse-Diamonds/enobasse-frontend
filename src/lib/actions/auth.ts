@@ -3,13 +3,25 @@
 import { createAccount, issueTokenForEmail } from "@/lib/api/auth";
 
 export async function handleSignUp(formData: Record<string, string>) {
-  const response = (await createAccount(
-    formData.name,
-    formData.email,
-    formData.password,
-  )) as any;
+  try {
+    const response = (await createAccount(
+      formData.name,
+      formData.email,
+      formData.password,
+    )) as any;
 
-  if (response?.errors) return response;
+    if (response?.errors) return response;
+  } catch (error) {
+    return {
+      errors: {
+        email: [
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred. Please try again.',
+        ],
+      },
+    };
+  }
 
   // Issue a session token immediately after account creation (server-side),
   // so the client can sign in without a separate login round-trip.
