@@ -55,6 +55,15 @@ function getIOR(tier: PerformanceTier): number {
   }
 }
 
+function isIOSDevice(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof navigator !== "undefined" &&
+    (/iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1))
+  );
+}
+
 function RingMeshComponent({
   geometry,
   material,
@@ -78,6 +87,17 @@ function RingMeshComponent({
     // raymarched reflections are what actually produce the diamond look,
     // so it's used everywhere — including iOS and low-tier devices, just
     // with cheaper bounces/aberration/ior on the latter.
+    //
+    // useMobileDetection caps every touch device at "medium", since that
+    // tier drives Canvas-wide cost (dpr, shadows, frameloop) that genuinely
+    // needs to stay conservative on phones. But iPhone GPUs are easily
+    // capable of the "high" gemstone settings used on desktop, so the gem
+    // itself gets the desktop-quality refraction params on iOS regardless
+    // of the device's overall tier.
+    const gemstoneQualityTier: PerformanceTier = isIOSDevice()
+      ? "high"
+      : performanceTier;
+
     return (
       <mesh
         geometry={geometry}
@@ -89,12 +109,12 @@ function RingMeshComponent({
       >
         <MeshRefractionMaterial
           envMap={texture}
-          bounces={getRefractionBounces(performanceTier)}
-          aberrationStrength={getAberrationStrength(performanceTier)}
-          ior={getIOR(performanceTier)}
+          bounces={getRefractionBounces(gemstoneQualityTier)}
+          aberrationStrength={getAberrationStrength(gemstoneQualityTier)}
+          ior={getIOR(gemstoneQualityTier)}
           fresnel={1}
           color="#c8d0d8"
-          fastChroma={performanceTier === "medium"}
+          fastChroma={gemstoneQualityTier === "medium"}
           toneMapped
         />
       </mesh>
