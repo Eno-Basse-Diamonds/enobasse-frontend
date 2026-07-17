@@ -120,7 +120,7 @@ export default function AdminLayout({
 
       {/* Desktop sidebar */}
       <div className="hidden lg:block">
-        <div className="fixed top-0 left-0 z-50">
+        <div className="fixed inset-y-0 left-0 z-50">
           <AdminSidebarNavigation sidebarItems={sidebarItems} />
         </div>
       </div>
