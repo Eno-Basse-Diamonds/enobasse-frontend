@@ -16,12 +16,15 @@ import { MetalSelection } from "./metal-selection";
 import { EngravingSelection } from "./engraving-selection";
 import { MobileConfigurationTabs } from "./mobile-configuration-tabs";
 import { RingSizeSelection } from "./ring-size-selection";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { sendCreativeStudioRequest } from "@/lib/api/creative-studio";
 import { logger } from "@/lib/utils/logger";
 import { Modal } from "./shared/modal";
 import { User, Mail, Phone, MessageSquare, Gem, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
 import * as motion from "motion/react-client";
+import { useSession } from "next-auth/react";
+import { useAccountStore } from "@/lib/store/account";
+import { useAccountByEmail } from "@/lib/hooks/use-accounts";
 
 interface ConfigurationFormProps {
   configuration: RingConfiguration;
@@ -161,13 +164,47 @@ function RequestQuoteButton({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  const { data: session } = useSession();
+  const { isHydrated, billingAddress: savedBillingAddress } = useAccountStore();
+  const { data: dbAccount } = useAccountByEmail(session?.user?.email);
+  const hasInitializedRef = useRef(false);
+
   const handleClose = () => {
     setOpen(false);
     setTimeout(() => {
       setSuccess(false);
       setError(null);
+      hasInitializedRef.current = false;
     }, 300);
   };
+
+  // Autofill form data when user is logged in
+  useEffect(() => {
+    if (open && isHydrated && !hasInitializedRef.current && (session === undefined || dbAccount !== undefined)) {
+      const autofillEmail = session?.user?.email || savedBillingAddress?.email || "";
+      let autofillName = session?.user?.name || "";
+      let autofillPhone = savedBillingAddress?.phone || "";
+
+      if (savedBillingAddress) {
+        if (savedBillingAddress.firstName && savedBillingAddress.lastName) {
+          autofillName = `${savedBillingAddress.firstName} ${savedBillingAddress.lastName}`.trim();
+        }
+      }
+
+      if (dbAccount) {
+        if (dbAccount.name) {
+          autofillName = dbAccount.name || autofillName;
+        }
+        autofillPhone = dbAccount.phone || autofillPhone;
+      }
+
+      if (autofillName) setName(autofillName);
+      if (autofillEmail) setEmail(autofillEmail);
+      if (autofillPhone) setPhone(autofillPhone);
+
+      hasInitializedRef.current = true;
+    }
+  }, [open, isHydrated, session, dbAccount, savedBillingAddress]);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
