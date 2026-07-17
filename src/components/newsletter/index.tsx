@@ -30,8 +30,8 @@ export const NewsletterPopup: React.FC = () => {
       }
     }
 
-    // Roll a random 30% chance to show the popup for this page load/session
-    if (Math.random() > 0.3) {
+    // Roll a random 70% chance to show the popup for this page load/session
+    if (Math.random() > 0.7) {
       setHasShown(true);
       return;
     }
