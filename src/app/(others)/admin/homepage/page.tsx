@@ -49,6 +49,7 @@ export default function AdminHomepagePage() {
   const [featuredSlugs, setFeaturedSlugs] = useState<string[]>([]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+  const [optimizeVideo, setOptimizeVideo] = useState(true);
   const [savedCollections, setSavedCollections] = useState(false);
   const [alertState, setAlertState] = useState<AlertState>({
     visible: false,
@@ -69,7 +70,7 @@ export default function AdminHomepagePage() {
   const handleVideoFile = async (file: File) => {
     setUploadProgress("Uploading & processing video… this may take a minute.");
     try {
-      await uploadVideoMutation.mutateAsync(file);
+      await uploadVideoMutation.mutateAsync({ file, optimize: optimizeVideo });
       setAlertState({
         visible: true,
         type: "success",
@@ -269,6 +270,24 @@ export default function AdminHomepagePage() {
                     onChange={handleFileChange}
                   />
                 </div>
+              )}
+
+              {/* Optimize toggle */}
+              {!isProcessing && (
+                <label className="flex items-center gap-2 mt-4 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={optimizeVideo}
+                    onChange={(e) => setOptimizeVideo(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-400"
+                  />
+                  <span className="text-sm text-primary-400">
+                    Optimize video{" "}
+                    <span className="text-primary-200 font-normal">
+                      (reduce file size while maintaining quality)
+                    </span>
+                  </span>
+                </label>
               )}
 
               {uploadVideoMutation.isError && (

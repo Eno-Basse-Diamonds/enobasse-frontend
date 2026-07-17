@@ -30,7 +30,13 @@ export function useUpdateHomepageSettings() {
 export function useUploadHeroVideo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (file: File) => uploadHeroVideo(file),
+    mutationFn: ({
+      file,
+      optimize,
+    }: {
+      file: File;
+      optimize?: boolean;
+    }) => uploadHeroVideo(file, optimize),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     },

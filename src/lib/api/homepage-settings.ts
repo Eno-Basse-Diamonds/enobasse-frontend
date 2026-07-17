@@ -32,10 +32,12 @@ export const updateHomepageSettings = async (
  * all three to Cloudinary, and returns the updated settings.
  */
 export const uploadHeroVideo = async (
-  file: File
+  file: File,
+  optimize: boolean = true,
 ): Promise<HomepageSettings> => {
   const formData = new FormData();
   formData.append("video", file);
+  formData.append("optimize", String(optimize));
 
   // Use fetch directly — axios strips multipart boundaries with the api client
   const { getSession } = await import("next-auth/react");
