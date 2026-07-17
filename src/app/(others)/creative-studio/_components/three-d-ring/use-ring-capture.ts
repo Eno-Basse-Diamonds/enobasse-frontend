@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useThree } from "@react-three/fiber";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useThree, useFrame } from "@react-three/fiber";
 import {
   useCreativeStudioImageCache,
   createConfigKey,
@@ -25,9 +25,11 @@ export function useRingCapture({
   controlsRef,
   onImagesGenerated,
 }: UseRingCaptureProps) {
-  const { camera, gl, scene } = useThree();
+  const { camera, gl, scene, invalidate } = useThree();
   const [imagesGenerated, setImagesGenerated] = useState(false);
   const [prevConfig, setPrevConfig] = useState("");
+  const frameCountRef = useRef(0);
+  const isGeneratingRef = useRef(false);
 
   const { getCachedImages, setCachedImages } = useCreativeStudioImageCache();
 
@@ -37,6 +39,8 @@ export function useRingCapture({
     if (productConfig !== prevConfig) {
       setImagesGenerated(false);
       setPrevConfig(productConfig);
+      frameCountRef.current = 0;
+      isGeneratingRef.current = false;
     }
   }, [productConfig, prevConfig]);
 
@@ -53,7 +57,9 @@ export function useRingCapture({
   );
 
   const generateImages = useCallback(() => {
-    if (imagesGenerated) return;
+    if (imagesGenerated || isGeneratingRef.current) return;
+
+    isGeneratingRef.current = true;
 
     const configKey = createConfigKey(
       gemstoneShape,
@@ -101,6 +107,7 @@ export function useRingCapture({
       setImagesGenerated(true);
     } catch (error) {
       console.error("Error generating preview images:", error);
+      isGeneratingRef.current = false;
     } finally {
       // Restore the main camera to its original state
       camera.position.copy(originalPosition);
@@ -131,40 +138,32 @@ export function useRingCapture({
     onImagesGenerated,
   ]);
 
-  useEffect(() => {
-    if (sceneReady && !imagesGenerated && onImagesGenerated) {
-      const configKey = createConfigKey(
-        gemstoneShape,
-        headStyle,
-        shankStyle,
-        metalType,
-      );
+  useFrame(() => {
+    if (!sceneReady || imagesGenerated || isGeneratingRef.current || !onImagesGenerated) return;
 
-      const cachedImages = getCachedImages(configKey);
-      if (cachedImages) {
-        onImagesGenerated(cachedImages);
-        setImagesGenerated(true);
-        return;
-      }
+    const configKey = createConfigKey(
+      gemstoneShape,
+      headStyle,
+      shankStyle,
+      metalType,
+    );
 
-      const timeoutId = setTimeout(() => {
-        generateImages();
-      }, 200);
-
-      return () => clearTimeout(timeoutId);
+    const cachedImages = getCachedImages(configKey);
+    if (cachedImages) {
+      onImagesGenerated(cachedImages);
+      setImagesGenerated(true);
+      return;
     }
-  }, [
-    sceneReady,
-    imagesGenerated,
-    onImagesGenerated,
-    productConfig,
-    gemstoneShape,
-    headStyle,
-    shankStyle,
-    metalType,
-    getCachedImages,
-    generateImages,
-  ]);
+
+    frameCountRef.current += 1;
+    // Wait for 30 frames (about 0.5s at 60fps) to ensure all textures, PMREM,
+    // and shaders are fully compiled/uploaded before rendering screenshots.
+    if (frameCountRef.current < 30) {
+      invalidate();
+    } else {
+      generateImages();
+    }
+  });
 
   return { imagesGenerated };
 }
