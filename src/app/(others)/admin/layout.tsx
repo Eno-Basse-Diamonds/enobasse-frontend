@@ -15,6 +15,7 @@ import {
   Truck,
   Menu,
   X,
+  LayoutDashboard,
 } from "lucide-react";
 import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
 import { usePathname } from "next/navigation";
@@ -31,6 +32,12 @@ export default function AdminLayout({
       label: "Dashboard",
       href: "/admin/dashboard",
       active: pathname === "/admin/dashboard",
+    },
+    {
+      icon: LayoutDashboard,
+      label: "Homepage",
+      href: "/admin/homepage",
+      active: pathname === "/admin/homepage",
     },
     {
       icon: Folder,

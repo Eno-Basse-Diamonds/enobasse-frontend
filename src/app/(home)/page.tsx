@@ -11,6 +11,7 @@ import { HelpSection } from "./_components/help-section";
 import { ServicesSection } from "./_components/services-section";
 import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
 import { getCollections } from "@/lib/api/collections";
+import { getHomepageSettings } from "@/lib/api/homepage-settings";
 import { HeroSection } from "@/components/hero-section";
 import { SectionContainer } from "@/components/section-container";
 import { SectionHeading } from "@/components/section-heading";
@@ -20,6 +21,92 @@ import {
   CTASection,
   RingCustomizationCTASection,
 } from "@/components/cta-section";
+
+/** Default carousel items (shown in the "Explore Eno Bassé" carousel) */
+const defaultCarouselItems = [
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
+    alt: "White gold diamond ring",
+    title: "Rings",
+    href: "/collections/rings",
+  },
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1756512325/engagement-rings_fptggu.webp",
+    alt: "White gold diamond engagement ring",
+    title: "Engagement Rings",
+    href: "/collections/engagement-rings",
+  },
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
+    alt: "White gold diamond earrings",
+    title: "Earrings",
+    href: "/collections/earrings",
+  },
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
+    alt: "White gold diamond cross pendant",
+    title: "Pendants",
+    href: "/collections/pendants",
+  },
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
+    alt: "White gold diamond necklace",
+    title: "Necklace",
+    href: "/collections/necklace",
+  },
+  {
+    image:
+      "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
+    alt: "White gold diamond bracelets",
+    title: "Bracelets",
+    href: "/collections/bracelets",
+  },
+];
+
+/** Fallback bento items used when no featured collections are configured */
+const defaultBentoItems = [
+  {
+    id: "bamboo-collection",
+    title: "Bamboo Collection",
+    href: "/collections/bamboo-collection",
+    image: {
+      src: "https://res.cloudinary.com/enobasse/image/upload/v1765203101/bamboo-collection_g8qmxp.webp",
+      alt: "Bamboo Collection",
+    },
+  },
+  {
+    id: "amora-collection",
+    title: "Amora Collection",
+    href: "/collections/amora-collection",
+    image: {
+      src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/amora-collection_a5qkxs.webp",
+      alt: "Amora Collection",
+    },
+  },
+  {
+    id: "new-arrivals",
+    title: "New Arrivals",
+    href: "/collections/new-arrivals",
+    image: {
+      src: "https://res.cloudinary.com/enobasse/image/upload/v1765203098/new-arrivals_uudlw9.webp",
+      alt: "New Arrivals",
+    },
+  },
+  {
+    id: "pearls",
+    title: "Pearls",
+    href: "/collections/pearls-collection",
+    image: {
+      src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/pearls-collection_ml5yhe.webp",
+      alt: "Pearls Collection",
+    },
+  },
+];
 
 export default async function HomePage() {
   const queryClient = new QueryClient();
@@ -31,93 +118,48 @@ export default async function HomePage() {
     queryFn: () => getPublishedBlogPosts(page, perPage),
   });
 
-  const carouselItems = [
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
-      alt: "White gold diamond ring",
-      title: "Rings",
-      href: "/collections/rings",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512325/engagement-rings_fptggu.webp",
-      alt: "White gold diamond engagement ring",
-      title: "Engagement Rings",
-      href: "/collections/engagement-rings",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
-      alt: "White gold diamond earrings",
-      title: "Earrings",
-      href: "/collections/earrings",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
-      alt: "White gold diamond cross pendant",
-      title: "Pendants",
-      href: "/collections/pendants",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
-      alt: "White gold diamond necklace",
-      title: "Necklace",
-      href: "/collections/necklace",
-    },
-    {
-      image:
-        "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
-      alt: "White gold diamond bracelets",
-      title: "Bracelets",
-      href: "/collections/bracelets",
-    },
-  ];
+  // ── Fetch homepage settings & all published collections in parallel ──────────
+  const [homepageSettings, dbCollections] = await Promise.all([
+    getHomepageSettings().catch(() => null),
+    getCollections().catch(() => []),
+  ]);
 
-  let bentoItems = [
-    {
-      id: "bamboo-collection",
-      title: "Bamboo Collection",
-      href: "/collections/bamboo-collection",
-      image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203101/bamboo-collection_g8qmxp.webp",
-        alt: "Bamboo Collection",
-      },
-    },
-    {
-      id: "amora-collection",
-      title: "Amora Collection",
-      href: "/collections/amora-collection",
-      image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/amora-collection_a5qkxs.webp",
-        alt: "Amora Collection",
-      },
-    },
-    {
-      id: "new-arrivals",
-      title: "New Arrivals",
-      href: "/collections/new-arrivals",
-      image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203098/new-arrivals_uudlw9.webp",
-        alt: "New Arrivals",
-      },
-    },
-    {
-      id: "pearls",
-      title: "Pearls",
-      href: "/collections/pearls-collection",
-      image: {
-        src: "https://res.cloudinary.com/enobasse/image/upload/v1765203100/pearls-collection_ml5yhe.webp",
-        alt: "Pearls Collection",
-      },
-    },
-  ];
+  // ── Hero video URL (from admin settings, or null = static fallback) ──────────
+  const heroVideoUrl = homepageSettings?.heroVideoUrl ?? null;
 
-  try {
-    const dbCollections = await getCollections();
-    bentoItems = bentoItems.map((item) => {
+  // ── Bento grid: use admin-ordered featured slugs when available ───────────────
+  let bentoItems = defaultBentoItems;
+
+  const featuredSlugs = homepageSettings?.featuredCollectionSlugs;
+
+  if (featuredSlugs && featuredSlugs.length > 0 && dbCollections.length > 0) {
+    // Build bento items in the admin-specified order, looking up each slug in
+    // the published collections returned by the API.
+    const orderedItems = featuredSlugs.flatMap((slug) => {
+      const collection = dbCollections.find((c) => c.slug === slug);
+      if (!collection) return [];
+      return [
+        {
+          id: collection.slug,
+          title: collection.name,
+          href: `/collections/${collection.slug}`,
+          image: {
+            src:
+              collection.image?.url ||
+              defaultBentoItems.find((d) => d.id === slug)?.image.src ||
+              "",
+            alt: collection.name,
+          },
+        },
+      ];
+    });
+
+    if (orderedItems.length > 0) {
+      bentoItems = orderedItems;
+    }
+  } else if (dbCollections.length > 0) {
+    // Legacy behaviour: map default slugs to live DB data when no explicit order is set
+    bentoItems = defaultBentoItems.map((item) => {
       const match = dbCollections.find(
         (c) =>
           c.slug === item.id ||
@@ -137,8 +179,6 @@ export default async function HomePage() {
       }
       return item;
     });
-  } catch (error) {
-    console.error("Failed to fetch dynamic collections for home page:", error);
   }
 
   return (
@@ -146,7 +186,7 @@ export default async function HomePage() {
       <BreadcrumbSchema
         items={[{ name: "Home", item: "https://enobasse.com" }]}
       />
-      <HeroSection />
+      <HeroSection videoUrl={heroVideoUrl} />
 
       <SectionContainer id="categories">
         <SectionHeading
@@ -155,10 +195,10 @@ export default async function HomePage() {
           description="Our craftsmen work with the finest materials with the sole aim of attaining perfection in every jewellery piece."
         />
         <div className="md:hidden">
-          <Carousel itemsPerPage={2} items={carouselItems} />
+          <Carousel itemsPerPage={2} items={defaultCarouselItems} />
         </div>
         <div className="hidden md:block">
-          <Carousel items={carouselItems} />
+          <Carousel items={defaultCarouselItems} />
         </div>
       </SectionContainer>
 

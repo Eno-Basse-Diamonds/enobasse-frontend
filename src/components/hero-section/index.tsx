@@ -3,8 +3,22 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  /** Cloudinary URL for the hero video (MP4). Falls back to the static /videos/hero.mp4 if not provided. */
+  videoUrl?: string | null;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ videoUrl }) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  const mp4Src = videoUrl || "/videos/hero.mp4";
+  // Derive a WebM variant from Cloudinary by swapping the format extension if it's a Cloudinary URL;
+  // otherwise fall back to the static WebM file.
+  const webmSrc =
+    videoUrl && videoUrl.includes("cloudinary.com")
+      ? videoUrl.replace(/\.(mp4|mov|avi)(\?.*)?$/, ".webm")
+      : "/videos/hero.webm";
+
   return (
     <div className="hero-section relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
       <Image
@@ -39,8 +53,8 @@ export const HeroSection: React.FC = () => {
           isVideoLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <source src="/videos/hero.mp4" type="video/mp4" />
-        <source src="/videos/hero.webm" type="video/webm" />
+        <source src={mp4Src} type="video/mp4" />
+        <source src={webmSrc} type="video/webm" />
         Your browser does not support the video tag.
       </video>
     </div>
