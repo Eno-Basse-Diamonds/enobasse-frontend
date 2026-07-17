@@ -37,7 +37,13 @@ export function ConfigurationForm({
   generatedImages = [],
 }: ConfigurationFormProps) {
   const updateConfiguration = (updates: Partial<RingConfiguration>) => {
-    onConfigurationChange({ ...configuration, ...updates });
+    const nextConfig = { ...configuration, ...updates };
+    if (!nextConfig.engravingText) {
+      nextConfig.engravingFont = "";
+    } else if (!nextConfig.engravingFont) {
+      nextConfig.engravingFont = "Arial, sans-serif";
+    }
+    onConfigurationChange(nextConfig);
   };
 
   const availableHeadStyles =

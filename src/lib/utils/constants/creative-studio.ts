@@ -458,7 +458,7 @@ export const DEFAULT_CONFIGURATION: RingConfiguration = {
   ringSize: 6.5,
   diamondType: "lab",
   engravingText: "",
-  engravingFont: "Arial, sans-serif",
+  engravingFont: "",
 };
 
 // Real polished jewelry metal is fully metallic (no dielectric diffuse
