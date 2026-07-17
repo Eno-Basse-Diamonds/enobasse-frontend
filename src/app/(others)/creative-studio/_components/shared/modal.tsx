@@ -43,12 +43,12 @@ export function Modal({
         className={`
           bg-white shadow-xl overflow-y-auto
           fixed bottom-0 left-0 right-0 rounded-t-sm h-[70vh]
-          sm:static sm:max-w-lg sm:w-full sm:h-auto sm:max-h-[90vh]
+          sm:static sm:w-full sm:h-auto sm:max-h-[90vh]
           sm:animate-none animate-slide-up
-          ${className}
+          ${className || "sm:max-w-lg"}
         `}
       >
-        <div className="sticky top-0 bg-white flex justify-between items-center p-4 border-b">
+        <div className="sticky top-0 bg-white z-10 flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button className="p-2" onClick={onClose}>
             <svg
