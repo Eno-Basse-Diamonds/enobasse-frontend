@@ -23,15 +23,6 @@ interface CreativeStudioImageCacheState {
   getCacheStats: () => { entries: number; maxEntries: number };
 }
 
-// Clean up legacy LocalStorage key to free up 5MB quota for other parts of the site (Cart, Wishlist, etc.)
-if (typeof window !== "undefined") {
-  try {
-    localStorage.removeItem("creative-studio-image-cache");
-  } catch (e) {
-    // Ignore errors
-  }
-}
-
 export const useCreativeStudioImageCache =
   create<CreativeStudioImageCacheState>()(
     (set, get) => ({
@@ -39,6 +30,15 @@ export const useCreativeStudioImageCache =
       maxEntries: 10,
 
       getCachedImages: (configKey: string) => {
+        // Clean up legacy LocalStorage key to free up 5MB quota for other parts of the site (Cart, Wishlist, etc.)
+        if (typeof window !== "undefined" && window.localStorage) {
+          try {
+            window.localStorage.removeItem("creative-studio-image-cache");
+          } catch (e) {
+            // Ignore errors
+          }
+        }
+
         const entry = get().cache[configKey];
         if (!entry) return null;
 
