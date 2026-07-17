@@ -124,8 +124,10 @@ export default async function HomePage() {
     getCollections().catch(() => []),
   ]);
 
-  // ── Hero video URL (from admin settings, or null = static fallback) ──────────
-  const heroVideoUrl = homepageSettings?.heroVideoUrl ?? null;
+  // ── Hero video URLs (from admin settings, or null = static fallback) ─────────
+  const heroVideoMp4Url = homepageSettings?.heroVideoMp4Url ?? null;
+  const heroVideoWebmUrl = homepageSettings?.heroVideoWebmUrl ?? null;
+  const heroVideoPosterUrl = homepageSettings?.heroVideoPosterUrl ?? null;
 
   // ── Bento grid: use admin-ordered featured slugs when available ───────────────
   let bentoItems = defaultBentoItems;
@@ -186,7 +188,11 @@ export default async function HomePage() {
       <BreadcrumbSchema
         items={[{ name: "Home", item: "https://enobasse.com" }]}
       />
-      <HeroSection videoUrl={heroVideoUrl} />
+      <HeroSection
+        videoMp4Url={heroVideoMp4Url}
+        videoWebmUrl={heroVideoWebmUrl}
+        posterUrl={heroVideoPosterUrl}
+      />
 
       <SectionContainer id="categories">
         <SectionHeading

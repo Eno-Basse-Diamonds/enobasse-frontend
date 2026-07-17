@@ -11,7 +11,8 @@ interface BentoItem {
 
 export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
   const getGridLayout = (index: number) => {
-    switch (index) {
+    const mod = index % 4;
+    switch (mod) {
       case 0:
         return "md:col-span-1";
       case 1:
@@ -35,7 +36,7 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
       aria-label="collections"
       className="grid grid-cols-1 gap-y-6 md:gap-y-8 mt-8 md:grid-cols-3 md:gap-x-8"
     >
-      {items.slice(0, 4).map((item, index) => (
+      {items.map((item, index) => (
         <div
           key={item.id}
           className={`rounded-sm bg-gray-100 h-full relative overflow-hidden ${getGridLayout(index)}`}
@@ -48,7 +49,7 @@ export const BentoGrid: React.FC<{ items: BentoItem[] }> = ({ items }) => {
                 title={item.image.alt}
                 fill
                 sizes={
-                  index === 1 || index === 2
+                  index % 4 === 1 || index % 4 === 2
                     ? "(max-width: 768px) 100vw, 66vw"
                     : "(max-width: 768px) 100vw, 33vw"
                 }
