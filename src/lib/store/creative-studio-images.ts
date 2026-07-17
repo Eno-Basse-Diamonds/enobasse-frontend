@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 export interface GeneratedImage {
   src: string;
@@ -24,101 +23,105 @@ interface CreativeStudioImageCacheState {
   getCacheStats: () => { entries: number; maxEntries: number };
 }
 
+// Clean up legacy LocalStorage key to free up 5MB quota for other parts of the site (Cart, Wishlist, etc.)
+if (typeof window !== "undefined") {
+  try {
+    localStorage.removeItem("creative-studio-image-cache");
+  } catch (e) {
+    // Ignore errors
+  }
+}
+
 export const useCreativeStudioImageCache =
   create<CreativeStudioImageCacheState>()(
-    persist(
-      (set, get) => ({
-        cache: {},
-        maxEntries: 10,
+    (set, get) => ({
+      cache: {},
+      maxEntries: 10,
 
-        getCachedImages: (configKey: string) => {
-          const entry = get().cache[configKey];
-          if (!entry) return null;
+      getCachedImages: (configKey: string) => {
+        const entry = get().cache[configKey];
+        if (!entry) return null;
 
+        set((state) => ({
+          cache: {
+            ...state.cache,
+            [configKey]: {
+              ...entry,
+              lastAccessed: Date.now(),
+            },
+          },
+        }));
+
+        return entry.images;
+      },
+
+      setCachedImages: (configKey: string, images: GeneratedImage[]) => {
+        const now = Date.now();
+        const state = get();
+        const currentEntries = Object.keys(state.cache).length;
+
+        if (currentEntries >= state.maxEntries && !state.cache[configKey]) {
+          const entries = Object.entries(state.cache);
+          entries.sort((a, b) => a[1].lastAccessed - b[1].lastAccessed);
+
+          const [oldestKey] = entries[0];
+
+          set((state) => {
+            const newCache = { ...state.cache };
+            delete newCache[oldestKey];
+            newCache[configKey] = {
+              images,
+              timestamp: now,
+              lastAccessed: now,
+            };
+            return { cache: newCache };
+          });
+        } else {
           set((state) => ({
             cache: {
               ...state.cache,
               [configKey]: {
-                ...entry,
-                lastAccessed: Date.now(),
-              },
-            },
-          }));
-
-          return entry.images;
-        },
-
-        setCachedImages: (configKey: string, images: GeneratedImage[]) => {
-          const now = Date.now();
-          const state = get();
-          const currentEntries = Object.keys(state.cache).length;
-
-          if (currentEntries >= state.maxEntries && !state.cache[configKey]) {
-            const entries = Object.entries(state.cache);
-            entries.sort((a, b) => a[1].lastAccessed - b[1].lastAccessed);
-
-            const [oldestKey] = entries[0];
-
-            set((state) => {
-              const newCache = { ...state.cache };
-              delete newCache[oldestKey];
-              newCache[configKey] = {
                 images,
                 timestamp: now,
                 lastAccessed: now,
-              };
-              return { cache: newCache };
-            });
-          } else {
-            set((state) => ({
-              cache: {
-                ...state.cache,
-                [configKey]: {
-                  images,
-                  timestamp: now,
-                  lastAccessed: now,
-                },
               },
-            }));
-          }
-        },
-
-        clearCache: () => {
-          set({ cache: {} });
-        },
-
-        clearOldEntries: () => {
-          const now = Date.now();
-          const maxImageAge = 24 * 60 * 60 * 1000; // 24 hours
-
-          set((state) => {
-            const newCache = { ...state.cache };
-
-            Object.entries(newCache).forEach(([key, entry]) => {
-              if (now - entry.timestamp > maxImageAge) {
-                delete newCache[key];
-              }
-            });
-
-            return {
-              cache: newCache,
-            };
-          });
-        },
-
-        getCacheStats: () => {
-          const state = get();
-          const entries = Object.keys(state.cache).length;
-          return {
-            entries,
-            maxEntries: state.maxEntries,
-          };
-        },
-      }),
-      {
-        name: "creative-studio-image-cache",
+            },
+          }));
+        }
       },
-    ),
+
+      clearCache: () => {
+        set({ cache: {} });
+      },
+
+      clearOldEntries: () => {
+        const now = Date.now();
+        const maxImageAge = 24 * 60 * 60 * 1000; // 24 hours
+
+        set((state) => {
+          const newCache = { ...state.cache };
+
+          Object.entries(newCache).forEach(([key, entry]) => {
+            if (now - entry.timestamp > maxImageAge) {
+              delete newCache[key];
+            }
+          });
+
+          return {
+            cache: newCache,
+          };
+        });
+      },
+
+      getCacheStats: () => {
+        const state = get();
+        const entries = Object.keys(state.cache).length;
+        return {
+          entries,
+          maxEntries: state.maxEntries,
+        };
+      },
+    }),
   );
 
 export const createConfigKey = (

@@ -20,9 +20,7 @@ export function DiamondPreview({
   setSelectedPreviewSize,
   availableGemstoneShapes,
 }: DiamondPreviewProps) {
-  const disabledShapes = GEMSTONE_SHAPES
-    .filter(shape => !availableGemstoneShapes.includes(shape.id))
-    .map(shape => shape.id);
+  const disabledShapes: string[] = [];
 
   return (
     <SectionContainer activeTab={activeTab} tabType="diamond" title="Diamond">

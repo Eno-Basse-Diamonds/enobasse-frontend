@@ -45,6 +45,21 @@ export function ConfigurationForm({
   const availableGemstoneShapes =
     GEMSTONES_BY_HEAD_STYLE[configuration.headStyle] || [];
 
+  const handleGemstoneShapeChange = (shape: string) => {
+    const updates: Partial<RingConfiguration> = { gemstoneShape: shape };
+
+    // Auto-select a compatible head style if the current head style is not compatible with the new gemstone shape
+    const compatibleHeadStyles = HEAD_STYLES_BY_GEMSTONE[shape] || [];
+    if (
+      compatibleHeadStyles.length > 0 &&
+      !compatibleHeadStyles.includes(configuration.headStyle)
+    ) {
+      updates.headStyle = compatibleHeadStyles[0];
+    }
+
+    updateConfiguration(updates);
+  };
+
   return (
     <>
       <MobileConfigurationTabs
@@ -55,9 +70,7 @@ export function ConfigurationForm({
       <DiamondPreview
         activeTab={activeTab}
         selectedPreviewShape={configuration.gemstoneShape}
-        setSelectedPreviewShape={(shape) =>
-          updateConfiguration({ gemstoneShape: shape })
-        }
+        setSelectedPreviewShape={handleGemstoneShapeChange}
         selectedPreviewSize={configuration.previewSize}
         setSelectedPreviewSize={(s) => updateConfiguration({ previewSize: s })}
         availableGemstoneShapes={availableGemstoneShapes}
