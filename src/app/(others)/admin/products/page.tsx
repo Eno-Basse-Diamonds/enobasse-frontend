@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Plus, Search, X, Package } from "lucide-react";
@@ -28,6 +28,13 @@ export default function AdminProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get("modal") === "create") {
+      setIsModalOpen(true);
+      document.body.style.overflow = "hidden";
+    }
+  }, []);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;

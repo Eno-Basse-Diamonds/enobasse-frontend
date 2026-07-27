@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Plus, Search, X, FileText } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
 import { AdminHeader } from "../_components/admin-header";
@@ -27,6 +27,13 @@ export default function AdminBlogPage() {
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get("modal") === "create") {
+      setIsModalOpen(true);
+      document.body.style.overflow = "hidden";
+    }
+  }, []);
 
   const [alertState, setAlertState] = useState<{
     visible: boolean;

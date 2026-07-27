@@ -6,29 +6,29 @@ export const QuickActionsSection = () => (
     <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <QuickActionLink
-        href="/admin/products"
-        icon={<Package className="h-8 w-8 text-purple-600 mr-3" />}
+        href="/admin/products?modal=create"
+        icon={<Package className="h-8 w-8 text-purple-600 mr-3 shrink-0" />}
         title="Add Product"
         description="Create new product"
       />
 
       <QuickActionLink
-        href="/admin/collections"
-        icon={<Folder className="h-8 w-8 text-indigo-600 mr-3" />}
+        href="/admin/collections?modal=create"
+        icon={<Folder className="h-8 w-8 text-indigo-600 mr-3 shrink-0" />}
         title="New Collection"
         description="Create collection"
       />
 
       <QuickActionLink
-        href="/admin/blog"
-        icon={<FileText className="h-8 w-8 text-green-600 mr-3" />}
+        href="/admin/blog?modal=create"
+        icon={<FileText className="h-8 w-8 text-green-600 mr-3 shrink-0" />}
         title="Write Post"
         description="Create blog post"
       />
 
       <QuickActionLink
         href="/admin/orders"
-        icon={<Truck className="h-8 w-8 text-blue-600 mr-3" />}
+        icon={<Truck className="h-8 w-8 text-blue-600 mr-3 shrink-0" />}
         title="View Orders"
         description="Manage orders"
       />
