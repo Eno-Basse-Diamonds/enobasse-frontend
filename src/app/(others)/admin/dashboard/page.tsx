@@ -84,6 +84,13 @@ export default function AdminDashboardPage() {
     );
   }
 
+  const greeting = (() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  })();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminHeader
@@ -94,43 +101,55 @@ export default function AdminDashboardPage() {
         }}
       />
 
-      <div className="p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {greeting}, {session?.user?.name?.split(" ")[0] || "Admin"}
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Here&apos;s what&apos;s happening with your store today.
+            </p>
+          </div>
+
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatsCard
             title="Total Orders"
             value={stats?.totalOrders || 0}
             icon={<ShoppingCart className="h-6 w-6 text-blue-600" />}
-            bgColor="bg-blue-100"
+            bgColor="bg-blue-50"
           />
 
           <StatsCard
             title="Total Products"
             value={stats?.totalProducts || 0}
             icon={<Package className="h-6 w-6 text-purple-600" />}
-            bgColor="bg-purple-100"
+            bgColor="bg-purple-50"
           />
 
           <StatsCard
             title="Cart Items"
             value={stats?.cartItems || 0}
             icon={<ShoppingBag className="h-6 w-6 text-orange-600" />}
-            bgColor="bg-orange-100"
+            bgColor="bg-orange-50"
           />
 
           <StatsCard
             title="Wishlist Items"
             value={stats?.wishlistItems || 0}
             icon={<Heart className="h-6 w-6 text-pink-600" />}
-            bgColor="bg-pink-100"
+            bgColor="bg-pink-50"
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatsCard
             title="Total Customers"
             value={stats?.totalCustomers || 0}
-            icon={<Users className="h-6 w-6 text-pink-600" />}
-            bgColor="bg-pink-100"
+            icon={<Users className="h-6 w-6 text-rose-600" />}
+            bgColor="bg-rose-50"
             compact
           />
 
@@ -138,7 +157,7 @@ export default function AdminDashboardPage() {
             title="Collections"
             value={stats?.collections || 0}
             icon={<Folder className="h-6 w-6 text-indigo-600" />}
-            bgColor="bg-indigo-100"
+            bgColor="bg-indigo-50"
             compact
           />
 
@@ -146,7 +165,7 @@ export default function AdminDashboardPage() {
             title="Blog Posts"
             value={stats?.blogPosts || 0}
             icon={<FileText className="h-6 w-6 text-green-600" />}
-            bgColor="bg-green-100"
+            bgColor="bg-green-50"
             compact
           />
         </div>

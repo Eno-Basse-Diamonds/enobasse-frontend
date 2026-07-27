@@ -18,7 +18,7 @@ export const AdminHeader: React.FC<HeaderProps> = ({ title, admin }) => {
   return (
     <>
       {/* Fixed header — sits above page content, to the right of the sidebar on desktop */}
-      <header className="fixed top-0 left-0 right-0 lg:left-72 z-20 bg-white shadow-sm border-b border-primary-500/10 px-4 sm:px-8 py-4 sm:py-5">
+      <header className="lg:fixed top-0 left-0 right-0 lg:left-72 z-20 bg-white shadow-sm border-b border-primary-500/10 px-4 sm:px-8 py-4 sm:py-5">
         <div className="flex items-center justify-between">
           <h2 className="font-primary text-lg sm:text-2xl font-semibold text-primary-500 truncate">
             {title}
@@ -48,7 +48,7 @@ export const AdminHeader: React.FC<HeaderProps> = ({ title, admin }) => {
       </header>
 
       {/* Spacer that pushes page content below the fixed header */}
-      <div className="h-[57px] sm:h-[65px]" aria-hidden="true" />
+      <div className="hidden lg:block h-[65px]" aria-hidden="true" />
     </>
   );
 };

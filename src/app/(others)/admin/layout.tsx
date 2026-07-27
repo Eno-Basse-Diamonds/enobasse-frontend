@@ -133,10 +133,10 @@ export default function AdminLayout({
       </div>
 
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 py-3 flex items-center">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 flex items-center">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2 mr-3 text-primary-500 hover:text-secondary-500"
+          className="-ml-2 p-2 mr-3 text-primary-500 hover:text-secondary-500"
         >
           <Menu className="w-6 h-6" />
         </button>
