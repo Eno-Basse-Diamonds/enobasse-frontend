@@ -18,9 +18,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   posterUrl,
 }) => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+const mp4Src = videoMp4Url || "/videos/hero/hero.mp4";
 
-  const mp4Src = videoMp4Url || "/videos/hero.mp4";
-  const webmSrc = videoWebmUrl || "/videos/hero.webm";
+  const webmSrc = videoWebmUrl || "/videos/hero/hero.webm";
 
   return (
     <div className="hero-section relative h-[94dvh] lg:h-[88dvh] overflow-hidden">
@@ -38,7 +38,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       ) : (
         <>
           <Image
-            src="/images/hero-mobile.webp"
+            src="/images/hero/hero-mobile.webp"
             alt="Hero Background"
             fill
             priority
@@ -48,7 +48,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             }`}
           />
           <Image
-            src="/images/hero.webp"
+            src="/images/hero/hero.webp"
             alt="Hero Background"
             fill
             priority

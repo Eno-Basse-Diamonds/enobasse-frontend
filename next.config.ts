@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // CATEGORY PAGES (Old) to COLLECTIONS (New)
+      // Legacy category pages → collections
       {
         source: "/product-category/accessories",
         destination: "/collections",
@@ -94,7 +94,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
-      // OLD TAGS & SHOP PAGES
+      // Legacy tag and shop pages → products or collections
       {
         source: "/product-tag/necklaces",
         destination: "/collections/necklaces",
@@ -111,7 +111,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
-      // OLD PAGES (No Direct Equivalent - Redirect to Homepage or Closest Page)
+      // Legacy pages with no direct equivalent — redirect to closest match or homepage
       {
         source: "/about-us-3",
         destination: "/about",

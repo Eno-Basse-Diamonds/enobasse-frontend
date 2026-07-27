@@ -160,7 +160,7 @@ export function ProductGallery({
             )}
 
             <Image
-              src="/images/360-degrees.png"
+              src="/images/studio/360-degrees.png"
               alt="360 degrees view"
               width={32}
               height={32}
@@ -276,7 +276,7 @@ export function ProductGallery({
           >
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
               <Image
-                src="/images/360-degrees.png"
+                src="/images/studio/360-degrees.png"
                 alt="360 degrees view"
                 width={24}
                 height={24}

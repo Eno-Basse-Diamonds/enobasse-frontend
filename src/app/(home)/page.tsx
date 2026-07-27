@@ -263,8 +263,8 @@ export default async function HomePage() {
           text: "Contact Us",
           href: "/maintenance-repairs",
         }}
-        videoSrcMP4="/videos/maintenance.mp4"
-        videoSrcWEBM="/videos/maintenance.webm"
+        videoSrcMP4="/videos/maintenance/maintenance.mp4"
+        videoSrcWEBM="/videos/maintenance/maintenance.webm"
       />
 
       <CTASection

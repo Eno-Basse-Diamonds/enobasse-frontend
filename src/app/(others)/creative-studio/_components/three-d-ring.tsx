@@ -70,7 +70,7 @@ export function ThreeDRing({
 
   const currentConfig = `${gemstoneShape}-${headStyle}-${shankStyle}-${metalType}`;
 
-  const environment = "/texture/metal3.hdr";
+  const environment = "/texture/studio-environment.hdr";
 
   const gemstonePath = getModelPath("gemstone", gemstoneShape);
   const gemstoneData = useGLTF(gemstonePath) as GLTFResult;

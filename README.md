@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eno Bassé Diamonds Frontend
 
-## Getting Started
+Frontend for the Eno Bassé Diamonds fine jewelry e-commerce platform. Built with [Next.js](https://nextjs.org/) (App Router) and React 19.
 
-First, run the development server:
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **UI:** React 19, TypeScript, Tailwind CSS 4
+- **State:** Zustand (client state), TanStack React Query (server state)
+- **Auth:** NextAuth.js (credentials + Google OAuth)
+- **3D:** React Three Fiber, drei, Three.js
+- **Payments:** Paystack (client-side integration)
+- **Media:** next-cloudinary
+- **Animation:** Motion
+
+## Prerequisites
+
+- Node.js >= 20
+- Running [backend](https://github.com/enobasse/enobasse-backend) instance
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy the environment file and fill in your values:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Environment Variables
 
-## Learn More
+| Variable                           | Description                          |
+|------------------------------------|--------------------------------------|
+| `NODE_ENV`                         | Environment mode                     |
+| `NEXT_PUBLIC_API_URL`              | Backend API URL                      |
+| `NEXTAUTH_URL`                     | NextAuth base URL                    |
+| `NEXTAUTH_SECRET`                  | NextAuth encryption secret           |
+| `GOOGLE_CLIENT_ID`                 | Google OAuth client ID               |
+| `GOOGLE_CLIENT_SECRET`             | Google OAuth client secret           |
+| `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`  | Paystack public key                  |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`| Cloudinary cloud name                |
+| `NEXT_PUBLIC_CLOUDINARY_API_KEY`   | Cloudinary API key                   |
+| `CLOUDINARY_API_SECRET`            | Cloudinary API secret                |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`    | Google Analytics ID (optional)       |
+| `MAILCHIMP_API_KEY`                | Mailchimp API key                    |
+| `MAILCHIMP_API_SERVER`             | Mailchimp server prefix              |
+| `MAILCHIMP_AUDIENCE_ID`            | Mailchimp audience ID                |
+| `EXCHANGE_RATE_API_KEY`            | Exchange rate API key                |
+| `RESEND_API_KEY`                   | Resend email API key                 |
 
-To learn more about Next.js, take a look at the following resources:
+## Running
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Development
+pnpm dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Network-accessible (mobile testing)
+pnpm dev:network
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Script          | Description                        |
+|-----------------|------------------------------------|
+| `dev`           | Start dev server                   |
+| `dev:network`   | Start dev server on all interfaces |
+| `build`         | Production build                   |
+| `start`         | Start production server            |
+| `lint`          | Run Next.js lint                   |
+| `format`        | Format with Prettier               |
+| `analyze`       | Build with bundle analyzer         |
+
+## Project Structure
+
+```
+src/
+  app/            # Next.js App Router pages & API routes
+  components/     # Reusable UI components
+  lib/
+    api/          # API client functions
+    hooks/        # React hooks & TanStack Query wrappers
+    store/        # Zustand stores
+    types/        # TypeScript type definitions
+    utils/        # Utility functions & helpers
+    validations/  # Zod validation schemas
+```
+
+## Pages
+
+| Route                  | Description                                |
+|------------------------|--------------------------------------------|
+| `/`                    | Landing page with hero & featured products |
+| `/products`            | Product catalog with search & filters      |
+| `/products/[slug]`     | Product detail page                        |
+| `/collections`         | Collection listing                         |
+| `/collections/[slug]`  | Collection detail with products            |
+| `/cart`                | Shopping cart                              |
+| `/checkout`            | Checkout with Paystack integration         |
+| `/orders`              | Customer order history                     |
+| `/wishlist`            | Customer wishlist                          |
+| `/blog`                | Blog listing                               |
+| `/blog/[slug]`         | Blog post detail                           |
+| `/sign-in`             | Sign in (credentials + Google)             |
+| `/sign-up`             | Registration                               |
+| `/admin/dashboard`     | Admin dashboard with stats                 |
+| `/admin/products`      | Product CRUD                               |
+| `/admin/orders`        | Order management                           |
+| `/admin/collections`   | Collection management                      |
+| `/admin/blog`          | Blog post management                       |
+| `/admin/accounts`      | Account management                         |
+| `/admin/homepage`      | Homepage settings                          |
+| `/admin/reviews`       | Review management                          |
+| `/admin/testimonials`  | Testimonial management                     |
+| `/admin/newsletter`    | Newsletter subscriber list                 |
+| `/admin/settings`      | Admin settings                             |
+| `/admin/analytics`     | Analytics overview                         |
+| `/creative-studio`     | Custom ring design configurator            |
+| `/custom-design`       | Custom design inquiry                      |
+| `/contact`             | Contact form                               |
+| `/faqs`                | Frequently asked questions                 |
+| `/size-guide`          | Ring size guide                            |
+| `/testimonials`        | Customer testimonials                      |
