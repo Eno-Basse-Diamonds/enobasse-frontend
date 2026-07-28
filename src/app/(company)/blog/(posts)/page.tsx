@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 
 import { SearchSlashIcon } from "lucide-react";
 
-import { BlogSection } from "@/shared/components/BlogSection";
 import { usePublishedBlogPosts } from "@/modules/blog/hooks";
+import { BlogSection } from "@/shared/components/BlogSection";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { Pagination } from "@/shared/components/Pagination";
 import { SectionContainer } from "@/shared/components/SectionContainer";

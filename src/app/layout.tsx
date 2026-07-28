@@ -12,8 +12,8 @@ import { GoogleAnalytics } from "@/shared/components/GoogleAnalytics";
 import { OrganizationSchema } from "@/shared/components/seo/OrganizationSchema";
 import { WebSiteSchema } from "@/shared/components/seo/WebSiteSchema";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
-
 import SessionProvider from "@/shared/providers/SessionProvider";
+
 import "./globals.scss";
 
 const lora = Lora({

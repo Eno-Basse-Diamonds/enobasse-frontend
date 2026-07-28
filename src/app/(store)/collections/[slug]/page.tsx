@@ -10,15 +10,12 @@ import * as motion from "motion/react-client";
 
 import { useAccountStore } from "@/modules/account/store";
 import { useCollection } from "@/modules/collections/hooks";
-import {
-  FilterPanelDesktop,
-  FilterPanelMobile,
-} from "@/shared/components/FilterPanel";
-import { ProductList } from "@/shared/components/ProductList";
 import { FilterOption } from "@/modules/products/types";
 import { EmptyState } from "@/shared/components/EmptyState";
+import { FilterPanelDesktop, FilterPanelMobile } from "@/shared/components/FilterPanel";
 import { PageHeading } from "@/shared/components/PageHeading";
 import { Pagination } from "@/shared/components/Pagination";
+import { ProductList } from "@/shared/components/ProductList";
 import { SectionContainer } from "@/shared/components/SectionContainer";
 import { ProductListLoader, ProductsPageLoader } from "@/shared/components/loaders/Products";
 import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";

@@ -9,7 +9,6 @@ import { Heart, SearchSlashIcon } from "lucide-react";
 
 import { useAccountStore } from "@/modules/account/store";
 import { useCartStore } from "@/modules/cart/store";
-import { ProductList } from "@/shared/components/ProductList";
 import { useProduct, useRelatedProducts } from "@/modules/products/hooks";
 import { Gemstone, Metal, ProductVariant } from "@/modules/products/types";
 import { calculateAverageRating } from "@/modules/reviews/utils";
@@ -24,6 +23,7 @@ import { ShareDropdown } from "@/shared/components/Dropdown";
 import { EmptyState } from "@/shared/components/EmptyState";
 import { Engraving } from "@/shared/components/Modal";
 import { PageHeading } from "@/shared/components/PageHeading";
+import { ProductList } from "@/shared/components/ProductList";
 import { Rating } from "@/shared/components/Rating";
 import { SectionContainer } from "@/shared/components/SectionContainer";
 import { RingSizeSelector } from "@/shared/components/SelectMenu";

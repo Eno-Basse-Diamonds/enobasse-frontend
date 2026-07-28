@@ -252,7 +252,7 @@ export const Reviews: React.FC<ReviewsProps> = ({
                     </div>
                     <time
                       className="text-xs md:text-sm text-[#502B3A]/70"
-                      dateTime={review.createdAt}
+                      dateTime={new Date(review.createdAt).toISOString()}
                       itemProp="datePublished"
                     >
                       {dateToOrdinalDayMonthYear(review.createdAt)}

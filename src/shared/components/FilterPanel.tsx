@@ -6,10 +6,10 @@ import { useCallback, useState } from "react";
 import { easeOut } from "motion/react";
 import * as motion from "motion/react-client";
 
+import type { FilterOption } from "@/modules/products/types";
 import { CloseIcon } from "@/shared/components/icons/Close";
 import { DiamondIcon } from "@/shared/components/icons/Diamond";
 import { FilterIcon } from "@/shared/components/icons/Filter";
-import type { FilterOption } from "@/modules/products/types";
 
 // ─── PriceRange ──────────────────────────────────────────────
 
@@ -88,7 +88,9 @@ const PriceRange: React.FC<PriceRangeProps> = ({ minPrice, maxPrice, onPriceChan
       <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Custom Range</p>
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
-          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+            $
+          </span>
           <input
             type="number"
             min={0}
@@ -100,7 +102,9 @@ const PriceRange: React.FC<PriceRangeProps> = ({ minPrice, maxPrice, onPriceChan
         </div>
         <span className="text-gray-400 text-sm">–</span>
         <div className="relative flex-1">
-          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+            $
+          </span>
           <input
             type="number"
             min={0}
@@ -161,7 +165,10 @@ const MetalOptions: React.FC<MetalOptionProps> = ({
               checked={selectedFilters.some((f) => f.name === metal.name)}
               onChange={() => toggleFilter(metal)}
             />
-            <motion.div whileHover={{ rotate: 5 }} className="w-12 h-12 flex items-center justify-center">
+            <motion.div
+              whileHover={{ rotate: 5 }}
+              className="w-12 h-12 flex items-center justify-center"
+            >
               <Image
                 src={metal.image!.src}
                 alt={metal.image!.alt}
@@ -225,7 +232,10 @@ const Gemstones: React.FC<GemstonesProps> = ({ selectedFilters, toggleFilter }) 
               checked={selectedFilters.some((f) => f.name === gemstone.name)}
               onChange={() => toggleFilter(gemstone)}
             />
-            <motion.div whileHover={{ rotate: 10 }} className="w-12 h-12 flex items-center justify-center">
+            <motion.div
+              whileHover={{ rotate: 10 }}
+              className="w-12 h-12 flex items-center justify-center"
+            >
               <DiamondIcon className={`w-10 h-10 ${gemstone.color}`} />
             </motion.div>
             <span className="text-xs font-medium">{gemstone.name}</span>

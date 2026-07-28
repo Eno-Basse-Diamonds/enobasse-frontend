@@ -12,9 +12,9 @@ import * as motion from "motion/react-client";
 import { useAccountStore } from "@/modules/account/store";
 import { Product } from "@/modules/products/types";
 import { useWishlistStore } from "@/modules/wishlist/store";
+import { ProductQuickView } from "@/shared/components/ProductQuickView";
 import { EyeOpenIcon } from "@/shared/components/icons/EyeOpen";
 import { HeartIcon } from "@/shared/components/icons/Heart";
-import { ProductQuickView } from "@/shared/components/ProductQuickView";
 import { useMobileDetection } from "@/shared/hooks/useMobileDetection";
 import { getCurrencySymbol } from "@/shared/utils/money";
 

@@ -1,11 +1,11 @@
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 
-import { getPublishedBlogPosts } from "@/modules/blog/api";
-import { getCollections } from "@/modules/collections/api";
-import { getHomepageSettings } from "@/modules/home/api";
 import { BentoGrid } from "@/app/(home)/_components/BentoGrid";
 import { CTASection, RingCustomizationCTASection } from "@/app/(home)/_components/CTASection";
 import { HeroSection } from "@/app/(home)/_components/HeroSection";
+import { getPublishedBlogPosts } from "@/modules/blog/api";
+import { getCollections } from "@/modules/collections/api";
+import { getHomepageSettings } from "@/modules/home/api";
 import { Carousel } from "@/shared/components/Carousel";
 import { SectionContainer } from "@/shared/components/SectionContainer";
 import { SectionHeading } from "@/shared/components/SectionHeading";

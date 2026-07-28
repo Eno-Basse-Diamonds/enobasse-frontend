@@ -27,7 +27,7 @@ const envSchema = z.object({
 /**
  * Parses and validates environment variables against the schema.
  *
- * @description Throws on missing required variables with a detailed 
+ * @description Throws on missing required variables with a detailed
  * error message. Should be called once at module load time.
  */
 function parseEnv() {

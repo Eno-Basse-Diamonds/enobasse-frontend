@@ -7,16 +7,13 @@ import { easeOut } from "motion/react";
 import * as motion from "motion/react-client";
 
 import { useAccountStore } from "@/modules/account/store";
-import {
-  FilterPanelDesktop,
-  FilterPanelMobile,
-} from "@/shared/components/FilterPanel";
-import { ProductList } from "@/shared/components/ProductList";
 import { useProducts } from "@/modules/products/hooks";
 import { FilterOption } from "@/modules/products/types";
 import { EmptyState } from "@/shared/components/EmptyState";
+import { FilterPanelDesktop, FilterPanelMobile } from "@/shared/components/FilterPanel";
 import { PageHeading } from "@/shared/components/PageHeading";
 import { Pagination } from "@/shared/components/Pagination";
+import { ProductList } from "@/shared/components/ProductList";
 import { SectionContainer } from "@/shared/components/SectionContainer";
 import { ProductListLoader } from "@/shared/components/loaders/Products";
 import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";

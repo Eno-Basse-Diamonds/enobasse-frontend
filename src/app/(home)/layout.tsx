@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
-import { NewsletterPopup } from "@/shared/components/Newsletter";
 import { WhatsAppButton } from "@/shared/components/Button";
 import { Footer } from "@/shared/components/Footer";
 import { Header } from "@/shared/components/Header";
+import { NewsletterPopup } from "@/shared/components/Newsletter";
 import { PrivacyConsent } from "@/shared/components/PrivacyConsent";
 
 export const metadata: Metadata = {

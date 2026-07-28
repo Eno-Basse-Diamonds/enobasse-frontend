@@ -8,9 +8,9 @@ import { useAdminCollections } from "@/modules/collections/hooks";
 import { Collection } from "@/modules/collections/types";
 import { useCreateProduct, useUpdateProduct } from "@/modules/products/hooks";
 import { Gemstone, Metal, Product, ProductStatus, ProductVariant } from "@/modules/products/types";
-import { getExchangeRate } from "@/shared/utils/exchangeRate";
 import { Alert } from "@/shared/components/Alert";
 import { Button } from "@/shared/components/Button";
+import { getExchangeRate } from "@/shared/utils/exchangeRate";
 import { textToSlug } from "@/shared/utils/string";
 
 import { AdminModal } from "./_elements/AdminModal";
