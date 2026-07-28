@@ -1,24 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Search, X, MessageSquare } from "lucide-react";
-import { EmptyState } from "@/components/empty-state";
-import { AdminHeader } from "../_components/admin-header";
-import { TestimonialForm } from "./_components/testimonial-form";
-import { TestimonialList } from "./_components/testimonial-list";
-import { Testimonial } from "@/lib/types/testimonial";
-import {
-  useTestimonialsForAdmin,
-  useDeleteTestimonial,
-} from "@/lib/hooks/use-testimonials";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Pagination } from "@/components/pagination";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useState } from "react";
+
+import { MessageSquare, Plus, Search, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useDeleteTestimonial, useTestimonialsForAdmin } from "@/modules/testimonials/hooks";
+import { Testimonial } from "@/modules/testimonials/types";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+
+import { TestimonialForm } from "./_components/TestimonialForm";
+import { TestimonialList } from "./_components/TestimonialList";
 
 export default function AdminTestimonialsPage() {
   const { data: session } = useSession();
@@ -26,8 +26,7 @@ export default function AdminTestimonialsPage() {
   const searchParams = useSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTestimonial, setEditingTestimonial] =
-    useState<Testimonial | null>(null);
+  const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -40,8 +39,7 @@ export default function AdminTestimonialsPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const currentActive = searchParams.get("isActive");
 
   const { data, isLoading } = useTestimonialsForAdmin();
@@ -59,7 +57,7 @@ export default function AdminTestimonialsPage() {
       });
       router.push(`/admin/testimonials?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   // Client-side filtering
@@ -73,7 +71,7 @@ export default function AdminTestimonialsPage() {
         (t) =>
           t.name.toLowerCase().includes(term) ||
           t.text.toLowerCase().includes(term) ||
-          (t.handle && t.handle.toLowerCase().includes(term))
+          (t.handle && t.handle.toLowerCase().includes(term)),
       );
     }
 
@@ -100,7 +98,7 @@ export default function AdminTestimonialsPage() {
   const totalPages = Math.ceil(filteredTestimonials.length / ITEMS_PER_PAGE);
   const paginated = filteredTestimonials.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   const handleEdit = (testimonial: Testimonial) => {
@@ -193,12 +191,7 @@ export default function AdminTestimonialsPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -217,9 +210,7 @@ export default function AdminTestimonialsPage() {
             <h3 className="text-lg font-medium text-gray-900">
               Customer Testimonials ({filteredTestimonials.length})
             </h3>
-            <p className="text-sm text-gray-500">
-              Manage customer testimonials and reviews
-            </p>
+            <p className="text-sm text-gray-500">Manage customer testimonials and reviews</p>
           </div>
           <Button
             leadingIcon={<Plus />}
@@ -278,11 +269,7 @@ export default function AdminTestimonialsPage() {
             ))}
           </div>
         ) : paginated.length > 0 ? (
-          <TestimonialList
-            testimonials={paginated}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          <TestimonialList testimonials={paginated} onEdit={handleEdit} onDelete={handleDelete} />
         ) : (
           <EmptyState
             title="No Testimonials Found"
@@ -314,10 +301,7 @@ export default function AdminTestimonialsPage() {
         />
 
         {isModalOpen && (
-          <TestimonialForm
-            testimonial={editingTestimonial}
-            onClose={handleFormClose}
-          />
+          <TestimonialForm testimonial={editingTestimonial} onClose={handleFormClose} />
         )}
       </div>
     </>

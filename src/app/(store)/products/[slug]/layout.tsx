@@ -1,19 +1,15 @@
 import { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getProduct } from "@/lib/api/products";
-import { getPreferredCurrency } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
-import { logger } from "@/lib/utils/logger";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getPreferredCurrency } from "@/modules/account/api";
+import { getProduct } from "@/modules/products/api";
+import { logger } from "@/shared/utils/logger";
 
 const DEFAULT_CURRENCY = "USD";
 
-async function resolvePreferredCurrency(
-  email: string | null | undefined,
-): Promise<string> {
+async function resolvePreferredCurrency(email: string | null | undefined): Promise<string> {
   if (!email) return DEFAULT_CURRENCY;
   try {
     return await getPreferredCurrency(email);
@@ -28,14 +24,10 @@ interface ProductPageProps {
   children: React.ReactNode;
 }
 
-export async function generateMetadata({
-  params,
-}: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await resolvePreferredCurrency(
-    session?.user?.email,
-  );
+  const preferredCurrency = await resolvePreferredCurrency(session?.user?.email);
   const product = await getProduct(slug, preferredCurrency);
 
   if (!product) {
@@ -76,15 +68,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({
-  params,
-  children,
-}: ProductPageProps) {
+export default async function ProductPage({ params, children }: ProductPageProps) {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await resolvePreferredCurrency(
-    session?.user?.email,
-  );
+  const preferredCurrency = await resolvePreferredCurrency(session?.user?.email);
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -92,9 +79,5 @@ export default async function ProductPage({
     queryFn: () => getProduct(slug, preferredCurrency),
   });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {children}
-    </HydrationBoundary>
-  );
+  return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

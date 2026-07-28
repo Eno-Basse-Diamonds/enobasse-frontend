@@ -1,14 +1,16 @@
 "use client";
 
 import { SearchSlashIcon } from "lucide-react";
-import { CollectionListLoader } from "@/components/loaders/collections";
-import { EmptyState } from "@/components/empty-state";
-import { PageHeading } from "@/components/page-heading";
-import { SectionContainer } from "@/components/section-container";
-import { CollectionCard } from "./_components/collection-card";
-import { useCollections } from "@/lib/hooks/use-collections";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
-import { ItemListSchema } from "@/components/seo/ItemListSchema";
+
+import { useCollections } from "@/modules/collections/hooks";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { CollectionListLoader } from "@/shared/components/loaders/Collections";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { ItemListSchema } from "@/shared/components/seo/ItemListSchema";
+
+import { CollectionCard } from "./_components/CollectionCard";
 
 export default function CollectionsPage() {
   const { data, isLoading, isError, error } = useCollections();
@@ -35,9 +37,7 @@ export default function CollectionsPage() {
       <SectionContainer
         id="collections"
         aria-labelledby="collections-heading"
-        className={
-          isLoading ? "" : "grid gap-y-10 gap-x-6 grid-cols-2 lg:grid-cols-3"
-        }
+        className={isLoading ? "" : "grid gap-y-10 gap-x-6 grid-cols-2 lg:grid-cols-3"}
       >
         <h2 id="collections-heading" className="sr-only">
           Collections
@@ -54,11 +54,7 @@ export default function CollectionsPage() {
           </div>
         ) : (
           collections.map((collection, index) => (
-            <CollectionCard
-              key={collection.id}
-              collection={collection}
-              index={index}
-            />
+            <CollectionCard key={collection.id} collection={collection} index={index} />
           ))
         )}
       </SectionContainer>

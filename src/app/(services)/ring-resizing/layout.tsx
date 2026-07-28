@@ -13,24 +13,18 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Ring Resizing Service - Eno Bassé Diamonds",
-    description:
-      "Get your ring resized to the perfect fit by our expert jewelers.",
+    description: "Get your ring resized to the perfect fit by our expert jewelers.",
     url: "https://enobasse.com/ring-resizing",
   },
   twitter: {
     title: "Ring Resizing Service - Eno Bassé Diamonds",
-    description:
-      "Get your ring resized to the perfect fit by our expert jewelers.",
+    description: "Get your ring resized to the perfect fit by our expert jewelers.",
   },
   alternates: {
     canonical: "https://enobasse.com/ring-resizing",
   },
 };
 
-export default function RingResizingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RingResizingLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

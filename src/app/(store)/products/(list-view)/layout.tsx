@@ -1,15 +1,13 @@
-import React from "react";
 import type { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
-import { getPreferredCurrency } from "@/lib/api/account";
-import { ProductFilterOptions } from "@/lib/types/products";
-import { getProducts } from "@/lib/api/products";
-import { logger } from "@/lib/utils/logger";
+import React from "react";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getPreferredCurrency } from "@/modules/account/api";
+import { getProducts } from "@/modules/products/api";
+import { ProductFilterOptions } from "@/modules/products/types";
+import { logger } from "@/shared/utils/logger";
 
 export const revalidate = 3600;
 
@@ -39,9 +37,7 @@ interface ProductListLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function ProductListLayout({
-  children,
-}: ProductListLayoutProps) {
+export default async function ProductListLayout({ children }: ProductListLayoutProps) {
   const session = await getServerSession();
 
   let preferredCurrency = DEFAULT_CURRENCY;
@@ -70,9 +66,5 @@ export default async function ProductListLayout({
     staleTime: 60 * 1000,
   });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {children}
-    </HydrationBoundary>
-  );
+  return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

@@ -1,22 +1,25 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback, useEffect } from "react";
-import { Plus, Search, X, FileText } from "lucide-react";
-import { EmptyState } from "@/components/empty-state";
-import { AdminHeader } from "../_components/admin-header";
-import { BlogPostForm } from "./_components/blog-post-form";
-import { BlogPostList } from "./_components/blog-post-list";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { BlogPost } from "@/lib/types/blog-post";
-import { useBlogPostsForAdmin, useDeleteBlogPost } from "@/lib/hooks/use-blog";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { AdminBlogSkeletonLoader } from "@/components/loaders/blog";
-import { Pagination } from "@/components/pagination";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+
+import { FileText, Plus, Search, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useBlogPostsForAdmin, useDeleteBlogPost } from "@/modules/blog/hooks";
+import { BlogPost } from "@/modules/blog/types";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+import { AdminBlogSkeletonLoader } from "@/shared/components/loaders/Blog";
+
+import { BlogPostForm } from "./_components/BlogPostForm";
+import { BlogPostList } from "./_components/BlogPostList";
 
 export default function AdminBlogPage() {
   const { data: session } = useSession();
@@ -44,19 +47,13 @@ export default function AdminBlogPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const currentPublished = searchParams.get("isPublished");
 
   const filterOptions = {
     page: currentPage,
     perPage: 9,
-    sortBy: currentSort as
-      | "title"
-      | "createdAt"
-      | "updatedAt"
-      | "readingTime"
-      | "author",
+    sortBy: currentSort as "title" | "createdAt" | "updatedAt" | "readingTime" | "author",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
     isPublished: currentPublished ? currentPublished === "true" : undefined,
@@ -79,7 +76,7 @@ export default function AdminBlogPage() {
 
       router.push(`/admin/blog?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const handleEdit = (blog: BlogPost) => {
@@ -165,12 +162,7 @@ export default function AdminBlogPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -190,9 +182,7 @@ export default function AdminBlogPage() {
           <div className="flex-1 p-4 sm:p-6 lg:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
-                <h3 className="text-lg font-medium text-gray-900">
-                  Posts ({data?.total || 0})
-                </h3>
+                <h3 className="text-lg font-medium text-gray-900">Posts ({data?.total || 0})</h3>
                 <p className="text-sm text-gray-500">Manage your blog posts</p>
               </div>
               <Button
@@ -242,11 +232,7 @@ export default function AdminBlogPage() {
             </div>
 
             {!isLoading && data?.posts && data.posts.length > 0 ? (
-              <BlogPostList
-                blogPosts={data.posts}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
+              <BlogPostList blogPosts={data.posts} onEdit={handleEdit} onDelete={handleDelete} />
             ) : !isLoading && data?.posts && data.posts.length === 0 ? (
               <EmptyState
                 title="No Blog Posts Found"
@@ -271,9 +257,7 @@ export default function AdminBlogPage() {
             )}
           </div>
 
-          {isModalOpen && (
-            <BlogPostForm blogPost={editingBlog} onClose={handleFormClose} />
-          )}
+          {isModalOpen && <BlogPostForm blogPost={editingBlog} onClose={handleFormClose} />}
 
           <DeleteConfirmationModal
             isOpen={deleteSlug !== null}

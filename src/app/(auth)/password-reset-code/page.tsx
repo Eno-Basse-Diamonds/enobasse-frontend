@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import PasswordResetCodeSection from "../_components/password-reset-code-section";
+
+import PasswordResetCodeSection from "@/app/(auth)/_components/PasswordResetCodeSection";
 
 export const metadata: Metadata = {
   title: "Password Reset",
@@ -20,8 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: "Password Reset - Eno Bassé Diamonds",
-    description:
-      "For your security, we've sent a temporary access code. Never share this code.",
+    description: "For your security, we've sent a temporary access code. Never share this code.",
   },
   alternates: {
     canonical: "https://enobasse.com/password-reset-code",

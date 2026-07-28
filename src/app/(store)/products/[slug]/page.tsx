@@ -1,50 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { notFound, useParams } from "next/navigation";
-import { getCurrencySymbol } from "@/lib/utils/money";
-import { useProduct, useRelatedProducts } from "@/lib/hooks/use-products";
-import { ImageGallery } from "./_components/image-gallery";
-import { ProductDetails } from "./_components/product-details";
-import { Reviews } from "./_components/reviews";
-import { Heart, SearchSlashIcon } from "lucide-react";
-import { ProductVariant, Metal, Gemstone } from "@/lib/types/products";
-import { calculateAverageRating } from "@/lib/utils/reviews";
-import { useWishlistStore } from "@/lib/store/wishlist";
-import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
-import { useAccountStore } from "@/lib/store/account";
-import { Accordion } from "@/components/accordion/index.";
-import { Alert } from "@/components/alert";
-import { useAlertStore } from "@/lib/store/alert";
-import { Button } from "@/components/button";
-import { MetalTypeSelector, GemstoneSelector } from "@/components/checkbox";
-import { Divider } from "@/components/divider";
-import { EmptyState } from "@/components/empty-state";
-import { ShareDropdown } from "@/components/dropdown";
-import { WishlistIcon } from "@/components/icons/wishlist";
-import { ProductDetailPageLoader } from "@/components/loaders/products";
-import { Engraving } from "@/components/modal";
-import { PageHeading } from "@/components/page-heading";
-import { ProductList } from "@/components/product/list";
-import { Rating } from "@/components/rating";
-import { SectionContainer } from "@/components/section-container";
-import { RingSizeSelector } from "@/components/select-menu";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
-import { ProductSchema } from "@/components/seo/ProductSchema";
+import Image from "next/image";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { RequestQuoteModal } from "./_components/request-quote-modal";
-import {
-  LetterSelection,
-  MOCK_AVAILABILITY,
-} from "./_components/letter-selection";
-import {
-  trackAddToCart,
-  trackViewItem,
-  trackAddToWishlist,
-} from "@/lib/analytics/gtag";
+import { Heart, SearchSlashIcon } from "lucide-react";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useCartStore } from "@/modules/cart/store";
+import { ProductList } from "@/shared/components/ProductList";
+import { useProduct, useRelatedProducts } from "@/modules/products/hooks";
+import { Gemstone, Metal, ProductVariant } from "@/modules/products/types";
+import { calculateAverageRating } from "@/modules/reviews/utils";
+import { useWishlistStore } from "@/modules/wishlist/store";
+import { trackAddToCart, trackAddToWishlist, trackViewItem } from "@/shared/analytics/gtag";
+import { Accordion } from "@/shared/components/Accordion";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { GemstoneSelector, MetalTypeSelector } from "@/shared/components/Checkbox";
+import { Divider } from "@/shared/components/Divider";
+import { ShareDropdown } from "@/shared/components/Dropdown";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Engraving } from "@/shared/components/Modal";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { Rating } from "@/shared/components/Rating";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { RingSizeSelector } from "@/shared/components/SelectMenu";
+import { WishlistIcon } from "@/shared/components/icons/Wishlist";
+import { ProductDetailPageLoader } from "@/shared/components/loaders/Products";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { ProductSchema } from "@/shared/components/seo/ProductSchema";
+import { useAlertStore } from "@/shared/store/alert";
+import { getCurrencySymbol } from "@/shared/utils/money";
+
+import { ImageGallery } from "./_components/ImageGallery";
+import { LetterSelection, MOCK_AVAILABILITY } from "./_components/LetterSelection";
+import { ProductDetails } from "./_components/ProductDetails";
+import { RequestQuoteModal } from "./_components/RequestQuoteModal";
+import { Reviews } from "./_components/Reviews";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -58,13 +52,17 @@ export default function ProductPage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   const { slug } = useParams<{ slug: string }>();
-  const { data: product, isLoading: productLoading, isError: productError } = useProduct(
+  const {
+    data: product,
+    isLoading: productLoading,
+    isError: productError,
+  } = useProduct(slug, preferredCurrency);
+
+  const { data: relatedProducts, isLoading: relatedLoading } = useRelatedProducts(
     slug,
+    4,
     preferredCurrency,
   );
-
-  const { data: relatedProducts, isLoading: relatedLoading } =
-    useRelatedProducts(slug, 4, preferredCurrency);
   const { data: session } = useSession();
 
   const dismissAlert = () => {
@@ -81,9 +79,7 @@ export default function ProductPage() {
         ? product.variants[0].metals[0]
         : undefined,
   );
-  const [selectedGemstone, setSelectedGemstone] = useState<
-    Gemstone | undefined
-  >(
+  const [selectedGemstone, setSelectedGemstone] = useState<Gemstone | undefined>(
     Array.isArray(product?.gemstones) && product.gemstones.length > 0
       ? product.gemstones[0]
       : Array.isArray(product?.variants) &&
@@ -112,36 +108,29 @@ export default function ProductPage() {
       return false;
     }) ?? product?.variants[0];
 
-  const [selectedVariant, setSelectedVariant] = useState<
-    ProductVariant | undefined
-  >(initialVariant);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>(
+    initialVariant,
+  );
 
   const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
   const isInWishlist = (productVariantId: string | number) => {
     return items.some((item) => item.productVariant?.id === productVariantId);
   };
 
-  const [engraving, setEngraving] = useState<
-    { text: string; fontStyle: string } | undefined
-  >(undefined);
-  const [selectedSize, setSelectedSize] = useState<number | undefined>(
+  const [engraving, setEngraving] = useState<{ text: string; fontStyle: string } | undefined>(
     undefined,
   );
+  const [selectedSize, setSelectedSize] = useState<number | undefined>(undefined);
 
   const [selectedLetters, setSelectedLetters] = useState<string[]>(["A"]);
   const [includeChain, setIncludeChain] = useState<boolean>(true);
 
-  const isAmoraCollection = product?.collections?.some(
-    (c) => c.slug === "amora-collection",
-  );
+  const isAmoraCollection = product?.collections?.some((c) => c.slug === "amora-collection");
 
-  const hasOutOfStockSelection = selectedLetters.some(
-    (l) => MOCK_AVAILABILITY[l] === false,
-  );
+  const hasOutOfStockSelection = selectedLetters.some((l) => MOCK_AVAILABILITY[l] === false);
 
   const isOutOfStock =
-    selectedVariant?.inventory?.inStock === false ||
-    selectedVariant?.inventory?.quantity === 0;
+    selectedVariant?.inventory?.inStock === false || selectedVariant?.inventory?.quantity === 0;
 
   // Calculate Amora collection price
   const letterPrice = product?.priceRange?.min ?? 0;
@@ -225,12 +214,7 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (selectedVariant && product) {
-      trackViewItem(
-        selectedVariant,
-        product.slug,
-        product.category || "",
-        preferredCurrency,
-      );
+      trackViewItem(selectedVariant, product.slug, product.category || "", preferredCurrency);
     }
   }, [selectedVariant?.id]);
 
@@ -240,12 +224,10 @@ export default function ProductPage() {
     const matchingVariant = product.variants.find((v) => {
       const matchMetal =
         !selectedMetal ||
-        (Array.isArray(v.metals) &&
-          v.metals.some((m) => m.type === selectedMetal.type));
+        (Array.isArray(v.metals) && v.metals.some((m) => m.type === selectedMetal.type));
       const matchGemstone =
         !selectedGemstone ||
-        (Array.isArray(v.gemstones) &&
-          v.gemstones.some((g) => g.type === selectedGemstone.type));
+        (Array.isArray(v.gemstones) && v.gemstones.some((g) => g.type === selectedGemstone.type));
 
       return matchMetal && matchGemstone;
     });
@@ -254,9 +236,7 @@ export default function ProductPage() {
       setSelectedVariant(matchingVariant);
     } else if (selectedVariant?.id) {
       // Fallback to ID match if attribute match fails (e.g., during currency update)
-      const variantById = product.variants.find(
-        (v) => v.id === selectedVariant.id,
-      );
+      const variantById = product.variants.find((v) => v.id === selectedVariant.id);
       if (variantById) setSelectedVariant(variantById);
     }
   }, [selectedMetal, selectedGemstone, product]);
@@ -305,23 +285,13 @@ export default function ProductPage() {
     },
     {
       label: `${
-        Array.isArray(metals) && metals.length > 0
-          ? (metals[0]?.type ?? "Metal")
-          : "Metal"
+        Array.isArray(metals) && metals.length > 0 ? (metals[0]?.type ?? "Metal") : "Metal"
       } Weight`,
-      value:
-        Array.isArray(metals) && metals.length > 0
-          ? (metals[0]?.weightGrams ?? "N/A")
-          : "N/A",
+      value: Array.isArray(metals) && metals.length > 0 ? (metals[0]?.weightGrams ?? "N/A") : "N/A",
     },
     {
-      label: `${
-        gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"
-      } Weight`,
-      value:
-        gemstones && gemstones[0]?.weightCarat != null
-          ? gemstones[0].weightCarat
-          : "N/A",
+      label: `${gemstones && gemstones[0]?.type ? gemstones[0].type : "Gemstone"} Weight`,
+      value: gemstones && gemstones[0]?.weightCarat != null ? gemstones[0].weightCarat : "N/A",
     },
   ];
 
@@ -339,8 +309,7 @@ export default function ProductPage() {
     {
       id: "offering-2",
       title: "Secure and Convenient Pickup Option",
-      content:
-        "You can choose to ship your order to a Hold for Pickup location.",
+      content: "You can choose to ship your order to a Hold for Pickup location.",
     },
     {
       id: "offering-3",
@@ -353,12 +322,7 @@ export default function ProductPage() {
     <div className="my-6 md:my-12">
       {alertState.visible && (
         <div className="fixed top-24 right-4 z-50 max-w-sm w-full md:max-w-md">
-          <Alert
-            type={alertState.type}
-            dismissible
-            onDismiss={dismissAlert}
-            duration={5000}
-          >
+          <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
             {alertState.message}
           </Alert>
         </div>
@@ -381,17 +345,13 @@ export default function ProductPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-x-4 md:gap-x-12">
           <div className="lg:col-span-3">
             <div className="flex w-full justify-end">
-              <ShareDropdown
-                url={typeof window !== "undefined" ? window.location.href : ""}
-              />
+              <ShareDropdown url={typeof window !== "undefined" ? window.location.href : ""} />
             </div>
             <ImageGallery images={selectedVariant?.images ?? []} />
             <div className="hidden md:block">
               <div className="mt-8 mb-4">
                 <h2 className="text-xl text-primary-300 mb-3">Description</h2>
-                <p className="text-primary-500 font-light leading-relaxed">
-                  {product.description}
-                </p>
+                <p className="text-primary-500 font-light leading-relaxed">{product.description}</p>
               </div>
               <ProductDetails details={productDetails} />
             </div>
@@ -405,15 +365,11 @@ export default function ProductPage() {
                 </h1>
                 <div className="mb-6 md:mb-10 flex justify-between items-center w-full">
                   <Rating
-                    rating={calculateAverageRating(
-                      product.ratingDistribution ?? [],
-                    )}
+                    rating={calculateAverageRating(product.ratingDistribution ?? [])}
                     count={product.reviews?.length || 0}
                     showCount={true}
                   />
-                  {!(
-                    product.isCustomDesign && selectedVariant?.price === 0
-                  ) && (
+                  {!(product.isCustomDesign && selectedVariant?.price === 0) && (
                     <button
                       onClick={handleWishlistToggle}
                       aria-label={
@@ -423,10 +379,7 @@ export default function ProductPage() {
                       }
                     >
                       {isInWishlist(selectedVariant?.id ?? "") ? (
-                        <Heart
-                          fill="#D1A559"
-                          className="text-secondary-500 h-5 w-5"
-                        />
+                        <Heart fill="#D1A559" className="text-secondary-500 h-5 w-5" />
                       ) : (
                         <WishlistIcon className="h-5 w-5" />
                       )}
@@ -434,29 +387,25 @@ export default function ProductPage() {
                   )}
                 </div>
 
-                {hasMultipleVariants &&
-                  product.metals &&
-                  product.metals.length > 1 && (
-                    <div>
-                      <MetalTypeSelector
-                        metalOptions={product.metals}
-                        selectedMetal={selectedMetal}
-                        onSelectMetal={setSelectedMetal}
-                      />
-                    </div>
-                  )}
+                {hasMultipleVariants && product.metals && product.metals.length > 1 && (
+                  <div>
+                    <MetalTypeSelector
+                      metalOptions={product.metals}
+                      selectedMetal={selectedMetal}
+                      onSelectMetal={setSelectedMetal}
+                    />
+                  </div>
+                )}
 
-                {hasMultipleVariants &&
-                  product.gemstones &&
-                  uniqueGemstones.length > 1 && (
-                    <div>
-                      <GemstoneSelector
-                        gemstoneOptions={gemstones}
-                        selectedGemstone={selectedGemstone}
-                        onSelectGemstone={setSelectedGemstone}
-                      />
-                    </div>
-                  )}
+                {hasMultipleVariants && product.gemstones && uniqueGemstones.length > 1 && (
+                  <div>
+                    <GemstoneSelector
+                      gemstoneOptions={gemstones}
+                      selectedGemstone={selectedGemstone}
+                      onSelectGemstone={setSelectedGemstone}
+                    />
+                  </div>
+                )}
 
                 {isAmoraCollection && (
                   <div>
@@ -468,9 +417,7 @@ export default function ProductPage() {
 
                     {/* Chain option toggle */}
                     <div className="mt-4">
-                      <p className="text-sm font-medium text-[#502B3A] mb-2">
-                        Add Chain
-                      </p>
+                      <p className="text-sm font-medium text-[#502B3A] mb-2">Add Chain</p>
                       <div className="flex gap-2">
                         <button
                           type="button"
@@ -502,10 +449,7 @@ export default function ProductPage() {
                 )}
 
                 <div className="flex flex-row gap-x-4 md:gap-x-14 ml-px">
-                  <Engraving
-                    engraving={engraving}
-                    setEngraving={setEngraving}
-                  />
+                  <Engraving engraving={engraving} setEngraving={setEngraving} />
                   {isRing && (
                     <RingSizeSelector
                       selectedSize={selectedSize}
@@ -520,8 +464,7 @@ export default function ProductPage() {
                       Price available upon request
                     </p>
                     <p className="text-[#502B3A]/60 text-base">
-                      You can request a quote using the link below or by calling
-                      by phone.
+                      You can request a quote using the link below or by calling by phone.
                     </p>
                   </div>
                 ) : isAmoraCollection && amoraPrice !== null ? (
@@ -547,7 +490,11 @@ export default function ProductPage() {
                   <>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
                       {isOutOfStock ? (
-                        <Button size="xl" disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                        <Button
+                          size="xl"
+                          disabled
+                          className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50"
+                        >
                           Sold
                         </Button>
                       ) : hasOutOfStockSelection ? (
@@ -562,13 +509,14 @@ export default function ProductPage() {
                     </div>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
                       {isOutOfStock ? (
-                        <Button disabled className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50">
+                        <Button
+                          disabled
+                          className="bg-red-600/50 cursor-not-allowed hover:bg-red-600/50"
+                        >
                           Sold
                         </Button>
                       ) : hasOutOfStockSelection ? (
-                        <Button onClick={handleRequestQuote}>
-                          Request for Item
-                        </Button>
+                        <Button onClick={handleRequestQuote}>Request for Item</Button>
                       ) : (
                         <Button onClick={handleAddToCart}>Add to Cart</Button>
                       )}
@@ -583,9 +531,7 @@ export default function ProductPage() {
                       </Button>
                     </div>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 flex md:hidden">
-                      <Button onClick={handleRequestQuote}>
-                        Request a Quote
-                      </Button>
+                      <Button onClick={handleRequestQuote}>Request a Quote</Button>
                     </div>
                   </>
                 )}
@@ -596,9 +542,7 @@ export default function ProductPage() {
           <div className="md:hidden">
             <div className="my-4">
               <h2 className="text-xl text-primary-300 mb-3">Description</h2>
-              <p className="text-primary-500 font-light leading-relaxed">
-                {product.description}
-              </p>
+              <p className="text-primary-500 font-light leading-relaxed">{product.description}</p>
             </div>
             <ProductDetails details={productDetails} />
           </div>
@@ -637,16 +581,15 @@ export default function ProductPage() {
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-2xl md:text-4xl font-normal text-[#502B3A] leading-tight font-primary">
-                We&#39;re committed to making your entire experience a pleasant
-                one, from shopping to delivery
+                We&#39;re committed to making your entire experience a pleasant one, from shopping
+                to delivery
               </h2>
               <p className="text-[#502B3A] text-base font-light leading-relaxed">
-                Every item we send comes in our signature Eno Bassé Diamonds packaging.
-                Engagement rings arrive in a deluxe ring box within an elegant
-                presentation box ready for your proposal. The presentation box
-                also secures your appraisal certificate and diamond grading
-                report. Loose diamonds are presented in a velvet-lined diamond
-                case that securely holds the stone.
+                Every item we send comes in our signature Eno Bassé Diamonds packaging. Engagement
+                rings arrive in a deluxe ring box within an elegant presentation box ready for your
+                proposal. The presentation box also secures your appraisal certificate and diamond
+                grading report. Loose diamonds are presented in a velvet-lined diamond case that
+                securely holds the stone.
               </p>
             </div>
             <div className="mt-8">

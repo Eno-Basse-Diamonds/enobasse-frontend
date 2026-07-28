@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+
 import { SearchSlashIcon } from "lucide-react";
-import { useTestimonials } from "@/lib/hooks/use-testimonials";
-import { EmptyState } from "@/components/empty-state";
+
+import { useTestimonials } from "@/modules/testimonials/hooks";
+import { EmptyState } from "@/shared/components/EmptyState";
 
 export default function TestimonialsPage() {
   const { data, isLoading, isError, error } = useTestimonials();
@@ -74,12 +76,8 @@ export default function TestimonialsPage() {
                 </div>
               )}
               <div>
-                <div className="font-semibold text-primary-500">
-                  {testimonial.name}
-                </div>
-                {testimonial.handle && (
-                  <div className="text-primary-400">{testimonial.handle}</div>
-                )}
+                <div className="font-semibold text-primary-500">{testimonial.name}</div>
+                {testimonial.handle && <div className="text-primary-400">{testimonial.handle}</div>}
               </div>
             </div>
           </div>

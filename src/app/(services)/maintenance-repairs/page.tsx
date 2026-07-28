@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { ProgressBar } from "./_components/progress-bar";
-import { NavigationButtons } from "./_components/navigation-buttons";
-import { CustomerDetailsForm } from "./_components/customer-details-form";
-import { ItemDetailsForm } from "./_components/item-details-form";
-import { ServiceDetailsForm } from "./_components/service-details-form";
-import { sendMaintenanceRepairsMessage } from "@/lib/api/contact";
-import { logger } from "@/lib/utils/logger";
-import { useMaintenanceRepairsStore } from "@/lib/store/maintenance-repairs";
-import { useAlertStore } from "@/lib/store/alert";
+
+import { sendMaintenanceRepairsMessage } from "@/modules/contact/api";
+import { useMaintenanceRepairsStore } from "@/modules/services/store";
+import { useAlertStore } from "@/shared/store/alert";
+import { logger } from "@/shared/utils/logger";
+
+import { CustomerDetailsForm } from "./_components/CustomerDetailsForm";
+import { ItemDetailsForm } from "./_components/ItemDetailsForm";
+import { NavigationButtons } from "./_components/NavigationButtons";
+import { ProgressBar } from "./_components/ProgressBar";
+import { ServiceDetailsForm } from "./_components/ServiceDetailsForm";
 
 interface FormErrors {
   customerInfo?: {
@@ -31,7 +33,8 @@ interface FormErrors {
 }
 
 export default function MaintenanceRepairsForm() {
-  const { formData, currentStep, setFormData, setCurrentStep, resetForm } = useMaintenanceRepairsStore();
+  const { formData, currentStep, setFormData, setCurrentStep, resetForm } =
+    useMaintenanceRepairsStore();
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,11 +43,14 @@ export default function MaintenanceRepairsForm() {
   const handleInputChange = (
     section: keyof typeof formData,
     field: string,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     if (field === "images") {
       // Handle images as an array
-      const imageUrls = value.toString().split(",").filter(url => url);
+      const imageUrls = value
+        .toString()
+        .split(",")
+        .filter((url) => url);
       setFormData({
         [section]: { ...formData[section], [field]: imageUrls },
       });
@@ -55,7 +61,7 @@ export default function MaintenanceRepairsForm() {
     }
 
     // Clear error when user starts typing
-    if (errors[section]?.[field as keyof typeof errors[typeof section]]) {
+    if (errors[section]?.[field as keyof (typeof errors)[typeof section]]) {
       setErrors((prev) => ({
         ...prev,
         [section]: {
@@ -79,7 +85,10 @@ export default function MaintenanceRepairsForm() {
       if (!formData.customerInfo.phone.trim())
         newErrors.customerInfo = { ...newErrors.customerInfo, phone: "Phone is required" };
       if (formData.customerInfo.email && !/\S+@\S+\.\S+/.test(formData.customerInfo.email)) {
-        newErrors.customerInfo = { ...newErrors.customerInfo, email: "Please enter a valid email address" };
+        newErrors.customerInfo = {
+          ...newErrors.customerInfo,
+          email: "Please enter a valid email address",
+        };
       }
     } else if (step === 2) {
       if (!formData.itemInfo.itemType)
@@ -90,7 +99,10 @@ export default function MaintenanceRepairsForm() {
         newErrors.itemInfo = { ...newErrors.itemInfo, karat: "Karat is required" };
     } else if (step === 3) {
       if (!formData.serviceInfo.serviceType)
-        newErrors.serviceInfo = { ...newErrors.serviceInfo, serviceType: "Service type is required" };
+        newErrors.serviceInfo = {
+          ...newErrors.serviceInfo,
+          serviceType: "Service type is required",
+        };
       if (!formData.serviceInfo.urgency)
         newErrors.serviceInfo = { ...newErrors.serviceInfo, urgency: "Urgency is required" };
     }
@@ -134,9 +146,10 @@ export default function MaintenanceRepairsForm() {
         },
       });
       addAlert({
-        type: 'success',
-        title: 'Request Submitted',
-        message: 'Thank you for your maintenance request. We\'ll review your submission and contact you within 24 hours with a detailed quote and timeline.',
+        type: "success",
+        title: "Request Submitted",
+        message:
+          "Thank you for your maintenance request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.",
         duration: 5000,
         dismissible: true,
       });
@@ -145,9 +158,10 @@ export default function MaintenanceRepairsForm() {
     } catch (error) {
       logger.error("Error submitting form:", error);
       addAlert({
-        type: 'error',
-        title: 'Submission Failed',
-        message: 'Failed to submit the form. Please try again or contact support if the problem persists.',
+        type: "error",
+        title: "Submission Failed",
+        message:
+          "Failed to submit the form. Please try again or contact support if the problem persists.",
         duration: 5000,
         dismissible: true,
       });
@@ -176,11 +190,10 @@ export default function MaintenanceRepairsForm() {
                 />
               </svg>
             </div>
-            <h1 className="text-3xl font-light text-primary-500 mb-4">
-              Request Submitted
-            </h1>
+            <h1 className="text-3xl font-light text-primary-500 mb-4">Request Submitted</h1>
             <p className="text-slate-600 mb-6">
-              Thank you for your maintenance request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.
+              Thank you for your maintenance request. We'll review your submission and contact you
+              within 24 hours with a detailed quote and timeline.
             </p>
             <div className="bg-slate-50 rounded-sm p-6 mb-6">
               <p className="text-sm text-slate-600 mb-2">Reference Number</p>
@@ -221,9 +234,7 @@ export default function MaintenanceRepairsForm() {
               <CustomerDetailsForm
                 formData={formData.customerInfo}
                 errors={errors.customerInfo}
-                onInputChange={(field, value) =>
-                  handleInputChange("customerInfo", field, value)
-                }
+                onInputChange={(field, value) => handleInputChange("customerInfo", field, value)}
               />
             )}
 
@@ -231,9 +242,7 @@ export default function MaintenanceRepairsForm() {
               <ItemDetailsForm
                 formData={formData.itemInfo}
                 errors={errors.itemInfo}
-                onInputChange={(field, value) =>
-                  handleInputChange("itemInfo", field, value)
-                }
+                onInputChange={(field, value) => handleInputChange("itemInfo", field, value)}
               />
             )}
 
@@ -241,9 +250,7 @@ export default function MaintenanceRepairsForm() {
               <ServiceDetailsForm
                 formData={formData.serviceInfo}
                 errors={errors.serviceInfo}
-                onInputChange={(field, value) =>
-                  handleInputChange("serviceInfo", field, value)
-                }
+                onInputChange={(field, value) => handleInputChange("serviceInfo", field, value)}
               />
             )}
 

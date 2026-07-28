@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { CheckoutFormSection } from "./_components/checkout-form-section";
-import { CheckoutAuthSection } from "./_components/checkout-auth-section";
-import { OrderSummary } from "./_components/order-summary";
-import { FormInput } from "./_components/form-input";
-import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
-import { useAccountStore } from "@/lib/store/account";
-import { countries } from "@/lib/utils/constants/countries";
-import { SectionContainer } from "@/components/section-container";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import { ChevronDownIcon, User } from "lucide-react";
-import { trackBeginCheckout } from "@/lib/analytics/gtag";
-import { useAccountByEmail } from "@/lib/hooks/use-accounts";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useAccountByEmail } from "@/modules/admin/hooks";
+import { useCartStore } from "@/modules/cart/store";
+import { trackBeginCheckout } from "@/shared/analytics/gtag";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { COUNTRIES } from "@/shared/constants/countries";
+
+import { CheckoutFormSection } from "./_components/CheckoutFormSection";
+import { FormInput } from "./_components/FormInput";
+import { OrderSummary } from "./_components/OrderSummary";
 
 interface FormData {
   email: string;
@@ -31,13 +33,7 @@ interface FormData {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const {
-    items: cartItems,
-    hydrated,
-    hydrate,
-    loading,
-    refreshWithCurrency,
-  } = useCartStore();
+  const { items: cartItems, hydrated, hydrate, loading, refreshWithCurrency } = useCartStore();
   const {
     preferredCurrency,
     isHydrated,
@@ -90,7 +86,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!hydrated) return;
     if (cartItems.length === 0 && !isProcessingPayment) {
-      router.replace("/cart");
+      router.replace("/Cart");
     }
   }, [cartItems, router, isProcessingPayment, hydrated]);
 
@@ -132,7 +128,11 @@ export default function CheckoutPage() {
   ]);
 
   useEffect(() => {
-    if (isHydrated && !hasInitializedRef.current && (session === undefined || dbAccount !== undefined)) {
+    if (
+      isHydrated &&
+      !hasInitializedRef.current &&
+      (session === undefined || dbAccount !== undefined)
+    ) {
       setFormData((prev) => {
         const email = session?.user?.email || savedBillingAddress?.email || prev.email;
         let firstName = savedBillingAddress?.firstName || prev.firstName;
@@ -214,9 +214,7 @@ export default function CheckoutPage() {
   const billingAddress = {
     firstName: formData.firstName,
     lastName: formData.lastName,
-    street: `${formData.address}${
-      formData.apartment ? `, ${formData.apartment}` : ""
-    }`,
+    street: `${formData.address}${formData.apartment ? `, ${formData.apartment}` : ""}`,
     city: formData.city,
     state: formData.region,
     postalCode: formData.postalCode,
@@ -259,9 +257,7 @@ export default function CheckoutPage() {
                       <User className="w-5 h-5 text-[#502B3A]" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-[#502B3A]">
-                        Returning customer?
-                      </h3>
+                      <h3 className="text-sm font-semibold text-[#502B3A]">Returning customer?</h3>
                       <p className="text-xs text-[#502B3A]/60 mt-1">
                         Sign in to checkout faster with your saved details.
                       </p>
@@ -306,18 +302,14 @@ export default function CheckoutPage() {
                       label="First name"
                       required
                       value={formData.firstName}
-                      onChange={(e) =>
-                        handleInputChange("firstName", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
                     />
                     <FormInput
                       id="last-name"
                       label="Last name"
                       required
                       value={formData.lastName}
-                      onChange={(e) =>
-                        handleInputChange("lastName", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
                     />
                   </div>
 
@@ -327,18 +319,14 @@ export default function CheckoutPage() {
                     placeholder="123 Main St"
                     required
                     value={formData.address}
-                    onChange={(e) =>
-                      handleInputChange("address", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("address", e.target.value)}
                   />
 
                   <FormInput
                     id="apartment"
                     label="Apartment, suite, etc. (optional)"
                     value={formData.apartment}
-                    onChange={(e) =>
-                      handleInputChange("apartment", e.target.value)
-                    }
+                    onChange={(e) => handleInputChange("apartment", e.target.value)}
                   />
 
                   <div className="grid grid-cols-2 gap-4">
@@ -347,9 +335,7 @@ export default function CheckoutPage() {
                       label="City"
                       required
                       value={formData.city}
-                      onChange={(e) =>
-                        handleInputChange("city", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("city", e.target.value)}
                     />
                     <div>
                       <label
@@ -364,11 +350,9 @@ export default function CheckoutPage() {
                           className="block w-full px-4 py-2 pr-8 border border-gray-300 rounded-sm focus:ring-[#D1A559] focus:border-[#D1A559] appearance-none bg-white"
                           required
                           value={formData.country}
-                          onChange={(e) =>
-                            handleInputChange("country", e.target.value)
-                          }
+                          onChange={(e) => handleInputChange("country", e.target.value)}
                         >
-                          {countries.map((country) => (
+                          {COUNTRIES.map((country) => (
                             <option key={country.code} value={country.name}>
                               {country.name}
                             </option>
@@ -387,17 +371,13 @@ export default function CheckoutPage() {
                       label="State/Province"
                       required
                       value={formData.region}
-                      onChange={(e) =>
-                        handleInputChange("region", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("region", e.target.value)}
                     />
                     <FormInput
                       id="postal-code"
                       label="ZIP/Postal code (optional)"
                       value={formData.postalCode}
-                      onChange={(e) =>
-                        handleInputChange("postalCode", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("postalCode", e.target.value)}
                     />
                   </div>
 
@@ -410,10 +390,7 @@ export default function CheckoutPage() {
                       checked={saveAddress}
                       onChange={(e) => setSaveAddress(e.target.checked)}
                     />
-                    <label
-                      htmlFor="save-address"
-                      className="ml-2 block text-sm text-[#502B3A]"
-                    >
+                    <label htmlFor="save-address" className="ml-2 block text-sm text-[#502B3A]">
                       Save this information for next time
                     </label>
                   </div>

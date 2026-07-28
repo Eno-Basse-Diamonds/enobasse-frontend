@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useThree, useFrame } from "@react-three/fiber";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useFrame, useThree } from "@react-three/fiber";
+
 import {
-  useCreativeStudioImageCache,
   createConfigKey,
   createGeneratedImage,
-} from "@/lib/store/creative-studio-images";
+  useCreativeStudioImageCache,
+} from "@/modules/creative-studio/store";
 
 interface UseRingCaptureProps {
   gemstoneShape: string;
@@ -61,12 +63,7 @@ export function useRingCapture({
 
     isGeneratingRef.current = true;
 
-    const configKey = createConfigKey(
-      gemstoneShape,
-      headStyle,
-      shankStyle,
-      metalType,
-    );
+    const configKey = createConfigKey(gemstoneShape, headStyle, shankStyle, metalType);
 
     const images: { src: string; alt: string }[] = [];
 
@@ -95,9 +92,7 @@ export function useRingCapture({
       images.push(captureView([0, 40, 0], "top"));
       images.push(captureView([0, 25, -40], "front"));
 
-      const generatedImages = images.map((img) =>
-        createGeneratedImage(img.src, img.alt),
-      );
+      const generatedImages = images.map((img) => createGeneratedImage(img.src, img.alt));
       setCachedImages(configKey, generatedImages);
 
       if (onImagesGenerated) {
@@ -141,12 +136,7 @@ export function useRingCapture({
   useFrame(() => {
     if (!sceneReady || imagesGenerated || isGeneratingRef.current || !onImagesGenerated) return;
 
-    const configKey = createConfigKey(
-      gemstoneShape,
-      headStyle,
-      shankStyle,
-      metalType,
-    );
+    const configKey = createConfigKey(gemstoneShape, headStyle, shankStyle, metalType);
 
     const cachedImages = getCachedImages(configKey);
     if (cachedImages) {

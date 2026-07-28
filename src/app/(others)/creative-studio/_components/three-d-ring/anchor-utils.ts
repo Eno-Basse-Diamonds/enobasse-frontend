@@ -1,12 +1,4 @@
-import {
-  Box3,
-  BufferGeometry,
-  Matrix4,
-  Mesh,
-  Object3D,
-  Quaternion,
-  Vector3,
-} from "three";
+import { Box3, BufferGeometry, Matrix4, Mesh, Object3D, Quaternion, Vector3 } from "three";
 
 export interface AnchorTransform {
   position: [number, number, number];
@@ -42,9 +34,7 @@ export function getAnchorTransform(anchor?: Object3D): AnchorTransform {
   };
 }
 
-export function getDecorationAnchors(
-  nodes: Record<string, Object3D>,
-): Object3D[] {
+export function getDecorationAnchors(nodes: Record<string, Object3D>): Object3D[] {
   return nodes.Decoration?.children ?? [];
 }
 

@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { AdminHeader } from "../_components/admin-header";
-import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
-import { AdminSettingsForm } from "./_components/admin-setting-form";
-import { AdminLoadingSkeleton } from "./_components/admin-loading-skeleton";
-import { Account, BillingAddress } from "@/lib/types/accounts";
-import { Alert } from "@/components/alert";
+import { useEffect, useState } from "react";
+
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAccountByEmail, useUpdateAccount } from "@/modules/admin/hooks";
+import { Account, BillingAddress } from "@/modules/admin/types";
+import { Alert } from "@/shared/components/Alert";
+
+import { AdminLoadingSkeleton } from "./_components/AdminLoadingSkeleton";
+import { AdminSettingsForm } from "./_components/AdminSettingForm";
 
 type AdminEditFormData = {
   name: string;
@@ -42,9 +44,7 @@ export default function AdminSettingsPage() {
     },
   });
 
-  const { data: account, isLoading } = useAccountByEmail(
-    session?.user?.email
-  ) as {
+  const { data: account, isLoading } = useAccountByEmail(session?.user?.email) as {
     data: Account | undefined;
     isLoading: boolean;
   };
@@ -113,8 +113,7 @@ export default function AdminSettingsPage() {
       setAlertState({
         visible: true,
         type: "error",
-        message:
-          error.message || "Failed to update settings. Please try again.",
+        message: error.message || "Failed to update settings. Please try again.",
       });
     }
   };
@@ -149,7 +148,7 @@ export default function AdminSettingsPage() {
 
   const handleBillingAddressChange = (
     field: keyof AdminEditFormData["billingAddress"],
-    value: string
+    value: string,
   ) => {
     setEditForm((prev) => ({
       ...prev,
@@ -175,12 +174,7 @@ export default function AdminSettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}

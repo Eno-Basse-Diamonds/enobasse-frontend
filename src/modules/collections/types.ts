@@ -1,0 +1,36 @@
+import { Product } from "@/modules/products/types";
+
+export interface Collection {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: { url: string; alt: string };
+  published: boolean;
+  productCount?: number;
+}
+
+export interface CollectionWithProducts {
+  collection: Collection;
+  products: Product[];
+  meta: {
+    total: string;
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+export interface CollectionFilterOptions {
+  sortBy?: string;
+  sortOrder?: "ASC" | "DESC";
+  minPrice?: number;
+  maxPrice?: number;
+  metals?: string[];
+  gemstones?: string[];
+  currency?: string;
+  page?: number;
+  pageSize?: number;
+}

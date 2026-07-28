@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { PageHeading } from "@/components/page-heading";
-import type { RingConfiguration, TabType } from "../../../lib/types/creative-studio";
-import { DEFAULT_CONFIGURATION } from "../../../lib/utils/constants/creative-studio";
-import { ConfigurationForm } from "./_components/configuration-form";
-import { ProductInfo } from "./_components/product-info";
-import { ProductDetails } from "./_components/product-details";
-import { ProductGallery } from "./_components/product-gallery";
-import { Modal } from "./_components/shared/modal";
-import { getFullMetalName } from "@/lib/utils/creative-studio";
+
+import { DEFAULT_CONFIGURATION } from "@/modules/creative-studio/constants";
+import type { RingConfiguration, TabType } from "@/modules/creative-studio/types";
+import { getFullMetalName } from "@/modules/creative-studio/utils";
+import { PageHeading } from "@/shared/components/PageHeading";
+
+import { ConfigurationForm } from "./_components/ConfigurationForm";
+import { ProductDetails } from "./_components/ProductDetails";
+import { ProductGallery } from "./_components/ProductGallery";
+import { ProductInfo } from "./_components/ProductInfo";
+import { Modal } from "./_components/shared/Modal";
 
 export default function RingConfiguratorPage() {
   const [configuration, setConfiguration] = useState<RingConfiguration>(DEFAULT_CONFIGURATION);

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import AuthSection from "../_components/auth-section";
+
+import AuthSection from "@/app/(auth)/_components/AuthSection";
 
 export const metadata: Metadata = {
   title: "Create New Password",
@@ -20,8 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: "Create New Password - Eno Bassé Diamonds",
-    description:
-      "Update your password to maintain exclusive access to your jewelry portfolio.",
+    description: "Update your password to maintain exclusive access to your jewelry portfolio.",
   },
   alternates: {
     canonical: "https://enobasse.com/create-new-password",
@@ -55,8 +55,7 @@ export default function CreateNewPasswordPage() {
         },
       ]}
       messages={{
-        success:
-          "Your new password has been saved. You can now log in with your new credentials.",
+        success: "Your new password has been saved. You can now log in with your new credentials.",
       }}
       actionButtonText="Continue"
       showSocialAuth={false}

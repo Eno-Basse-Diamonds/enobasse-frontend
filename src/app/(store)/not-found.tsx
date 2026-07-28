@@ -1,18 +1,13 @@
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
+import Link from "next/link";
+
+import { ArrowUpRightIcon } from "@/shared/components/icons/ArrowUpRight";
 
 export default function NotFound() {
   return (
-    <section
-      className="h-[90vh] lg:h-auto min-h-screen"
-      aria-labelledby="not-found-page-heading"
-    >
+    <section className="h-[90vh] lg:h-auto min-h-screen" aria-labelledby="not-found-page-heading">
       <header className="w-full flex flex-col items-center justify-center px-4 pt-14">
-        <h1
-          id="error-heading"
-          className="font-primary font-normal text-[#502B3A] text-2xl mb-2"
-        >
+        <h1 id="error-heading" className="font-primary font-normal text-[#502B3A] text-2xl mb-2">
           Lost in Elegance?
         </h1>
         <p className="text-[#D1A559] font-light text-lg mb-6 text-center">

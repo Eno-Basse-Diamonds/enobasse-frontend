@@ -1,23 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { CartItemCard } from "./_components/cart-item-card";
-import { OrderSummary } from "./_components/order-summary";
-import { EmptyStateIcon } from "./_components/empty-state-icon";
-import { useCartStore } from "@/lib/store/cart";
 import { useSession } from "next-auth/react";
-import { useAccountStore } from "@/lib/store/account";
-import { ringSizes } from "@/lib/utils/constants/ring-sizes";
-import { EmptyState } from "@/components/empty-state";
-import { CartLoader } from "@/components/loaders/cart";
-import { SectionContainer } from "@/components/section-container";
-import { trackViewCart } from "@/lib/analytics/gtag";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useCartStore } from "@/modules/cart/store";
+import { RING_SIZES } from "@/modules/services/constants";
+import { trackViewCart } from "@/shared/analytics/gtag";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { CartLoader } from "@/shared/components/loaders/Cart";
+
+import { CartItemCard } from "./_components/CartItemCard";
+import { EmptyStateIcon } from "./_components/EmptyStateIcon";
+import { OrderSummary } from "./_components/OrderSummary";
 
 export default function CartPage() {
-  const { items, hydrated, hydrate, loading, refreshWithCurrency } =
-    useCartStore();
+  const { items, hydrated, hydrate, loading, refreshWithCurrency } = useCartStore();
   const { data: session } = useSession();
   const { preferredCurrency, isHydrated } = useAccountStore();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
@@ -36,10 +37,7 @@ export default function CartPage() {
       const needsRefresh =
         preferredCurrency &&
         (preferredCurrency !== lastCurrency ||
-          items.some(
-            (item) =>
-              (item.productVariant.currency || "USD") !== preferredCurrency,
-          ));
+          items.some((item) => (item.productVariant.currency || "USD") !== preferredCurrency));
 
       if (session?.user?.email && preferredCurrency) {
         await hydrate(session.user.email, preferredCurrency);
@@ -104,11 +102,7 @@ export default function CartPage() {
               <div className="bg-white overflow-hidden mx-auto w-full flex-none lg:max-w-xl xl:max-w-2xl rounded-sm">
                 <ul className="divide-y divide-gray-100">
                   {items.map((item) => (
-                    <CartItemCard
-                      key={item.id}
-                      item={item}
-                      ringSizes={ringSizes}
-                    />
+                    <CartItemCard key={item.id} item={item} ringSizes={RING_SIZES} />
                   ))}
                 </ul>
               </div>

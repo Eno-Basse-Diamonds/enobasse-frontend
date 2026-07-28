@@ -1,26 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { useOrdersStore } from "@/lib/store/orders";
-import { getCurrencySymbol } from "@/lib/utils/money";
+import { useEffect, useState } from "react";
+
 import { ShoppingBagIcon } from "lucide-react";
-import { useAccountStore } from "@/lib/store/account";
-import { Order } from "@/lib/types/orders";
-import { EmptyState } from "@/components/empty-state";
-import { OrderHistoryLoader } from "@/components/loaders/orders";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useOrdersStore } from "@/modules/orders/store";
+import { Order } from "@/modules/orders/types";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { OrderHistoryLoader } from "@/shared/components/loaders/Orders";
+import { getCurrencySymbol } from "@/shared/utils/money";
 
 export default function OrderHistoryPage() {
   const { data: session } = useSession();
-  const {
-    orders,
-    loading: storeLoading,
-    hydrateOrders,
-    totalPages,
-    total,
-  } = useOrdersStore();
+  const { orders, loading: storeLoading, hydrateOrders, totalPages, total } = useOrdersStore();
   const { isHydrated } = useAccountStore();
   const accountEmail = session?.user?.email;
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,9 +64,7 @@ export default function OrderHistoryPage() {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="grid grid-cols-2 md:flex md:flex-row md:items-center gap-4 md:gap-8 w-full">
                   <div>
-                    <p className="text-gray-900 mb-1 font-medium text-sm md:text-base">
-                      Order ID
-                    </p>
+                    <p className="text-gray-900 mb-1 font-medium text-sm md:text-base">Order ID</p>
                     <p className="font-medium text-gray-500 text-sm md:text-base">
                       #{order.shortId}
                     </p>
@@ -107,9 +101,7 @@ export default function OrderHistoryPage() {
                   <div
                     key={`${item.id}-${index}`}
                     className={`${
-                      index < order.items.length - 1
-                        ? "border-b border-gray-200 pb-6"
-                        : "pb-2"
+                      index < order.items.length - 1 ? "border-b border-gray-200 pb-6" : "pb-2"
                     }`}
                   >
                     <div className="flex flex-col md:flex-row gap-6">
@@ -136,20 +128,16 @@ export default function OrderHistoryPage() {
                             </h3>
                             <div className="text-gray-600 flex flex-row items-center gap-x-4">
                               <p>
-                                <span className="text-gray-900">Quantity:</span>{" "}
-                                {item.quantity}
+                                <span className="text-gray-900">Quantity:</span> {item.quantity}
                               </p>
                               {item.size && (
                                 <p>
-                                  <span className="text-gray-900">Size:</span>{" "}
-                                  {item.size}
+                                  <span className="text-gray-900">Size:</span> {item.size}
                                 </p>
                               )}
                               {item.engraving && (
                                 <p>
-                                  <span className="text-gray-900">
-                                    Engraving:
-                                  </span>{" "}
+                                  <span className="text-gray-900">Engraving:</span>{" "}
                                   {item.engraving.text}
                                 </p>
                               )}
@@ -210,11 +198,15 @@ export default function OrderHistoryPage() {
             <div>
               <p className="text-sm text-gray-700">
                 Showing page <span className="font-medium">{currentPage}</span> of{" "}
-                <span className="font-medium">{totalPages}</span> (<span className="font-medium">{total}</span> orders total)
+                <span className="font-medium">{totalPages}</span> (
+                <span className="font-medium">{total}</span> orders total)
               </p>
             </div>
             <div>
-              <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <nav
+                className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                aria-label="Pagination"
+              >
                 <button
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
@@ -274,9 +266,7 @@ const BillingSummary = ({ order }: { order: Order }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Billing Address Section */}
         <div className="space-y-2">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Billing address
-          </h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Billing address</h3>
           <div className="text-gray-700 space-y-1">
             <p className="font-medium">
               {order.billingAddress.firstName} {order.billingAddress.lastName}
@@ -293,9 +283,7 @@ const BillingSummary = ({ order }: { order: Order }) => {
 
         {/* Payment Information Section */}
         <div className="space-y-2">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Payment information
-          </h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Payment information</h3>
           <div className="flex items-center space-x-3">
             <p className="text-gray-700">Bank Transfer</p>
           </div>
@@ -313,23 +301,17 @@ const BillingSummary = ({ order }: { order: Order }) => {
 
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Shipping</span>
-            <span className="text-gray-900 font-medium">
-              {shipping.toLocaleString()}
-            </span>
+            <span className="text-gray-900 font-medium">{shipping.toLocaleString()}</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Tax</span>
-            <span className="text-gray-900 font-medium">
-              {tax.toLocaleString()}
-            </span>
+            <span className="text-gray-900 font-medium">{tax.toLocaleString()}</span>
           </div>
 
           <div className="border-t pt-4">
             <div className="flex justify-between items-center">
-              <span className="text-lg font-medium text-gray-900">
-                Order total
-              </span>
+              <span className="text-lg font-medium text-gray-900">Order total</span>
               <span className="text-xl font-semibold text-secondary-500">
                 {currencySymbol}
                 {order.total.toLocaleString()}

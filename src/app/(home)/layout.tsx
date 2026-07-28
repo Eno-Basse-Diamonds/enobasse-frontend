@@ -1,14 +1,14 @@
 import { Metadata } from "next";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { WhatsAppButton } from "@/components/button";
-import { NewsletterPopup } from "@/components/newsletter";
-import { PrivacyConsent } from "@/components/privacy-consent";
+
+import { NewsletterPopup } from "@/shared/components/Newsletter";
+import { WhatsAppButton } from "@/shared/components/Button";
+import { Footer } from "@/shared/components/Footer";
+import { Header } from "@/shared/components/Header";
+import { PrivacyConsent } from "@/shared/components/PrivacyConsent";
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      "Eno Bassé Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
+    absolute: "Eno Bassé Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
   },
   description:
     "Discover exquisite handcrafted Eno Bassé jewellery pieces. Shop our curated collection of diamond rings, gold necklaces, and custom engagement rings. Ethical sourcing, artisan craftsmanship.",
@@ -35,9 +35,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Layout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <Header />

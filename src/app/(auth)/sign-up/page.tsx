@@ -1,4 +1,4 @@
-import AuthSection from "../_components/auth-section";
+import AuthSection from "@/app/(auth)/_components/AuthSection";
 
 export default function SignUpPage() {
   return (

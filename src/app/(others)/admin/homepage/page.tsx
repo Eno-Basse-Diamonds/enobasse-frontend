@@ -1,27 +1,29 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { useEffect, useRef, useState } from "react";
+
 import {
-  Video,
-  Upload,
-  GripVertical,
-  Trash2,
-  Plus,
-  Check,
-  Loader2,
-  LayoutGrid,
   AlertCircle,
+  Check,
+  GripVertical,
+  LayoutGrid,
+  Loader2,
+  Plus,
+  Trash2,
+  Upload,
+  Video,
 } from "lucide-react";
-import { AdminHeader } from "../_components/admin-header";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
+
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAdminCollections } from "@/modules/collections/hooks";
 import {
   useHomepageSettings,
   useUpdateHomepageSettings,
   useUploadHeroVideo,
-} from "@/lib/hooks/use-homepage-settings";
-import { useAdminCollections } from "@/lib/hooks/use-collections";
+} from "@/modules/home/hooks";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -38,8 +40,10 @@ interface AlertState {
 export default function AdminHomepagePage() {
   const { data: session } = useSession();
   const { data: settings, isLoading: settingsLoading } = useHomepageSettings();
-  const { data: collectionsData, isLoading: collectionsLoading } =
-    useAdminCollections({ pageSize: 100, published: true });
+  const { data: collectionsData, isLoading: collectionsLoading } = useAdminCollections({
+    pageSize: 100,
+    published: true,
+  });
   const updateMutation = useUpdateHomepageSettings();
   const uploadVideoMutation = useUploadHeroVideo();
 
@@ -74,8 +78,7 @@ export default function AdminHomepagePage() {
       setAlertState({
         visible: true,
         type: "success",
-        message:
-          "Hero video processed and uploaded! WebM + poster generated automatically.",
+        message: "Hero video processed and uploaded! WebM + poster generated automatically.",
       });
     } catch (err: any) {
       setAlertState({
@@ -192,9 +195,8 @@ export default function AdminHomepagePage() {
                     Hero Video
                   </h2>
                   <p className="text-sm text-primary-300">
-                    Upload a video file — the server will automatically generate
-                    a WebM version and extract a poster image from the first
-                    frame.
+                    Upload a video file — the server will automatically generate a WebM version and
+                    extract a poster image from the first frame.
                   </p>
                 </div>
               </div>
@@ -214,13 +216,28 @@ export default function AdminHomepagePage() {
                   {/* Asset URLs */}
                   <div className="mt-2 space-y-1 text-xs font-mono text-primary-200 break-all">
                     {settings.heroVideoMp4Url && (
-                      <p><span className="text-primary-400 font-semibold not-italic font-sans">MP4: </span>{settings.heroVideoMp4Url}</p>
+                      <p>
+                        <span className="text-primary-400 font-semibold not-italic font-sans">
+                          MP4:{" "}
+                        </span>
+                        {settings.heroVideoMp4Url}
+                      </p>
                     )}
                     {settings.heroVideoWebmUrl && (
-                      <p><span className="text-primary-400 font-semibold not-italic font-sans">WebM: </span>{settings.heroVideoWebmUrl}</p>
+                      <p>
+                        <span className="text-primary-400 font-semibold not-italic font-sans">
+                          WebM:{" "}
+                        </span>
+                        {settings.heroVideoWebmUrl}
+                      </p>
                     )}
                     {settings.heroVideoPosterUrl && (
-                      <p><span className="text-primary-400 font-semibold not-italic font-sans">Poster: </span>{settings.heroVideoPosterUrl}</p>
+                      <p>
+                        <span className="text-primary-400 font-semibold not-italic font-sans">
+                          Poster:{" "}
+                        </span>
+                        {settings.heroVideoPosterUrl}
+                      </p>
                     )}
                   </div>
                   <button
@@ -242,9 +259,7 @@ export default function AdminHomepagePage() {
               {isProcessing ? (
                 <div className="flex flex-col items-center justify-center gap-3 p-8 border border-dashed border-primary-300 rounded-sm bg-primary-50/30">
                   <Loader2 className="w-8 h-8 animate-spin text-primary-400" />
-                  <p className="text-sm text-primary-400 text-center">
-                    {uploadProgress}
-                  </p>
+                  <p className="text-sm text-primary-400 text-center">{uploadProgress}</p>
                 </div>
               ) : (
                 <div
@@ -293,10 +308,7 @@ export default function AdminHomepagePage() {
               {uploadVideoMutation.isError && (
                 <div className="mt-3 flex items-center gap-2 text-sm text-red-600">
                   <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>
-                    {(uploadVideoMutation.error as any)?.message ||
-                      "Upload failed"}
-                  </span>
+                  <span>{(uploadVideoMutation.error as any)?.message || "Upload failed"}</span>
                 </div>
               )}
             </section>
@@ -312,8 +324,8 @@ export default function AdminHomepagePage() {
                     Featured Collections
                   </h2>
                   <p className="text-sm text-primary-300">
-                    Select and arrange collections for the home page bento grid.
-                    Drag cards to reorder.
+                    Select and arrange collections for the home page bento grid. Drag cards to
+                    reorder.
                   </p>
                 </div>
               </div>
@@ -333,8 +345,7 @@ export default function AdminHomepagePage() {
                       {featuredSlugs.map((slug, position) => {
                         const col = allCollections.find((c) => c.slug === slug);
                         const isOddCount = featuredSlugs.length % 2 !== 0;
-                        const isLastAlone =
-                          isOddCount && position === featuredSlugs.length - 1;
+                        const isLastAlone = isOddCount && position === featuredSlugs.length - 1;
 
                         let spanClass: string;
                         if (isLastAlone) {
@@ -343,15 +354,9 @@ export default function AdminHomepagePage() {
                           const pairIndex = Math.floor(position / 2);
                           const pairPosition = position % 2;
                           if (pairIndex % 2 === 0) {
-                            spanClass =
-                              pairPosition === 0
-                                ? "md:col-span-1"
-                                : "md:col-span-2";
+                            spanClass = pairPosition === 0 ? "md:col-span-1" : "md:col-span-2";
                           } else {
-                            spanClass =
-                              pairPosition === 0
-                                ? "md:col-span-2"
-                                : "md:col-span-1";
+                            spanClass = pairPosition === 0 ? "md:col-span-2" : "md:col-span-1";
                           }
                         }
 
@@ -436,14 +441,10 @@ export default function AdminHomepagePage() {
                         className="flex items-center gap-2 p-3 text-left border border-gray-200 hover:border-primary-300 hover:bg-primary-50/30 transition-colors rounded-sm"
                       >
                         <Plus className="w-4 h-4 text-primary-300 shrink-0" />
-                        <span className="text-sm text-primary-500 truncate">
-                          {col.name}
-                        </span>
+                        <span className="text-sm text-primary-500 truncate">{col.name}</span>
                       </button>
                     ))}
-                  {allCollections.filter(
-                    (c) => !featuredSlugs.includes(c.slug)
-                  ).length === 0 && (
+                  {allCollections.filter((c) => !featuredSlugs.includes(c.slug)).length === 0 && (
                     <p className="text-sm text-primary-200 italic col-span-2">
                       All published collections are selected.
                     </p>
@@ -466,8 +467,8 @@ export default function AdminHomepagePage() {
                   {updateMutation.isPending
                     ? "Saving…"
                     : savedCollections
-                    ? "Saved!"
-                    : "Save Collections"}
+                      ? "Saved!"
+                      : "Save Collections"}
                 </Button>
               </div>
             </section>

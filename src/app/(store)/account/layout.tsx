@@ -1,23 +1,17 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { PageHeading } from "@/components/page-heading";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getAccountByEmail } from "@/lib/api/account";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getAccountByEmail } from "@/modules/account/api";
+import { PageHeading } from "@/shared/components/PageHeading";
 
 export const metadata: Metadata = {
   title: "Account",
 };
 
-export default async function AccountLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession();
 
   // Route protection: redirect to sign-in if not authenticated
@@ -35,9 +29,7 @@ export default async function AccountLayout({
   return (
     <div className="my-12 min-h-[88dvh] lg:min-h-screen">
       <PageHeading title="Account" />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        {children}
-      </HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>
     </div>
   );
 }

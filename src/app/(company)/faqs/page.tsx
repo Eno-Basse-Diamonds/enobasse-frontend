@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import { FAQSchema } from "@/components/seo/FAQSchema";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { FAQSchema } from "@/shared/components/seo/FAQSchema";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -70,9 +71,8 @@ export default async function FAQsPage() {
             Frequently Asked Questions
           </h1>
           <p className="text-primary-400 max-w-3xl mx-auto leading-relaxed">
-            Get answers to all your questions about luxury jewelry at Eno Bassé.
-            Explore our FAQ page for details on products, services, shipping,
-            and more.
+            Get answers to all your questions about luxury jewelry at Eno Bassé. Explore our FAQ
+            page for details on products, services, shipping, and more.
           </p>
         </div>
 

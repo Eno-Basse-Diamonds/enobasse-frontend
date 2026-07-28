@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right";
+import Link from "next/link";
+
+import { Footer } from "@/shared/components/Footer";
+import { Header } from "@/shared/components/Header";
+import { ArrowUpRightIcon } from "@/shared/components/icons/ArrowUpRight";
 
 export const metadata: Metadata = {
   title: "Page Not Found",

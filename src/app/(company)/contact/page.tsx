@@ -1,7 +1,9 @@
 import { Metadata } from "next";
-import { ContactForm } from "./_components/contact-form";
-import { ContactDetails } from "./_components/contact-details";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+
+import { ContactDetails } from "./_components/ContactDetails";
+import { ContactForm } from "./_components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact Us",

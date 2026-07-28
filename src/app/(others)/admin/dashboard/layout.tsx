@@ -8,8 +8,6 @@ interface AdminDashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AdminDashboardLayout({
-  children,
-}: AdminDashboardLayoutProps) {
+export default function AdminDashboardLayout({ children }: AdminDashboardLayoutProps) {
   return <>{children}</>;
 }

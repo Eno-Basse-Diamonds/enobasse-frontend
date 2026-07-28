@@ -1,15 +1,12 @@
 import { Metadata } from "next";
-import { PageHeading } from "@/components/page-heading";
+
+import { PageHeading } from "@/shared/components/PageHeading";
 
 export const metadata: Metadata = {
   title: "Cart",
 };
 
-export default async function CartLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function CartLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="my-12 min-h-[88dvh] lg:min-h-screen">
       <PageHeading title="Shopping Cart" />

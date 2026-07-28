@@ -1,19 +1,15 @@
 import { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getBlogPost, getRelatedBlogPosts } from "@/lib/api/blog-posts";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getBlogPost, getRelatedBlogPosts } from "@/modules/blog/api";
 
 interface BlogPostPageLayoutProps {
   params: Promise<{ slug: string }>;
   children: React.ReactNode;
 }
 
-export const generateMetadata = async ({
-  params,
-}: BlogPostPageLayoutProps): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: BlogPostPageLayoutProps): Promise<Metadata> => {
   const { slug } = await params;
   const post = await getBlogPost(slug);
 
@@ -45,10 +41,7 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function BlogPostPageLayout({
-  params,
-  children,
-}: BlogPostPageLayoutProps) {
+export default async function BlogPostPageLayout({ params, children }: BlogPostPageLayoutProps) {
   const { slug } = await params;
   const queryClient = new QueryClient();
 
@@ -65,9 +58,7 @@ export default async function BlogPostPageLayout({
 
   return (
     <main className="blog-detail">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        {children}
-      </HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>
     </main>
   );
 }

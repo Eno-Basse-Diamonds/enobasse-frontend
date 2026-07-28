@@ -2,30 +2,37 @@
 
 import { useParams } from "next/navigation";
 import Markdown from "react-markdown";
+
 import { SearchSlashIcon } from "lucide-react";
-import { BlogHeroImage } from "./_components/blog-hero-image";
-import { TableOfContents } from "./_components/table-of-content";
-import { RelatedPosts } from "./_components/related-posts";
-import { useBlogPost, useRelatedBlogPosts } from "@/lib/hooks/use-blog";
+
 import {
   cleanMarkdownContent,
   createHeadingRenderer,
   generateTableOfContents,
-} from "@/lib/helpers/blog-post";
-import { dateToOrdinalDayMonthYear } from "@/lib/utils/date";
-import { EmptyState } from "@/components/empty-state";
-import { PageHeading } from "@/components/page-heading";
-import { SectionContainer } from "@/components/section-container";
-import { BlogPostDetailLoader } from "@/components/loaders/blog";
-import { ArticleSchema } from "@/components/seo/ArticleSchema";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+} from "@/modules/blog/helpers";
+import { useBlogPost, useRelatedBlogPosts } from "@/modules/blog/hooks";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { BlogPostDetailLoader } from "@/shared/components/loaders/Blog";
+import { ArticleSchema } from "@/shared/components/seo/ArticleSchema";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { dateToOrdinalDayMonthYear } from "@/shared/utils/date";
+
+import { BlogHeroImage } from "./_components/BlogHeroImage";
+import { RelatedPosts } from "./_components/RelatedPosts";
+import { TableOfContents } from "./_components/TableOfContent";
 
 export default function BlogPostContent() {
   const params = useParams();
   const slug = (params.slug as string) || "";
-  const { data: post, isLoading: isPostLoading, isError: isPostError, error: postError } = useBlogPost(slug);
-  const { data: relatedPosts, isLoading: isRelatedLoading } =
-    useRelatedBlogPosts(slug);
+  const {
+    data: post,
+    isLoading: isPostLoading,
+    isError: isPostError,
+    error: postError,
+  } = useBlogPost(slug);
+  const { data: relatedPosts, isLoading: isRelatedLoading } = useRelatedBlogPosts(slug);
 
   if (isPostLoading) {
     return <BlogPostDetailLoader />;

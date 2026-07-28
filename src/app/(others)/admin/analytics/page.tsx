@@ -1,10 +1,11 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { ExternalLink, BarChart3, Eye, Lock } from "lucide-react";
 
-import { AdminHeader } from "../_components/admin-header";
-import { Button } from "@/components/button";
+import { BarChart3, ExternalLink, Eye, Lock } from "lucide-react";
+
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { Button } from "@/shared/components/Button";
 
 export default function AdminAnalyticsPage() {
   const { data: session } = useSession();
@@ -22,12 +23,9 @@ export default function AdminAnalyticsPage() {
       <div className="flex-1 p-4 sm:p-6 lg:p-8">
         <div>
           <div className="mb-8">
-            <h1 className="text-lg font-medium text-gray-900">
-              Website Analytics
-            </h1>
+            <h1 className="text-lg font-medium text-gray-900">Website Analytics</h1>
             <p className="text-sm text-gray-500">
-              Monitor your website performance, track user behavior, and analyze
-              key metrics
+              Monitor your website performance, track user behavior, and analyze key metrics
             </p>
           </div>
 
@@ -38,9 +36,7 @@ export default function AdminAnalyticsPage() {
                   <BarChart3 className="w-6 h-6 text-primary-500" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-primary-500">
-                    Umami Analytics
-                  </h2>
+                  <h2 className="text-xl font-semibold text-primary-500">Umami Analytics</h2>
                   <p className="text-primary-300 text-sm">
                     Privacy-focused website analytics platform
                   </p>
@@ -59,15 +55,12 @@ export default function AdminAnalyticsPage() {
               <div className="bg-gray-50 rounded-sm p-6 rounded-sm">
                 <div className="flex items-center space-x-2 mb-4">
                   <Lock className="w-5 h-5 text-primary-500" />
-                  <h3 className="font-semibold text-primary-500">
-                    Login Credentials
-                  </h3>
+                  <h3 className="font-semibold text-primary-500">Login Credentials</h3>
                 </div>
                 <div className="space-y-3">
                   <p className="text-sm text-primary-400">
-                    Credentials for the shared Umami login are kept in the
-                    team password manager, not in this app. Ask an admin for
-                    access if you don&apos;t have it yet.
+                    Credentials for the shared Umami login are kept in the team password manager,
+                    not in this app. Ask an admin for access if you don&apos;t have it yet.
                   </p>
                 </div>
               </div>
@@ -75,24 +68,16 @@ export default function AdminAnalyticsPage() {
               <div className="bg-gray-50 rounded-sm p-6 rounded-sm">
                 <div className="flex items-center space-x-2 mb-4">
                   <Eye className="w-5 h-5 text-primary-500" />
-                  <h3 className="font-semibold text-primary-500">
-                    Quick Access
-                  </h3>
+                  <h3 className="font-semibold text-primary-500">Quick Access</h3>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-primary-400">Website</span>
-                    <span className="text-sm font-medium text-primary-500">
-                      enobasse.com
-                    </span>
+                    <span className="text-sm font-medium text-primary-500">enobasse.com</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-primary-400">
-                      Dashboard URL
-                    </span>
-                    <span className="text-sm font-medium text-primary-500">
-                      umami.is
-                    </span>
+                    <span className="text-sm text-primary-400">Dashboard URL</span>
+                    <span className="text-sm font-medium text-primary-500">umami.is</span>
                   </div>
                 </div>
               </div>
@@ -107,9 +92,7 @@ export default function AdminAnalyticsPage() {
               <li>Click the "Open Analytics Dashboard" button above</li>
               <li>Sign in using the provided credentials</li>
               <li>Navigate to your website's analytics dashboard</li>
-              <li>
-                Explore metrics like page views, visitors, and referral sources
-              </li>
+              <li>Explore metrics like page views, visitors, and referral sources</li>
               <li>Set up custom events and goals for better tracking</li>
             </ol>
           </div>

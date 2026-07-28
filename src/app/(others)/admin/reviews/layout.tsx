@@ -4,8 +4,6 @@ export const metadata: Metadata = {
   title: "Admin Reviews Management",
 };
 
-export default function AdminReviewsLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function AdminReviewsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <>{children}</>;
 }

@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Health check endpoint.
+ *
+ * @description Returns server status, uptime, memory usage, environment info,
+ * and Node.js version for monitoring purposes.
+ *
+ * @returns A JSON response with health check data.
+ */
 export async function GET() {
   try {
     const healthCheck = {

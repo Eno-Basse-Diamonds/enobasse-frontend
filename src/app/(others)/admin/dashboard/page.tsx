@@ -1,22 +1,17 @@
 "use client";
 
-import {
-  Package,
-  Users,
-  ShoppingCart,
-  FileText,
-  Folder,
-  Heart,
-  ShoppingBag,
-} from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useDashboardStats } from "@/lib/hooks/use-dashboard";
-import { AdminHeader } from "../_components/admin-header";
-import { StatsCard } from "./_components/stats-card";
-import { QuickActionsSection } from "./_components/quick-actions-section";
-import { RecentOrdersSection } from "./_components/recent-orders";
-import { RecentReviewsSection } from "./_components/recent-reviews-section";
-import { DashboardSkeleton } from "@/components/loaders/dashboard";
+
+import { FileText, Folder, Heart, Package, ShoppingBag, ShoppingCart, Users } from "lucide-react";
+
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useDashboardStats } from "@/modules/admin/hooks";
+import { DashboardSkeleton } from "@/shared/components/loaders/Dashboard";
+
+import { QuickActionsSection } from "./_components/QuickActionsSection";
+import { RecentOrdersSection } from "./_components/RecentOrders";
+import { RecentReviewsSection } from "./_components/RecentReviewsSection";
+import { StatsCard } from "./_components/StatsCard";
 
 export default function AdminDashboardPage() {
   const { data: session } = useSession();
@@ -75,9 +70,7 @@ export default function AdminDashboardPage() {
         />
         <div className="p-8">
           <div className="bg-red-50 border border-red-200 p-4">
-            <p className="text-red-800">
-              Error loading dashboard: {error.message}
-            </p>
+            <p className="text-red-800">Error loading dashboard: {error.message}</p>
           </div>
         </div>
       </div>
@@ -111,7 +104,6 @@ export default function AdminDashboardPage() {
               Here&apos;s what&apos;s happening with your store today.
             </p>
           </div>
-
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { ProgressBar } from "./_components/progress-bar";
-import { NavigationButtons } from "./_components/navigation-buttons";
-import { CustomerDetailsForm } from "./_components/customer-details-form";
-import { RingDetailsForm } from "./_components/ring-details-form";
-import { AdditionalInfoForm } from "./_components/additional-info-form";
-import { logger } from "@/lib/utils/logger";
-import { sendRingResizingMessage } from "@/lib/api/contact";
-import { useAlertStore } from "@/lib/store/alert";
-import { useRingResizingStore } from "@/lib/store/ring-resizing";
+
+import { sendRingResizingMessage } from "@/modules/contact/api";
+import { useRingResizingStore } from "@/modules/services/store";
+import { useAlertStore } from "@/shared/store/alert";
+import { logger } from "@/shared/utils/logger";
+
+import { AdditionalInfoForm } from "./_components/AdditionalInfoForm";
+import { CustomerDetailsForm } from "./_components/CustomerDetailsForm";
+import { NavigationButtons } from "./_components/NavigationButtons";
+import { ProgressBar } from "./_components/ProgressBar";
+import { RingDetailsForm } from "./_components/RingDetailsForm";
 
 interface FormErrors {
   firstName?: string;
@@ -92,11 +94,7 @@ export default function RingResizingPage() {
     "13",
   ];
 
-  const handleInputChange = (
-    section: string,
-    field: string,
-    value: string | boolean
-  ) => {
+  const handleInputChange = (section: string, field: string, value: string | boolean) => {
     if (section === "personalInfo") {
       setFormData({
         ...formData,
@@ -154,10 +152,8 @@ export default function RingResizingPage() {
       }
     } else if (step === 2) {
       if (!formData.ringType) newErrors.ringType = "Ring type is required";
-      if (!formData.currentSize)
-        newErrors.currentSize = "Current size is required";
-      if (!formData.desiredSize)
-        newErrors.desiredSize = "Desired size is required";
+      if (!formData.currentSize) newErrors.currentSize = "Current size is required";
+      if (!formData.desiredSize) newErrors.desiredSize = "Desired size is required";
     }
 
     setErrors(newErrors);
@@ -218,7 +214,8 @@ export default function RingResizingPage() {
       addAlert({
         type: "success",
         title: "Request Submitted",
-        message: "Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.",
+        message:
+          "Thank you for your ring resizing request. We'll review your submission and contact you within 24 hours with a detailed quote and timeline.",
         duration: 5000,
         dismissible: true,
       });
@@ -259,13 +256,10 @@ export default function RingResizingPage() {
                 />
               </svg>
             </div>
-            <h1 className="text-3xl font-light text-primary-500 mb-4">
-              Request Submitted
-            </h1>
+            <h1 className="text-3xl font-light text-primary-500 mb-4">Request Submitted</h1>
             <p className="text-slate-600 mb-6">
-              Thank you for your ring resizing request. We'll review your
-              submission and contact you within 24 hours with a detailed quote
-              and timeline.
+              Thank you for your ring resizing request. We'll review your submission and contact you
+              within 24 hours with a detailed quote and timeline.
             </p>
             <div className="bg-slate-50 rounded-sm p-6 mb-6">
               <p className="text-sm text-slate-600 mb-2">Reference Number</p>
@@ -328,16 +322,10 @@ export default function RingResizingPage() {
                   notes: formData.notes || "",
                   images: formData.images,
                 }}
-                onInputChange={(
-                  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                ) => {
+                onInputChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                   const { name, value, type } = e.target;
                   if (type === "checkbox") {
-                    handleInputChange(
-                      name,
-                      name,
-                      (e.target as HTMLInputElement).checked
-                    );
+                    handleInputChange(name, name, (e.target as HTMLInputElement).checked);
                   } else {
                     handleInputChange(name, name, value);
                   }

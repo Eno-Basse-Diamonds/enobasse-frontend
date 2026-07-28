@@ -29,8 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     title: "Sign In - Eno Bassé Diamonds",
-    description:
-      "Securely access your heirloom jewelry records and upcoming appointments.",
+    description: "Securely access your heirloom jewelry records and upcoming appointments.",
     images: ["https://res.cloudinary.com/enobasse/image/upload/v1756507388/sign-in_luzacd.webp"],
   },
   alternates: {
@@ -38,8 +37,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SignInLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function SignInLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <>{children}</>;
 }

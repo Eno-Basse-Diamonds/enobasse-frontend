@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 import { getServerSession } from "next-auth";
-import { getCollectionWithProducts } from "@/lib/api/collections";
-import { getPreferredCurrency } from "@/lib/api/account";
-import { logger } from "@/lib/utils/logger";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getPreferredCurrency } from "@/modules/account/api";
+import { getCollectionWithProducts } from "@/modules/collections/api";
+import { logger } from "@/shared/utils/logger";
 
 const DEFAULT_CURRENCY = "USD";
 
-async function resolvePreferredCurrency(
-  email: string | null | undefined,
-): Promise<string> {
+async function resolvePreferredCurrency(email: string | null | undefined): Promise<string> {
   if (!email) return DEFAULT_CURRENCY;
   try {
     return await getPreferredCurrency(email);
@@ -35,9 +31,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { slug } = await params;
   const session = await getServerSession();
-  const preferredCurrency = await resolvePreferredCurrency(
-    session?.user?.email,
-  );
+  const preferredCurrency = await resolvePreferredCurrency(session?.user?.email);
   const { collection } = await getCollectionWithProducts(slug, {
     currency: preferredCurrency,
   });
@@ -75,16 +69,11 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function CollectionLayout({
-  params,
-  children,
-}: CollectionLayoutProps) {
+export default async function CollectionLayout({ params, children }: CollectionLayoutProps) {
   const { slug } = await params;
   const queryClient = new QueryClient();
   const session = await getServerSession();
-  const preferredCurrency = await resolvePreferredCurrency(
-    session?.user?.email,
-  );
+  const preferredCurrency = await resolvePreferredCurrency(session?.user?.email);
   const options = { currency: preferredCurrency };
 
   await queryClient.prefetchQuery({
@@ -92,9 +81,5 @@ export default async function CollectionLayout({
     queryFn: () => getCollectionWithProducts(slug, options),
   });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {children}
-    </HydrationBoundary>
-  );
+  return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

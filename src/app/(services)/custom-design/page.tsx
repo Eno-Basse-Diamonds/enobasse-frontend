@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
-import { Header } from "./_components/header";
-import { ProgressBar } from "./_components/progress-bar";
-import { PersonalInfoForm } from "./_components/personal-info-form";
-import { DesignSpecsForm } from "./_components/design-specs-form";
-import { FinalDetailsForm } from "./_components/final-details-form";
-import { NavigationButtons } from "./_components/navigation-buttons";
-import { logger } from "@/lib/utils/logger";
-import { sendCustomDesignMessage } from "@/lib/api/contact";
-import { useCustomDesignStore } from "@/lib/store/custom-design";
-import { useAlertStore } from "@/lib/store/alert";
+import { FormEvent, useState } from "react";
+
+import { sendCustomDesignMessage } from "@/modules/contact/api";
+import { useCustomDesignStore } from "@/modules/services/store";
+import { useAlertStore } from "@/shared/store/alert";
+import { logger } from "@/shared/utils/logger";
+
+import { DesignSpecsForm } from "./_components/DesignSpecsForm";
+import { FinalDetailsForm } from "./_components/FinalDetailsForm";
+import { Header } from "./_components/Header";
+import { NavigationButtons } from "./_components/NavigationButtons";
+import { PersonalInfoForm } from "./_components/PersonalInfoForm";
+import { ProgressBar } from "./_components/ProgressBar";
 
 interface PersonalInfo {
   firstName: string;
@@ -60,11 +62,7 @@ export default function CustomDesignPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addAlert = useAlertStore((state) => state.addAlert);
 
-  const handleInputChange = (
-    section: keyof typeof formData,
-    field: string,
-    value: string
-  ) => {
+  const handleInputChange = (section: keyof typeof formData, field: string, value: string) => {
     if (section === "personalInfo" || section === "designSpecs") {
       setFormData({
         [section]: { ...formData[section], [field]: value },
@@ -184,7 +182,8 @@ export default function CustomDesignPage() {
       addAlert({
         type: "success",
         title: "Request Submitted",
-        message: "Thank you for your custom design request! We will contact you within 24 hours to discuss your design in detail.",
+        message:
+          "Thank you for your custom design request! We will contact you within 24 hours to discuss your design in detail.",
         duration: 5000,
         dismissible: true,
       });
@@ -214,9 +213,7 @@ export default function CustomDesignPage() {
           <PersonalInfoForm
             personalInfo={formData.personalInfo}
             errors={errors}
-            onInputChange={(field, value) =>
-              handleInputChange("personalInfo", field, value)
-            }
+            onInputChange={(field, value) => handleInputChange("personalInfo", field, value)}
           />
         )}
 
@@ -224,9 +221,7 @@ export default function CustomDesignPage() {
           <DesignSpecsForm
             designSpecs={formData.designSpecs}
             errors={errors}
-            onInputChange={(field, value) =>
-              handleInputChange("designSpecs", field, value)
-            }
+            onInputChange={(field, value) => handleInputChange("designSpecs", field, value)}
           />
         )}
 
@@ -237,15 +232,9 @@ export default function CustomDesignPage() {
             contactPreference={formData.contactPreference}
             uploadedFiles={formData.inspiration}
             errors={errors}
-            onDescriptionChange={(value) =>
-              handleInputChange("description", "", value)
-            }
-            onTimelineChange={(value) =>
-              handleInputChange("timeline", "", value)
-            }
-            onContactPreferenceChange={(value) =>
-              handleInputChange("contactPreference", "", value)
-            }
+            onDescriptionChange={(value) => handleInputChange("description", "", value)}
+            onTimelineChange={(value) => handleInputChange("timeline", "", value)}
+            onContactPreferenceChange={(value) => handleInputChange("contactPreference", "", value)}
             onFileUpload={handleImageUpload}
           />
         )}

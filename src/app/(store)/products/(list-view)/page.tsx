@@ -1,22 +1,27 @@
 "use client";
 
-import React, { useCallback, useState, useMemo } from "react";
-import * as motion from "motion/react-client";
-import { easeOut } from "motion/react";
+import { useCallback, useMemo, useState } from "react";
+
 import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
-import { useProducts } from "@/lib/hooks/use-products";
-import { FilterOption } from "@/lib/types/products";
-import { metalOptions } from "@/lib/utils/constants/metal-options";
-import { useAccountStore } from "@/lib/store/account";
-import { EmptyState } from "@/components/empty-state";
-import { ProductListLoader } from "@/components/loaders/products";
-import { PageHeading } from "@/components/page-heading";
-import { Pagination } from "@/components/pagination";
-import { FilterPanelDesktop, FilterPanelMobile } from "@/components/product/filter-panel";
-import { ProductList } from "@/components/product/list";
-import { SectionContainer } from "@/components/section-container";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
-import { ItemListSchema } from "@/components/seo/ItemListSchema";
+import { easeOut } from "motion/react";
+import * as motion from "motion/react-client";
+
+import { useAccountStore } from "@/modules/account/store";
+import {
+  FilterPanelDesktop,
+  FilterPanelMobile,
+} from "@/shared/components/FilterPanel";
+import { ProductList } from "@/shared/components/ProductList";
+import { useProducts } from "@/modules/products/hooks";
+import { FilterOption } from "@/modules/products/types";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { Pagination } from "@/shared/components/Pagination";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { ProductListLoader } from "@/shared/components/loaders/Products";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { ItemListSchema } from "@/shared/components/seo/ItemListSchema";
+import { METAL_OPTIONS } from "@/shared/constants/metals";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -40,20 +45,19 @@ export default function ProductsPage() {
   const { preferredCurrency } = useAccountStore();
   const pageSize = 36;
 
-  const filterOptions = useMemo(() => ({
-    page: currentPage,
-    pageSize,
-    sortBy,
-    currency: preferredCurrency,
-    metals: selectedFilters
-      .filter((f) => f.type === "metal")
-      .map((f) => f.name),
-    gemstones: selectedFilters
-      .filter((f) => f.type === "gemstone")
-      .map((f) => f.name),
-    minPrice,
-    maxPrice,
-  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice]);
+  const filterOptions = useMemo(
+    () => ({
+      page: currentPage,
+      pageSize,
+      sortBy,
+      currency: preferredCurrency,
+      metals: selectedFilters.filter((f) => f.type === "metal").map((f) => f.name),
+      gemstones: selectedFilters.filter((f) => f.type === "gemstone").map((f) => f.name),
+      minPrice,
+      maxPrice,
+    }),
+    [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice],
+  );
 
   const { data, isLoading, isFetching, isError, error } = useProducts(filterOptions);
 
@@ -86,14 +90,11 @@ export default function ProductsPage() {
     setCurrentPage(1);
   }, []);
 
-  const handlePriceChange = useCallback(
-    (min: number | undefined, max: number | undefined) => {
-      setMinPrice(min);
-      setMaxPrice(max);
-      setCurrentPage(1);
-    },
-    []
-  );
+  const handlePriceChange = useCallback((min: number | undefined, max: number | undefined) => {
+    setMinPrice(min);
+    setMaxPrice(max);
+    setCurrentPage(1);
+  }, []);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
@@ -132,7 +133,7 @@ export default function ProductsPage() {
             variants={itemVariants}
           >
             <FilterPanelDesktop
-              metalOptions={metalOptions as FilterOption[]}
+              metalOptions={METAL_OPTIONS as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
               minPrice={minPrice}
@@ -143,7 +144,7 @@ export default function ProductsPage() {
           <motion.div variants={itemVariants} className="lg:w-3/4">
             <div className="lg:hidden">
               <FilterPanelMobile
-                metalOptions={metalOptions as FilterOption[]}
+                metalOptions={METAL_OPTIONS as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
                 minPrice={minPrice}
@@ -179,7 +180,9 @@ export default function ProductsPage() {
               </div>
             </motion.div>
 
-            <div className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <div
+              className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+            >
               {isLoading && !displayProducts.length ? (
                 <ProductListLoader />
               ) : isError ? (

@@ -1,0 +1,82 @@
+import { Collection } from "@/modules/collections/types";
+import { RatingDistribution, Review } from "@/modules/reviews/types";
+
+export type MetalName = "White Gold" | "Yellow Gold" | "Rose Gold" | "Platinum";
+
+export type ProductStatus = "draft" | "published" | "archived";
+
+export interface Metal {
+  type: MetalName;
+  purity?: string | null;
+  weightGrams?: string;
+}
+
+export interface Gemstone {
+  type: string;
+  weightCarat?: string;
+}
+
+export interface ProductVariant {
+  id: number | string;
+  sku: string;
+  title: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  currency: string;
+  metals: Metal[];
+  gemstones: Gemstone[];
+  inventory: { quantity: number; inStock: boolean };
+  images: Array<{ url: string; alt: string }>;
+}
+
+export interface Product {
+  id: number | string;
+  name: string;
+  slug: string;
+  description: string;
+  priceRange: { min: number; max: number; currency: string };
+  category: string;
+  collections?: Collection[];
+  images: Array<{ url: string; alt: string }>;
+  variants: ProductVariant[];
+  metals?: Metal[];
+  gemstones?: Gemstone[];
+  reviews?: Review[];
+  ratingDistribution?: RatingDistribution[];
+  isCustomDesign?: boolean;
+  status?: ProductStatus;
+  createdAt: any;
+}
+
+export interface ProductFilterOptions {
+  sortBy?: string;
+  sortOrder?: "ASC" | "DESC";
+  metals?: string[];
+  gemstones?: string[];
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  currency?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export interface ProductsResponse {
+  products: Product[];
+  meta: {
+    total: number;
+    currentPage: number;
+    totalPages: number;
+    pageSize: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+export interface FilterOption {
+  name: string;
+  type: "metal" | "gemstone";
+  image?: { src: string; alt: string };
+  color?: string;
+}

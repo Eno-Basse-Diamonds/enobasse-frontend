@@ -1,7 +1,8 @@
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
 import { Metadata } from "next";
-import { WhatsAppButton } from "@/components/button";
+
+import { WhatsAppButton } from "@/shared/components/Button";
+import { Footer } from "@/shared/components/Footer";
+import { Header } from "@/shared/components/Header";
 
 export const metadata: Metadata = {
   title: "Design Your Engagement Ring",

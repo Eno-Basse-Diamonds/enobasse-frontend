@@ -1,0 +1,25 @@
+import { ProductVariant } from "@/modules/products/types";
+
+export interface CartItem {
+  id: string;
+  productSlug: string;
+  productCategory: string;
+  productVariant: ProductVariant;
+  quantity: number;
+  size?: number;
+  engraving?: { text: string; fontStyle: string };
+  amoraOptions?: {
+    selectedLetters: string[];
+    includeChain: boolean;
+    calculatedPrice: number;
+  };
+  note?: string;
+  addedAt: string;
+}
+
+export interface Cart {
+  id: string;
+  items: CartItem[];
+  createdAt: string;
+  updatedAt: string;
+}

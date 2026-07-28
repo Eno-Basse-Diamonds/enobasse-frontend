@@ -1,19 +1,20 @@
 "use client";
 
-import * as React from "react";
-import { useState, useMemo, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Trash2, Search, X, Mail, Download } from "lucide-react";
-import { AdminHeader } from "../_components/admin-header";
+import { useEffect, useMemo, useState } from "react";
+
+import { Download, Mail, Search, Trash2, X } from "lucide-react";
+
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
 import {
-  useNewsletterSubscriptions,
   useDeleteNewsletterSubscription,
-} from "@/lib/hooks/use-newsletter";
-import { EmptyState } from "@/components/empty-state";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { Pagination } from "@/components/pagination";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+  useNewsletterSubscriptions,
+} from "@/modules/newsletter/hooks";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
 
 export default function AdminNewsletterPage() {
   const { data: session } = useSession();
@@ -70,7 +71,7 @@ export default function AdminNewsletterPage() {
 
     const csvContent = [
       headers.join(","),
-      ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(","))
+      ...rows.map((e) => e.map((val) => `"${String(val).replace(/"/g, '""')}"`).join(",")),
     ].join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -79,7 +80,7 @@ export default function AdminNewsletterPage() {
     link.setAttribute("href", url);
     link.setAttribute(
       "download",
-      `newsletter_subscribers_${new Date().toISOString().split("T")[0]}.csv`
+      `newsletter_subscribers_${new Date().toISOString().split("T")[0]}.csv`,
     );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
@@ -92,9 +93,7 @@ export default function AdminNewsletterPage() {
     if (!subscriptions) return [];
     if (!searchTerm.trim()) return subscriptions;
     const term = searchTerm.toLowerCase();
-    return subscriptions.filter((sub) =>
-      sub.email.toLowerCase().includes(term)
-    );
+    return subscriptions.filter((sub) => sub.email.toLowerCase().includes(term));
   }, [subscriptions, searchTerm]);
 
   // Reset page when search term changes
@@ -133,12 +132,7 @@ export default function AdminNewsletterPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -231,9 +225,7 @@ export default function AdminNewsletterPage() {
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {sub.email}
-                            </div>
+                            <div className="text-sm font-medium text-gray-900">{sub.email}</div>
                           </div>
                         </div>
                       </td>

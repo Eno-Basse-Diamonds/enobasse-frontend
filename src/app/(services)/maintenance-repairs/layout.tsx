@@ -27,10 +27,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function MaintenanceRepairsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function MaintenanceRepairsLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

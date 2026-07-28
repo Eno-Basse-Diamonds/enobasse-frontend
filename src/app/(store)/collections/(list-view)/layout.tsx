@@ -1,10 +1,8 @@
 import { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getCollections } from "@/lib/api/collections";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getCollections } from "@/modules/collections/api";
 
 export const revalidate = 3600;
 
@@ -39,9 +37,7 @@ interface CollectionsLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function CollectionsLayout({
-  children,
-}: CollectionsLayoutProps) {
+export default async function CollectionsLayout({ children }: CollectionsLayoutProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -50,9 +46,5 @@ export default async function CollectionsLayout({
     staleTime: 60 * 1000,
   });
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {children}
-    </HydrationBoundary>
-  );
+  return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
 }

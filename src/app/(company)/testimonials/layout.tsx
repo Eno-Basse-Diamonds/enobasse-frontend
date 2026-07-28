@@ -1,11 +1,9 @@
-import { ReactNode } from "react";
 import { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { useTestimonials } from "@/lib/hooks/use-testimonials";
+import { ReactNode } from "react";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { useTestimonials } from "@/modules/testimonials/hooks";
 
 export const metadata: Metadata = {
   title: "Testimonials",
@@ -37,9 +35,7 @@ interface TestimonialLayoutProps {
   children: ReactNode;
 }
 
-export default async function TesimonialsLayout({
-  children,
-}: TestimonialLayoutProps) {
+export default async function TesimonialsLayout({ children }: TestimonialLayoutProps) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -59,9 +55,7 @@ export default async function TesimonialsLayout({
           </h2>
         </div>
 
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          {children}
-        </HydrationBoundary>
+        <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>
       </div>
     </div>
   );

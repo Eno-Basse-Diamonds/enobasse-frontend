@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { logger } from "@/lib/utils/logger";
+
+import { logger } from "@/shared/utils/logger";
 
 const cache = new Map<string, { rate: number; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000;
@@ -9,6 +10,15 @@ interface ExchangeRateApiResponse {
   conversion_rates: Record<string, number>;
 }
 
+/**
+ * Handles exchange rate retrieval and currency conversion.
+ *
+ * @description Returns the USD/NGN exchange rate or performs amount conversion
+ * based on optional `amount`, `from`, and `to` query parameters.
+ *
+ * @param request - The incoming Next.js request.
+ * @returns A JSON response with exchange rate or converted amount.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -25,10 +35,7 @@ export async function GET(request: NextRequest) {
         currencyPair: "USD/NGN",
       });
 
-      response.headers.set(
-        "Cache-Control",
-        "public, s-maxage=3600, stale-while-revalidate=7200",
-      );
+      response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
 
       return response;
     }
@@ -75,18 +82,12 @@ export async function GET(request: NextRequest) {
       lastUpdated: new Date().toISOString(),
     });
 
-    response.headers.set(
-      "Cache-Control",
-      "public, s-maxage=3600, stale-while-revalidate=7200",
-    );
+    response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
 
     return response;
   } catch (error) {
     logger.error("Exchange rate fetch error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch exchange rate" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch exchange rate" }, { status: 500 });
   }
 }
 
@@ -105,13 +106,10 @@ async function getCachedExchangeRate(): Promise<number> {
       throw new Error("Exchange rate API key not configured");
     }
 
-    const response = await fetch(
-      `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`,
-      {
-        headers: { Accept: "application/json" },
-        next: { revalidate: 3600 }, // Next.js fetch caching - 1 hour
-      },
-    );
+    const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`, {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 3600 }, // Next.js fetch caching - 1 hour
+    });
 
     if (!response.ok) {
       throw new Error(`API responded with status ${response.status}`);

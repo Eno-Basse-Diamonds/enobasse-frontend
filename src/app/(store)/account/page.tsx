@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
-import { User, Package, Heart, LogOut, ShoppingCart, Lock } from "lucide-react";
-import { useCartStore } from "@/lib/store/cart";
-import { useWishlistStore } from "@/lib/store/wishlist";
-import { useAccountStore } from "@/lib/store/account";
-import { useAccountByEmail, useUpdateAccount } from "@/lib/hooks/use-accounts";
-import { AccountForm } from "./_components/account-form";
-import { DesktopNavigation, MobileNavigation } from "./_components/navigation";
-import type { Account } from "@/lib/types/accounts";
-import type { EditFormData } from "@/lib/types/account-form";
-import { Alert } from "@/components/alert";
-import { AccountLoadingSkeleton } from "@/components/loaders/accounts";
+import { signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+
+import { Heart, Lock, LogOut, Package, ShoppingCart, User } from "lucide-react";
+
+import { useAccountStore } from "@/modules/account/store";
+import type { EditFormData } from "@/modules/account/types";
+import { useAccountByEmail, useUpdateAccount } from "@/modules/admin/hooks";
+import { useCartStore } from "@/modules/cart/store";
+import { useWishlistStore } from "@/modules/wishlist/store";
+import { Alert } from "@/shared/components/Alert";
+import { AccountLoadingSkeleton } from "@/shared/components/loaders/Accounts";
+
+import { AccountForm } from "./_components/AccountForm";
+import { DesktopNavigation, MobileNavigation } from "./_components/Navigation";
 
 export type NavigationItem = {
   id: string;
@@ -44,9 +46,7 @@ export default function CustomerAccountPage() {
     country: "",
   });
 
-  const { data: account, isLoading, isError, error } = useAccountByEmail(
-    session?.user?.email
-  );
+  const { data: account, isLoading, isError, error } = useAccountByEmail(session?.user?.email);
   const updateMutation = useUpdateAccount();
 
   const [alertState, setAlertState] = useState<AlertState>({
@@ -127,14 +127,12 @@ export default function CustomerAccountPage() {
     setEditForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const tabs: NavigationItem[] = [
-    { id: "profile", label: "Profile", icon: User },
-  ];
+  const tabs: NavigationItem[] = [{ id: "profile", label: "Profile", icon: User }];
 
   const linkItems: NavigationItem[] = [
     { id: "orders", label: "Order History", icon: Package, href: "/orders" },
-    { id: "wishlist", label: "Wishlist", icon: Heart, href: "/wishlist" },
-    { id: "cart", label: "Cart", icon: ShoppingCart, href: "/cart" },
+    { id: "wishlist", label: "Wishlist", icon: Heart, href: "/Wishlist" },
+    { id: "cart", label: "Cart", icon: ShoppingCart, href: "/Cart" },
     {
       id: "forgot-password",
       label: "Forgot Password",
@@ -199,12 +197,7 @@ export default function CustomerAccountPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}

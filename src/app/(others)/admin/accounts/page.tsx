@@ -1,20 +1,23 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Search, X, Users, Shield, User } from "lucide-react";
-import { AdminHeader } from "../_components/admin-header";
-import { useAdminAccounts, useDeleteAccount } from "@/lib/hooks/use-accounts";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Account } from "@/lib/types/accounts";
-import { AccountForm } from "./_components/account-form";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
-import { EmptyState } from "@/components/empty-state";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { Pagination } from "@/components/pagination";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useState } from "react";
+
+import { Plus, Search, Shield, User, Users, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAdminAccounts, useDeleteAccount } from "@/modules/admin/hooks";
+import { Account } from "@/modules/admin/types";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+
+import { AccountForm } from "./_components/AccountForm";
 
 export default function AdminAccountsPage() {
   const { data: session } = useSession();
@@ -38,8 +41,7 @@ export default function AdminAccountsPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const currentIsAdmin = searchParams.get("isAdmin");
 
   const filterOptions = {
@@ -68,7 +70,7 @@ export default function AdminAccountsPage() {
 
       router.push(`/admin/accounts?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const handleEdit = (account: Account) => {
@@ -167,12 +169,7 @@ export default function AdminAccountsPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -191,9 +188,7 @@ export default function AdminAccountsPage() {
             <h3 className="text-lg font-medium text-gray-900">
               User Accounts ({data?.total || 0})
             </h3>
-            <p className="text-sm text-gray-500">
-              Manage customer and admin accounts
-            </p>
+            <p className="text-sm text-gray-500">Manage customer and admin accounts</p>
           </div>
           <Button
             leadingIcon={<Plus />}
@@ -283,9 +278,7 @@ export default function AdminAccountsPage() {
                           <div className="text-sm font-medium text-gray-900">
                             {account.name || "No name"}
                           </div>
-                          <div className="text-sm text-gray-500">
-                            {account.email}
-                          </div>
+                          <div className="text-sm text-gray-500">{account.email}</div>
                         </div>
                       </div>
                     </td>
@@ -294,16 +287,12 @@ export default function AdminAccountsPage() {
                         {account.isAdmin ? (
                           <>
                             <Shield className="w-4 h-4 text-red-500 mr-2" />
-                            <span className="text-sm text-red-600 font-medium">
-                              Admin
-                            </span>
+                            <span className="text-sm text-red-600 font-medium">Admin</span>
                           </>
                         ) : (
                           <>
                             <User className="w-4 h-4 text-blue-500 mr-2" />
-                            <span className="text-sm text-blue-600 font-medium">
-                              Customer
-                            </span>
+                            <span className="text-sm text-blue-600 font-medium">Customer</span>
                           </>
                         )}
                       </div>
@@ -327,11 +316,7 @@ export default function AdminAccountsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEdit(account)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => handleEdit(account)}>
                           Edit
                         </Button>
                         <Button
@@ -379,9 +364,7 @@ export default function AdminAccountsPage() {
           </div>
         )}
 
-        {isModalOpen && (
-          <AccountForm account={editingAccount} onClose={handleFormClose} />
-        )}
+        {isModalOpen && <AccountForm account={editingAccount} onClose={handleFormClose} />}
 
         <DeleteConfirmationModal
           isOpen={deleteModalState.isOpen}

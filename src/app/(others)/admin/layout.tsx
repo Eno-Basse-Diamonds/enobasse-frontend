@@ -1,28 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Home,
-  Package,
-  Users,
-  Settings,
-  FileText,
-  BarChart3,
-  Folder,
-  MessageSquare,
-  Star,
-  Mail,
-  Truck,
-  Menu,
-  X,
-  LayoutDashboard,
-} from "lucide-react";
-import { AdminSidebarNavigation } from "./_components/admin-sidebar-navigation";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-export default function AdminLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+import {
+  BarChart3,
+  FileText,
+  Folder,
+  Home,
+  LayoutDashboard,
+  Mail,
+  Menu,
+  MessageSquare,
+  Package,
+  Settings,
+  Star,
+  Truck,
+  Users,
+} from "lucide-react";
+
+import { AdminSidebarNavigation } from "./_components/AdminSidebarNavigation";
+
+export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -72,8 +71,8 @@ export default function AdminLayout({
     {
       icon: Star,
       label: "Reviews",
-      href: "/admin/reviews",
-      active: pathname === "/admin/reviews",
+      href: "/admin/Reviews",
+      active: pathname === "/admin/Reviews",
     },
     {
       icon: Mail,
@@ -140,15 +139,11 @@ export default function AdminLayout({
         >
           <Menu className="w-6 h-6" />
         </button>
-        <span className="font-primary text-lg font-semibold text-primary-500 truncate">
-          Admin
-        </span>
+        <span className="font-primary text-lg font-semibold text-primary-500 truncate">Admin</span>
       </div>
 
       {/* Main content */}
-      <div className="lg:ml-72 pt-14 lg:pt-0 min-w-0 overflow-x-hidden">
-        {children}
-      </div>
+      <div className="lg:ml-72 pt-14 lg:pt-0 min-w-0 overflow-x-hidden">{children}</div>
     </div>
   );
 }

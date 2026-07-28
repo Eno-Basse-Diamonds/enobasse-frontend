@@ -1,27 +1,29 @@
 "use client";
 
-import React, { useCallback, useState, useMemo } from "react";
-import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
-import * as motion from "motion/react-client";
-import { easeOut } from "motion/react";
+import { notFound, useParams } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
+
 import { ChevronDownIcon, SearchSlashIcon } from "lucide-react";
-import { FilterOption } from "@/lib/types/products";
-import { useCollection } from "@/lib/hooks/use-collections";
-import { useAccountStore } from "@/lib/store/account";
-import { metalOptions } from "@/lib/utils/constants/metal-options";
-import { EmptyState } from "@/components/empty-state";
-import { ProductsPageLoader, ProductListLoader } from "@/components/loaders/products";
-import { PageHeading } from "@/components/page-heading";
-import { Pagination } from "@/components/pagination";
+import { easeOut } from "motion/react";
+import * as motion from "motion/react-client";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useCollection } from "@/modules/collections/hooks";
 import {
   FilterPanelDesktop,
   FilterPanelMobile,
-} from "@/components/product/filter-panel";
-import { ProductList } from "@/components/product/list";
-import { SectionContainer } from "@/components/section-container";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
-import { CollectionSchema } from "@/components/seo/CollectionSchema";
+} from "@/shared/components/FilterPanel";
+import { ProductList } from "@/shared/components/ProductList";
+import { FilterOption } from "@/modules/products/types";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { Pagination } from "@/shared/components/Pagination";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { ProductListLoader, ProductsPageLoader } from "@/shared/components/loaders/Products";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+import { CollectionSchema } from "@/shared/components/seo/CollectionSchema";
+import { METAL_OPTIONS } from "@/shared/constants/metals";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,20 +52,19 @@ export default function CollectionPage() {
   const { preferredCurrency } = useAccountStore();
   const pageSize = 36;
 
-  const filterOptions = useMemo(() => ({
-    page: currentPage,
-    pageSize,
-    sortBy,
-    currency: preferredCurrency,
-    metals: selectedFilters
-      .filter((f) => f.type === "metal")
-      .map((f) => f.name),
-    gemstones: selectedFilters
-      .filter((f) => f.type === "gemstone")
-      .map((f) => f.name),
-    minPrice,
-    maxPrice,
-  }), [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice]);
+  const filterOptions = useMemo(
+    () => ({
+      page: currentPage,
+      pageSize,
+      sortBy,
+      currency: preferredCurrency,
+      metals: selectedFilters.filter((f) => f.type === "metal").map((f) => f.name),
+      gemstones: selectedFilters.filter((f) => f.type === "gemstone").map((f) => f.name),
+      minPrice,
+      maxPrice,
+    }),
+    [currentPage, pageSize, sortBy, preferredCurrency, selectedFilters, minPrice, maxPrice],
+  );
 
   const { data, isLoading, isFetching, isError, error } = useCollection(slug, filterOptions);
   const { collection, products = [], meta } = data || {};
@@ -82,14 +83,11 @@ export default function CollectionPage() {
     setCurrentPage(1);
   }, []);
 
-  const handlePriceChange = useCallback(
-    (min: number | undefined, max: number | undefined) => {
-      setMinPrice(min);
-      setMaxPrice(max);
-      setCurrentPage(1);
-    },
-    []
-  );
+  const handlePriceChange = useCallback((min: number | undefined, max: number | undefined) => {
+    setMinPrice(min);
+    setMaxPrice(max);
+    setCurrentPage(1);
+  }, []);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
@@ -171,18 +169,12 @@ export default function CollectionPage() {
               transition={{ delay: 0.3 }}
               className="bg-[#502B3A] p-6 text-white mt-2 rounded-sm"
             >
-              <h1 className="text-2xl font-primary font-medium mb-3">
-                {collection.name}
-              </h1>
+              <h1 className="text-2xl font-primary font-medium mb-3">{collection.name}</h1>
               <p className="text-sm font-light">{collection.description}</p>
             </motion.div>
           </div>
           <div className="hidden lg:block relative h-80 overflow-hidden rounded-sm">
-            <motion.div
-              whileHover="hover"
-              variants={imageHoverVariants}
-              className="w-full h-full"
-            >
+            <motion.div whileHover="hover" variants={imageHoverVariants} className="w-full h-full">
               <Image
                 src={collection.image.url}
                 alt={collection.image.alt}
@@ -199,25 +191,20 @@ export default function CollectionPage() {
                 transition={{ delay: 0.4 }}
                 className="text-white max-w-2xl bg-[#502B3A] p-8 rounded-sm"
               >
-                <h1 className="text-3xl font-primary font-medium mb-4">
-                  {collection.name}
-                </h1>
+                <h1 className="text-3xl font-primary font-medium mb-4">{collection.name}</h1>
                 <p className="text-base font-light">{collection.description}</p>
               </motion.div>
             </div>
           </div>
         </motion.header>
 
-        <motion.div
-          variants={containerVariants}
-          className="flex flex-col lg:flex-row gap-8"
-        >
+        <motion.div variants={containerVariants} className="flex flex-col lg:flex-row gap-8">
           <motion.aside
             variants={itemVariants}
             className="hidden lg:block lg:w-1/4 divide-y divide-gray-200"
           >
             <FilterPanelDesktop
-              metalOptions={metalOptions as FilterOption[]}
+              metalOptions={METAL_OPTIONS as FilterOption[]}
               selectedFilters={selectedFilters}
               onFilterChange={handleFilterChange}
               minPrice={minPrice}
@@ -229,7 +216,7 @@ export default function CollectionPage() {
           <motion.div variants={itemVariants} className="lg:w-3/4">
             <div className="lg:hidden">
               <FilterPanelMobile
-                metalOptions={metalOptions as FilterOption[]}
+                metalOptions={METAL_OPTIONS as FilterOption[]}
                 selectedFilters={selectedFilters}
                 onFilterChange={handleFilterChange}
                 minPrice={minPrice}
@@ -265,7 +252,9 @@ export default function CollectionPage() {
               </div>
             </motion.div>
 
-            <div className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <div
+              className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+            >
               {isLoading && !products.length ? (
                 <ProductListLoader />
               ) : products.length === 0 ? (

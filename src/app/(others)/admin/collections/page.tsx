@@ -1,25 +1,25 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Search, X, Folder } from "lucide-react";
-import { EmptyState } from "@/components/empty-state";
-import { AdminHeader } from "../_components/admin-header";
-import { CollectionForm } from "./_components/collection-form";
-import { CollectionList } from "./_components/collection-list";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Collection } from "@/lib/types/collections";
-import {
-  useDeleteCollection,
-  useAdminCollections,
-} from "@/lib/hooks/use-collections";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { AdminCollectionsSkeletonLoader } from "@/components/loaders/collections";
-import { Pagination } from "@/components/pagination";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+
+import { Folder, Plus, Search, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAdminCollections, useDeleteCollection } from "@/modules/collections/hooks";
+import { Collection } from "@/modules/collections/types";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+import { AdminCollectionsSkeletonLoader } from "@/shared/components/loaders/Collections";
+
+import { CollectionForm } from "./_components/CollectionForm";
+import { CollectionList } from "./_components/CollectionList";
 
 export default function AdminCollectionsPage() {
   const { data: session } = useSession();
@@ -27,9 +27,7 @@ export default function AdminCollectionsPage() {
   const searchParams = useSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCollection, setEditingCollection] = useState<Collection | null>(
-    null
-  );
+  const [editingCollection, setEditingCollection] = useState<Collection | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -49,8 +47,7 @@ export default function AdminCollectionsPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const currentPublished = searchParams.get("published");
 
   const filterOptions = {
@@ -79,7 +76,7 @@ export default function AdminCollectionsPage() {
 
       router.push(`/admin/collections?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const handleEdit = (collection: Collection) => {
@@ -164,12 +161,7 @@ export default function AdminCollectionsPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -192,9 +184,7 @@ export default function AdminCollectionsPage() {
                 <h3 className="text-lg font-medium text-gray-900">
                   Collections ({data?.total || 0})
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Manage your jewelry collections
-                </p>
+                <p className="text-sm text-gray-500">Manage your jewelry collections</p>
               </div>
               <Button
                 leadingIcon={<Plus />}
@@ -273,10 +263,7 @@ export default function AdminCollectionsPage() {
           </div>
 
           {isModalOpen && (
-            <CollectionForm
-              collection={editingCollection}
-              onClose={handleFormClose}
-            />
+            <CollectionForm collection={editingCollection} onClose={handleFormClose} />
           )}
 
           <DeleteConfirmationModal

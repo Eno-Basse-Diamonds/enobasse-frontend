@@ -1,23 +1,26 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Plus, Search, X, Package } from "lucide-react";
-import { AdminHeader } from "../_components/admin-header";
-import { useAdminProducts, useDeleteProduct } from "@/lib/hooks/use-products";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Product } from "@/lib/types/products";
-import { ProductList } from "./_components/product-list";
-import { ProductForm } from "./_components/product-form";
-import { EmptyState } from "@/components/empty-state";
-import { useAdminCollections } from "@/lib/hooks/use-collections";
-import { Alert } from "@/components/alert";
-import { Button } from "@/components/button";
-import { AdminProductsSkeletonLoader } from "@/components/loaders/products";
-import { Pagination } from "@/components/pagination";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+
+import { Package, Plus, Search, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAdminCollections } from "@/modules/collections/hooks";
+import { useAdminProducts, useDeleteProduct } from "@/modules/products/hooks";
+import { Product } from "@/modules/products/types";
+import { Alert } from "@/shared/components/Alert";
+import { Button } from "@/shared/components/Button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+import { AdminProductsSkeletonLoader } from "@/shared/components/loaders/Products";
+
+import { ProductForm } from "./_components/ProductForm";
+import { ProductList } from "./_components/ProductList";
 
 export default function AdminProductsPage() {
   const { data: session } = useSession();
@@ -46,28 +49,22 @@ export default function AdminProductsPage() {
   const currentSearch = searchParams.get("search") || "";
   const currentCollection = searchParams.get("collectionId") || "";
   const currentSort = searchParams.get("sortBy") || "updatedAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
 
   const filterOptions = {
     page: currentPage,
     pageSize: 21,
-    sortBy: currentSort as
-      | "name"
-      | "createdAt"
-      | "updatedAt"
-      | "price",
+    sortBy: currentSort as "name" | "createdAt" | "updatedAt" | "price",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
     collectionId: currentCollection || undefined,
   };
 
   const { data, isLoading } = useAdminProducts(filterOptions);
-  const { data: collections, isLoading: isCollectionsLoading } =
-    useAdminCollections({
-      page: 1,
-      pageSize: 100,
-    });
+  const { data: collections, isLoading: isCollectionsLoading } = useAdminCollections({
+    page: 1,
+    pageSize: 100,
+  });
   const deleteMutation = useDeleteProduct();
 
   const updateURL = useCallback(
@@ -84,7 +81,7 @@ export default function AdminProductsPage() {
 
       router.push(`/admin/products?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const handleEdit = (product: Product) => {
@@ -168,12 +165,7 @@ export default function AdminProductsPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -196,9 +188,7 @@ export default function AdminProductsPage() {
                 <h3 className="text-lg font-medium text-gray-900">
                   Products ({data?.meta.total || 0})
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Manage your jewelry products and variants
-                </p>
+                <p className="text-sm text-gray-500">Manage your jewelry products and variants</p>
               </div>
               <Button
                 leadingIcon={<Plus />}
@@ -271,11 +261,7 @@ export default function AdminProductsPage() {
             </div>
 
             {!isLoading && data?.products && data.products.length > 0 ? (
-              <ProductList
-                products={data.products}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
+              <ProductList products={data.products} onEdit={handleEdit} onDelete={handleDelete} />
             ) : !isLoading && data?.products && data.products.length === 0 ? (
               <EmptyState
                 title="No Products Found"
@@ -299,9 +285,7 @@ export default function AdminProductsPage() {
             )}
           </div>
 
-          {isModalOpen && (
-            <ProductForm product={editingProduct} onClose={handleFormClose} />
-          )}
+          {isModalOpen && <ProductForm product={editingProduct} onClose={handleFormClose} />}
 
           <DeleteConfirmationModal
             isOpen={deleteId !== null}

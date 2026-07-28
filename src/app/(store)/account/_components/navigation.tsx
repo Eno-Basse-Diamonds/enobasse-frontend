@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { ChevronDown } from "lucide-react";
 
 type NavigationItem = {
@@ -9,18 +10,13 @@ type NavigationItem = {
   action?: () => void;
 };
 
-
 interface DesktopNavigationProps {
   items: NavigationItem[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
 }
 
-export function DesktopNavigation({
-  items,
-  activeTab,
-  onTabChange,
-}: DesktopNavigationProps) {
+export function DesktopNavigation({ items, activeTab, onTabChange }: DesktopNavigationProps) {
   return (
     <nav className="space-y-1">
       {items.map((item) => {

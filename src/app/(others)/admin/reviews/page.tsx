@@ -1,24 +1,23 @@
 "use client";
 
-import * as React from "react";
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Search, X, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
-import { Alert } from "@/components/alert";
-import { Pagination } from "@/components/pagination";
-import { EmptyState } from "@/components/empty-state";
-import { AdminHeader } from "../_components/admin-header";
-import { ReviewList } from "./_components/review-list";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { DeleteConfirmationModal } from "@/components/delete-confirmation-modal";
-import {
-  useReviewsForAdmin,
-  useUpdateReview,
-  useDeleteReview,
-} from "@/lib/hooks/use-reviews";
-import { Review } from "@/lib/types/review";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { AdminReviewsSkeletonLoader } from "@/components/loaders/reviews";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import { ChevronDown, ChevronUp, MessageSquare, Search, X } from "lucide-react";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useDeleteReview, useReviewsForAdmin, useUpdateReview } from "@/modules/reviews/hooks";
+import { Review } from "@/modules/reviews/types";
+import { Alert } from "@/shared/components/Alert";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { DeleteConfirmationModal } from "@/shared/components/Modal";
+import { Pagination } from "@/shared/components/Pagination";
+import { AdminReviewsSkeletonLoader } from "@/shared/components/loaders/Reviews";
+
+import { ReviewList } from "./_components/ReviewList";
 
 export default function AdminReviewsPage() {
   const { data: session } = useSession();
@@ -40,20 +39,14 @@ export default function AdminReviewsPage() {
   const currentPage = Number(searchParams.get("page")) || 1;
   const currentSearch = searchParams.get("search") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const currentVerified = searchParams.get("isVerified");
   const currentRating = searchParams.get("rating");
 
   const filterOptions = {
     page: currentPage,
     perPage: 9,
-    sortBy: currentSort as
-      | "authorName"
-      | "createdAt"
-      | "updatedAt"
-      | "rating"
-      | "product",
+    sortBy: currentSort as "authorName" | "createdAt" | "updatedAt" | "rating" | "product",
     sortOrder: currentSortOrder,
     search: currentSearch || undefined,
     isVerified: currentVerified ? currentVerified === "true" : undefined,
@@ -78,7 +71,7 @@ export default function AdminReviewsPage() {
 
       router.push(`/admin/reviews?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const dismissAlert = () => {
@@ -134,11 +127,7 @@ export default function AdminReviewsPage() {
   ];
 
   const currentFilters =
-    currentVerified === "true"
-      ? ["verified"]
-      : currentVerified === "false"
-        ? ["unverified"]
-        : [];
+    currentVerified === "true" ? ["verified"] : currentVerified === "false" ? ["unverified"] : [];
 
   const handleFilterChange = (filters: string[]) => {
     const newlyAdded = filters.find((f) => !currentFilters.includes(f));
@@ -172,7 +161,7 @@ export default function AdminReviewsPage() {
             message: "Failed to update review. Please try again.",
           });
         },
-      }
+      },
     );
   };
 
@@ -210,12 +199,7 @@ export default function AdminReviewsPage() {
   return (
     <>
       {alertState.visible && (
-        <Alert
-          type={alertState.type}
-          dismissible
-          onDismiss={dismissAlert}
-          duration={5000}
-        >
+        <Alert type={alertState.type} dismissible onDismiss={dismissAlert} duration={5000}>
           {alertState.message}
         </Alert>
       )}
@@ -235,9 +219,7 @@ export default function AdminReviewsPage() {
           <div className="flex-1 p-4 sm:p-6 lg:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
-                <h3 className="text-lg font-medium text-gray-900">
-                  Reviews ({data?.total || 0})
-                </h3>
+                <h3 className="text-lg font-medium text-gray-900">Reviews ({data?.total || 0})</h3>
                 <p className="text-sm text-gray-500">Manage customer reviews</p>
               </div>
             </div>
@@ -289,15 +271,9 @@ export default function AdminReviewsPage() {
                 onToggleVerified={handleToggleVerified}
                 onDelete={handleDelete}
                 togglingVerifiedId={
-                  updateMutation.isPending
-                    ? (updateMutation.variables?.id ?? null)
-                    : null
+                  updateMutation.isPending ? (updateMutation.variables?.id ?? null) : null
                 }
-                deletingId={
-                  deleteMutation.isPending
-                    ? (deleteMutation.variables ?? null)
-                    : null
-                }
+                deletingId={deleteMutation.isPending ? (deleteMutation.variables ?? null) : null}
               />
             ) : !isLoading && data?.reviews && data.reviews.length === 0 ? (
               <EmptyState
@@ -343,12 +319,7 @@ interface RatingDropdownProps {
   className?: string;
 }
 
-const RatingDropdown = ({
-  value,
-  onChange,
-  options,
-  className = "",
-}: RatingDropdownProps) => {
+const RatingDropdown = ({ value, onChange, options, className = "" }: RatingDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -368,8 +339,7 @@ const RatingDropdown = ({
     setIsOpen(false);
   };
 
-  const selectedOption =
-    options.find((opt) => opt.value === value) || options[0];
+  const selectedOption = options.find((opt) => opt.value === value) || options[0];
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
@@ -395,9 +365,7 @@ const RatingDropdown = ({
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex items-center gap-2 ${
-                value === option.value
-                  ? "bg-gray-100 text-primary-500"
-                  : "text-gray-700"
+                value === option.value ? "bg-gray-100 text-primary-500" : "text-gray-700"
               }`}
             >
               <span className="text-sm">{option.label}</span>

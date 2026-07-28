@@ -1,6 +1,7 @@
-import { PageHeading } from "@/components/page-heading";
-import { SizeGuide } from "@/components/size-guide";
 import type { Metadata } from "next";
+
+import { PageHeading } from "@/shared/components/PageHeading";
+import { SizeGuide } from "@/shared/components/SizeGuide";
 
 export const metadata: Metadata = {
   title: "Ring Size Guide",

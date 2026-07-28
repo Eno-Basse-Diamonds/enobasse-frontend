@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import AuthSection from "../_components/auth-section";
+
+import AuthSection from "@/app/(auth)/_components/AuthSection";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
@@ -21,8 +22,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Forgot Password - Eno Bassé Diamonds",
-    description:
-      "We'll help you securely regain access to your jewelry account.",
+    description: "We'll help you securely regain access to your jewelry account.",
   },
   alternates: {
     canonical: "https://enobasse.com/forgot-password",

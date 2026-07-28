@@ -1,13 +1,22 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+
+import axios from "axios";
 import { z } from "zod";
-import { logger } from "@/lib/utils/logger";
-import { API_URL } from "@/lib/utils/constants/api-url";
 
-const EmailSchema = z
-  .string()
-  .email({ message: "Please enter a valid email address" });
+import { API_URL } from "@/shared/constants/url";
+import { logger } from "@/shared/utils/logger";
 
+const EmailSchema = z.string().email({ message: "Please enter a valid email address" });
+
+/**
+ * Handles newsletter subscription requests.
+ *
+ * @description Validates the email, forwards the subscription to the backend
+ * API, and returns the appropriate response for success, duplicate, or error.
+ *
+ * @param request - The incoming Next.js request with an email in the body.
+ * @returns A JSON response indicating success, duplicate subscription, or error.
+ */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -15,10 +24,7 @@ export async function POST(request: NextRequest) {
 
     const emailValidation = EmailSchema.safeParse(email);
     if (!emailValidation.success) {
-      return NextResponse.json(
-        { error: "Please enter a valid email address" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Please enter a valid email address" }, { status: 400 });
     }
 
     try {
@@ -53,9 +59,6 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    return NextResponse.json(
-      { error: "Invalid request body" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 }

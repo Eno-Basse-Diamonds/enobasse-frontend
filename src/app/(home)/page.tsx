@@ -1,32 +1,26 @@
-import {
-  HydrationBoundary,
-  dehydrate,
-  QueryClient,
-} from "@tanstack/react-query";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
-import { AboutSection } from "./_components/about-section";
-import { BlogHeader } from "./_components/blog-header";
-import { BlogContent } from "./_components/blog-content";
-import { HelpSection } from "./_components/help-section";
-import { ServicesSection } from "./_components/services-section";
-import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
-import { getCollections } from "@/lib/api/collections";
-import { getHomepageSettings } from "@/lib/api/homepage-settings";
-import { HeroSection } from "@/components/hero-section";
-import { SectionContainer } from "@/components/section-container";
-import { SectionHeading } from "@/components/section-heading";
-import { Carousel } from "@/components/carousel";
-import { BentoGrid } from "@/components/bento-grid";
-import {
-  CTASection,
-  RingCustomizationCTASection,
-} from "@/components/cta-section";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getPublishedBlogPosts } from "@/modules/blog/api";
+import { getCollections } from "@/modules/collections/api";
+import { getHomepageSettings } from "@/modules/home/api";
+import { BentoGrid } from "@/app/(home)/_components/BentoGrid";
+import { CTASection, RingCustomizationCTASection } from "@/app/(home)/_components/CTASection";
+import { HeroSection } from "@/app/(home)/_components/HeroSection";
+import { Carousel } from "@/shared/components/Carousel";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { SectionHeading } from "@/shared/components/SectionHeading";
+import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
+
+import { AboutSection } from "./_components/AboutSection";
+import { BlogContent } from "./_components/BlogContent";
+import { BlogHeader } from "./_components/BlogHeader";
+import { HelpSection } from "./_components/HelpSection";
+import { ServicesSection } from "./_components/ServicesSection";
 
 /** Default carousel items (shown in the "Explore Eno Bassé" carousel) */
 const defaultCarouselItems = [
   {
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
+    image: "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
     alt: "White gold diamond ring",
     title: "Rings",
     href: "/collections/rings",
@@ -39,29 +33,25 @@ const defaultCarouselItems = [
     href: "/collections/engagement-rings",
   },
   {
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
+    image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/earrings_rw9wkx.webp",
     alt: "White gold diamond earrings",
     title: "Earrings",
     href: "/collections/earrings",
   },
   {
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
+    image: "https://res.cloudinary.com/enobasse/image/upload/v1756512325/pendants_icgsmi.webp",
     alt: "White gold diamond cross pendant",
     title: "Pendants",
     href: "/collections/pendants",
   },
   {
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
+    image: "https://res.cloudinary.com/enobasse/image/upload/v1756512323/necklaces_igeblg.webp",
     alt: "White gold diamond necklace",
     title: "Necklace",
     href: "/collections/necklace",
   },
   {
-    image:
-      "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
+    image: "https://res.cloudinary.com/enobasse/image/upload/v1756512322/bracelets_g5lb4h.webp",
     alt: "White gold diamond bracelets",
     title: "Bracelets",
     href: "/collections/bracelets",
@@ -166,7 +156,7 @@ export default async function HomePage() {
         (c) =>
           c.slug === item.id ||
           (item.id === "pearls" && c.slug === "pearls-collection") ||
-          c.slug === item.href.split("/").pop()
+          c.slug === item.href.split("/").pop(),
       );
       if (match) {
         return {
@@ -185,9 +175,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <BreadcrumbSchema
-        items={[{ name: "Home", item: "https://enobasse.com" }]}
-      />
+      <BreadcrumbSchema items={[{ name: "Home", item: "https://enobasse.com" }]} />
       <HeroSection
         videoMp4Url={heroVideoMp4Url}
         videoWebmUrl={heroVideoWebmUrl}
@@ -220,10 +208,7 @@ export default async function HomePage() {
       <RingCustomizationCTASection />
 
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <SectionContainer
-          id="blog"
-          className="bg-[#D1A559]/20 px-4 lg:px-8 py-8 lg:py-16"
-        >
+        <SectionContainer id="blog" className="bg-[#D1A559]/20 px-4 lg:px-8 py-8 lg:py-16">
           <BlogHeader />
           <BlogContent />
         </SectionContainer>
@@ -232,7 +217,7 @@ export default async function HomePage() {
       <HelpSection
         title="Need Help?"
         body={[
-          "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Bassé team is here to assist you every step of the way. We offer consultation services to assist clients in finding the right gemstones to suit their needs.",
+          "Selecting the perfect stone and jewellery design is not the easiest task which is why the Eno Bassé team is here to assist you every step of the way. We offer consultation services to assist clients in finding the right GEMSTONES to suit their needs.",
           "Every piece of jewellery tells a story… From glittering necklaces to radiant rings, we lead you to the perfect jewellery to tell your story, the best expression of you. Our team consists of artisans with over 50 years of experience and a wide range of expertise who are eager to help you find and design the perfect piece.",
         ]}
         button={{ text: "Contact Us", href: "/contact" }}
@@ -245,7 +230,7 @@ export default async function HomePage() {
       <AboutSection
         title="Company Profile"
         description={[
-          "Eno Bassé was founded with the vision of procuring gemstones to create gorgeous, one-of-a-kind jewellery. Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
+          "Eno Bassé was founded with the vision of procuring GEMSTONES to create gorgeous, one-of-a-kind jewellery. Each piece is a true work of art made with the world's finest and most precious gems. We have access to over 1.5 million GIA certified diamonds, which are embodied in our stunning creations.",
         ]}
         button={{ text: "About Us", href: "/about" }}
         image={{

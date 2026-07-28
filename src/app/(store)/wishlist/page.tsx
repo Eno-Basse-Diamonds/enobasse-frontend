@@ -1,22 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { WishlistHeader } from "./_components/wishlist-header";
-import { WishlistItem } from "./_components/wishlist-item";
-import { useWishlistStore } from "@/lib/store/wishlist";
-import { useAccountStore } from "@/lib/store/account";
-import { EmptyState } from "@/components/empty-state";
-import { SectionContainer } from "@/components/section-container";
-import { HeartIcon } from "@/components/icons/heart";
-import { WishlistLoader } from "@/components/loaders/wishlist";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { useAccountStore } from "@/modules/account/store";
+import { useWishlistStore } from "@/modules/wishlist/store";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { HeartIcon } from "@/shared/components/icons/Heart";
+import { WishlistLoader } from "@/shared/components/loaders/Wishlist";
+
+import { WishlistHeader } from "./_components/WishlistHeader";
+import { WishlistItem } from "./_components/WishlistItem";
 
 export default function WishlistPage() {
   const { data: session } = useSession();
   const { preferredCurrency, isHydrated } = useAccountStore();
-  const { clear, items, hydrated, hydrate, loading, refreshWithCurrency } =
-    useWishlistStore();
+  const { clear, items, hydrated, hydrate, loading, refreshWithCurrency } = useWishlistStore();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
@@ -86,11 +87,7 @@ export default function WishlistPage() {
             <div className="bg-white overflow-hidden">
               <ul role="list" className="divide-y divide-gray-100">
                 {items.map((item) => (
-                  <WishlistItem
-                    key={item.id}
-                    item={item}
-                    currentCurrency={preferredCurrency}
-                  />
+                  <WishlistItem key={item.id} item={item} currentCurrency={preferredCurrency} />
                 ))}
               </ul>
             </div>

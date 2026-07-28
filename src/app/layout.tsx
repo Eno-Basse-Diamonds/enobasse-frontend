@@ -1,16 +1,19 @@
 import { Metadata } from "next";
-import Script from "next/script";
-import { Lora, Gantari, Dancing_Script } from "next/font/google";
-import { QueryProvider } from "../lib/providers/query-provider";
 import { getServerSession } from "next-auth";
-import SessionProvider from "@/lib/providers/session-provider";
-import { AppAlert } from "@/components/alert";
+import { Dancing_Script, Gantari, Lora } from "next/font/google";
+import Script from "next/script";
+
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { GoogleAnalytics } from "@/components/google-analytics";
-import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
-import { WebSiteSchema } from "@/components/seo/WebSiteSchema";
-import { domAnimation, LazyMotion } from "motion/react";
+import { LazyMotion, domAnimation } from "motion/react";
+
+import { AppAlert } from "@/shared/components/Alert";
+import { GoogleAnalytics } from "@/shared/components/GoogleAnalytics";
+import { OrganizationSchema } from "@/shared/components/seo/OrganizationSchema";
+import { WebSiteSchema } from "@/shared/components/seo/WebSiteSchema";
+import { QueryProvider } from "@/shared/providers/QueryProvider";
+
+import SessionProvider from "@/shared/providers/SessionProvider";
 import "./globals.scss";
 
 const lora = Lora({
@@ -33,8 +36,7 @@ const dancingScript = Dancing_Script({
 
 export const metadata: Metadata = {
   title: {
-    default:
-      "Eno Bassé Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
+    default: "Eno Bassé Diamonds - Handcrafted Fine Jewelry & Diamond Collections",
     template: "%s - Eno Bassé Diamonds",
   },
   description:

@@ -1,11 +1,9 @@
-import { WhatsAppButton } from "@/components/button";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { PrivacyConsent } from "@/components/privacy-consent";
+import { WhatsAppButton } from "@/shared/components/Button";
+import { Footer } from "@/shared/components/Footer";
+import { Header } from "@/shared/components/Header";
+import { PrivacyConsent } from "@/shared/components/PrivacyConsent";
 
-export default function Layout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <Header />

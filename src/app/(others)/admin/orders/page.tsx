@@ -1,17 +1,20 @@
 "use client";
 
-import * as React from "react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+
 import { Search } from "lucide-react";
-import { AdminHeader } from "../_components/admin-header";
-import { useAdminOrders } from "@/lib/hooks/use-orders";
-import { AdminFilterSortPanel } from "../_components/admin-filter-sort-panel";
-import { Order } from "@/lib/types/orders";
-import { OrdersTable } from "./_components/orders-table";
-import { OrderModal } from "./_components/order-modal";
-import { Alert } from "@/components/alert";
-import { Pagination } from "@/components/pagination";
+
+import { AdminFilterSortPanel } from "@/app/(others)/admin/_components/AdminFilterSortPanel";
+import { AdminHeader } from "@/app/(others)/admin/_components/AdminHeader";
+import { useAdminOrders } from "@/modules/orders/hooks";
+import { Order } from "@/modules/orders/types";
+import { Alert } from "@/shared/components/Alert";
+import { Pagination } from "@/shared/components/Pagination";
+
+import { OrderModal } from "./_components/OrderModal";
+import { OrdersTable } from "./_components/OrdersTable";
 
 export default function AdminOrdersPage() {
   const { data: session } = useSession();
@@ -30,8 +33,7 @@ export default function AdminOrdersPage() {
   const currentSearch = searchParams.get("search") || "";
   const currentStatus = searchParams.get("status") || "";
   const currentSort = searchParams.get("sortBy") || "createdAt";
-  const currentSortOrder =
-    (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
+  const currentSortOrder = (searchParams.get("sortOrder") as "ASC" | "DESC") || "DESC";
   const perPage = Number(searchParams.get("perPage")) || 10;
 
   const { data, isLoading } = useAdminOrders({
@@ -62,7 +64,7 @@ export default function AdminOrdersPage() {
       });
       router.push(`/admin/orders?${params.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const [inputValue, setInputValue] = React.useState("");
@@ -133,12 +135,8 @@ export default function AdminOrdersPage() {
       <div className="flex-1 p-4 sm:p-6 lg:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">
-              Orders ({data?.total || 0})
-            </h3>
-            <p className="text-sm text-gray-500">
-              Search by shortId, filter by status
-            </p>
+            <h3 className="text-lg font-medium text-gray-900">Orders ({data?.total || 0})</h3>
+            <p className="text-sm text-gray-500">Search by shortId, filter by status</p>
           </div>
         </div>
 
@@ -198,12 +196,7 @@ export default function AdminOrdersPage() {
         )}
       </div>
 
-      {selectedOrder && (
-        <OrderModal
-          order={selectedOrder}
-          onClose={() => setSelectedOrder(null)}
-        />
-      )}
+      {selectedOrder && <OrderModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
     </>
   );
 }

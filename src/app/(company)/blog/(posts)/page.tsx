@@ -1,13 +1,15 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+
 import { SearchSlashIcon } from "lucide-react";
-import { usePublishedBlogPosts } from "@/lib/hooks/use-blog";
-import { BlogSection } from "@/components/blog-section";
-import { EmptyState } from "@/components/empty-state";
-import { Pagination } from "@/components/pagination";
-import { SectionContainer } from "@/components/section-container";
-import { BlogSectionSkeletonLoader } from "@/components/loaders/blog";
+
+import { BlogSection } from "@/shared/components/BlogSection";
+import { usePublishedBlogPosts } from "@/modules/blog/hooks";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Pagination } from "@/shared/components/Pagination";
+import { SectionContainer } from "@/shared/components/SectionContainer";
+import { BlogSectionSkeletonLoader } from "@/shared/components/loaders/Blog";
 
 export default function BlogPage() {
   const searchParams = useSearchParams();
@@ -43,10 +45,7 @@ export default function BlogPage() {
         </h2>
         <BlogSection posts={posts} />
       </SectionContainer>
-      <div
-        aria-label="Blog pagination"
-        className="mt-12 md:mt-16 lg:mt-20 px-4 sm:px-6"
-      >
+      <div aria-label="Blog pagination" className="mt-12 md:mt-16 lg:mt-20 px-4 sm:px-6">
         <Pagination
           currentPage={page}
           totalPages={totalPages}

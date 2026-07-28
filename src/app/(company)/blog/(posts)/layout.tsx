@@ -1,13 +1,11 @@
 import { Metadata } from "next";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
 import { ReactNode, Suspense } from "react";
-import { PageHeading } from "@/components/page-heading";
-import { BlogSectionSkeletonLoader } from "@/components/loaders/blog";
+
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+
+import { getPublishedBlogPosts } from "@/modules/blog/api";
+import { PageHeading } from "@/shared/components/PageHeading";
+import { BlogSectionSkeletonLoader } from "@/shared/components/loaders/Blog";
 
 export const metadata: Metadata = {
   title: "Our Blog",
@@ -40,9 +38,7 @@ interface BlogPageLayoutProps {
   children: ReactNode;
 }
 
-export default async function BlogPageLayout({
-  children,
-}: BlogPageLayoutProps) {
+export default async function BlogPageLayout({ children }: BlogPageLayoutProps) {
   const page = 1;
   const perPage = 9;
   const queryClient = new QueryClient();

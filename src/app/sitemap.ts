@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getProducts } from "@/lib/api/products";
-import { getCollections } from "@/lib/api/collections";
-import { getPublishedBlogPosts } from "@/lib/api/blog-posts";
-import { logger } from "@/lib/utils/logger";
+
+import { getPublishedBlogPosts } from "@/modules/blog/api";
+import { getCollections } from "@/modules/collections/api";
+import { getProducts } from "@/modules/products/api";
+import { logger } from "@/shared/utils/logger";
 
 const BASE_URL = "https://enobasse.com";
 
@@ -63,6 +64,15 @@ async function getAllPublishedBlogPosts() {
   return posts;
 }
 
+/**
+ * Generates the sitemap XML for SEO.
+ *
+ * @description Builds sitemap entries for static routes, products, collections,
+ * and blog posts. Dynamic entries are fetched concurrently and errors for each
+ * category are handled independently.
+ *
+ * @returns Array of sitemap entries.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
     url: `${BASE_URL}${route.path}`,
@@ -73,16 +83,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [productEntries, collectionEntries, blogEntries] = await Promise.all([
     getAllProducts()
       .then((products) =>
-        products.map(
-          (product): MetadataRoute.Sitemap[number] => ({
-            url: `${BASE_URL}/products/${product.slug}`,
-            lastModified: product.createdAt
-              ? new Date(product.createdAt)
-              : undefined,
-            changeFrequency: "weekly",
-            priority: 0.8,
-          }),
-        ),
+        products.map((product): MetadataRoute.Sitemap[number] => ({
+          url: `${BASE_URL}/products/${product.slug}`,
+          lastModified: product.createdAt ? new Date(product.createdAt) : undefined,
+          changeFrequency: "weekly",
+          priority: 0.8,
+        })),
       )
       .catch((error) => {
         logger.error("sitemap: failed to fetch products", error);
@@ -92,13 +98,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .then((collections) =>
         collections
           .filter((collection) => collection.published)
-          .map(
-            (collection): MetadataRoute.Sitemap[number] => ({
-              url: `${BASE_URL}/collections/${collection.slug}`,
-              changeFrequency: "weekly",
-              priority: 0.8,
-            }),
-          ),
+          .map((collection): MetadataRoute.Sitemap[number] => ({
+            url: `${BASE_URL}/collections/${collection.slug}`,
+            changeFrequency: "weekly",
+            priority: 0.8,
+          })),
       )
       .catch((error) => {
         logger.error("sitemap: failed to fetch collections", error);
@@ -106,14 +110,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
     getAllPublishedBlogPosts()
       .then((posts) =>
-        posts.map(
-          (post): MetadataRoute.Sitemap[number] => ({
-            url: `${BASE_URL}/blog/${post.slug}`,
-            lastModified: post.updatedAt || post.createdAt,
-            changeFrequency: "monthly",
-            priority: 0.6,
-          }),
-        ),
+        posts.map((post): MetadataRoute.Sitemap[number] => ({
+          url: `${BASE_URL}/blog/${post.slug}`,
+          lastModified: post.updatedAt || post.createdAt,
+          changeFrequency: "monthly",
+          priority: 0.6,
+        })),
       )
       .catch((error) => {
         logger.error("sitemap: failed to fetch blog posts", error);
@@ -121,10 +123,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
   ]);
 
-  return [
-    ...staticEntries,
-    ...productEntries,
-    ...collectionEntries,
-    ...blogEntries,
-  ];
+  return [...staticEntries, ...productEntries, ...collectionEntries, ...blogEntries];
 }
