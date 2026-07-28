@@ -96,7 +96,7 @@ export const BlogHeroImage = ({
 
   return (
     <>
-      <div className="hidden sm:block relative w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] overflow-hidden">
+      <div className="hidden sm:block relative w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] overflow-hidden bg-gray-100">
         {imageError ? (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">
             <ImageIcon className="w-12 h-12 text-gray-400" />
@@ -119,7 +119,7 @@ export const BlogHeroImage = ({
       </div>
 
       <div className="sm:hidden">
-        <div className="relative w-full h-[200px] overflow-hidden">
+        <div className="relative w-full h-[200px] overflow-hidden bg-gray-100">
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center bg-gray-100">
               <ImageIcon className="w-8 h-8 text-gray-400" />
