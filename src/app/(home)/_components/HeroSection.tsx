@@ -4,11 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface HeroSectionProps {
-  /** Cloudinary URL for the hero video – MP4 (H.264) */
   videoMp4Url?: string | null;
-  /** Cloudinary URL for the hero video – WebM (VP9) */
   videoWebmUrl?: string | null;
-  /** Cloudinary URL for the video poster (first frame) */
   posterUrl?: string | null;
 }
 
@@ -39,7 +36,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Static poster shown until the video can play */}
       {posterUrl ? (
         // Dynamic poster from the admin-uploaded video
-
         <img
           src={posterUrl}
           alt="Hero Background"
@@ -50,7 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       ) : (
         // Fallback poster used during development / before admin upload
         <Image
-          src={"/images/Hero-Poster.webp"}
+          src={"/images/hero/hero.webp"}
           alt="Hero Background"
           fill
           priority
@@ -76,19 +72,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <source src={webmSrc} type="video/webm" />
         <source src={mp4Src} type="video/mp4" />
       </video>
-
-      {/* Gradient overlay to make content on top readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70" />
-
-      {/* Text content positioned at the bottom */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-10 md:bottom-20 w-full px-6 text-white text-center">
-        <h1 className="font-primary text-3xl md:text-5xl lg:text-6xl font-semibold mb-4 tracking-wide">
-          Enobasse
-        </h1>
-        <p className="font-light text-lg md:text-xl lg:text-2xl max-w-2xl mx-auto">
-          Timeless jewellery crafted from diamonds, gemstones, gold and silver.
-        </p>
-      </div>
     </div>
   );
 };

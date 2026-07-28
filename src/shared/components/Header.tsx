@@ -858,18 +858,18 @@ export const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
 
   return (
     <nav className="header__utility-nav" aria-label="Utility navigation">
-      <ul className="flex items-center gap-4">
+      <ul className="header__utility-nav-list">
         {navItems.map((item) => (
-          <li key={item.id} className="relative group">
+          <li key={item.id} className="header__utility-nav-item relative group">
             {item.href ? (
               <Link
                 href={item.href}
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="header__utility-nav-link"
               >
                 {item.title}
               </Link>
             ) : (
-              <span className="text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">
+              <span className="header__utility-nav-link cursor-pointer">
                 {item.title}
               </span>
             )}
@@ -879,7 +879,7 @@ export const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
                   <li key={subItem.label}>
                     <Link
                       href={subItem.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      className="block px-4 py-2 text-sm text-[#502B3A] hover:bg-gray-50"
                     >
                       {subItem.label}
                     </Link>
@@ -890,10 +890,10 @@ export const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
           </li>
         ))}
         {!isLoading && user?.isAdmin && (
-          <li>
+          <li className="header__utility-nav-item">
             <Link
               href="/admin"
-              className="text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+              className="header__utility-nav-link"
             >
               Admin
             </Link>

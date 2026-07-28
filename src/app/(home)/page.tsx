@@ -17,7 +17,6 @@ import { BlogHeader } from "./_components/BlogHeader";
 import { HelpSection } from "./_components/HelpSection";
 import { ServicesSection } from "./_components/ServicesSection";
 
-/** Default carousel items (shown in the "Explore Eno Bassé" carousel) */
 const defaultCarouselItems = [
   {
     image: "https://res.cloudinary.com/enobasse/image/upload/v1762268753/rings_gppaxg.webp",
@@ -58,7 +57,6 @@ const defaultCarouselItems = [
   },
 ];
 
-/** Fallback bento items used when no featured collections are configured */
 const defaultBentoItems = [
   {
     id: "bamboo-collection",
@@ -108,18 +106,15 @@ export default async function HomePage() {
     queryFn: () => getPublishedBlogPosts(page, perPage),
   });
 
-  // ── Fetch homepage settings & all published collections in parallel ──────────
   const [homepageSettings, dbCollections] = await Promise.all([
     getHomepageSettings().catch(() => null),
     getCollections().catch(() => []),
   ]);
 
-  // ── Hero video URLs (from admin settings, or null = static fallback) ─────────
   const heroVideoMp4Url = homepageSettings?.heroVideoMp4Url ?? null;
   const heroVideoWebmUrl = homepageSettings?.heroVideoWebmUrl ?? null;
   const heroVideoPosterUrl = homepageSettings?.heroVideoPosterUrl ?? null;
 
-  // ── Bento grid: use admin-ordered featured slugs when available ───────────────
   let bentoItems = defaultBentoItems;
 
   const featuredSlugs = homepageSettings?.featuredCollectionSlugs;
