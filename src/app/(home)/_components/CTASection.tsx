@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { BLUR_DATA_URL } from "@/shared/constants/url";
-
 interface CTASectionProps {
   heading: string;
   button: { text: string; href: string };
@@ -58,8 +56,6 @@ export const CTASection: React.FC<CTASectionProps> = ({ heading, button, image }
           fill
           sizes="(max-width: 1023px) 100vw, 50vw"
           className="w-full h-full object-cover"
-          placeholder="blur"
-          blurDataURL={BLUR_DATA_URL}
         />
       </figure>
     </section>

@@ -16,7 +16,6 @@ import { handleSignUp } from "@/modules/auth/actions";
 import { login } from "@/modules/auth/api";
 import { BackButton } from "@/shared/components/Button";
 import { Input, PasswordInput } from "@/shared/components/Input";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 import { useAlertStore } from "@/shared/store/alert";
 
 interface AuthFormField {
@@ -121,7 +120,7 @@ export default function AuthSection({
 
       setIsAuthenticated(true);
       setAccount({ email: formData.email });
-      router.push("/Account");
+      router.push("/account");
     },
     "sign-in": async (formData) => {
       const { accessToken, account } = await login(formData.email, formData.password);
@@ -142,7 +141,7 @@ export default function AuthSection({
         if (updatedSession?.user?.isAdmin) {
           router.push("/admin/dashboard");
         } else {
-          router.push("/Account");
+          router.push("/account");
         }
       }
     },
@@ -304,11 +303,8 @@ export default function AuthSection({
           alt="Auth page hero image"
           fill
           className="object-cover"
-          priority={true}
-          loading="eager"
+          priority
           sizes="(max-width: 1024px) 100vw, 60vw"
-          placeholder="blur"
-          blurDataURL={BLUR_DATA_URL}
         />
 
         <Link href="/" className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
@@ -317,9 +313,8 @@ export default function AuthSection({
             alt="Brand Logo"
             width={250}
             height={100}
-            className="h-auto w-24 sm:w-32"
-            priority={true}
-            loading="eager"
+            className="h-auto w-24 sm:w-32 bg-transparent"
+            priority
             sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 250px"
           />
         </Link>
@@ -337,9 +332,8 @@ export default function AuthSection({
                 alt="Brand Logo"
                 width={120}
                 height={40}
-                className="h-auto"
-                priority={true}
-                loading="eager"
+                className="h-auto bg-transparent"
+                priority
               />
             </Link>
           </div>

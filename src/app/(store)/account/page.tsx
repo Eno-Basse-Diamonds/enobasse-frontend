@@ -131,8 +131,8 @@ export default function CustomerAccountPage() {
 
   const linkItems: NavigationItem[] = [
     { id: "orders", label: "Order History", icon: Package, href: "/orders" },
-    { id: "wishlist", label: "Wishlist", icon: Heart, href: "/Wishlist" },
-    { id: "cart", label: "Cart", icon: ShoppingCart, href: "/Cart" },
+    { id: "wishlist", label: "Wishlist", icon: Heart, href: "/wishlist" },
+    { id: "cart", label: "Cart", icon: ShoppingCart, href: "/cart" },
     {
       id: "forgot-password",
       label: "Forgot Password",

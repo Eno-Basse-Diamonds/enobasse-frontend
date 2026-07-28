@@ -12,6 +12,7 @@ export default function Loading() {
             alt="Logo"
             width={32}
             height={32}
+            className="bg-transparent"
             priority
           />
         </div>

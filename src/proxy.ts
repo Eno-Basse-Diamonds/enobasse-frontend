@@ -23,7 +23,7 @@ export async function proxy(req: NextRequest) {
     });
 
     if (token) {
-      const redirectUrl = token.isAdmin ? "/admin/dashboard" : "/Account";
+      const redirectUrl = token.isAdmin ? "/admin/dashboard" : "/account";
       return NextResponse.redirect(new URL(redirectUrl, req.url));
     }
     return NextResponse.next();

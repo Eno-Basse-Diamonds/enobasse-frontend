@@ -129,8 +129,7 @@ export default function ProductPage() {
 
   const hasOutOfStockSelection = selectedLetters.some((l) => MOCK_AVAILABILITY[l] === false);
 
-  const isOutOfStock =
-    selectedVariant?.inventory?.inStock === false || selectedVariant?.inventory?.quantity === 0;
+  const isOutOfStock = selectedVariant?.inventory?.inStock === false;
 
   // Calculate Amora collection price
   const letterPrice = product?.priceRange?.min ?? 0;
@@ -458,11 +457,9 @@ export default function ProductPage() {
                     />
                   )}
                 </div>
-                {product.isCustomDesign && selectedVariant?.price === 0 ? (
+                {product.isCustomDesign || selectedVariant?.price === 0 ? (
                   <div>
-                    <p className="text-[#502B3A] text-xl font-semibold">
-                      Price available upon request
-                    </p>
+                    <p className="text-[#502B3A] text-xl font-semibold">Contact us for pricing</p>
                     <p className="text-[#502B3A]/60 text-base">
                       You can request a quote using the link below or by calling by phone.
                     </p>

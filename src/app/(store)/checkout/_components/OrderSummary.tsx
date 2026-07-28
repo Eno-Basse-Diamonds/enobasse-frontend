@@ -141,7 +141,7 @@ export function OrderSummary({
 
           <div className="mt-4 text-center text-sm text-[#502B3A]/70">
             or{" "}
-            <Link href="/Cart" className="font-medium text-[#502B3A] hover:text-[#D1A559]">
+            <Link href="/cart" className="font-medium text-[#502B3A] hover:text-[#D1A559]">
               Return to Cart
             </Link>
           </div>

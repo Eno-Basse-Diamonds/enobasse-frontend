@@ -114,6 +114,7 @@ export default function OrderHistoryPage() {
                               fill
                               className="size-full object-cover"
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 24vw"
+                              loading="lazy"
                             />
                           ) : (
                             <ShoppingBagIcon className="w-12 h-12 text-gray-400" />

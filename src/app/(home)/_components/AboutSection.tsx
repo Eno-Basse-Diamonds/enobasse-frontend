@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { BLUR_DATA_URL } from "@/shared/constants/url";
-
 interface AboutSectionProps {
   title: string;
   description: string[];
@@ -47,8 +45,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           width={600}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
           className="rounded-sm w-full h-auto"
-          placeholder="blur"
-          blurDataURL={BLUR_DATA_URL}
         />
       </figure>
     </section>

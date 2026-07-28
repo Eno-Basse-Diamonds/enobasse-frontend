@@ -9,7 +9,6 @@ import { handleRequestResetPassword, handleResetCode } from "@/modules/account/a
 import { useAccountStore } from "@/modules/account/store";
 import { BackButton } from "@/shared/components/Button";
 import { OtpInput } from "@/shared/components/Input";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 import { useAlertStore } from "@/shared/store/alert";
 
 interface PasswordResetCodeSectionProps {
@@ -148,11 +147,8 @@ export default function PasswordResetCodeSection({
           alt="Password reset hero image"
           fill
           className="object-cover"
-          priority={true}
-          loading="eager"
+          priority
           sizes="(max-width: 1024px) 100vw, 60vw"
-          placeholder="blur"
-          blurDataURL={BLUR_DATA_URL}
         />
 
         <Link href="/" className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
@@ -161,9 +157,8 @@ export default function PasswordResetCodeSection({
             alt="Brand Logo"
             width={250}
             height={100}
-            className="h-auto w-24 sm:w-32"
-            priority={true}
-            loading="eager"
+            className="h-auto w-24 sm:w-32 bg-transparent"
+            priority
             sizes="(max-width: 640px) 96px, (max-width: 768px) 128px, 250px"
           />
         </Link>
@@ -181,9 +176,8 @@ export default function PasswordResetCodeSection({
                 alt="Brand Logo"
                 width={120}
                 height={40}
-                className="h-auto"
-                priority={true}
-                loading="eager"
+                className="h-auto bg-transparent"
+                priority
               />
             </Link>
           </div>

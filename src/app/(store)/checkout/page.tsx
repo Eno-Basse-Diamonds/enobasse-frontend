@@ -86,7 +86,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!hydrated) return;
     if (cartItems.length === 0 && !isProcessingPayment) {
-      router.replace("/Cart");
+      router.replace("/cart");
     }
   }, [cartItems, router, isProcessingPayment, hydrated]);
 

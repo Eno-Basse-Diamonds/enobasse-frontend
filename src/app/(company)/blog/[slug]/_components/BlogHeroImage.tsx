@@ -10,7 +10,6 @@ import { FacebookIcon } from "@/shared/components/icons/Facebook";
 import { InstagramIcon } from "@/shared/components/icons/Instagram";
 import { TiktokIcon } from "@/shared/components/icons/Tiktok";
 import { XIcon } from "@/shared/components/icons/X";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 
 interface BlogHeroImageProps {
   src: string;
@@ -110,10 +109,7 @@ export const BlogHeroImage = ({
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             priority
-            loading="eager"
             onError={() => setImageError(true)}
-            placeholder="blur"
-            blurDataURL={BLUR_DATA_URL}
           />
         )}
         <p className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 md:bottom-8 md:left-8 text-primary-300 text-xs sm:text-sm md:text-base font-light bg-white p-2 sm:p-3 shadow">
@@ -136,10 +132,7 @@ export const BlogHeroImage = ({
               className="object-cover"
               sizes="100vw"
               priority
-              loading="eager"
               onError={() => setImageError(true)}
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
             />
           )}
         </div>

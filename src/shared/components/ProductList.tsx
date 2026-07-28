@@ -11,6 +11,7 @@ import * as motion from "motion/react-client";
 
 import { useAccountStore } from "@/modules/account/store";
 import { Product } from "@/modules/products/types";
+import { isProductCustomDesign } from "@/modules/products/utils";
 import { useWishlistStore } from "@/modules/wishlist/store";
 import { ProductQuickView } from "@/shared/components/ProductQuickView";
 import { EyeOpenIcon } from "@/shared/components/icons/EyeOpen";
@@ -64,6 +65,7 @@ const ProductListItem = React.memo(
 
     const { isMobile } = useMobileDetection();
     const isHoverDevice = !isMobile;
+    const isCustom = isProductCustomDesign(product);
 
     return (
       <motion.div
@@ -101,7 +103,7 @@ const ProductListItem = React.memo(
             )}
             <Image
               src={product.images[0].url}
-              alt={product.images[0].alt}
+              alt={product.images[0]?.alt || product.name || "Product image"}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className={`object-cover bg-gray-100 transition-opacity duration-500 ${
@@ -139,7 +141,7 @@ const ProductListItem = React.memo(
                 )}
                 <Image
                   src={product.images[1].url}
-                  alt={product.images[1].alt}
+                  alt={product.images[1]?.alt || product.name || "Product image"}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -149,25 +151,25 @@ const ProductListItem = React.memo(
             )}
             {product.variants &&
             product.variants.length > 0 &&
-            product.variants.every(
-              (v) => v.inventory?.inStock === false || v.inventory?.quantity === 0,
-            ) ? (
+            product.variants.every((v) => v.inventory?.inStock === false) ? (
               <span className="absolute bottom-2 right-2 z-10 bg-red-600 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white uppercase">
                 Sold
               </span>
+            ) : isCustom ? (
+              <span className="absolute bottom-2 right-2 z-10 bg-primary-500 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white">
+                Custom Design
+              </span>
             ) : (
-              !product.isCustomDesign && (
-                <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white">
-                  In Store
-                </span>
-              )
+              <span className="absolute bottom-2 right-2 z-10 bg-secondary-500 px-3 py-1 text-[10px] sm:text-xs font-semibold text-white">
+                In Store
+              </span>
             )}
           </div>
 
           <motion.div className="mt-4 flex flex-grow flex-col">
             <h3 className="mb-1 flex-grow text-sm text-gray-700">{product.name}</h3>
             <p className="mt-auto text-sm font-medium text-gray-900">
-              {product.isCustomDesign && product.priceRange.min === 0
+              {isCustom
                 ? "Contact us for pricing"
                 : product.priceRange.min === product.priceRange.max
                   ? `${getCurrencySymbol(

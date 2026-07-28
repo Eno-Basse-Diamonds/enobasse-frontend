@@ -23,6 +23,7 @@ export const SizeGuide: React.FC = () => {
                 alt="Eno Bassé Diamonds Logo"
                 height={30}
                 width={30}
+                className="bg-transparent"
               />
             </div>
             <h4 className="font-primary text-lg font-semibold text-gray-800">Eno Bassé Diamonds</h4>

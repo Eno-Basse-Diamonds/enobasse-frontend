@@ -82,9 +82,11 @@ export const ProductList = memo(function ProductList({
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-primary-400">Price Range:</span>
                   <span className="font-medium text-secondary-500">
-                    {hasSamePrice
-                      ? `${currencySymbol}${product.priceRange.min.toLocaleString()}`
-                      : `${currencySymbol}${product.priceRange.min.toLocaleString()} - ${currencySymbol}${product.priceRange.max.toLocaleString()}`}
+                    {product.isCustomDesign || product.priceRange.min === 0
+                      ? "Contact us for pricing"
+                      : hasSamePrice
+                        ? `${currencySymbol}${product.priceRange.min.toLocaleString()}`
+                        : `${currencySymbol}${product.priceRange.min.toLocaleString()} - ${currencySymbol}${product.priceRange.max.toLocaleString()}`}
                   </span>
                 </div>
                 {product.isCustomDesign && (

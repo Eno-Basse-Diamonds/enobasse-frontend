@@ -199,18 +199,18 @@ const UserActions: React.FC<UserActionsProps> = ({ onSearchClick }) => {
       onClick: onSearchClick,
     },
     {
-      href: "/Wishlist",
+      href: "/wishlist",
       label: "Wishlist",
       icon: <WishlistIcon />,
       showBadge: true,
     },
     {
-      href: "/Account",
+      href: "/account",
       label: "Account",
       icon: <AccountIcon />,
       showDot: !!session?.user,
     },
-    { href: "/Cart", label: "Cart", icon: <CartIcon />, showBadge: true },
+    { href: "/cart", label: "Cart", icon: <CartIcon />, showBadge: true },
   ];
 
   return (
@@ -862,16 +862,11 @@ export const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
         {navItems.map((item) => (
           <li key={item.id} className="header__utility-nav-item relative group">
             {item.href ? (
-              <Link
-                href={item.href}
-                className="header__utility-nav-link"
-              >
+              <Link href={item.href} className="header__utility-nav-link">
                 {item.title}
               </Link>
             ) : (
-              <span className="header__utility-nav-link cursor-pointer">
-                {item.title}
-              </span>
+              <span className="header__utility-nav-link cursor-pointer">{item.title}</span>
             )}
             {item.dropdownItems && item.dropdownItems.length > 0 && (
               <ul className="absolute top-full right-0 bg-white shadow-lg border min-w-[200px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
@@ -891,10 +886,7 @@ export const UtilityNav: React.FC<UtilityNavProps> = ({ navItems }) => {
         ))}
         {!isLoading && user?.isAdmin && (
           <li className="header__utility-nav-item">
-            <Link
-              href="/admin"
-              className="header__utility-nav-link"
-            >
+            <Link href="/admin" className="header__utility-nav-link">
               Admin
             </Link>
           </li>

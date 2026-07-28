@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 
 import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -48,9 +47,6 @@ export default function AboutUsPage() {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="w-full md:rounded-sm h-80 lg:h-96 object-cover bg-gray-100"
               priority
-              loading="eager"
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
             />
           </div>
           <div className="max-w-4xl mx-auto text-primary-400 leading-relaxed space-y-4">
@@ -84,8 +80,7 @@ export default function AboutUsPage() {
                 height={1000}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
+                loading="lazy"
               />
             </div>
 
@@ -136,8 +131,7 @@ export default function AboutUsPage() {
                     height={80}
                     sizes="(max-width: 768px) 50vw, 200px"
                     className="rounded-sm"
-                    placeholder="blur"
-                    blurDataURL={BLUR_DATA_URL}
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -170,8 +164,7 @@ export default function AboutUsPage() {
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto rounded-sm"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
+                loading="lazy"
               />
             </div>
           </div>
@@ -188,8 +181,7 @@ export default function AboutUsPage() {
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto rounded-sm"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
+                loading="lazy"
               />
             </div>
             <div className="space-y-6">
@@ -268,8 +260,7 @@ export default function AboutUsPage() {
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto rounded-sm"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
+                loading="lazy"
               />
             </div>
           </div>
@@ -286,8 +277,7 @@ export default function AboutUsPage() {
                 height={600}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto rounded-sm"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
+                loading="lazy"
               />
             </div>
 

@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { BLUR_DATA_URL } from "@/shared/constants/url";
-
 interface HelpSectionProps {
   title: string;
   body: string[];
@@ -22,8 +20,6 @@ export const HelpSection: React.FC<HelpSectionProps> = ({ title, body, button, i
           width={600}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
           className="rounded-sm w-full h-auto"
-          placeholder="blur"
-          blurDataURL={BLUR_DATA_URL}
         />
       </figure>
       <article className="px-4 md:px-0 mx-auto max-w-4xl flex flex-col items-start">

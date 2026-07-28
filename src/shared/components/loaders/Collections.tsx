@@ -1,16 +1,29 @@
+interface CollectionListLoaderProps {
+  count?: number;
+}
+
 /**
  * Collection list skeleton loader.
  *
- * @description Renders a pulsing grid with six card-sized blocks to indicate
- * the collection listing is loading.
+ * @description Renders a pulsing grid with card-sized blocks matching the exact
+ * 2-column mobile / 3-column desktop CollectionCard layout.
  *
- * @returns An animated skeleton placeholder.
+ * @param count - Number of skeleton cards to render (default 6).
+ * @returns An animated skeleton placeholder matching CollectionCard UI.
  */
-export function CollectionListLoader() {
+export function CollectionListLoader({ count = 6 }: CollectionListLoaderProps = {}) {
   return (
-    <div className="animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="bg-gray-200 rounded-lg h-64" />
+    <div className="animate-pulse grid gap-y-10 gap-x-6 grid-cols-2 lg:grid-cols-3">
+      {[...Array(count)].map((_, i) => (
+        <div key={i} className="flex flex-col h-full">
+          {/* Card Image Skeleton */}
+          <div className="relative w-full h-40 sm:h-48 md:h-60 lg:h-80 overflow-hidden rounded-sm bg-gray-200/80 border border-gray-200/50" />
+          {/* Collection Title & Count Skeleton */}
+          <div className="mt-4 flex flex-col flex-grow space-y-2">
+            <div className="h-5 bg-gray-200 rounded w-3/5" />
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+          </div>
+        </div>
       ))}
     </div>
   );

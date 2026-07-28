@@ -24,7 +24,7 @@ export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Image
-            className="w-10 h-10"
+            className="w-10 h-10 bg-transparent"
             src="https://res.cloudinary.com/enobasse/image/upload/v1756506781/logo_gvieez.png"
             alt="Eno Bassé logo"
             quality={100}

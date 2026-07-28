@@ -86,7 +86,7 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item, currentCurrenc
               </p>
             </div>
             <p className="font-medium text-[#502B3A] whitespace-nowrap">
-              {item.isCustomDesign ? (
+              {item.isCustomDesign || displayPrice === 0 ? (
                 "Contact us for pricing"
               ) : (
                 <>

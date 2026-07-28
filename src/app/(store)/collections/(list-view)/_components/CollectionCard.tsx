@@ -24,7 +24,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
               ? "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png"
               : collection.image.url
           }
-          alt={collection.image.alt}
+          alt={collection.image?.alt || collection.name || "Collection image"}
           title={collection.image.alt}
           width={500}
           height={500}

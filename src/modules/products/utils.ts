@@ -58,14 +58,14 @@ export function filterAndSortProducts({
       break;
     case "in-store":
       filtered.sort((a, b) => {
-        // In store products (isCustomDesign == false) come first
-        return Number(!!a.isCustomDesign) - Number(!!b.isCustomDesign);
+        // In store products come first
+        return Number(isProductCustomDesign(a)) - Number(isProductCustomDesign(b));
       });
       break;
     case "custom-design":
       filtered.sort((a, b) => {
-        // Custom design products (isCustomDesign == true) come first
-        return Number(!!b.isCustomDesign) - Number(!!a.isCustomDesign);
+        // Custom design products come first
+        return Number(isProductCustomDesign(b)) - Number(isProductCustomDesign(a));
       });
       break;
     default:
@@ -73,4 +73,24 @@ export function filterAndSortProducts({
   }
 
   return filtered;
+}
+
+/**
+ * Helper to determine if a product is a custom design product.
+ * Checks boolean flag, category name, or zero min price.
+ *
+ * @param product - Product object
+ * @returns boolean indicating if product is a custom design
+ */
+export function isProductCustomDesign(product: {
+  isCustomDesign?: boolean;
+  priceRange?: { min: number };
+  category?: string;
+}): boolean {
+  if (!product) return false;
+  return (
+    Boolean(product.isCustomDesign) ||
+    product.priceRange?.min === 0 ||
+    Boolean(product.category?.toLowerCase().includes("custom"))
+  );
 }

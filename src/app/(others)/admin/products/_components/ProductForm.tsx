@@ -111,7 +111,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
           purity: m.purity ?? undefined,
           weightGrams: m.weightGrams,
         })) || [],
-      inventory: v.inventory ?? { quantity: 0, inStock: false },
+      inventory: v.inventory ?? { quantity: 1, inStock: true },
       images: v.images,
     })) || [{ ...defaultVariant }],
     isCustomDesign: product?.isCustomDesign || false,

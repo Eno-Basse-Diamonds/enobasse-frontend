@@ -7,7 +7,6 @@ import { useState } from "react";
 import { ImageIcon } from "lucide-react";
 
 import { BlogPost } from "@/modules/blog/types";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 import { dateToOrdinalDayMonthYear } from "@/shared/utils/date";
 
 interface RelatedPostsProps {
@@ -46,8 +45,6 @@ const RelatedPostCard = ({ post }: { post: BlogPost }) => {
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 224px, 224px"
               className="object-cover transition-transform duration-300 group-hover:scale-105 bg-gray-100"
               onError={() => setImageError(true)}
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
             />
           )}
         </div>

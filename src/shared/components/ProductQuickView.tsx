@@ -226,7 +226,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
             >
               <Image
                 src={selectedVariant.images[currentImageIndex].url}
-                alt={selectedVariant.images[currentImageIndex].alt}
+                alt={
+                  selectedVariant.images[currentImageIndex]?.alt || product.name || "Product image"
+                }
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                 className="object-contain"
@@ -300,7 +302,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   )}
                   <Image
                     src={image.url}
-                    alt={image.alt}
+                    alt={image?.alt || product.name || "Thumbnail image"}
                     width={48}
                     height={48}
                     className="object-cover w-full h-full"
@@ -332,11 +334,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               <h2 className="text-lg font-semibold md:text-2xl font-primary text-primary-500">
                 {selectedVariant.title}
               </h2>
-              {product.isCustomDesign && selectedVariant?.price === 0 ? (
+              {product.isCustomDesign || selectedVariant?.price === 0 ? (
                 <div>
-                  <p className="text-primary-500 text-lg font-semibold">
-                    Price available upon request
-                  </p>
+                  <p className="text-primary-500 text-lg font-semibold">Contact us for pricing</p>
                 </div>
               ) : (
                 <p className="md:text-xl font-medium text-primary-500 mt-2">
@@ -431,8 +431,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               {!product.isCustomDesign || selectedVariant?.price !== 0 ? (
                 <>
                   <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
-                    {selectedVariant?.inventory?.inStock === false ||
-                    selectedVariant?.inventory?.quantity === 0 ? (
+                    {selectedVariant?.inventory?.inStock === false ? (
                       <Button
                         size="lg"
                         disabled
@@ -457,8 +456,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                     </Button>
                   </div>
                   <div className="grid-cols-2 gap-4 mb-4 grid md:hidden">
-                    {selectedVariant?.inventory?.inStock === false ||
-                    selectedVariant?.inventory?.quantity === 0 ? (
+                    {selectedVariant?.inventory?.inStock === false ? (
                       <Button
                         variant="outline"
                         disabled

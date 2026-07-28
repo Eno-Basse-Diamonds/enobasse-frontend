@@ -9,7 +9,6 @@ import { easeOut } from "motion/react";
 import * as motion from "motion/react-client";
 
 import { BlogPost } from "@/modules/blog/types";
-import { BLUR_DATA_URL } from "@/shared/constants/url";
 import { dateToOrdinalDayMonthYear } from "@/shared/utils/date";
 
 interface BlogSectionProps {
@@ -121,8 +120,6 @@ const BlogCard: React.FC<BlogCardProps> = React.memo(({ post, index, isMobile = 
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw"
               priority={index < 3}
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
               onError={() => setImageError(true)}
             />
           )}

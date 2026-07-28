@@ -120,8 +120,6 @@ export default async function HomePage() {
   const featuredSlugs = homepageSettings?.featuredCollectionSlugs;
 
   if (featuredSlugs && featuredSlugs.length > 0 && dbCollections.length > 0) {
-    // Build bento items in the admin-specified order, looking up each slug in
-    // the published collections returned by the API.
     const orderedItems = featuredSlugs.flatMap((slug) => {
       const collection = dbCollections.find((c) => c.slug === slug);
       if (!collection) return [];
@@ -145,7 +143,6 @@ export default async function HomePage() {
       bentoItems = orderedItems;
     }
   } else if (dbCollections.length > 0) {
-    // Legacy behaviour: map default slugs to live DB data when no explicit order is set
     bentoItems = defaultBentoItems.map((item) => {
       const match = dbCollections.find(
         (c) =>
