@@ -112,6 +112,22 @@ export const useAccountStore = create<AccountState>()(
     }),
     {
       name: "account-storage",
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as Partial<AccountState> | undefined;
+
+        return {
+          email: typeof state?.email === "string" ? state.email : null,
+          billingAddress:
+            state?.billingAddress && typeof state.billingAddress === "object"
+              ? state.billingAddress
+              : undefined,
+          preferredCurrency:
+            typeof state?.preferredCurrency === "string" ? state.preferredCurrency : "USD",
+          isAuthenticated:
+            typeof state?.isAuthenticated === "boolean" ? state.isAuthenticated : false,
+        };
+      },
       partialize: (state) => ({
         email: state.email,
         billingAddress: state.billingAddress,

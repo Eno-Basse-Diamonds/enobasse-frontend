@@ -383,6 +383,18 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "cart-store",
+      version: 1,
+      migrate: (persistedState) => {
+        const state = persistedState as Partial<CartState> | undefined;
+
+        return {
+          items: Array.isArray(state?.items) ? state.items : [],
+          originalUsdPrices:
+            state?.originalUsdPrices && typeof state.originalUsdPrices === "object"
+              ? state.originalUsdPrices
+              : {},
+        };
+      },
       partialize: (state) => ({
         items: state.items,
         originalUsdPrices: state.originalUsdPrices,

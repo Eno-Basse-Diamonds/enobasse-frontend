@@ -9,7 +9,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
  * Query provider.
  *
  * @description Provides React Query context to the application with default
- * configuration (5-minute stale time, 2 retries, no refetch on window focus).
+ * configuration (5-minute stale time, 2 retries, and refresh on window focus).
  * @param children - The child components to wrap with the query client provider
  * @returns The QueryClientProvider wrapping the children with devtools
  */
@@ -21,7 +21,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
         queries: {
           staleTime: 5 * 60 * 1000,
           retry: 2,
-          refetchOnWindowFocus: false,
+          refetchOnWindowFocus: true,
         },
       },
     });
