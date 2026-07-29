@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, CreditCard } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 export type PaymentMethodType = "paystack" | "bank_transfer";
 
@@ -31,20 +31,25 @@ export function PaymentMethodSelector({
               selectedMethod === "paystack" ? "bg-[#D1A559]/20" : "bg-gray-100"
             }`}
           >
-            <CreditCard
-              className={`w-5 h-5 ${
-                selectedMethod === "paystack" ? "text-[#D1A559]" : "text-gray-500"
-              }`}
-            />
+            <svg
+              viewBox="0 0 24 24"
+              className="h-6 w-6"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="3" rx="0.75" fill="#0BA4DB" />
+              <rect x="3" y="9" width="14" height="3" rx="0.75" fill="#0BA4DB" />
+              <rect x="3" y="14" width="10" height="3" rx="0.75" fill="#0BA4DB" />
+              <rect x="3" y="19" width="6" height="2" rx="0.75" fill="#0BA4DB" />
+            </svg>
           </div>
           <span
             className={`text-sm font-medium ${
               selectedMethod === "paystack" ? "text-[#502B3A]" : "text-gray-600"
             }`}
           >
-            Pay with Card
+            Pay with Paystack
           </span>
-          <span className="text-xs text-gray-400 mt-1">Visa, Mastercard, etc.</span>
+          <span className="text-xs text-gray-400 mt-1">Card, transfer, bank & more</span>
           {selectedMethod === "paystack" && (
             <div className="absolute top-2 right-2 w-4 h-4 bg-[#D1A559] rounded-full flex items-center justify-center">
               <svg

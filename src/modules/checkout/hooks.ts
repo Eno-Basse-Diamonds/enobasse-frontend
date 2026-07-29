@@ -148,7 +148,12 @@ export function useCheckout({
           phone: phone || "",
         },
         currency: preferredCurrency,
+        paymentMethod: "paystack",
       });
+
+      if (!order?.id || !accessCode || !reference) {
+        throw new Error("Payment could not be initialized. Please try again.");
+      }
 
       addOrder(order);
 
@@ -161,7 +166,7 @@ export function useCheckout({
         onSuccess: () => {
           if (hasProcessedPaymentRef.current) return;
           hasProcessedPaymentRef.current = true;
-          handlePaymentConfirmed(order.id, reference);
+          void handlePaymentConfirmed(order.id, reference);
         },
         onError: () => {
           setIsProcessing(false);
@@ -171,10 +176,9 @@ export function useCheckout({
       });
     } catch (error) {
       logger.error("Failed to initialize Paystack payment:", error);
-      setPaymentError(
-        error instanceof Error ? error.message : "Failed to initialize payment. Please try again.",
-      );
+      setPaymentError("We couldn't start a secure payment. Please try again.");
       setIsProcessing(false);
+      document.body.style.overflow = "auto";
     }
   };
 

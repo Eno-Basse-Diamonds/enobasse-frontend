@@ -42,5 +42,6 @@ export interface Order {
     "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled" | "refunded";
   paymentMethod?: "paystack" | "bank_transfer";
   paymentStatus?: "pending" | "paid" | "failed" | "flagged";
+  paymentReference?: string;
   createdAt: Date;
 }
