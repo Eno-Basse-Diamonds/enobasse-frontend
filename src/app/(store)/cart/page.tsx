@@ -39,7 +39,7 @@ export default function CartPage() {
         (preferredCurrency !== lastCurrency ||
           items.some((item) => (item.productVariant.currency || "USD") !== preferredCurrency));
 
-      if (session?.user?.email && preferredCurrency) {
+      if (session?.user?.email && preferredCurrency && (!hydrated || preferredCurrency !== lastCurrency)) {
         await hydrate(session.user.email, preferredCurrency);
         setLastCurrency(preferredCurrency);
       } else if (needsRefresh) {
