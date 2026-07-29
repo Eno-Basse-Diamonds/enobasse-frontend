@@ -70,11 +70,12 @@ export function MetalsGemstonesSelector({
   };
 
   const updateMetalDetail = (metalName: string, field: "purity" | "weight", value: string) => {
+    const safeValue = value ?? "";
     setMetalDetails((prev) => ({
       ...prev,
       [metalName]: {
-        ...prev[metalName],
-        [field]: value,
+        purity: field === "purity" ? safeValue : (prev[metalName]?.purity ?? ""),
+        weight: field === "weight" ? safeValue : (prev[metalName]?.weight ?? ""),
       },
     }));
 
@@ -82,7 +83,7 @@ export function MetalsGemstonesSelector({
       metal.type === metalName
         ? {
             ...metal,
-            [field === "purity" ? "purity" : "weightGrams"]: value,
+            [field === "purity" ? "purity" : "weightGrams"]: safeValue,
           }
         : metal,
     );
@@ -90,13 +91,14 @@ export function MetalsGemstonesSelector({
   };
 
   const updateGemstoneDetail = (gemstoneName: string, weight: string) => {
+    const safeWeight = weight ?? "";
     setGemstoneDetails((prev) => ({
       ...prev,
-      [gemstoneName]: { weight },
+      [gemstoneName]: { weight: safeWeight },
     }));
 
     const updatedGemstones = selectedGemstones.map((gemstone) =>
-      gemstone.type === gemstoneName ? { ...gemstone, weightCarat: weight } : gemstone,
+      gemstone.type === gemstoneName ? { ...gemstone, weightCarat: safeWeight } : gemstone,
     );
     onGemstonesChange(updatedGemstones);
   };
@@ -108,7 +110,11 @@ export function MetalsGemstonesSelector({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {METAL_OPTIONS.map((metal) => {
             const isSelected = selectedMetals.some((m) => m.type === metal.name);
-            const details = metalDetails[metal.name] || { purity: "", weight: "" };
+            const selectedMetal = selectedMetals.find((m) => m.type === metal.name);
+            const details = {
+              purity: selectedMetal?.purity ?? metalDetails[metal.name]?.purity ?? "",
+              weight: selectedMetal?.weightGrams ?? metalDetails[metal.name]?.weight ?? "",
+            };
 
             return (
               <div key={metal.name} className="border p-3">
@@ -138,6 +144,22 @@ export function MetalsGemstonesSelector({
                       <label className="block text-xs text-gray-600 mb-1">
                         Purity (e.g., 18K, 24K)
                       </label>
+                      <div className="flex flex-wrap gap-1 mb-1.5">
+                        {["14K", "18K", "22K", "24K", "PT950"].map((purity) => (
+                          <button
+                            key={purity}
+                            type="button"
+                            onClick={() => updateMetalDetail(metal.name, "purity", purity)}
+                            className={`px-1.5 py-0.5 text-[10px] font-medium border rounded transition-colors ${
+                              details.purity === purity
+                                ? "bg-primary-500 text-white border-primary-500"
+                                : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                            }`}
+                          >
+                            {purity}
+                          </button>
+                        ))}
+                      </div>
                       <input
                         type="text"
                         value={details.purity}
@@ -170,7 +192,10 @@ export function MetalsGemstonesSelector({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {GEMSTONES.map((gemstone) => {
             const isSelected = selectedGemstones.some((g) => g.type === gemstone.name);
-            const details = gemstoneDetails[gemstone.name] || { weight: "" };
+            const selectedGemstone = selectedGemstones.find((g) => g.type === gemstone.name);
+            const details = {
+              weight: selectedGemstone?.weightCarat ?? gemstoneDetails[gemstone.name]?.weight ?? "",
+            };
 
             return (
               <div key={gemstone.name} className="border p-3">
@@ -192,6 +217,22 @@ export function MetalsGemstonesSelector({
                 {isSelected && (
                   <div className="mt-3">
                     <label className="block text-xs text-gray-600 mb-1">Weight (carats)</label>
+                    <div className="flex flex-wrap gap-1 mb-1.5">
+                      {["0.5", "1.0", "1.5", "2.0", "3.0"].map((carat) => (
+                        <button
+                          key={carat}
+                          type="button"
+                          onClick={() => updateGemstoneDetail(gemstone.name, carat)}
+                          className={`px-1.5 py-0.5 text-[10px] font-medium border rounded transition-colors ${
+                            details.weight === carat
+                              ? "bg-primary-500 text-white border-primary-500"
+                              : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                          }`}
+                        >
+                          {carat}ct
+                        </button>
+                      ))}
+                    </div>
                     <input
                       type="number"
                       value={details.weight}

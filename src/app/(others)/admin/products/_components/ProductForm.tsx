@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Plus } from "lucide-react";
+import { Plus, Wand2 } from "lucide-react";
 
 import { useAdminCollections } from "@/modules/collections/hooks";
 import { Collection } from "@/modules/collections/types";
@@ -146,6 +146,87 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct();
 
+  const buildVariantsFromMaterials = (
+    metals: ProductFormData["metals"],
+    gemstones: ProductFormData["gemstones"],
+    prev: ProductFormData,
+  ) => {
+    const currentMetals = metals || [];
+    const currentGemstones = gemstones || [];
+    const baseSku = prev.sku.trim() || textToSlug(prev.name).toUpperCase() || "PRODUCT";
+    const basePrice = prev.variants[0]?.price || 0;
+    const baseCurrency = prev.variants[0]?.currency || "USD";
+
+    if (currentMetals.length === 0 && currentGemstones.length === 0) {
+      return prev.variants;
+    }
+
+    const combinations: Array<{
+      title: string;
+      sku: string;
+      metals: typeof currentMetals;
+      gemstones: typeof currentGemstones;
+    }> = [];
+
+    if (currentMetals.length > 0 && currentGemstones.length > 0) {
+      currentMetals.forEach((m) => {
+        const metalLabel = [m.purity, m.type].filter(Boolean).join(" ");
+        currentGemstones.forEach((g) => {
+          const gemLabel = [g.weightCarat ? `${g.weightCarat}ct` : "", g.type]
+            .filter(Boolean)
+            .join(" ");
+          const title = `${metalLabel} / ${gemLabel}`;
+          const skuSlug = textToSlug(`${baseSku}-${metalLabel}-${gemLabel}`).toUpperCase();
+          combinations.push({
+            title,
+            sku: skuSlug,
+            metals: [m],
+            gemstones: [g],
+          });
+        });
+      });
+    } else if (currentMetals.length > 0) {
+      currentMetals.forEach((m) => {
+        const metalLabel = [m.purity, m.type].filter(Boolean).join(" ");
+        const title = metalLabel;
+        const skuSlug = textToSlug(`${baseSku}-${metalLabel}`).toUpperCase();
+        combinations.push({
+          title,
+          sku: skuSlug,
+          metals: [m],
+          gemstones: [],
+        });
+      });
+    } else if (currentGemstones.length > 0) {
+      currentGemstones.forEach((g) => {
+        const gemLabel = [g.weightCarat ? `${g.weightCarat}ct` : "", g.type]
+          .filter(Boolean)
+          .join(" ");
+        const title = gemLabel;
+        const skuSlug = textToSlug(`${baseSku}-${gemLabel}`).toUpperCase();
+        combinations.push({
+          title,
+          sku: skuSlug,
+          metals: [],
+          gemstones: [g],
+        });
+      });
+    }
+
+    if (combinations.length === 0) return prev.variants;
+
+    return combinations.map((combo) => ({
+      sku: combo.sku,
+      title: combo.title,
+      price: basePrice,
+      currency: baseCurrency,
+      metals: combo.metals,
+      gemstones: combo.gemstones,
+      inventory: { quantity: 1, inStock: true },
+      images: prev.images.length > 0 ? [...prev.images] : [],
+    }));
+  };
+
   const handleInputChange = (
     field: keyof ProductFormData,
     value:
@@ -161,6 +242,20 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
       const newData = { ...prev, [field]: value };
       if (field === "name") {
         newData.slug = textToSlug(value as string);
+      }
+      if (field === "metals" || field === "gemstones") {
+        const updatedMetals =
+          field === "metals" ? (value as ProductFormData["metals"]) : prev.metals;
+        const updatedGemstones =
+          field === "gemstones" ? (value as ProductFormData["gemstones"]) : prev.gemstones;
+        newData.variants = buildVariantsFromMaterials(updatedMetals, updatedGemstones, prev);
+      }
+      if (field === "images") {
+        const newImages = value as ProductFormData["images"];
+        newData.variants = prev.variants.map((v) => ({
+          ...v,
+          images: v.images.length === 0 ? [...newImages] : v.images,
+        }));
       }
       return newData;
     });
@@ -189,10 +284,162 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
     });
   };
 
-  const addVariant = () => {
+  const [bulkPriceInput, setBulkPriceInput] = useState<string>("");
+
+  const generateVariantsFromMaterials = () => {
+    const metals = formData.metals || [];
+    const gemstones = formData.gemstones || [];
+    const baseSku = formData.sku.trim() || textToSlug(formData.name).toUpperCase() || "PRODUCT";
+    const basePrice = formData.variants[0]?.price || 0;
+    const baseCurrency = formData.variants[0]?.currency || "USD";
+
+    if (metals.length === 0 && gemstones.length === 0) return;
+
+    const combinations: Array<{
+      title: string;
+      sku: string;
+      metals: typeof metals;
+      gemstones: typeof gemstones;
+    }> = [];
+
+    if (metals.length > 0 && gemstones.length > 0) {
+      metals.forEach((m) => {
+        const metalLabel = [m.purity, m.type].filter(Boolean).join(" ");
+        gemstones.forEach((g) => {
+          const gemLabel = [g.weightCarat ? `${g.weightCarat}ct` : "", g.type]
+            .filter(Boolean)
+            .join(" ");
+          const title = `${metalLabel} / ${gemLabel}`;
+          const skuSlug = textToSlug(`${baseSku}-${metalLabel}-${gemLabel}`).toUpperCase();
+          combinations.push({
+            title,
+            sku: skuSlug,
+            metals: [m],
+            gemstones: [g],
+          });
+        });
+      });
+    } else if (metals.length > 0) {
+      metals.forEach((m) => {
+        const metalLabel = [m.purity, m.type].filter(Boolean).join(" ");
+        const title = metalLabel;
+        const skuSlug = textToSlug(`${baseSku}-${metalLabel}`).toUpperCase();
+        combinations.push({
+          title,
+          sku: skuSlug,
+          metals: [m],
+          gemstones: [],
+        });
+      });
+    } else if (gemstones.length > 0) {
+      gemstones.forEach((g) => {
+        const gemLabel = [g.weightCarat ? `${g.weightCarat}ct` : "", g.type]
+          .filter(Boolean)
+          .join(" ");
+        const title = gemLabel;
+        const skuSlug = textToSlug(`${baseSku}-${gemLabel}`).toUpperCase();
+        combinations.push({
+          title,
+          sku: skuSlug,
+          metals: [],
+          gemstones: [g],
+        });
+      });
+    }
+
+    if (combinations.length === 0) return;
+
+    const newVariants = combinations.map((combo) => ({
+      sku: combo.sku,
+      title: combo.title,
+      price: basePrice,
+      currency: baseCurrency,
+      metals: combo.metals,
+      gemstones: combo.gemstones,
+      inventory: { quantity: 1, inStock: true },
+      images: formData.images.length > 0 ? [...formData.images] : [],
+    }));
+
     setFormData((prev) => ({
       ...prev,
-      variants: [...prev.variants, { ...defaultVariant }],
+      variants: newVariants,
+    }));
+  };
+
+  const autoGenerateVariantSkusAndTitles = () => {
+    const baseSku = formData.sku.trim() || textToSlug(formData.name).toUpperCase() || "PRODUCT";
+    const primaryMetal = formData.metals?.[0]?.type || "";
+    const primaryPurity = formData.metals?.[0]?.purity || "";
+    const metalLabel = [primaryPurity, primaryMetal].filter(Boolean).join(" ");
+    const primaryGem = formData.gemstones?.[0]?.type || "";
+
+    setFormData((prev) => ({
+      ...prev,
+      variants: prev.variants.map((v, i) => {
+        const variantNum = i + 1;
+        const newSku = v.sku.trim() ? v.sku : `${baseSku}-VAR-${variantNum}`;
+
+        const titleParts: string[] = [];
+        if (metalLabel) titleParts.push(metalLabel);
+        if (primaryGem) titleParts.push(primaryGem);
+        if (titleParts.length === 0) titleParts.push(`Variant ${variantNum}`);
+
+        const newTitle = v.title.trim()
+          ? v.title
+          : prev.variants.length > 1
+            ? `${titleParts.join(" - ")} #${variantNum}`
+            : titleParts.join(" - ");
+
+        return {
+          ...v,
+          sku: newSku,
+          title: newTitle,
+        };
+      }),
+    }));
+  };
+
+  const applyBulkPrice = () => {
+    const priceNum = parseFloat(bulkPriceInput);
+    if (isNaN(priceNum) || priceNum <= 0) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      variants: prev.variants.map((v) => ({
+        ...v,
+        price: priceNum,
+      })),
+    }));
+  };
+
+  const addVariant = () => {
+    const variantNum = formData.variants.length + 1;
+    const baseSku = formData.sku.trim() || textToSlug(formData.name).toUpperCase() || "PRODUCT";
+    const primaryMetal = formData.metals?.[0]?.type || "";
+    const primaryPurity = formData.metals?.[0]?.purity || "";
+    const metalLabel = [primaryPurity, primaryMetal].filter(Boolean).join(" ");
+    const primaryGem = formData.gemstones?.[0]?.type || "";
+
+    const titleParts: string[] = [];
+    if (metalLabel) titleParts.push(metalLabel);
+    if (primaryGem) titleParts.push(primaryGem);
+    if (titleParts.length === 0) titleParts.push(`Variant ${variantNum}`);
+
+    const autoTitle = `${titleParts.join(" - ")} #${variantNum}`;
+    const autoSku = `${baseSku}-VAR-${variantNum}`;
+
+    setFormData((prev) => ({
+      ...prev,
+      variants: [
+        ...prev.variants,
+        {
+          ...defaultVariant,
+          sku: autoSku,
+          title: autoTitle,
+          price: prev.variants[0]?.price || 0,
+          currency: prev.variants[0]?.currency || "USD",
+        },
+      ],
     }));
     setActiveTab("variants");
   };
@@ -306,6 +553,18 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
   const saveDraftText = isDraft ? "Save Draft" : "Save as Draft";
   const submitText = product ? (isDraft ? "Publish" : "Update") : "Create Product";
   const isPending = createMutation.isPending || updateMutation.isPending;
+
+  const isFormValid =
+    formData.name.trim().length > 0 &&
+    formData.slug.trim().length > 0 &&
+    formData.description.trim().length > 0 &&
+    formData.collections.length > 0 &&
+    formData.images.length > 0 &&
+    formData.variants.length > 0 &&
+    formData.variants.every(
+      (v) =>
+        v.sku.trim().length > 0 && v.title.trim().length > 0 && v.price > 0 && v.images.length > 0,
+    );
 
   const tabHasErrors = (tab: TabKey) => {
     if (tab === "basic")
@@ -424,6 +683,9 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
         );
 
       case "materials":
+        const hasSelectedMaterials =
+          (formData.metals && formData.metals.length > 0) ||
+          (formData.gemstones && formData.gemstones.length > 0);
         return (
           <div className="space-y-6">
             <MetalsGemstonesSelector
@@ -432,10 +694,38 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               onMetalsChange={(metals) => handleInputChange("metals", metals)}
               onGemstonesChange={(GEMSTONES) => handleInputChange("gemstones", GEMSTONES)}
             />
+
+            {hasSelectedMaterials && (
+              <div className="bg-primary-50 border border-primary-100 p-4 rounded-sm flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-primary-900">
+                    Ready to create product variants?
+                  </p>
+                  <p className="text-xs text-primary-700">
+                    Automatically generate variants for all selected metal & gemstone combinations.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  leadingIcon={<Wand2 className="w-4 h-4" />}
+                  onClick={() => {
+                    generateVariantsFromMaterials();
+                    setActiveTab("variants");
+                  }}
+                >
+                  Generate Variants
+                </Button>
+              </div>
+            )}
           </div>
         );
 
       case "variants":
+        const canGenerateFromMaterials =
+          (formData.metals && formData.metals.length > 0) ||
+          (formData.gemstones && formData.gemstones.length > 0);
+
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -448,6 +738,52 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
               <Button type="button" size="sm" leadingIcon={<Plus />} onClick={addVariant}>
                 Add Variant
               </Button>
+            </div>
+
+            {/* Quick Actions Toolbar */}
+            <div className="bg-gray-50 border border-gray-200 p-3 rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex flex-wrap items-center gap-2">
+                {canGenerateFromMaterials && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    leadingIcon={<Wand2 className="w-3.5 h-3.5" />}
+                    onClick={generateVariantsFromMaterials}
+                  >
+                    Generate from Materials
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  leadingIcon={<Wand2 className="w-3.5 h-3.5" />}
+                  onClick={autoGenerateVariantSkusAndTitles}
+                >
+                  Auto-Fill SKUs & Titles
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-gray-700 whitespace-nowrap">Bulk Price:</span>
+                <input
+                  type="number"
+                  placeholder="Price (USD)"
+                  value={bulkPriceInput}
+                  onChange={(e) => setBulkPriceInput(e.target.value)}
+                  className="w-28 p-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={applyBulkPrice}
+                  disabled={!bulkPriceInput || parseFloat(bulkPriceInput) <= 0}
+                >
+                  Apply to All
+                </Button>
+              </div>
             </div>
 
             {errors?.variants && <p className="text-red-500 text-sm">{errors.variants}</p>}
@@ -530,7 +866,7 @@ export function ProductForm({ product, onClose }: ProductFormProps) {
             <Button
               type="submit"
               loading={isPending}
-              disabled={isPending}
+              disabled={isPending || !isFormValid}
               onClick={(e: any) => handleSubmit(e, "published")}
             >
               {submitText}

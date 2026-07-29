@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { ChevronDown, ChevronUp, GripVertical, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Minus, Plus, Trash2 } from "lucide-react";
 
 import { ImageUploadField } from "./ImageUploadField";
 
@@ -38,6 +38,15 @@ export function VariantCard({
 }: VariantCardProps) {
   const [expanded, setExpanded] = useState(false);
   const hasPrice = variant.price > 0;
+  const updateQuantity = (quantity: number) => {
+    const nextQuantity = Math.max(0, quantity);
+
+    onVariantChange(index, "inventory", {
+      ...variant.inventory,
+      quantity: nextQuantity,
+      inStock: nextQuantity > 0 ? variant.inventory.inStock : false,
+    });
+  };
 
   return (
     <div className="border border-gray-200 bg-white overflow-hidden">
@@ -123,7 +132,7 @@ export function VariantCard({
               )}
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs font-medium text-gray-600 mb-1">Price *</label>
               <div className="flex gap-1">
                 <input
@@ -132,7 +141,7 @@ export function VariantCard({
                   onChange={(e) => onVariantChange(index, "price", Number(e.target.value))}
                   min="0"
                   step="0.01"
-                  className="flex-1 p-2 text-sm border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+                  className="min-w-0 flex-1 p-2 text-sm border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
                 />
                 <select
                   value={variant.currency}
@@ -148,34 +157,57 @@ export function VariantCard({
               )}
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs font-medium text-gray-600 mb-1">Quantity</label>
-              <div className="flex items-center gap-2">
+              <div className="flex h-[38px] overflow-hidden border border-gray-300 focus-within:border-primary-300 focus-within:ring-1 focus-within:ring-primary-300">
+                <button
+                  type="button"
+                  aria-label="Decrease quantity"
+                  onClick={() => updateQuantity(variant.inventory.quantity - 1)}
+                  disabled={variant.inventory.quantity === 0}
+                  className="grid w-9 shrink-0 place-items-center border-r border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800 disabled:cursor-not-allowed disabled:text-gray-300"
+                >
+                  <Minus className="h-3.5 w-3.5" />
+                </button>
                 <input
                   type="number"
                   value={variant.inventory.quantity}
-                  onChange={(e) =>
-                    onVariantChange(index, "inventory", {
-                      ...variant.inventory,
-                      quantity: Number(e.target.value),
-                    })
-                  }
+                  onChange={(e) => updateQuantity(Number(e.target.value))}
                   min="0"
-                  className="flex-1 p-2 text-sm border border-gray-300 focus:outline-none focus:ring-1 focus:ring-primary-300 focus:border-primary-300"
+                  step="1"
+                  placeholder="0"
+                  aria-label="Variant quantity"
+                  className="min-w-0 flex-1 appearance-none border-0 px-2 text-center text-sm font-medium text-gray-800 focus:outline-none focus:ring-0"
                 />
-                <label className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  aria-label="Increase quantity"
+                  onClick={() => updateQuantity(variant.inventory.quantity + 1)}
+                  className="grid w-9 shrink-0 place-items-center border-l border-gray-200 text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              <div className="mt-2 flex items-center justify-between">
+                <span className="text-xs text-gray-500">Available for sale</span>
+                <label className="relative inline-flex cursor-pointer items-center">
                   <input
                     type="checkbox"
                     checked={variant.inventory.inStock}
+                    disabled={variant.inventory.quantity === 0}
                     onChange={(e) =>
                       onVariantChange(index, "inventory", {
                         ...variant.inventory,
                         inStock: e.target.checked,
                       })
                     }
-                    className="h-4 w-4 text-primary-500 focus:ring-primary-300"
+                    className="peer sr-only"
                   />
-                  <span className="text-xs text-gray-600">In Stock</span>
+                  <span
+                    className="h-5 w-9 rounded-full bg-gray-200 transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-sm after:transition-transform peer-checked:bg-green-500 peer-checked:after:translate-x-4 peer-focus-visible:ring-2 peer-focus-visible:ring-primary-300 peer-focus-visible:ring-offset-1 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+                    aria-hidden="true"
+                  />
                 </label>
               </div>
             </div>
