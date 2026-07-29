@@ -4,70 +4,115 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { useAlertStore } from "@/shared/store/alert";
 
-const POLL_INTERVAL_MS = 10 * 60 * 1000;
-const CURRENT_BUILD_ID = process.env.NEXT_PUBLIC_BUILD_ID ?? "unknown";
+const POLL_INTERVAL_MS = 30 * 60 * 1000; // Check every 30 minutes in production
+const DISMISS_STORAGE_KEY = "enobasse_version_dismissed";
+const CURRENT_BUILD_ID =
+  process.env.NEXT_PUBLIC_BUILD_ID || process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || "";
 
 interface VersionResponse {
   buildId?: string;
 }
 
 /**
- * Detects when an open tab belongs to an older deployment and offers a safe,
- * user-controlled refresh. This avoids interrupting checkout or unsaved forms.
+ * Production-only Version Watcher.
+ *
+ * @description Silently checks for new deployments only in production environments.
+ * Disabled completely in development or when no build ID is defined.
+ * Never listens to window focus or tab switching.
  */
 export function VersionWatcher() {
   const addAlert = useAlertStore((state) => state.addAlert);
   const notificationShown = useRef(false);
 
+  const isDevOrLocal =
+    process.env.NODE_ENV !== "production" ||
+    (typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        window.location.hostname.endsWith(".local")));
+
   const checkVersion = useCallback(async () => {
-    if (notificationShown.current || CURRENT_BUILD_ID === "unknown") return;
+    // Strictly run only in production on live domain with a valid build hash
+    if (
+      isDevOrLocal ||
+      !CURRENT_BUILD_ID ||
+      CURRENT_BUILD_ID === "unknown"
+    ) {
+      return;
+    }
+
+    if (notificationShown.current) return;
+    try {
+      if (typeof window !== "undefined" && sessionStorage.getItem(DISMISS_STORAGE_KEY) === "true") {
+        return;
+      }
+    } catch {}
 
     try {
       const response = await fetch(`/api/version?t=${Date.now()}`, {
         cache: "no-store",
         headers: { "Cache-Control": "no-cache" },
       });
+
       if (!response.ok) return;
 
       const { buildId } = (await response.json()) as VersionResponse;
-      if (!buildId || buildId === "unknown" || buildId === CURRENT_BUILD_ID) return;
+
+      if (!buildId || buildId === "unknown" || buildId === CURRENT_BUILD_ID) {
+        return;
+      }
 
       notificationShown.current = true;
+      try {
+        sessionStorage.setItem(DISMISS_STORAGE_KEY, "true");
+      } catch {}
+
       addAlert({
         type: "info",
-        title: "Update available",
+        title: "Update Available",
         dismissible: true,
+        duration: 10000,
         message: (
-          <span>
-            A new version of Eno Bassé is ready.{" "}
+          <span className="flex items-center gap-2">
+            A new version of Eno Bassé is available.{" "}
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="font-semibold underline underline-offset-2"
+              className="font-semibold underline underline-offset-2 hover:opacity-80"
             >
-              Refresh now
+              Refresh
             </button>
           </span>
         ),
       });
     } catch {
-      // A version check must never disrupt the user's session.
+      // Quietly ignore network failures
     }
   }, [addAlert]);
 
   useEffect(() => {
-    const onVisibilityChange = () => {
-      if (document.visibilityState === "visible") void checkVersion();
-    };
+    // Strict guard: Do nothing in development or local environment
+    if (
+      isDevOrLocal ||
+      !CURRENT_BUILD_ID ||
+      CURRENT_BUILD_ID === "unknown"
+    ) {
+      return;
+    }
 
-    const intervalId = window.setInterval(() => void checkVersion(), POLL_INTERVAL_MS);
-    window.addEventListener("focus", checkVersion);
-    document.addEventListener("visibilitychange", onVisibilityChange);
+    // Single quiet check 30 seconds after page load
+    const initialTimer = setTimeout(() => {
+      void checkVersion();
+    }, 30000);
+
+    // Periodic check every 30 minutes (NO tab focus or visibility listeners!)
+    const intervalId = setInterval(() => {
+      void checkVersion();
+    }, POLL_INTERVAL_MS);
 
     return () => {
-      window.clearInterval(intervalId);
-      window.removeEventListener("focus", checkVersion);
-      document.removeEventListener("visibilitychange", onVisibilityChange);
+      clearTimeout(initialTimer);
+      clearInterval(intervalId);
     };
   }, [checkVersion]);
 

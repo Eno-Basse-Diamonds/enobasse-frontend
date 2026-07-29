@@ -10,7 +10,7 @@ import { LazyMotion, domAnimation } from "motion/react";
 import { AppAlert } from "@/shared/components/Alert";
 import { GoogleAnalytics } from "@/shared/components/GoogleAnalytics";
 import { ScrollToTop } from "@/shared/components/ScrollToTop";
-import { VersionWatcher } from "@/shared/components/VersionWatcher";
+import { SilentUpdateWatcher } from "@/shared/components/SilentUpdateWatcher";
 import { OrganizationSchema } from "@/shared/components/seo/OrganizationSchema";
 import { WebSiteSchema } from "@/shared/components/seo/WebSiteSchema";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
@@ -148,7 +148,7 @@ export default async function RootLayout({
             <LazyMotion features={domAnimation}>
               <ScrollToTop />
               <AppAlert />
-              <VersionWatcher />
+              <SilentUpdateWatcher />
               {children}
             </LazyMotion>
           </QueryProvider>
