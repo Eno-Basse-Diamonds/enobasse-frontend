@@ -11,7 +11,7 @@ import { ConfigurationForm } from "./_components/ConfigurationForm";
 import { ProductDetails } from "./_components/ProductDetails";
 import { ProductGallery } from "./_components/ProductGallery";
 import { ProductInfo } from "./_components/ProductInfo";
-import { Modal } from "./_components/shared/Modal";
+import { Modal } from "./_components/shared/modal";
 
 export default function RingConfiguratorPage() {
   const [configuration, setConfiguration] = useState<RingConfiguration>(DEFAULT_CONFIGURATION);

@@ -33,7 +33,7 @@ import { MetalSelection } from "./MetalSelection";
 import { MobileConfigurationTabs } from "./MobileConfigurationTabs";
 import { RingSizeSelection } from "./RingSizeSelection";
 import { ShankStyleSelection } from "./ShankStyleSelection";
-import { Modal } from "./shared/Modal";
+import { Modal } from "./shared/modal";
 
 interface ConfigurationFormProps {
   configuration: RingConfiguration;

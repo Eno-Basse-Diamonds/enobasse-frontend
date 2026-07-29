@@ -33,7 +33,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "public/3d-models/convert.js",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
