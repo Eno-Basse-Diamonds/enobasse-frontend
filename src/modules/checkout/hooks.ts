@@ -51,6 +51,7 @@ export function useCheckout({
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [paymentReference, setPaymentReference] = useState<string | null>(null);
 
   const hasProcessedPaymentRef = useRef(false);
 
@@ -66,6 +67,12 @@ export function useCheckout({
     const randomPart = Math.random().toString(36).substring(2, 10);
     return `ENO-${timestamp}-${randomPart}`.toUpperCase();
   };
+
+  useEffect(() => {
+    if (paymentMethod === "bank_transfer" && !paymentReference) {
+      setPaymentReference(generateReference());
+    }
+  }, [paymentMethod]);
 
   const buildOrderItems = () =>
     items.map((item) => ({
@@ -185,7 +192,7 @@ export function useCheckout({
   const handleBankTransfer = async () => {
     setIsProcessing(true);
     setPaymentError(null);
-    const reference = generateReference();
+    const reference = paymentReference || generateReference();
 
     try {
       await persistOrder({
@@ -225,6 +232,7 @@ export function useCheckout({
     isConfirmed,
     isRedirecting,
     paystackLoaded,
+    paymentReference,
     handlePaystackPayment,
     handleBankTransfer,
   };

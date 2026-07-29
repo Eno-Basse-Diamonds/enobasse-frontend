@@ -45,6 +45,7 @@ export function OrderSummary({
     isConfirmed,
     isRedirecting,
     paystackLoaded,
+    paymentReference,
     handlePaystackPayment,
     handleBankTransfer,
   } = useCheckout({
@@ -107,7 +108,11 @@ export function OrderSummary({
           <PaymentMethodSelector selectedMethod={paymentMethod} onMethodChange={setPaymentMethod} />
 
           {paymentMethod === "bank_transfer" && (
-            <BankTransferDetails amount={subtotal} currency={displayCurrency} />
+            <BankTransferDetails
+              amount={subtotal}
+              currency={displayCurrency}
+              paymentReference={paymentReference || ""}
+            />
           )}
 
           {paymentError && (

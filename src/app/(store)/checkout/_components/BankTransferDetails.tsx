@@ -10,6 +10,7 @@ import { getCurrencySymbol } from "@/shared/utils/money";
 interface BankTransferDetailsProps {
   amount: number;
   currency: string;
+  paymentReference: string;
 }
 
 const ACCOUNT_NAME = "Eno Bassé Jewellery";
@@ -17,7 +18,7 @@ const NGN_ACCOUNT = "0638724267";
 const USD_ACCOUNT = "0670021982";
 const ZELLE_EMAIL = "bob.eyakeno@yahoo.com";
 
-export function BankTransferDetails({ amount, currency }: BankTransferDetailsProps) {
+export function BankTransferDetails({ amount, currency, paymentReference }: BankTransferDetailsProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const formattedPrice = (val: number) =>
@@ -116,7 +117,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 border border-gray-100">
+          <div className="flex items-center justify-between rounded bg-gray-50 px-2 py-2 border border-gray-100">
             <div>
               <span className="block text-[10px] text-gray-400 uppercase tracking-wider">
                 Account Number
@@ -194,9 +195,41 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
         </div>
       </div>
 
-      <p className="mt-4 text-[11px] text-gray-500 leading-relaxed italic">
-        * Please include your full name and order reference in the payment description/memo
-        when transferring.
+      {paymentReference && (
+        <div className="mt-4 rounded-sm border border-[#D1A559]/40 bg-[#D1A559]/10 p-3.5">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="block text-[10px] text-[#502B3A] uppercase tracking-wider font-semibold">
+                Your Order Reference
+              </span>
+              <span className="font-mono text-sm font-bold text-[#502B3A] tracking-wide">
+                {paymentReference}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleCopy(paymentReference, "ref")}
+              className="inline-flex items-center gap-1 rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              {copiedKey === "ref" ? (
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <span className="text-emerald-700 font-semibold">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3.5 w-3.5 text-gray-500" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      <p className="mt-3 text-[11px] text-gray-500 leading-relaxed italic">
+        * Please include your full name and the order reference above in the payment
+        description/memo when transferring.
       </p>
     </div>
   );
