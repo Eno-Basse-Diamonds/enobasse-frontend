@@ -293,18 +293,10 @@ const BillingSummary = ({ order }: { order: Order }) => {
                   ? "Bank Transfer"
                   : order.paymentMethod || "Bank Transfer"}
             </p>
-            {(order.paymentMethod === "bank_transfer" || !order.paymentMethod) && (
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-sm text-xs space-y-1.5 mt-2">
-                <p className="text-gray-500 font-semibold uppercase text-[10px] tracking-wider">
-                  Transfer / Wire Details (Eno Bassé Jewellery)
-                </p>
-                <p><span className="text-gray-500">GT Bank (NGN):</span> <strong className="text-[#502B3A] font-mono text-sm">0638724267</strong></p>
-                <p><span className="text-gray-500">GT Bank (USD):</span> <strong className="text-[#502B3A] font-mono text-sm">0670021982</strong></p>
-                <p><span className="text-gray-500">Zelle (International):</span> <strong className="text-[#502B3A] font-mono text-xs">bob.eyakeno@yahoo.com</strong></p>
-                {order.paymentReference && (
-                  <p className="pt-1 border-t border-gray-200"><span className="text-gray-500">Reference:</span> <span className="font-mono font-medium text-gray-900">{order.paymentReference}</span></p>
-                )}
-              </div>
+            {order.paymentReference && (
+              <p className="text-xs text-gray-500 mt-1">
+                Reference: <span className="font-mono font-medium text-gray-900">{order.paymentReference}</span>
+              </p>
             )}
           </div>
         </div>
