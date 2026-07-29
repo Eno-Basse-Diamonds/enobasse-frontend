@@ -10,12 +10,8 @@ export function BlogContent() {
   const { data, isLoading } = usePublishedBlogPosts(currentPage, perPage);
   const { posts } = data || { posts: [], totalPages: 1 };
 
-  if (isLoading) {
-    return (
-      <div className="-mx-4 lg:-mx-8">
-        <BlogSectionSkeletonLoader count={3} />
-      </div>
-    );
+  if (isLoading && !posts.length) {
+    return null;
   }
 
   return <BlogSection layout="horizontal-scroll" posts={posts} />;
