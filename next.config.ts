@@ -2,11 +2,20 @@ import type { NextConfig } from "next";
 
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
+const buildId =
+  process.env.NEXT_PUBLIC_BUILD_ID ||
+  process.env.VERCEL_GIT_COMMIT_SHA ||
+  process.env.VERCEL_DEPLOYMENT_ID ||
+  `local-${Date.now()}`;
+
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_ID: buildId,
+  },
   allowedDevOrigins: ["10.58.84.197"],
   images: {
     remotePatterns: [
@@ -15,6 +24,22 @@ const nextConfig: NextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
+  },
+  async headers() {
+    return [
+      {
+        // Documents must be revalidated so a navigation/reload receives the
+        // newest build manifest. API routes and static files manage their own
+        // caching separately.
+        source: "/((?!api(?:/|$)|_next(?:/|$)|.*\\.[^/]+$).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+    ];
   },
   async redirects() {
     return [
