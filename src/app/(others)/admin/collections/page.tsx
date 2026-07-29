@@ -175,7 +175,9 @@ export default function AdminCollectionsPage() {
       />
 
       {isLoading ? (
-        <AdminCollectionsSkeletonLoader />
+        <div className="flex-1 p-4 sm:p-6 lg:p-8">
+          <AdminCollectionsSkeletonLoader />
+        </div>
       ) : (
         <>
           <div className="flex-1 p-4 sm:p-6 lg:p-8">
