@@ -125,4 +125,3 @@ src/
 | `/faqs`                | Frequently asked questions                 |
 | `/size-guide`          | Ring size guide                            |
 | `/testimonials`        | Customer testimonials                      |
-
