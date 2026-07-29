@@ -77,7 +77,7 @@ export default async function SitemapPage() {
   ];
 
   return (
-    <div className="px-4 lg:px-8 mt-12 pb-16 text-primary-500">
+    <div className="px-4 lg:px-8 mt-12 pb-16 text-primary-500 min-h-screen">
       <h1 className="font-primary text-3xl md:text-4xl font-semibold text-center mb-12">Sitemap</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {sections.map((section) => (
