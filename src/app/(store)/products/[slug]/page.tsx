@@ -127,9 +127,12 @@ export default function ProductPage() {
 
   const isAmoraCollection = product?.collections?.some((c) => c.slug === "amora-collection");
 
-  const hasOutOfStockSelection = selectedLetters.some((l) => MOCK_AVAILABILITY[l] === false);
+  const hasOutOfStockSelection = Boolean(
+    isAmoraCollection && selectedLetters.some((l) => MOCK_AVAILABILITY[l] === false),
+  );
 
-  const isOutOfStock = selectedVariant?.inventory?.inStock === false;
+  const activeVariant = selectedVariant || product?.variants?.[0];
+  const isOutOfStock = activeVariant?.inventory?.inStock === false;
 
   // Calculate Amora collection price
   const letterPrice = product?.priceRange?.min ?? 0;
@@ -140,13 +143,13 @@ export default function ProductPage() {
   const quantity = 1;
 
   const handleWishlistToggle = async () => {
-    if (!selectedVariant || !hydrated) return;
+    if (!activeVariant || !hydrated) return;
 
-    if (isInWishlist(selectedVariant.id)) {
-      await removeItem(selectedVariant.id, session?.user?.email ?? undefined);
+    if (isInWishlist(activeVariant.id)) {
+      await removeItem(activeVariant.id, session?.user?.email ?? undefined);
     } else {
       await addItem(
-        selectedVariant,
+        activeVariant,
         product?.slug || "",
         product?.category || "",
         session?.user?.email ?? undefined,
@@ -155,7 +158,7 @@ export default function ProductPage() {
       );
 
       trackAddToWishlist(
-        selectedVariant,
+        activeVariant,
         product?.slug || "",
         product?.category || "",
         preferredCurrency,
@@ -167,9 +170,11 @@ export default function ProductPage() {
   const addAlert = useAlertStore((state) => state.addAlert);
 
   const handleAddToCart = () => {
-    if (!selectedVariant) return;
+    const variantToAdd = activeVariant;
+    if (!variantToAdd) return;
+
     addCartItem(
-      selectedVariant,
+      variantToAdd,
       product?.slug || "",
       product?.category || "",
       quantity,
@@ -187,7 +192,7 @@ export default function ProductPage() {
     );
 
     trackAddToCart(
-      selectedVariant,
+      variantToAdd,
       product?.slug || "",
       product?.category || "",
       quantity,
@@ -197,7 +202,7 @@ export default function ProductPage() {
     addAlert({
       type: "success",
       title: "Added to Cart",
-      message: `${selectedVariant.title || product?.name} has been added to your cart.`,
+      message: `${variantToAdd.title || product?.name} has been added to your cart.`,
       duration: 4000,
       dismissible: true,
     });
@@ -212,13 +217,20 @@ export default function ProductPage() {
   }, [session, hydrate]);
 
   useEffect(() => {
-    if (selectedVariant && product) {
-      trackViewItem(selectedVariant, product.slug, product.category || "", preferredCurrency);
+    if (activeVariant && product) {
+      trackViewItem(activeVariant, product.slug, product.category || "", preferredCurrency);
     }
-  }, [selectedVariant?.id]);
+  }, [activeVariant?.id]);
 
   useEffect(() => {
-    if (!product?.variants) return;
+    if (!product?.variants || product.variants.length === 0) return;
+
+    if (!selectedMetal && product.metals && product.metals.length > 0) {
+      setSelectedMetal(product.metals[0]);
+    }
+    if (!selectedGemstone && product.gemstones && product.gemstones.length > 0) {
+      setSelectedGemstone(product.gemstones[0]);
+    }
 
     const matchingVariant = product.variants.find((v) => {
       const matchMetal =
@@ -233,10 +245,8 @@ export default function ProductPage() {
 
     if (matchingVariant) {
       setSelectedVariant(matchingVariant);
-    } else if (selectedVariant?.id) {
-      // Fallback to ID match if attribute match fails (e.g., during currency update)
-      const variantById = product.variants.find((v) => v.id === selectedVariant.id);
-      if (variantById) setSelectedVariant(variantById);
+    } else if (!selectedVariant) {
+      setSelectedVariant(product.variants[0]);
     }
   }, [selectedMetal, selectedGemstone, product]);
 
@@ -260,21 +270,18 @@ export default function ProductPage() {
     return notFound();
   }
 
-  if (!selectedVariant) {
-    setSelectedVariant(product.variants[0]);
-  }
-
+  const isQuoteOnlyProduct = Boolean(product.isCustomDesign && (activeVariant?.price === 0 || activeVariant?.price == null));
   const hasMultipleVariants = product.variants.length > 1;
   const uniqueGemstones = Array.from(
     new Set(product.gemstones?.map((gemstone) => gemstone.type) || []),
   );
   const isRing = product.category === "Rings";
 
-  const metals = selectedVariant?.metals ?? [];
-  const gemstones = selectedVariant?.gemstones ?? [];
+  const metals = activeVariant?.metals ?? [];
+  const gemstones = activeVariant?.gemstones ?? [];
 
   const productDetails = [
-    { label: "SKU", value: selectedVariant?.sku ?? "N/A" },
+    { label: "SKU", value: activeVariant?.sku ?? "N/A" },
     {
       label: "Metal",
       value:
@@ -346,7 +353,7 @@ export default function ProductPage() {
             <div className="flex w-full justify-end">
               <ShareDropdown url={typeof window !== "undefined" ? window.location.href : ""} />
             </div>
-            <ImageGallery images={selectedVariant?.images ?? []} />
+            <ImageGallery images={activeVariant?.images ?? []} />
             <div className="hidden md:block">
               <div className="mt-8 mb-4">
                 <h2 className="text-xl text-primary-300 mb-3">Description</h2>
@@ -360,7 +367,7 @@ export default function ProductPage() {
             <div className="sticky top-4 md:top-32 h-auto md:h-[calc(100vh-6rem)] overflow-y-auto pb-8 md:pb-0">
               <div className="space-y-6 md:space-y-7">
                 <h1 className="font-primary text-xl md:text-2xl lg:text-3xl text-[#502B3A] mb-3 md:mb-5">
-                  {selectedVariant?.title ?? product.name}
+                  {activeVariant?.title ?? product.name}
                 </h1>
                 <div className="mb-6 md:mb-10 flex justify-between items-center w-full">
                   <Rating
@@ -368,16 +375,16 @@ export default function ProductPage() {
                     count={product.reviews?.length || 0}
                     showCount={true}
                   />
-                  {!(product.isCustomDesign && selectedVariant?.price === 0) && (
+                  {!isQuoteOnlyProduct && (
                     <button
                       onClick={handleWishlistToggle}
                       aria-label={
-                        isInWishlist(selectedVariant?.id ?? "")
+                        isInWishlist(activeVariant?.id ?? "")
                           ? "Remove from wishlist"
                           : "Add to wishlist"
                       }
                     >
-                      {isInWishlist(selectedVariant?.id ?? "") ? (
+                      {isInWishlist(activeVariant?.id ?? "") ? (
                         <Heart fill="#D1A559" className="text-secondary-500 h-5 w-5" />
                       ) : (
                         <WishlistIcon className="h-5 w-5" />
@@ -457,7 +464,7 @@ export default function ProductPage() {
                     />
                   )}
                 </div>
-                {product.isCustomDesign || selectedVariant?.price === 0 ? (
+                {isQuoteOnlyProduct ? (
                   <div>
                     <p className="text-[#502B3A] text-xl font-semibold">Contact us for pricing</p>
                     <p className="text-[#502B3A]/60 text-base">
@@ -477,13 +484,13 @@ export default function ProductPage() {
                     Price:{" "}
                     <span className="font-semibold text-[#502B3A] text-xl md:text-2xl">
                       {getCurrencySymbol(product.priceRange.currency)}
-                      {selectedVariant?.price != null
-                        ? selectedVariant.price.toLocaleString(undefined)
+                      {activeVariant?.price != null
+                        ? activeVariant.price.toLocaleString(undefined)
                         : "N/A"}
                     </span>
                   </p>
                 )}
-                {(!product.isCustomDesign || selectedVariant?.price !== 0) && (
+                {!isQuoteOnlyProduct && (
                   <>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
                       {isOutOfStock ? (
@@ -520,7 +527,7 @@ export default function ProductPage() {
                     </div>
                   </>
                 )}
-                {product.isCustomDesign && selectedVariant?.price === 0 && (
+                {isQuoteOnlyProduct && (
                   <>
                     <div className="flex-col gap-y-3 md:gap-y-4 mt-8 md:mt-12 hidden md:flex">
                       <Button size="xl" onClick={handleRequestQuote}>
@@ -535,6 +542,7 @@ export default function ProductPage() {
               </div>
             </div>
           </div>
+
 
           <div className="md:hidden">
             <div className="my-4">
