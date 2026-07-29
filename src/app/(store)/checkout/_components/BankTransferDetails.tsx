@@ -30,8 +30,6 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const isNgn = currency?.toUpperCase() === "NGN";
-
   return (
     <div className="mb-6 rounded-sm border border-[#D1A559]/30 bg-[#502B3A]/5 p-4 sm:p-5">
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#D1A559]/20 pb-3">
@@ -44,19 +42,13 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             {formattedPrice(amount)} to:
           </h4>
         </div>
-        <span className="self-start sm:self-auto rounded bg-[#D1A559]/20 px-2.5 py-1 text-xs font-semibold text-[#502B3A]">
+        <span className="self-start sm:self-auto rounded bg-[#D1A559]/20 px-2 py-1 text-xs font-semibold text-[#502B3A]">
           Direct Wire / Zelle
         </span>
       </div>
 
       <div className="space-y-3">
-        <div
-          className={`relative rounded-sm border p-3.5 transition-all ${
-            isNgn
-              ? "border-[#D1A559] bg-white shadow-sm ring-1 ring-[#D1A559]/50"
-              : "border-gray-200 bg-white hover:border-gray-300"
-          }`}
-        >
+        <div className="relative rounded-sm border border-gray-200 bg-white p-3.5 transition-all hover:border-gray-300">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="relative h-5 w-5 overflow-hidden rounded">
@@ -64,6 +56,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
                   src="https://res.cloudinary.com/enobasse/image/upload/v1756511213/gtbank_ttbzya.png"
                   alt="GT Bank"
                   fill
+                  sizes="20px"
                   className="object-contain"
                 />
               </div>
@@ -71,14 +64,9 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
                 GT Bank <span className="text-xs text-gray-500 font-normal">(NGN)</span>
               </span>
             </div>
-            {isNgn && (
-              <span className="rounded bg-[#502B3A] px-2 py-0.5 text-[10px] font-bold text-white">
-                Recommended for NGN
-              </span>
-            )}
           </div>
 
-          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2.5 border border-gray-100">
+          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 border border-gray-100">
             <div>
               <span className="block text-[10px] text-gray-400 uppercase tracking-wider">
                 Account Number
@@ -90,7 +78,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             <button
               type="button"
               onClick={() => handleCopy(NGN_ACCOUNT, "ngn")}
-              className="inline-flex items-center gap-1 rounded bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
             >
               {copiedKey === "ngn" ? (
                 <>
@@ -110,13 +98,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
           </p>
         </div>
 
-        <div
-          className={`relative rounded-sm border p-3.5 transition-all ${
-            !isNgn
-              ? "border-[#D1A559] bg-white shadow-sm ring-1 ring-[#D1A559]/50"
-              : "border-gray-200 bg-white hover:border-gray-300"
-          }`}
-        >
+        <div className="relative rounded-sm border border-gray-200 bg-white p-3.5 transition-all hover:border-gray-300">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="relative h-5 w-5 overflow-hidden rounded">
@@ -124,6 +106,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
                   src="https://res.cloudinary.com/enobasse/image/upload/v1756511213/gtbank_ttbzya.png"
                   alt="GT Bank"
                   fill
+                  sizes="20px"
                   className="object-contain"
                 />
               </div>
@@ -131,14 +114,9 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
                 GT Bank <span className="text-xs text-gray-500 font-normal">(USD)</span>
               </span>
             </div>
-            {!isNgn && (
-              <span className="rounded bg-[#502B3A] px-2 py-0.5 text-[10px] font-bold text-white">
-                Recommended for USD
-              </span>
-            )}
           </div>
 
-          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2.5 border border-gray-100">
+          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 border border-gray-100">
             <div>
               <span className="block text-[10px] text-gray-400 uppercase tracking-wider">
                 Account Number
@@ -150,7 +128,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             <button
               type="button"
               onClick={() => handleCopy(USD_ACCOUNT, "usd")}
-              className="inline-flex items-center gap-1 rounded bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
             >
               {copiedKey === "usd" ? (
                 <>
@@ -183,7 +161,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2.5 border border-gray-100">
+          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 border border-gray-100">
             <div>
               <span className="block text-[10px] text-gray-400 uppercase tracking-wider">
                 Zelle Email
@@ -195,7 +173,7 @@ export function BankTransferDetails({ amount, currency }: BankTransferDetailsPro
             <button
               type="button"
               onClick={() => handleCopy(ZELLE_EMAIL, "zelle")}
-              className="inline-flex items-center gap-1 rounded bg-white px-2.5 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 rounded bg-white px-2 py-1 text-xs font-medium text-gray-700 shadow-xs border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer"
             >
               {copiedKey === "zelle" ? (
                 <>
