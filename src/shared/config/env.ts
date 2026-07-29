@@ -4,7 +4,6 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 
   NEXT_PUBLIC_API_URL: z.string().url().default("http://localhost:4000"),
-  NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY: z.string().min(1),
   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().min(1),
   NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string().min(1),
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
