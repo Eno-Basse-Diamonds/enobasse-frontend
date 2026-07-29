@@ -17,7 +17,7 @@ import { PageHeading } from "@/shared/components/PageHeading";
 import { Pagination } from "@/shared/components/Pagination";
 import { ProductList } from "@/shared/components/ProductList";
 import { SectionContainer } from "@/shared/components/SectionContainer";
-import { ProductListLoader, ProductsPageLoader } from "@/shared/components/loaders/Products";
+import { CollectionDetailPageLoader } from "@/shared/components/loaders/Collections";
 import { BreadcrumbSchema } from "@/shared/components/seo/BreadcrumbSchema";
 import { CollectionSchema } from "@/shared/components/seo/CollectionSchema";
 import { METAL_OPTIONS } from "@/shared/constants/metals";
@@ -93,12 +93,8 @@ export default function CollectionPage() {
     }
   }, []);
 
-  if (isLoading && !collection) {
-    return (
-      <SectionContainer id="collection-products">
-        <ProductsPageLoader />
-      </SectionContainer>
-    );
+  if (isLoading) {
+    return <CollectionDetailPageLoader />;
   }
 
   if (isError) {
@@ -252,9 +248,7 @@ export default function CollectionPage() {
             <div
               className={`transition-opacity duration-300 ${isFetching ? "opacity-50 pointer-events-none" : "opacity-100"}`}
             >
-              {isLoading && !products.length ? (
-                <ProductListLoader />
-              ) : products.length === 0 ? (
+              {products.length === 0 ? (
                 <EmptyState
                   title="No Results Found"
                   description="We couldn't find any products that match your filters."
