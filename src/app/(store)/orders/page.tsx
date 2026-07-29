@@ -83,7 +83,7 @@ export default function OrderHistoryPage() {
                     </p>
                     <p className="font-medium text-gray-900 text-sm md:text-base">
                       {currencySymbol}
-                      {order.total.toLocaleString()}
+                      {Number(order.total || 0).toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -285,8 +285,27 @@ const BillingSummary = ({ order }: { order: Order }) => {
         {/* Payment Information Section */}
         <div className="space-y-2">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Payment information</h3>
-          <div className="flex items-center space-x-3">
-            <p className="text-gray-700">Bank Transfer</p>
+          <div className="space-y-2 text-sm text-gray-700">
+            <p className="font-semibold text-gray-900">
+              {order.paymentMethod === "paystack"
+                ? "Paystack"
+                : order.paymentMethod === "bank_transfer"
+                  ? "Bank Transfer"
+                  : order.paymentMethod || "Bank Transfer"}
+            </p>
+            {(order.paymentMethod === "bank_transfer" || !order.paymentMethod) && (
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-sm text-xs space-y-1.5 mt-2">
+                <p className="text-gray-500 font-semibold uppercase text-[10px] tracking-wider">
+                  Transfer / Wire Details (Eno Bassé Jewellery)
+                </p>
+                <p><span className="text-gray-500">GT Bank (NGN):</span> <strong className="text-[#502B3A] font-mono text-sm">0638724267</strong></p>
+                <p><span className="text-gray-500">GT Bank (USD):</span> <strong className="text-[#502B3A] font-mono text-sm">0670021982</strong></p>
+                <p><span className="text-gray-500">Zelle (International):</span> <strong className="text-[#502B3A] font-mono text-xs">bob.eyakeno@yahoo.com</strong></p>
+                {order.paymentReference && (
+                  <p className="pt-1 border-t border-gray-200"><span className="text-gray-500">Reference:</span> <span className="font-mono font-medium text-gray-900">{order.paymentReference}</span></p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -296,18 +315,18 @@ const BillingSummary = ({ order }: { order: Order }) => {
             <span className="text-gray-600">Subtotal</span>
             <span className="text-gray-900 font-medium">
               {currencySymbol}
-              {subtotal.toLocaleString()}
+              {Number(subtotal || 0).toLocaleString()}
             </span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Shipping</span>
-            <span className="text-gray-900 font-medium">{shipping.toLocaleString()}</span>
+            <span className="text-gray-900 font-medium">{shipping}</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Tax</span>
-            <span className="text-gray-900 font-medium">{tax.toLocaleString()}</span>
+            <span className="text-gray-900 font-medium">{tax}</span>
           </div>
 
           <div className="border-t pt-4">
@@ -315,7 +334,7 @@ const BillingSummary = ({ order }: { order: Order }) => {
               <span className="text-lg font-medium text-gray-900">Order total</span>
               <span className="text-xl font-semibold text-secondary-500">
                 {currencySymbol}
-                {order.total.toLocaleString()}
+                {Number(order.total || 0).toLocaleString()}
               </span>
             </div>
           </div>

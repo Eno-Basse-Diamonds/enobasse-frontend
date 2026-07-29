@@ -7,12 +7,13 @@ interface OrderTotalsProps {
 }
 
 export function OrderTotals({ subtotal, totalItems, currency }: OrderTotalsProps) {
-  const formattedPrice = (amount: number) => amount.toLocaleString();
+  const formattedPrice = (amount?: number) =>
+    typeof amount === "number" && !isNaN(amount) ? amount.toLocaleString() : "0";
 
   return (
     <div className="space-y-4 border-t border-gray-200 pt-4">
       <div className="flex justify-between">
-        <span className="text-sm text-[#502B3A]">Subtotal ({totalItems} items)</span>
+        <span className="text-sm text-[#502B3A]">Subtotal ({totalItems || 0} items)</span>
         <span className="text-sm font-medium text-[#502B3A]">
           {getCurrencySymbol(currency)}
           {formattedPrice(subtotal)}
