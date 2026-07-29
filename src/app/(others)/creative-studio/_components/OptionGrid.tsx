@@ -12,6 +12,21 @@ interface OptionGridProps {
   className?: string;
 }
 
+/**
+ * Selectable option grid.
+ *
+ * @description Renders a CSS grid of selectable option cards, each with an
+ * optional image and label. Supports selected, disabled, and hover states.
+ * @param options - Array of Option objects with id, name, and optional
+ * image and disabled flag.
+ * @param selectedId - Currently selected option ID.
+ * @param onSelect - Callback when an option is selected.
+ * @param disabledIds - IDs of options to render as non-interactive.
+ * @param columns - Number of grid columns (3-6; default 5).
+ * @param imageSize - Pixel size for option images (default 40).
+ * @param className - Additional CSS classes.
+ * @returns A grid of selectable option buttons.
+ */
 export function OptionGrid({
   options,
   selectedId,

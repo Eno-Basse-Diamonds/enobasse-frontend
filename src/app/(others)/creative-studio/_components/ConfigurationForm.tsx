@@ -31,9 +31,9 @@ import { EngravingSelection } from "./EngravingSelection";
 import { HeadStyleSelection } from "./HeadStyleSelection";
 import { MetalSelection } from "./MetalSelection";
 import { MobileConfigurationTabs } from "./MobileConfigurationTabs";
+import { Modal } from "./Modal";
 import { RingSizeSelection } from "./RingSizeSelection";
 import { ShankStyleSelection } from "./ShankStyleSelection";
-import { Modal } from "./shared/modal";
 
 interface ConfigurationFormProps {
   configuration: RingConfiguration;
@@ -43,6 +43,20 @@ interface ConfigurationFormProps {
   generatedImages?: Array<{ src: string; alt?: string }>;
 }
 
+/**
+ * Configuration form for the creative studio.
+ *
+ * @description Orchestrates all ring-configuration selection widgets
+ * (diamond preview, head, shank, metal, ring size, engraving) and the
+ * mobile tab navigation. Manages the "Request a Quote" button and modal
+ * submission flow including Cloudinary upload of generated preview images.
+ * @param configuration - Current ring configuration state.
+ * @param onConfigurationChange - Callback when configuration is updated.
+ * @param activeTab - Currently active mobile tab identifier.
+ * @param onTabChange - Callback when the active tab changes.
+ * @param generatedImages - Rendered preview images from the 3D viewer.
+ * @returns The full configuration sidebar UI.
+ */
 export function ConfigurationForm({
   configuration,
   onConfigurationChange,

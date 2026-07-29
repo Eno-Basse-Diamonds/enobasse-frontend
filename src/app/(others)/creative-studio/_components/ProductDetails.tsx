@@ -6,6 +6,19 @@ interface ProductDetailsProps {
   onClose?: () => void;
 }
 
+/**
+ * Product specification details.
+ *
+ * @description Displays a list of product specification rows (metal, width,
+ * length, head type, shank type, optional engraving). Renders inline on
+ * desktop or as a bottom-sheet modal on mobile.
+ * @param metalName - Display name of the selected metal.
+ * @param engravingText - Optional engraving text to display.
+ * @param engravingFont - Font family of the engraving text.
+ * @param isModal - Whether to render as a full-screen modal overlay.
+ * @param onClose - Callback when the modal close button is clicked.
+ * @returns The product details list or modal UI.
+ */
 export function ProductDetails({
   metalName,
   engravingText = "",

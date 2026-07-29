@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { ProductVariant } from "@/modules/products/types";
-import { convertCurrency, getExchangeRate } from "@/shared/utils/exchangeRate";
+import { convertCurrency, getExchangeRate } from "@/shared/utils/exchange";
 
 import { addToCart, clearCart, getCart, removeFromCart, updateCartItem } from "./api";
 import { CartItem } from "./types";

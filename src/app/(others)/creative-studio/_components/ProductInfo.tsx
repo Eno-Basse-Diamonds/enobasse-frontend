@@ -5,6 +5,15 @@ interface ProductInfoProps {
   configuration: RingConfiguration;
 }
 
+/**
+ * Product information header.
+ *
+ * @description Displays the generated ring name, "Price available upon
+ * request" text, and a phone call prompt.
+ * @param configuration - Current ring configuration used to derive the
+ * ring name and metal name.
+ * @returns The product info header UI.
+ */
 export function ProductInfo({ configuration }: ProductInfoProps) {
   const ringName = getRingName(configuration.headStyle, configuration.shankStyle);
   const metalName = getFullMetalName(configuration.metalType, configuration.karat);

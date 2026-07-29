@@ -8,6 +8,18 @@ interface ModalProps {
   className?: string;
 }
 
+/**
+ * Reusable modal dialog.
+ *
+ * @description Renders a full-screen overlay with centered dialog on
+ * desktop or a bottom-sheet panel on mobile. Supports Escape key to close.
+ * @param isOpen - Whether the modal is visible.
+ * @param onClose - Callback to close the modal.
+ * @param title - Heading text displayed in the modal header.
+ * @param children - Modal body content.
+ * @param className - Additional CSS classes for the dialog panel.
+ * @returns A modal overlay with header and content.
+ */
 export function Modal({ isOpen, onClose, title, children, className = "" }: ModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 import { ProductVariant } from "@/modules/products/types";
 import { WishlistItem } from "@/modules/wishlist/types";
-import { convertCurrency, getExchangeRate } from "@/shared/utils/exchangeRate";
+import { convertCurrency, getExchangeRate } from "@/shared/utils/exchange";
 
 import { addToWishlist, clearWishlist, getWishlist, removeFromWishlist } from "./api";
 

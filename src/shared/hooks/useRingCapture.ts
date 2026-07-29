@@ -18,6 +18,14 @@ interface UseRingCaptureProps {
   onImagesGenerated?: (images: { src: string; alt: string }[]) => void;
 }
 
+/**
+ * Ring capture hook.
+ *
+ * @description Handles capturing three views (front, top, side) of the 3D
+ * ring scene after all textures and shaders have compiled, caching the
+ * generated images per product configuration.
+ * @returns An object containing `imagesGenerated`
+ */
 export function useRingCapture({
   gemstoneShape,
   headStyle,
@@ -71,6 +79,7 @@ export function useRingCapture({
     const originalPosition = camera.position.clone();
     const originalRotation = camera.rotation.clone();
     const originalQuaternion = camera.quaternion.clone();
+    const originalUp = camera.up.clone();
 
     // Temporarily disable OrbitControls to prevent conflicts
     const controlsWasEnabled = controlsRef.current?.enabled;
@@ -79,18 +88,27 @@ export function useRingCapture({
     }
 
     try {
-      const captureView = (position: [number, number, number], angle: "front" | "top" | "side") => {
+      const captureView = (
+        position: [number, number, number],
+        up: [number, number, number] | undefined,
+        angle: "front" | "top" | "side",
+      ) => {
         // Move the actual main camera
         camera.position.set(...position);
+        if (up) {
+          camera.up.set(...up);
+        } else {
+          camera.up.set(0, 1, 0);
+        }
         camera.lookAt(0, 0, 0);
         camera.updateMatrixWorld(true);
         return captureImage(camera, angle);
       };
 
       // Capture the three views synchronously without moving the camera on screen
-      images.push(captureView([20, 25, 30], "side"));
-      images.push(captureView([0, 40, 0], "top"));
-      images.push(captureView([0, 25, -40], "front"));
+      images.push(captureView([20, 25, -30], undefined, "side"));
+      images.push(captureView([0, 45, 0], [0, 0, -1], "top"));
+      images.push(captureView([0, 25, -40], undefined, "front"));
 
       const generatedImages = images.map((img) => createGeneratedImage(img.src, img.alt));
       setCachedImages(configKey, generatedImages);
@@ -108,6 +126,7 @@ export function useRingCapture({
       camera.position.copy(originalPosition);
       camera.rotation.copy(originalRotation);
       camera.quaternion.copy(originalQuaternion);
+      camera.up.copy(originalUp);
       camera.updateMatrixWorld(true);
 
       // Re-enable controls if they were enabled
@@ -146,6 +165,7 @@ export function useRingCapture({
     }
 
     frameCountRef.current += 1;
+
     // Wait for 30 frames (about 0.5s at 60fps) to ensure all textures, PMREM,
     // and shaders are fully compiled/uploaded before rendering screenshots.
     if (frameCountRef.current < 30) {

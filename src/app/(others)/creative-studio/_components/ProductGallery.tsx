@@ -10,7 +10,7 @@ import {
   useCreativeStudioImageCache,
 } from "@/modules/creative-studio/store";
 
-import { LoadingSpinner } from "./shared/LoadingSpinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 const ThreeDRing = dynamic(() => import("./ThreeDRing").then((mod) => mod.ThreeDRing), {
   ssr: false,
@@ -29,6 +29,20 @@ interface ProductGalleryProps {
   onImagesUpdate?: (images: { src: string; alt: string }[]) => void;
 }
 
+/**
+ * Product gallery with 3D viewer and rendered previews.
+ *
+ * @description Displays a grid of product images: an interactive 3D ring
+ * viewer plus three auto-generated preview renders (side, top, front).
+ * Handles image caching per configuration, loading states, and mobile
+ * swipe-friendly navigation with thumbnails.
+ * @param gemstoneShape - Gemstone shape identifier.
+ * @param headStyle - Head style identifier.
+ * @param shankStyle - Shank style identifier.
+ * @param metalType - Metal type identifier.
+ * @param onImagesUpdate - Callback fired with generated image array.
+ * @returns The product gallery layout.
+ */
 export function ProductGallery({
   gemstoneShape,
   headStyle,

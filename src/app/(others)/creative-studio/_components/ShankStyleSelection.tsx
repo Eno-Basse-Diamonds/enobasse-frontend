@@ -1,7 +1,7 @@
 import { SHANK_STYLES } from "@/modules/creative-studio/constants";
 
-import { OptionGrid } from "./shared/OptionGrid";
-import { SectionContainer } from "./shared/SectionContainer";
+import { OptionGrid } from "./OptionGrid";
+import { SectionContainer } from "./SectionContainer";
 
 interface ShankStyleSelectionProps {
   activeTab: string;
@@ -9,6 +9,16 @@ interface ShankStyleSelectionProps {
   setSelectedShankStyle: (style: string) => void;
 }
 
+/**
+ * Shank style selector.
+ *
+ * @description Displays available shank (band) styles in a grid. Gated by
+ * the active mobile tab.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param selectedShankStyle - Currently selected shank style ID.
+ * @param setSelectedShankStyle - Callback when shank style changes.
+ * @returns The shank style grid UI.
+ */
 export function ShankStyleSelection({
   activeTab,
   selectedShankStyle,

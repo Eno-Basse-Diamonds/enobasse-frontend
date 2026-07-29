@@ -6,7 +6,7 @@ import * as motion from "motion/react-client";
 
 import { ENGRAVING_FONTS } from "@/modules/creative-studio/constants";
 
-import { SectionContainer } from "./shared/SectionContainer";
+import { SectionContainer } from "./SectionContainer";
 
 interface EngravingSelectionProps {
   activeTab: string;
@@ -16,6 +16,19 @@ interface EngravingSelectionProps {
   setEngravingFont: (font: string) => void;
 }
 
+/**
+ * Engraving text and font selection.
+ *
+ * @description Provides a text input (max 20 chars) with character count,
+ * a font style dropdown, and a live SVG preview of the engraving on a
+ * curved ring band. Gated by the active mobile tab.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param engravingText - Current engraving text value.
+ * @param setEngravingText - Callback when engraving text changes.
+ * @param engravingFont - Current engraving font-family value.
+ * @param setEngravingFont - Callback when engraving font changes.
+ * @returns The engraving configuration UI.
+ */
 export function EngravingSelection({
   activeTab,
   engravingText,

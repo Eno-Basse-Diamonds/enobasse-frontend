@@ -1,7 +1,7 @@
 import { GEMSTONE_SHAPES, PREVIEW_SIZES } from "@/modules/creative-studio/constants";
 
-import { OptionGrid } from "./shared/OptionGrid";
-import { SectionContainer } from "./shared/SectionContainer";
+import { OptionGrid } from "./OptionGrid";
+import { SectionContainer } from "./SectionContainer";
 
 interface DiamondPreviewProps {
   activeTab: string;
@@ -12,6 +12,20 @@ interface DiamondPreviewProps {
   availableGemstoneShapes: string[];
 }
 
+/**
+ * Diamond shape and size preview selector.
+ *
+ * @description Allows the user to choose a gemstone shape from available
+ * options and select a preview carat size. Gated by the active mobile tab.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param selectedPreviewShape - Currently selected gemstone shape ID.
+ * @param setSelectedPreviewShape - Callback when shape changes.
+ * @param selectedPreviewSize - Currently selected carat size label.
+ * @param setSelectedPreviewSize - Callback when size changes.
+ * @param availableGemstoneShapes - Array of shape IDs compatible with the
+ * current head style.
+ * @returns The diamond shape and size section UI.
+ */
 export function DiamondPreview({
   activeTab,
   selectedPreviewShape,

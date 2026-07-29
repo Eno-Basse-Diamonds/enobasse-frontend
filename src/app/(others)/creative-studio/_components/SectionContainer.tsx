@@ -8,6 +8,20 @@ interface SectionContainerProps {
   className?: string;
 }
 
+/**
+ * Section visibility container.
+ *
+ * @description Conditionally shows or hides its children based on whether
+ * the active tab matches the section's tab type. On desktop (lg+) the
+ * section is always visible; on mobile it only shows when activeTab matches
+ * tabType or when activeTab is empty.
+ * @param children - Section content.
+ * @param activeTab - Currently active mobile tab identifier.
+ * @param tabType - The tab type this section belongs to.
+ * @param title - Section heading text.
+ * @param className - Additional CSS classes.
+ * @returns The section wrapper with heading.
+ */
 export function SectionContainer({
   children,
   activeTab,

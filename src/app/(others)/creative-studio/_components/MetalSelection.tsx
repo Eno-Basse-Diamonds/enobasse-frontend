@@ -1,6 +1,6 @@
 import { KARATS, METAL_TYPES } from "@/modules/creative-studio/constants";
 
-import { SectionContainer } from "./shared/SectionContainer";
+import { SectionContainer } from "./SectionContainer";
 
 interface MetalSelectionProps {
   activeTab: string;
@@ -10,6 +10,20 @@ interface MetalSelectionProps {
   setSelectedKarat: (karat: string) => void;
 }
 
+/**
+ * Metal type and karat selector.
+ *
+ * @description Displays a color-swatch grid for metal types (yellow gold,
+ * white gold, rose gold, platinum) and a karat selector for gold options.
+ * Platinum is fixed at 950 and hides the karat picker. Gated by the active
+ * mobile tab.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param selectedMetalType - Currently selected metal type ID.
+ * @param setSelectedMetalType - Callback when metal type changes.
+ * @param selectedKarat - Currently selected karat ID.
+ * @param setSelectedKarat - Callback when karat changes.
+ * @returns The metal and karat selection UI.
+ */
 export function MetalSelection({
   activeTab,
   selectedMetalType,

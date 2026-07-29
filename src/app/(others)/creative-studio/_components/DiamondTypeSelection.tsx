@@ -1,4 +1,4 @@
-import { SectionContainer } from "./shared/SectionContainer";
+import { SectionContainer } from "./SectionContainer";
 
 interface DiamondTypeSelectionProps {
   activeTab: string;
@@ -12,6 +12,16 @@ const OPTIONS = [
   { id: "moissanite", name: "Moissanite" },
 ];
 
+/**
+ * Diamond type selection (lab / natural / moissanite).
+ *
+ * @description Renders a row of buttons to choose between lab-grown,
+ * natural, and moissanite diamond types. Gated by the active mobile tab.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param selectedDiamondType - Currently selected diamond type ID.
+ * @param setSelectedDiamondType - Callback when type changes.
+ * @returns The diamond type selector UI.
+ */
 export function DiamondTypeSelection({
   activeTab,
   selectedDiamondType,

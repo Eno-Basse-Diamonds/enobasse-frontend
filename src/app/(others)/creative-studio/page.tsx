@@ -8,10 +8,10 @@ import { getFullMetalName } from "@/modules/creative-studio/utils";
 import { PageHeading } from "@/shared/components/PageHeading";
 
 import { ConfigurationForm } from "./_components/ConfigurationForm";
+import { Modal } from "./_components/Modal";
 import { ProductDetails } from "./_components/ProductDetails";
 import { ProductGallery } from "./_components/ProductGallery";
 import { ProductInfo } from "./_components/ProductInfo";
-import { Modal } from "./_components/shared/modal";
 
 export default function RingConfiguratorPage() {
   const [configuration, setConfiguration] = useState<RingConfiguration>(DEFAULT_CONFIGURATION);

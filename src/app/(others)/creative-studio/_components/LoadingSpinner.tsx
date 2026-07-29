@@ -4,6 +4,16 @@ interface LoadingSpinnerProps {
   text?: string;
 }
 
+/**
+ * Loading spinner indicator.
+ *
+ * @description Renders a simple spinning border animation with optional
+ * descriptive text below it. Supports sm, md, and lg sizes.
+ * @param size - Spinner size (sm, md, lg; default md).
+ * @param className - Additional CSS classes.
+ * @param text - Optional label rendered below the spinner.
+ * @returns A spinner element with optional text.
+ */
 export function LoadingSpinner({ size = "md", className = "", text }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: "h-4 w-4",

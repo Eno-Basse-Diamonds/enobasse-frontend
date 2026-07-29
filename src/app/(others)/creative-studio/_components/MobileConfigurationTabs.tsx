@@ -3,6 +3,16 @@ interface MobileConfigurationTabsProps {
   setActiveTab: (tab: string) => void;
 }
 
+/**
+ * Mobile configuration tab navigation.
+ *
+ * @description Horizontal tab bar visible only on small screens, allowing
+ * the user to switch between diamond, head, shank, metal, and engraving
+ * configuration sections. Hidden on lg+ via CSS.
+ * @param activeTab - Currently active tab identifier.
+ * @param setActiveTab - Callback when the active tab changes.
+ * @returns The mobile tab navigation UI.
+ */
 export function MobileConfigurationTabs({ activeTab, setActiveTab }: MobileConfigurationTabsProps) {
   return (
     <div className="lg:hidden border-b border-gray-200">

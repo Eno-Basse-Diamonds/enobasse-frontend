@@ -10,7 +10,7 @@ import { useCreateProduct, useUpdateProduct } from "@/modules/products/hooks";
 import { Gemstone, Metal, Product, ProductStatus, ProductVariant } from "@/modules/products/types";
 import { Alert } from "@/shared/components/Alert";
 import { Button } from "@/shared/components/Button";
-import { getExchangeRate } from "@/shared/utils/exchangeRate";
+import { getExchangeRate } from "@/shared/utils/exchange";
 import { textToSlug } from "@/shared/utils/string";
 
 import { AdminModal } from "./_elements/AdminModal";

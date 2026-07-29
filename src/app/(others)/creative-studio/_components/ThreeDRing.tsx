@@ -17,18 +17,18 @@ import {
 } from "@/modules/creative-studio/constants";
 import { getModelPath } from "@/modules/creative-studio/utils";
 import { PerformanceTier, useMobileDetection } from "@/shared/hooks/useMobileDetection";
-
-import { HeadRenderer } from "./three-d-ring/HeadRenderer";
-import { RingMesh } from "./three-d-ring/RingMesh";
-import { ShankRenderer } from "./three-d-ring/ShankRenderer";
+import { useRingCapture } from "@/shared/hooks/useRingCapture";
+import { GLTFResult } from "@/shared/types/creativeStudio";
 import {
   findFirstMeshGeometry,
   getAnchorTransform,
   getTransformedBoundingBox,
   makeTransformMatrix,
-} from "./three-d-ring/anchor-utils";
-import { GLTFResult } from "./three-d-ring/types";
-import { useRingCapture } from "./three-d-ring/use-ring-capture";
+} from "@/shared/utils/anchor";
+
+import { HeadRenderer } from "./HeadRenderer";
+import { RingMesh } from "./RingMesh";
+import { ShankRenderer } from "./ShankRenderer";
 
 const ACCENT_MODEL_PATHS = ACCENT_GEM_SHAPES.map((shape) => getModelPath("gemstone", shape));
 
@@ -42,6 +42,23 @@ interface ThreeDRingProps {
   imagesReady?: boolean;
 }
 
+/**
+ * 3D ring viewer.
+ *
+ * @description Renders a Three.js canvas with an interactive 3D ring model
+ * composed of head, shank, gemstone, and accent diamond meshes loaded from
+ * glTF. Auto-fits and recenters the assembled ring per configuration using
+ * bounding-box calculations. Handles mobile performance optimization,
+ * auto-rotation via useFrame, and OrbitControls with mobile-adjusted limits.
+ * @param gemstoneShape - Gemstone shape identifier for model loading.
+ * @param headStyle - Head style identifier for model loading.
+ * @param shankStyle - Shank style identifier for model loading.
+ * @param metalType - Metal type for material configuration.
+ * @param onImagesGenerated - Callback fired with captured preview images.
+ * @param onImageGenerationStart - Callback when image generation begins.
+ * @param imagesReady - Whether previously cached images are ready.
+ * @returns A Three.js canvas with the assembled ring scene.
+ */
 export function ThreeDRing({
   gemstoneShape,
   headStyle,
@@ -99,7 +116,7 @@ export function ThreeDRing({
       frameloop={isMobile ? "demand" : "always"}
       performance={{ min: 0.5 }}
       camera={{ position: [0, 25, -40], fov: 33 }}
-      gl={{ toneMappingExposure: 1.5, antialias: true }}
+      gl={{ toneMappingExposure: 1.2, antialias: true }}
       className="w-full h-full"
     >
       <Suspense fallback={null}>
@@ -214,6 +231,8 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     });
   }, [metalType, isMobile]);
 
+  const shankGeometry = useMemo(() => findFirstMeshGeometry(shankData.nodes), [shankData]);
+  const headGeometry = useMemo(() => findFirstMeshGeometry(headData.nodes), [headData]);
   const gemstoneGeometry = useMemo(() => findFirstMeshGeometry(gemstoneData.nodes), [gemstoneData]);
 
   const accentGeometryByShape = useMemo(() => {
@@ -258,7 +277,7 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
     const box = new Box3();
 
     const shankBox = getTransformedBoundingBox(
-      (shankData.nodes.Body as Mesh)?.geometry,
+      shankGeometry,
       makeTransformMatrix([0, 0, 0], [0, 0, 0, 1], [1, 1, 1]),
     );
     if (shankBox) box.union(shankBox);
@@ -268,7 +287,7 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
       headAttachment.quaternion,
       headAttachment.scale,
     );
-    const headBox = getTransformedBoundingBox((headData.nodes.Body as Mesh)?.geometry, headMatrix);
+    const headBox = getTransformedBoundingBox(headGeometry, headMatrix);
     if (headBox) box.union(headBox);
 
     const gemstoneMatrix = headMatrix
@@ -298,7 +317,14 @@ const RotatingRing: React.FC<RotatingRingProps> = ({
       centerOffset: [-center.x, -center.y, -center.z] as [number, number, number],
       autoScale: maxDimension > 0 ? TARGET_RING_SIZE / maxDimension : FALLBACK_RING_SCALE,
     };
-  }, [shankData, headData, gemstoneGeometry, headAttachment, gemstoneAttachment, gemstoneScale]);
+  }, [
+    shankGeometry,
+    headGeometry,
+    gemstoneGeometry,
+    headAttachment,
+    gemstoneAttachment,
+    gemstoneScale,
+  ]);
 
   // On mobile, frameloop="demand" means useFrame only runs when a frame is
   // actually rendered, which otherwise only happens via invalidate() calls,

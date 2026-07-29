@@ -1,6 +1,6 @@
 import { RING_SIZES } from "@/modules/services/constants";
 
-import { SectionContainer } from "./shared/SectionContainer";
+import { SectionContainer } from "./SectionContainer";
 
 interface RingSizeSelectionProps {
   activeTab: string;
@@ -8,6 +8,16 @@ interface RingSizeSelectionProps {
   setSelectedRingSize: (size: number) => void;
 }
 
+/**
+ * Ring size selector.
+ *
+ * @description Displays a grid of available ring size buttons. Gated by the
+ * active mobile tab. Sizes are sourced from shared services constants.
+ * @param activeTab - Current active tab to determine visibility.
+ * @param selectedRingSize - Currently selected ring size number.
+ * @param setSelectedRingSize - Callback when ring size changes.
+ * @returns The ring size grid UI.
+ */
 export function RingSizeSelection({
   activeTab,
   selectedRingSize,
