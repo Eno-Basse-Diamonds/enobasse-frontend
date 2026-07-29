@@ -108,7 +108,7 @@ export const RecentReviewsSection = ({ reviews }: RecentReviewsSectionProps) => 
 
           <div className="mt-2 pt-4 border-t border-gray-100">
             <Link
-              href="/admin/Reviews"
+              href="/admin/reviews"
               className="text-sm text-secondary-500 hover:text-secondary-400 font-medium flex items-center gap-x-2 transition-colors"
             >
               <span>View all reviews</span>

@@ -71,8 +71,8 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
     {
       icon: Star,
       label: "Reviews",
-      href: "/admin/Reviews",
-      active: pathname === "/admin/Reviews",
+      href: "/admin/reviews",
+      active: pathname === "/admin/reviews",
     },
     {
       icon: Mail,

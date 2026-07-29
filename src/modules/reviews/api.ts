@@ -56,7 +56,7 @@ export const createReview = async (
 export const getReviewsForAdmin = async (
   options?: AdminReviewFilterOptions,
 ): Promise<PaginatedReviewResponse> => {
-  return api.get("/Reviews", { params: options, cache: false });
+  return api.get("/reviews", { params: options, cache: false });
 };
 
 export interface UpdateReviewData {

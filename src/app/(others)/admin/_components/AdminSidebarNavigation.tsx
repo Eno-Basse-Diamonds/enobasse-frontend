@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { X } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { LogOut, X } from "lucide-react";
 
 interface SidebarItem {
   label: string;
@@ -20,7 +21,7 @@ export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
   onItemClick,
 }) => {
   return (
-    <div className="w-72 bg-white border-r border-gray-200 h-full overflow-y-auto">
+    <div className="w-72 bg-white border-r border-gray-200 h-full overflow-y-auto flex flex-col">
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Image
@@ -39,7 +40,7 @@ export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
           <X className="w-5 h-5" />
         </button>
       </div>
-      <nav className="mt-2">
+      <nav className="mt-2 flex-1">
         {sidebarItems.map((item, index) => (
           <Link
             key={index}
@@ -56,6 +57,13 @@ export const AdminSidebarNavigation: React.FC<SidebarNavigationProps> = ({
           </Link>
         ))}
       </nav>
+      <button
+        onClick={() => signOut({ callbackUrl: "/" })}
+        className="w-full flex items-center px-6 py-3 text-left transition-colors text-primary-500 hover:text-secondary-500 border-t border-gray-200"
+      >
+        <LogOut className="w-5 h-5 mr-3 text-primary-200 shrink-0" />
+        <span className="truncate">Sign Out</span>
+      </button>
     </div>
   );
 };
