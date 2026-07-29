@@ -12,6 +12,7 @@ import * as motion from "motion/react-client";
 import { RequestQuoteModal } from "@/app/(store)/products/[slug]/_components/RequestQuoteModal";
 import { useCartStore } from "@/modules/cart/store";
 import { Gemstone, Metal, Product, ProductVariant } from "@/modules/products/types";
+import { isQuoteOnlyProduct } from "@/modules/products/utils";
 import { useWishlistStore } from "@/modules/wishlist/store";
 import { Button } from "@/shared/components/Button";
 import { GemstoneSelector, MetalTypeSelector } from "@/shared/components/Checkbox";
@@ -72,13 +73,21 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
   );
 
   const { items } = useWishlistStore();
-  const isInWishlist = items.some((item) => item.productVariant?.id === selectedVariant.id);
+  const isInWishlist = items.some(
+    (item) => String(item.productVariant?.id) === String(selectedVariant.id),
+  );
 
   const { addItem } = useCartStore();
   const { data: session } = useSession();
   const addAlert = useAlertStore((state) => state.addAlert);
 
+  const isQuoteOnly = isQuoteOnlyProduct(product, selectedVariant?.price);
+
   const onAddToCart = () => {
+    if (isQuoteOnly) {
+      setIsQuoteModalOpen(true);
+      return;
+    }
     addItem(
       selectedVariant,
       product.slug,
@@ -334,7 +343,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               <h2 className="text-lg font-semibold md:text-2xl font-primary text-primary-500">
                 {selectedVariant.title}
               </h2>
-              {product.isCustomDesign || selectedVariant?.price === 0 ? (
+              {isQuoteOnly ? (
                 <div>
                   <p className="text-primary-500 text-lg font-semibold">Contact us for pricing</p>
                 </div>
@@ -428,7 +437,7 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
             >
-              {!product.isCustomDesign || selectedVariant?.price !== 0 ? (
+              {!isQuoteOnly ? (
                 <>
                   <div className="grid-cols-2 gap-4 mb-4 hidden md:grid">
                     {selectedVariant?.inventory?.inStock === false ? (

@@ -43,6 +43,8 @@ interface ProductGalleryProps {
  * @param onImagesUpdate - Callback fired with generated image array.
  * @returns The product gallery layout.
  */
+const FALLBACK_IMAGE = "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png";
+
 export function ProductGallery({
   gemstoneShape,
   headStyle,
@@ -57,6 +59,7 @@ export function ProductGallery({
   const [isGenerating, setIsGenerating] = useState(false);
   const [imagesReady, setImagesReady] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
   const { getCachedImages, setCachedImages } = useCreativeStudioImageCache();
 
@@ -172,12 +175,13 @@ export function ProductGallery({
             >
               {allImages[index] ? (
                 <Image
-                  src={allImages[index].src}
+                  src={failedImages.has(index) ? FALLBACK_IMAGE : allImages[index].src}
                   alt={allImages[index].alt}
                   width={200}
                   height={200}
                   className="object-cover h-full w-auto"
                   quality={100}
+                  onError={() => setFailedImages((prev) => new Set(prev).add(index))}
                 />
               ) : (
                 renderLoadingState()
@@ -207,11 +211,18 @@ export function ProductGallery({
               </div>
             ) : allImages[currentImageIndex - 1] ? (
               <Image
-                src={allImages[currentImageIndex - 1].src}
+                src={
+                  failedImages.has(currentImageIndex - 1)
+                    ? FALLBACK_IMAGE
+                    : allImages[currentImageIndex - 1].src
+                }
                 alt={allImages[currentImageIndex - 1].alt}
                 fill
                 className="object-contain mt-6"
                 quality={100}
+                onError={() =>
+                  setFailedImages((prev) => new Set(prev).add(currentImageIndex - 1))
+                }
               />
             ) : (
               renderLoadingState()
@@ -282,11 +293,12 @@ export function ProductGallery({
             >
               {allImages[index] ? (
                 <Image
-                  src={allImages[index].src}
+                  src={failedImages.has(index) ? FALLBACK_IMAGE : allImages[index].src}
                   alt={allImages[index].alt}
                   width={64}
                   height={64}
                   className="object-cover w-full h-full"
+                  onError={() => setFailedImages((prev) => new Set(prev).add(index))}
                 />
               ) : (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center -mt-2">

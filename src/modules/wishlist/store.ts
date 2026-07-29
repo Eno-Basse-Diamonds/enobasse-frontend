@@ -144,7 +144,11 @@ export const useWishlistStore = create<WishlistState>()(
         isCustomDesign?: boolean,
       ) => {
         // Check if already in wishlist
-        if (get().items.some((item) => item.productVariant.id === productVariant.id)) {
+        if (
+          get().items.some(
+            (item) => String(item.productVariant?.id) === String(productVariant.id),
+          )
+        ) {
           return;
         }
 
@@ -217,7 +221,9 @@ export const useWishlistStore = create<WishlistState>()(
 
         // Optimistic update - remove item immediately
         set((state) => ({
-          items: state.items.filter((item) => item.productVariant.id !== productVariantId),
+          items: state.items.filter(
+            (item) => String(item.productVariant?.id) !== String(productVariantId),
+          ),
           originalUsdPrices: Object.fromEntries(
             Object.entries(state.originalUsdPrices).filter(
               ([id]) => id !== productVariantId.toString(),

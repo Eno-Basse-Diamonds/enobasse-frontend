@@ -11,12 +11,13 @@ import * as motion from "motion/react-client";
 
 import { useAccountStore } from "@/modules/account/store";
 import { Product } from "@/modules/products/types";
-import { isProductCustomDesign } from "@/modules/products/utils";
+import { isProductCustomDesign, isQuoteOnlyProduct } from "@/modules/products/utils";
 import { useWishlistStore } from "@/modules/wishlist/store";
 import { ProductQuickView } from "@/shared/components/ProductQuickView";
 import { EyeOpenIcon } from "@/shared/components/icons/EyeOpen";
 import { HeartIcon } from "@/shared/components/icons/Heart";
 import { useMobileDetection } from "@/shared/hooks/useMobileDetection";
+import { useAlertStore } from "@/shared/store/alert";
 import { getCurrencySymbol } from "@/shared/utils/money";
 
 interface ProductListProps {
@@ -48,6 +49,8 @@ const buttonHover = {
   transition: { duration: 0.2 },
 };
 
+const FALLBACK_IMAGE = "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png";
+
 const ProductListItem = React.memo(
   ({
     product,
@@ -62,10 +65,13 @@ const ProductListItem = React.memo(
   }) => {
     const [isFirstImageLoading, setIsFirstImageLoading] = useState(true);
     const [isSecondImageLoading, setIsSecondImageLoading] = useState(!!product.images[1]);
+    const [firstImageError, setFirstImageError] = useState(false);
+    const [secondImageError, setSecondImageError] = useState(false);
 
     const { isMobile } = useMobileDetection();
     const isHoverDevice = !isMobile;
     const isCustom = isProductCustomDesign(product);
+    const isQuoteOnly = isQuoteOnlyProduct(product);
 
     return (
       <motion.div
@@ -102,7 +108,7 @@ const ProductListItem = React.memo(
               </div>
             )}
             <Image
-              src={product.images[0].url}
+              src={firstImageError ? FALLBACK_IMAGE : (product.images[0]?.url || FALLBACK_IMAGE)}
               alt={product.images[0]?.alt || product.name || "Product image"}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -110,6 +116,7 @@ const ProductListItem = React.memo(
                 product.images[1] && isHoverDevice ? "group-hover:opacity-0" : ""
               }`}
               onLoad={() => setIsFirstImageLoading(false)}
+              onError={() => setFirstImageError(true)}
             />
             {product.images[1] && isHoverDevice && (
               <>
@@ -140,12 +147,13 @@ const ProductListItem = React.memo(
                   </div>
                 )}
                 <Image
-                  src={product.images[1].url}
+                  src={secondImageError ? FALLBACK_IMAGE : (product.images[1]?.url || FALLBACK_IMAGE)}
                   alt={product.images[1]?.alt || product.name || "Product image"}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   onLoad={() => setIsSecondImageLoading(false)}
+                  onError={() => setSecondImageError(true)}
                 />
               </>
             )}
@@ -169,7 +177,7 @@ const ProductListItem = React.memo(
           <motion.div className="mt-4 flex flex-grow flex-col">
             <h3 className="mb-1 flex-grow text-sm text-gray-700">{product.name}</h3>
             <p className="mt-auto text-sm font-medium text-gray-900">
-              {isCustom
+              {isQuoteOnly
                 ? "Contact us for pricing"
                 : product.priceRange.min === product.priceRange.max
                   ? `${getCurrencySymbol(
@@ -236,14 +244,13 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   const { data: session } = useSession();
   const [lastCurrency, setLastCurrency] = useState(preferredCurrency);
 
+  const addAlert = useAlertStore((state) => state.addAlert);
+
   useEffect(() => {
     if (!isHydrated) return;
 
-    if (session?.user?.email && preferredCurrency && preferredCurrency !== lastCurrency) {
-      hydrate(session.user.email, preferredCurrency);
-      setLastCurrency(preferredCurrency);
-    } else if (session?.user?.email && preferredCurrency && !hydrated) {
-      hydrate(session.user.email, preferredCurrency);
+    if (preferredCurrency && (!hydrated || preferredCurrency !== lastCurrency)) {
+      hydrate(session?.user?.email ?? undefined, preferredCurrency);
       setLastCurrency(preferredCurrency);
     }
   }, [session, hydrate, preferredCurrency, hydrated, isHydrated, lastCurrency]);
@@ -259,10 +266,10 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
   }, [quickViewProduct]);
 
   const wishlistProductVariantIds = useMemo(() => {
-    const set = new Set<string | number>();
+    const set = new Set<string>();
     items.forEach((item) => {
-      if (item.productVariant && item.productVariant.id) {
-        set.add(item.productVariant.id);
+      if (item.productVariant && item.productVariant.id != null) {
+        set.add(String(item.productVariant.id));
       }
     });
     return set;
@@ -270,23 +277,40 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
 
   const handleWishlistToggle = useCallback(
     (product: Product) => {
-      if (!hydrated) return;
+      const variant = product.variants?.[0];
+      if (!variant) return;
 
-      const productVariantId = product.variants[0].id;
-      if (wishlistProductVariantIds.has(productVariantId)) {
+      const productVariantId = variant.id;
+      const variantIdStr = String(productVariantId);
+
+      if (wishlistProductVariantIds.has(variantIdStr)) {
         removeItem(productVariantId, session?.user?.email ?? undefined);
+        addAlert({
+          type: "info",
+          title: "Removed from Wishlist",
+          message: `${product.name} has been removed from your wishlist.`,
+          duration: 3000,
+          dismissible: true,
+        });
       } else {
         addItem(
-          product.variants[0],
+          variant,
           product.slug,
           product.category,
           session?.user?.email ?? undefined,
           preferredCurrency,
           product.isCustomDesign,
         );
+        addAlert({
+          type: "success",
+          title: "Added to Wishlist",
+          message: `${product.name} has been added to your wishlist.`,
+          duration: 3000,
+          dismissible: true,
+        });
       }
     },
-    [hydrated, wishlistProductVariantIds, addItem, removeItem, session, preferredCurrency],
+    [wishlistProductVariantIds, addItem, removeItem, session, preferredCurrency, addAlert],
   );
 
   const handleQuickView = useCallback((product: Product) => {
@@ -319,7 +343,8 @@ export const ProductList: React.FC<ProductListProps> = ({ products }) => {
     >
       {uniqueProducts.map((product) => {
         const productVariantId = product.variants[0]?.id;
-        const isInWishlist = wishlistProductVariantIds.has(productVariantId);
+        const isInWishlist =
+          productVariantId != null && wishlistProductVariantIds.has(String(productVariantId));
         return (
           <ProductListItem
             key={product.id}

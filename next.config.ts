@@ -19,9 +19,12 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["10.58.84.197"],
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com" },
-      { protocol: "https", hostname: "via.placeholder.com" },
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
   },

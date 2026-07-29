@@ -10,6 +10,8 @@ interface ImageGalleryProps {
   images: Array<{ url: string; alt: string }>;
 }
 
+const FALLBACK_IMAGE = "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png";
+
 export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
@@ -20,6 +22,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
     new Set(images.map((_, index) => index)),
   );
   const [loadingZoomed, setLoadingZoomed] = useState(false);
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   const isSingleImage = images.length === 1;
 
   const handleImageClick = (index: number) => {
@@ -77,7 +80,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     </div>
                   )}
                   <Image
-                    src={img.url}
+                    src={failedImages.has(index) ? FALLBACK_IMAGE : img.url}
                     alt={img.alt}
                     width={800}
                     height={800}
@@ -92,6 +95,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                         return newSet;
                       });
                     }}
+                    onError={() => setFailedImages((prev) => new Set(prev).add(index))}
                   />
                 </div>
               ))}
@@ -138,7 +142,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                         </div>
                       )}
                       <Image
-                        src={img.url}
+                        src={failedImages.has(i) ? FALLBACK_IMAGE : img.url}
                         alt=""
                         fill
                         className="image-gallery__thumbnail-image"
@@ -151,6 +155,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                             return newSet;
                           });
                         }}
+                        onError={() => setFailedImages((prev) => new Set(prev).add(i))}
                       />
                     </button>
                   </li>
@@ -203,7 +208,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                 </div>
               )}
               <Image
-                src={img.url}
+                src={failedImages.has(index) ? FALLBACK_IMAGE : img.url}
                 alt={img.alt}
                 fill
                 className="image-gallery__desktop-image"
@@ -216,6 +221,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     return newSet;
                   });
                 }}
+                onError={() => setFailedImages((prev) => new Set(prev).add(index))}
               />
               <figcaption className="image-gallery__caption">{img.alt}</figcaption>
             </figure>
@@ -268,12 +274,17 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                   </div>
                 )}
                 <Image
-                  src={images[zoomedIndex].url}
-                  alt={images[zoomedIndex].alt}
+                  src={
+                    failedImages.has(zoomedIndex)
+                      ? FALLBACK_IMAGE
+                      : images[zoomedIndex]?.url || FALLBACK_IMAGE
+                  }
+                  alt={images[zoomedIndex]?.alt || "Product image"}
                   fill
                   className="object-contain"
                   quality={100}
                   onLoad={() => setLoadingZoomed(false)}
+                  onError={() => zoomedIndex !== null && setFailedImages((prev) => new Set(prev).add(zoomedIndex))}
                 />
               </div>
             </motion.div>

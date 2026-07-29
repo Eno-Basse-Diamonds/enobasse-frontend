@@ -13,6 +13,7 @@ import { useProduct, useRelatedProducts } from "@/modules/products/hooks";
 import { Gemstone, Metal, ProductVariant } from "@/modules/products/types";
 import { calculateAverageRating } from "@/modules/reviews/utils";
 import { useWishlistStore } from "@/modules/wishlist/store";
+import { isQuoteOnlyProduct as checkQuoteOnlyProduct } from "@/modules/products/utils";
 import { trackAddToCart, trackAddToWishlist, trackViewItem } from "@/shared/analytics/gtag";
 import { Accordion } from "@/shared/components/Accordion";
 import { Alert } from "@/shared/components/Alert";
@@ -114,7 +115,7 @@ export default function ProductPage() {
 
   const { items, addItem, removeItem, hydrated, hydrate } = useWishlistStore();
   const isInWishlist = (productVariantId: string | number) => {
-    return items.some((item) => item.productVariant?.id === productVariantId);
+    return items.some((item) => String(item.productVariant?.id) === String(productVariantId));
   };
 
   const [engraving, setEngraving] = useState<{ text: string; fontStyle: string } | undefined>(
@@ -143,10 +144,17 @@ export default function ProductPage() {
   const quantity = 1;
 
   const handleWishlistToggle = async () => {
-    if (!activeVariant || !hydrated) return;
+    if (!activeVariant) return;
 
     if (isInWishlist(activeVariant.id)) {
       await removeItem(activeVariant.id, session?.user?.email ?? undefined);
+      addAlert({
+        type: "info",
+        title: "Removed from Wishlist",
+        message: `${activeVariant.title || product?.name} has been removed from your wishlist.`,
+        duration: 3000,
+        dismissible: true,
+      });
     } else {
       await addItem(
         activeVariant,
@@ -163,6 +171,14 @@ export default function ProductPage() {
         product?.category || "",
         preferredCurrency,
       );
+
+      addAlert({
+        type: "success",
+        title: "Added to Wishlist",
+        message: `${activeVariant.title || product?.name} has been added to your wishlist.`,
+        duration: 3000,
+        dismissible: true,
+      });
     }
   };
 
@@ -171,7 +187,10 @@ export default function ProductPage() {
 
   const handleAddToCart = () => {
     const variantToAdd = activeVariant;
-    if (!variantToAdd) return;
+    if (!variantToAdd || isQuoteOnlyProduct) {
+      if (isQuoteOnlyProduct) handleRequestQuote();
+      return;
+    }
 
     addCartItem(
       variantToAdd,
@@ -270,7 +289,7 @@ export default function ProductPage() {
     return notFound();
   }
 
-  const isQuoteOnlyProduct = Boolean(product.isCustomDesign && (activeVariant?.price === 0 || activeVariant?.price == null));
+  const isQuoteOnlyProduct = checkQuoteOnlyProduct(product, activeVariant?.price);
   const hasMultipleVariants = product.variants.length > 1;
   const uniqueGemstones = Array.from(
     new Set(product.gemstones?.map((gemstone) => gemstone.type) || []),

@@ -77,7 +77,7 @@ export function filterAndSortProducts({
 
 /**
  * Helper to determine if a product is a custom design product.
- * Checks boolean flag, category name, or zero min price.
+ * Checks boolean flag or category name.
  *
  * @param product - Product object
  * @returns boolean indicating if product is a custom design
@@ -93,4 +93,27 @@ export function isProductCustomDesign(product: {
     product.priceRange?.min === 0 ||
     Boolean(product.category?.toLowerCase().includes("custom"))
   );
+}
+
+/**
+ * Helper to determine if a product is a custom design product that is quote-only (price is 0 or null).
+ * Custom design products with a price of zero cannot be added to cart and require requesting a quote.
+ *
+ * @param product - Product object or parameters
+ * @param price - Optional variant price override
+ * @returns boolean indicating if product is quote-only
+ */
+export function isQuoteOnlyProduct(
+  product: {
+    isCustomDesign?: boolean;
+    category?: string;
+    priceRange?: { min: number };
+  },
+  price?: number | null,
+): boolean {
+  if (!product) return false;
+  const isCustom = isProductCustomDesign(product);
+  if (!isCustom) return false;
+  const effectivePrice = price !== undefined ? price : product.priceRange?.min;
+  return effectivePrice === 0 || effectivePrice == null;
 }

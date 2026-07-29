@@ -193,6 +193,17 @@ export const useCartStore = create<CartState>()(
           calculatedPrice: number;
         },
       ) => {
+        const isCustom = Boolean(
+          (productVariant as any).isCustomDesign ||
+            (productVariant as any).product?.isCustomDesign ||
+            productCategory?.toLowerCase().includes("custom"),
+        );
+        const isZeroPrice = productVariant.price === 0 || productVariant.price == null;
+
+        if (isCustom && isZeroPrice) {
+          return;
+        }
+
         set({ loading: true, error: null });
         try {
           const targetCurrency = currency || "USD";

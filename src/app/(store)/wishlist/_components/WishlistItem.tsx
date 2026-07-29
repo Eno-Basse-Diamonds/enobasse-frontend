@@ -10,6 +10,7 @@ import { RequestQuoteModal } from "@/app/(store)/products/[slug]/_components/Req
 import { useCartStore } from "@/modules/cart/store";
 import { useWishlistStore } from "@/modules/wishlist/store";
 import { WishlistItem as WishlistItemInterface } from "@/modules/wishlist/types";
+import { isProductCustomDesign, isQuoteOnlyProduct } from "@/modules/products/utils";
 import { useAlertStore } from "@/shared/store/alert";
 import { getCurrencySymbol } from "@/shared/utils/money";
 
@@ -17,6 +18,8 @@ type WishlistItemProps = {
   item: WishlistItemInterface;
   currentCurrency: string;
 };
+
+const FALLBACK_IMAGE = "https://res.cloudinary.com/enobasse/image/upload/v1756512499/collection-fallback_syzbce.png";
 
 export const WishlistItem: React.FC<WishlistItemProps> = ({ item, currentCurrency }) => {
   const router = useRouter();
@@ -26,9 +29,24 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item, currentCurrenc
   const { addItem: addCartItem, loading: cartLoading } = useCartStore();
   const quantity = 1;
   const [isRequestQuoteOpen, setIsRequestQuoteOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const addAlert = useAlertStore((state) => state.addAlert);
 
+  const displayCurrency = currentCurrency || variant.currency;
+  const displayPrice = variant.price;
+  const productRef = {
+    isCustomDesign: item.isCustomDesign,
+    category: item.productCategory,
+    priceRange: { min: displayPrice },
+  };
+  const isCustomDesign = isProductCustomDesign(productRef);
+  const isQuoteOnly = isQuoteOnlyProduct(productRef, displayPrice);
+
   const handleAddToCart = () => {
+    if (isQuoteOnly) {
+      setIsRequestQuoteOpen(true);
+      return;
+    }
     addCartItem(
       variant,
       item.productSlug,
@@ -46,9 +64,6 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item, currentCurrenc
     });
   };
 
-  const displayCurrency = currentCurrency || variant.currency;
-  const displayPrice = variant.price;
-
   return (
     <li className="py-4 transition-colors">
       <div className="flex gap-4">
@@ -57,49 +72,46 @@ export const WishlistItem: React.FC<WishlistItemProps> = ({ item, currentCurrenc
           className="shrink-0 relative size-24 md:size-40 overflow-hidden border border-gray-200"
         >
           <Image
-            src={variant.images?.[0].url}
+            src={imageError ? FALLBACK_IMAGE : (variant.images?.[0]?.url || FALLBACK_IMAGE)}
             alt={variant.images?.[0]?.alt || variant.title}
             fill
             className="size-full object-cover"
             sizes="(max-width: 768px) 100px, 150px"
+            onError={() => setImageError(true)}
           />
         </Link>
 
         <div className="flex flex-col flex-1">
-          <div className="flex justify-between gap-2">
-            <div>
-              <h3 className="font-medium text-[#502B3A]">
-                <Link
-                  href={`/products/${item.productSlug}`}
-                  className="hover:underline transition-all"
-                >
-                  {variant.title}
-                </Link>
-              </h3>
-              <p className="text-sm text-[#502B3A]/70 mt-1">
-                {variant.gemstones?.[0] &&
-                  (variant.gemstones[0].weightCarat
-                    ? `${variant.gemstones[0].weightCarat}ct ${variant.gemstones[0].type}`
-                    : variant.gemstones[0].type)}
-                {variant.gemstones?.[0] && variant.metals?.[0] ? " | " : null}
-                {variant.metals?.[0] && `${variant.metals[0].purity} ${variant.metals[0].type}`}
-              </p>
-            </div>
-            <p className="font-medium text-[#502B3A] whitespace-nowrap">
-              {item.isCustomDesign || displayPrice === 0 ? (
-                "Contact us for pricing"
-              ) : (
-                <>
-                  {getCurrencySymbol(displayCurrency)}
-                  {displayPrice?.toLocaleString()}
-                </>
-              )}
-            </p>
-          </div>
+          <h3 className="font-medium text-[#502B3A]">
+            <Link
+              href={`/products/${item.productSlug}`}
+              className="hover:underline transition-all"
+            >
+              {variant.title}
+            </Link>
+          </h3>
+          <p className="text-sm text-[#502B3A]/70 mt-1">
+            {variant.gemstones?.[0] &&
+              (variant.gemstones[0].weightCarat
+                ? `${variant.gemstones[0].weightCarat}ct ${variant.gemstones[0].type}`
+                : variant.gemstones[0].type)}
+            {variant.gemstones?.[0] && variant.metals?.[0] ? " | " : null}
+            {variant.metals?.[0] && `${variant.metals[0].purity} ${variant.metals[0].type}`}
+          </p>
+          <p className="font-medium text-[#502B3A] mt-1">
+            {isQuoteOnly ? (
+              "Contact us for pricing"
+            ) : (
+              <>
+                {getCurrencySymbol(displayCurrency)}
+                {displayPrice?.toLocaleString()}
+              </>
+            )}
+          </p>
 
           <div className="mt-auto pt-4 flex justify-between items-center">
             <div className="flex gap-3">
-              {!item.isCustomDesign ? (
+              {!isQuoteOnly ? (
                 <button
                   type="button"
                   className="font-medium text-sm rounded-sm text-[#D1A559] border-[#D1A559] hover:underline"
