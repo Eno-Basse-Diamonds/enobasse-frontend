@@ -117,7 +117,7 @@ export function BankTransferDetails({ amount, currency, paymentReference }: Bank
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded bg-gray-50 px-2 py-2 border border-gray-100">
+          <div className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 border border-gray-100">
             <div>
               <span className="block text-[10px] text-gray-400 uppercase tracking-wider">
                 Account Number
