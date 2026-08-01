@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: ["10.58.84.197"],
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "**" },
       { protocol: "http", hostname: "**" },
