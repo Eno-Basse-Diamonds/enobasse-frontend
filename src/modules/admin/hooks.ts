@@ -9,7 +9,7 @@ import {
 
 import { api } from "@/shared/utils/api";
 
-import { DashboardStats, getDashboardStats } from "./api";
+import { DashboardStats, getDashboardStats, getDashboardCarts, getDashboardWishlists, DashboardCart, DashboardWishlist } from "./api";
 import { Account, AccountsResponse, CreateAccountData, UpdateAccount } from "./types";
 
 /**
@@ -135,5 +135,33 @@ export function useDashboardStats() {
   return useDashQuery<DashboardStats, Error>({
     queryKey: ["dashboardStats"],
     queryFn: getDashboardStats,
+  });
+}
+
+/**
+ * Fetches all customer carts for the admin panel.
+ *
+ * @description React Query hook to fetch every cart belonging to a
+ * registered account with its items and product details.
+ * @returns Query result with an array of carts
+ */
+export function useDashboardCarts() {
+  return useQuery<DashboardCart[], Error>({
+    queryKey: ["dashboardCarts"],
+    queryFn: getDashboardCarts,
+  });
+}
+
+/**
+ * Fetches all customer wishlists for the admin panel.
+ *
+ * @description React Query hook to fetch every wishlist belonging to a
+ * registered account with its items and product details.
+ * @returns Query result with an array of wishlists
+ */
+export function useDashboardWishlists() {
+  return useQuery<DashboardWishlist[], Error>({
+    queryKey: ["dashboardWishlists"],
+    queryFn: getDashboardWishlists,
   });
 }
