@@ -56,7 +56,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({ item, ringSizes }) =
         }`
       : "";
 
-  const engravableProducts = ["Rings", "Wristwears", "Neckpieces", "Bracelets", "Necklaces"];
+  const engravableProducts = ["Rings", "Bracelets", "Necklaces"];
   const canBeEngraved = engravableProducts.includes(item.productCategory);
   const isRing = item.productCategory === "Rings" ? true : false;
 

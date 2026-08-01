@@ -27,6 +27,16 @@ export const ProductList = memo(function ProductList({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product) => {
+        const categoryAliases: Record<string, string> = {
+          neckpiece: "Necklaces",
+          neckpieces: "Necklaces",
+          necklace: "Necklaces",
+          wristwear: "Bracelets",
+          wristwears: "Bracelets",
+          bangle: "Bracelets",
+          bangles: "Bracelets",
+        };
+        const displayCategory = categoryAliases[product.category.trim().toLowerCase()] || product.category;
         const hasSamePrice = product.priceRange.min === product.priceRange.max;
         const currencySymbol = getCurrencySymbol(product.priceRange.currency);
 
@@ -52,7 +62,7 @@ export const ProductList = memo(function ProductList({
               )}
               <div className="absolute top-3 left-3">
                 <div className="px-3 py-1 text-xs font-semibold bg-primary-500 rounded-sm text-white">
-                  {product.category}
+                  {displayCategory}
                 </div>
               </div>
               <div className="absolute top-3 right-3">
