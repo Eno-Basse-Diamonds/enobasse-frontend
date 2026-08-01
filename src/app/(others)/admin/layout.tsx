@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   BarChart3,
@@ -25,92 +25,100 @@ import { AdminSidebarNavigation } from "./_components/AdminSidebarNavigation";
 
 export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
+  // Keep the server HTML and the first client render identical. Pathname can
+  // differ during rewrites or a rolling deploy, which otherwise changes the
+  // active sidebar item during hydration.
+  const [hydratedPathname, setHydratedPathname] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setHydratedPathname(pathname);
+  }, [pathname]);
 
   const sidebarItems = [
     {
       icon: Home,
       label: "Dashboard",
       href: "/admin/dashboard",
-      active: pathname === "/admin/dashboard",
+      active: hydratedPathname === "/admin/dashboard",
     },
     {
       icon: LayoutDashboard,
       label: "Homepage",
       href: "/admin/homepage",
-      active: pathname === "/admin/homepage",
+      active: hydratedPathname === "/admin/homepage",
     },
     {
       icon: Folder,
       label: "Collections",
       href: "/admin/collections",
-      active: pathname === "/admin/collections",
+      active: hydratedPathname === "/admin/collections",
     },
     {
       icon: Package,
       label: "Products",
       href: "/admin/products",
-      active: pathname === "/admin/products",
+      active: hydratedPathname === "/admin/products",
     },
     {
       icon: Truck,
       label: "Orders",
       href: "/admin/orders",
-      active: pathname === "/admin/orders",
+      active: hydratedPathname === "/admin/orders",
     },
     {
       icon: ShoppingBag,
       label: "Carts",
       href: "/admin/carts",
-      active: pathname === "/admin/carts",
+      active: hydratedPathname === "/admin/carts",
     },
     {
       icon: Heart,
       label: "Wishlists",
       href: "/admin/wishlists",
-      active: pathname === "/admin/wishlists",
+      active: hydratedPathname === "/admin/wishlists",
     },
     {
       icon: FileText,
       label: "Blog",
       href: "/admin/blog",
-      active: pathname === "/admin/blog",
+      active: hydratedPathname === "/admin/blog",
     },
     {
       icon: MessageSquare,
       label: "Testimonials",
       href: "/admin/testimonials",
-      active: pathname === "/admin/testimonials",
+      active: hydratedPathname === "/admin/testimonials",
     },
     {
       icon: Star,
       label: "Reviews",
       href: "/admin/reviews",
-      active: pathname === "/admin/reviews",
+      active: hydratedPathname === "/admin/reviews",
     },
     {
       icon: Mail,
       label: "Newsletter",
       href: "/admin/newsletter",
-      active: pathname === "/admin/newsletter",
+      active: hydratedPathname === "/admin/newsletter",
     },
     {
       icon: Users,
       label: "Accounts",
       href: "/admin/accounts",
-      active: pathname === "/admin/accounts",
+      active: hydratedPathname === "/admin/accounts",
     },
     {
       icon: BarChart3,
       label: "Analytics",
       href: "/admin/analytics",
-      active: pathname === "/admin/analytics",
+      active: hydratedPathname === "/admin/analytics",
     },
     {
       icon: Settings,
       label: "Settings",
       href: "/admin/settings",
-      active: pathname === "/admin/settings",
+      active: hydratedPathname === "/admin/settings",
     },
   ];
 
